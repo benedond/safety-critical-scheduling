@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include "visualiser.h"
 
 #define Y_OFFSET 30U
@@ -14,141 +16,145 @@
 
 using namespace cimg_library;
 
-constexpr Visualiser::uchar WHITE[] = { 0xFF, 0xFF, 0xFF };
-constexpr Visualiser::uchar BLACK[] = { 0x00, 0x00, 0x00 };
-constexpr Visualiser::uchar RED[] = { 0xFF, 0x00, 0x00 };
-//constexpr Visualiser::uchar BLUE[] = { 0x00, 0x00, 0xFF };
-constexpr Visualiser::uchar CYAN[] = { 0x00, 0x80, 0x80 };
+constexpr visualiser::uchar WHITE[] = {0xFF, 0xFF, 0xFF };
+constexpr visualiser::uchar BLACK[] = {0x00, 0x00, 0x00 };
+constexpr visualiser::uchar RED[] = {0xFF, 0x00, 0x00 };
+//constexpr visualiser::uchar BLUE[] = { 0x00, 0x00, 0xFF };
+constexpr visualiser::uchar CYAN[] = {0x00, 0x80, 0x80 };
 
-Visualiser::Visualiser(const Environment& e, const std::unordered_map<std::string, Task>& t, const Solution& s) :
-		environment(e), tasks(t), solution(s), img_built(false), img_width(0), img_height(0)
+visualiser::visualiser(const Environment& e, const std::unordered_map<std::string, Task>& t, const Solution& s) :
+		m_environment(e), m_tasks(t), m_solution(s), m_img_built(false), m_img_width(0), m_img_height(0)
 {
 }
 
-void Visualiser::display()
+void visualiser::display()
 {
+#if (cimg_display == 0)
+	std::cerr << "display is not supported, please recompile with display support" << std::endl;
+#else
 	build_image();
 
-	CImgDisplay disp(img, "Visualiser");
+	CImgDisplay disp(m_img, "visualiser");
 	while (!disp.is_closed()) disp.wait();
+#endif
+
 }
 
-void Visualiser::export_bmp(const std::string& filename)
+void visualiser::export_bmp(const std::string& filename)
 {
 	build_image();
-	img.save_bmp(filename.c_str());
+	m_img.save_bmp(filename.c_str());
 }
 
-void Visualiser::build_image()
+void visualiser::build_image()
 {
-	if (img_built)
+	if (m_img_built)
 		return;
+	m_img_built = true;
 
 	init_img();
 
-	if (solution.feasible)
+	if (m_solution.feasible)
 	{
 		draw_grid();
 
 		uint last_window_start = 0;
-		for (auto& window : solution.windows)
+		for (auto& window : m_solution.windows)
 			last_window_start = draw_window(window, last_window_start);
 	}
 	else
 	{
 		draw_infeasible_solution();
 	}
-
-	img_built = true;
 }
 
-void Visualiser::init_img()
+void visualiser::init_img()
 {
-	for (auto& p : environment.processors)
+	for (auto& p : m_environment.processors)
 	{
 		for (int i=0; i<p.second.processing_units; i++)
 		{
-			processing_units.push_back(p.first);
+			m_processing_units.push_back(p.first);
 		}
 	}
 
-	img_width = environment.main_frame_length * TIME_SCALE + 2*X_OFFSET + LANE_X_START;
-	img_height = processing_units.size() * LANE_HEIGHT + 2*Y_OFFSET;
-	img = img_type(img_width, img_height, 1, 4);
-	img.draw_rectangle(0, 0, img_width, img_height, WHITE);
+	m_img_width = m_environment.main_frame_length * TIME_SCALE + 2 * X_OFFSET + LANE_X_START;
+	m_img_height = m_processing_units.size() * LANE_HEIGHT + 2 * Y_OFFSET;
+	m_img = img_type(m_img_width, m_img_height, 1, 3);
+	m_img.draw_rectangle(0, 0, m_img_width, m_img_height, WHITE);
 }
 
-void Visualiser::draw_grid()
+void visualiser::draw_grid()
 {
 	const uint min_x = X_OFFSET;
-	const uint max_x = img_width - X_OFFSET;
+	const uint max_x = m_img_width - X_OFFSET;
 	uint y_pos = Y_OFFSET;
 
 	// horizontalni cary
 	std::string last_pu;
-	for (auto& pu : processing_units)
+	for (auto& pu : m_processing_units)
 	{
 		if (pu != last_pu)
 		{
-			pu_offsets[pu] = y_pos;
+			m_pu_offsets[pu] = y_pos;
 			last_pu = pu;
 		}
 
-		img.draw_line(min_x, y_pos, max_x, y_pos, BLACK);
-		img.draw_text(min_x + 10, (uint) (y_pos + 5), pu.c_str(), BLACK, WHITE);
+		m_img.draw_line(min_x, y_pos, max_x, y_pos, BLACK);
+		m_img.draw_text(min_x + 10, (uint) (y_pos + 5), pu.c_str(), BLACK, WHITE);
 		y_pos += LANE_HEIGHT;
 	}
-	img.draw_line(min_x, y_pos, max_x, y_pos, BLACK);
+	m_img.draw_line(min_x, y_pos, max_x, y_pos, BLACK);
 
 	// vertikalni cary
 	const uint min_y = Y_OFFSET;
-	const uint max_y = img_height - Y_OFFSET;
-	const uint end_x = LANE_X_START + environment.main_frame_length*TIME_SCALE;
-	img.draw_line(LANE_X_START, min_y, LANE_X_START, max_y, BLACK);
-	img.draw_line(end_x, min_y, end_x, max_y, BLACK);
+	const uint max_y = m_img_height - Y_OFFSET;
+	const uint end_x = LANE_X_START + m_environment.main_frame_length * TIME_SCALE;
+	m_img.draw_line(LANE_X_START, min_y, LANE_X_START, max_y, BLACK);
+	m_img.draw_line(end_x, min_y, end_x, max_y, BLACK);
 
-	std::string mf_label = "MF: " + std::to_string(environment.main_frame_length) + "ms";
-	img.draw_text(end_x-20, max_y+1, mf_label.c_str(), BLACK, WHITE);
+	std::string mf_label = "MF: " + std::to_string(m_environment.main_frame_length) + "ms";
+	m_img.draw_text((uint) (end_x - 20), (uint) (max_y + 1), mf_label.c_str(), BLACK, WHITE);
 }
 
-Visualiser::uint Visualiser::draw_window(const Window& window, uint window_start_time)
+visualiser::uint visualiser::draw_window(const Window& window, uint window_start_time)
 {
 	const uint min_y = Y_OFFSET;
-	const uint max_y = img_height - Y_OFFSET;
+	const uint max_y = m_img_height - Y_OFFSET;
 
 	uint start_x = LANE_X_START + window_start_time*TIME_SCALE;
 	std::unordered_map<std::string, int> pu_allocations;
 
 	for (auto& task : window.tasks)
 	{
-		auto& task_data = tasks.at(task);
+		auto& task_data = m_tasks.at(task);
 		uint end_x = start_x + task_data.length*TIME_SCALE;
 
 		for (auto& proc : task_data.processors)
 		{
 			int pu_allocation = pu_allocations[proc];
 			pu_allocations[proc] = pu_allocation + 1;
-			uint start_y = pu_offsets.at(proc) + pu_allocation*LANE_HEIGHT+LANE_Y_OFFSET;
+			uint start_y = m_pu_offsets.at(proc) + pu_allocation * LANE_HEIGHT + LANE_Y_OFFSET;
 			uint end_y = start_y + LANE_HEIGHT - LANE_Y_OFFSET*2;
 
-			img.draw_rectangle((uint) (start_x + LANE_X_OFFSET), start_y, end_x, end_y, CYAN);
+			m_img.draw_rectangle((uint) (start_x + LANE_X_OFFSET), start_y, end_x, end_y, CYAN);
 
 			std::string label = task + ": " + std::to_string(task_data.length) + "ms";
-			img.draw_text((uint) (start_x + 10), (uint) (start_y + 3), label.c_str(), WHITE, CYAN);
+			m_img.draw_text((uint) (start_x + 10), (uint) (start_y + 3), label.c_str(), WHITE, CYAN);
 		}
 	}
 
 	uint end_x = start_x + window.length*TIME_SCALE;
-	img.draw_line(end_x, min_y, end_x, max_y, RED, 1, LINE_DASHED);
+	m_img.draw_line(end_x, min_y, end_x, max_y, RED, 1, LINE_DASHED);
 
 	uint window_end = window_start_time + window.length;
 	std::string window_label = std::to_string(window_end) + "ms";
-	img.draw_text(end_x, max_y+1, window_label.c_str(), RED, WHITE);
+	m_img.draw_text(end_x, (uint) (max_y + 1), window_label.c_str(), RED, WHITE);
 
 	return window_end;
 }
 
-void Visualiser::draw_infeasible_solution()
+void visualiser::draw_infeasible_solution()
 {
-	img.draw_text(X_OFFSET, Y_OFFSET, "SOLUTION INFEASIBLE", RED, WHITE, 1, 18);
+	m_img.draw_text(X_OFFSET, Y_OFFSET, "SOLUTION INFEASIBLE", RED, WHITE, 1, 18);
 }

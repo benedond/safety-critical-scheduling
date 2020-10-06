@@ -41,4 +41,6 @@ Environment parse_environment(const nlohmann::json& json);
 std::unordered_map<std::string, Task> parse_tasks(const nlohmann::json& json);
 Solution parse_solution(const nlohmann::json& json);
 
+void write_solution(nlohmann::json& json, const Solution& solution);
+
 #endif // _INSTANCE_H

@@ -64,3 +64,27 @@ Solution parse_solution(const nlohmann::json& json)
 
 	return s;
 }
+
+void write_solution(nlohmann::json& json, const Solution& solution)
+{
+	auto& json_solution = json["solution"];
+	json_solution["feasible"] = solution.feasible;
+
+	int i=0;
+	auto& json_windows = json_solution["windows"];
+
+	if (solution.feasible)
+	{
+		for (auto& w : solution.windows)
+		{
+			auto& json_window = json_windows[i];
+			json_window["length"] = w.length;
+			json_window["tasks"] = w.tasks;
+			i++;
+		}
+	}
+	else
+	{
+		json_windows = {};
+	}
+}
