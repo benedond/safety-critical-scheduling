@@ -6,20 +6,20 @@
 class simple_solver
 {
 private:
-	const Environment& m_environment;
-	const std::unordered_map<std::string, Task>& m_tasks;
+	const environment& m_environment;
+	const task_map& m_tasks;
 
 	bool m_solved, m_feasible;
-	std::vector<Window> m_windows;
+	std::vector<window> m_windows;
 
-	Window save_window(Window&& window);
+	window save_window(window&& window);
 	bool check_feasibility();
 	void solve();
 
 public:
-	Solution get_solution();
+	solution get_solution();
 
-	simple_solver(const Environment& e, const std::unordered_map<std::string, Task>& t);
+	simple_solver(const environment& e, const task_map& t);
 };
 
 #endif // _SIMPLE_SOLVER_H

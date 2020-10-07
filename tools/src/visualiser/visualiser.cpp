@@ -16,14 +16,14 @@
 
 using namespace cimg_library;
 
-constexpr visualiser::uchar WHITE[] = {0xFF, 0xFF, 0xFF };
-constexpr visualiser::uchar BLACK[] = {0x00, 0x00, 0x00 };
-constexpr visualiser::uchar RED[] = {0xFF, 0x00, 0x00 };
+constexpr visualiser::uchar WHITE[] = { 0xFF, 0xFF, 0xFF };
+constexpr visualiser::uchar BLACK[] = { 0x00, 0x00, 0x00 };
+constexpr visualiser::uchar RED[] = { 0xFF, 0x00, 0x00 };
 //constexpr visualiser::uchar BLUE[] = { 0x00, 0x00, 0xFF };
-constexpr visualiser::uchar CYAN[] = {0x00, 0x80, 0x80 };
+constexpr visualiser::uchar CYAN[] = { 0x00, 0x80, 0x80 };
 
-visualiser::visualiser(const Environment& e, const std::unordered_map<std::string, Task>& t, const Solution& s) :
-		m_environment(e), m_tasks(t), m_solution(s), m_img_built(false), m_img_width(0), m_img_height(0)
+visualiser::visualiser(const environment& e, const solution& s) :
+		m_environment(e), m_solution(s), m_img_built(false), m_img_width(0), m_img_height(0)
 {
 }
 
@@ -35,7 +35,8 @@ void visualiser::display()
 	build_image();
 
 	CImgDisplay disp(m_img, "visualiser");
-	while (!disp.is_closed()) disp.wait();
+	while (!disp.is_closed())
+		disp.wait();
 #endif
 
 }
@@ -71,12 +72,8 @@ void visualiser::build_image()
 void visualiser::init_img()
 {
 	for (auto& p : m_environment.processors)
-	{
 		for (int i=0; i<p.second.processing_units; i++)
-		{
 			m_processing_units.push_back(p.first);
-		}
-	}
 
 	m_img_width = m_environment.main_frame_length * TIME_SCALE + 2 * X_OFFSET + LANE_X_START;
 	m_img_height = m_processing_units.size() * LANE_HEIGHT + 2 * Y_OFFSET;
@@ -117,34 +114,28 @@ void visualiser::draw_grid()
 	m_img.draw_text((uint) (end_x - 20), (uint) (max_y + 1), mf_label.c_str(), BLACK, WHITE);
 }
 
-visualiser::uint visualiser::draw_window(const Window& window, uint window_start_time)
+visualiser::uint visualiser::draw_window(const window& window, uint window_start_time)
 {
 	const uint min_y = Y_OFFSET;
 	const uint max_y = m_img_height - Y_OFFSET;
 
-	uint start_x = LANE_X_START + window_start_time*TIME_SCALE;
+	uint window_start_x = LANE_X_START + window_start_time*TIME_SCALE;
 	std::unordered_map<std::string, int> pu_allocations;
 
-	for (auto& task : window.tasks)
+	for (auto& task_assignment : window.task_assignments)
 	{
-		auto& task_data = m_tasks.at(task);
-		uint end_x = start_x + task_data.length*TIME_SCALE;
+		uint start_x = window_start_x + task_assignment.start*TIME_SCALE;
+		uint end_x = start_x + task_assignment.length*TIME_SCALE;
 
-		for (auto& proc : task_data.processors)
-		{
-			int pu_allocation = pu_allocations[proc];
-			pu_allocations[proc] = pu_allocation + 1;
-			uint start_y = m_pu_offsets.at(proc) + pu_allocation * LANE_HEIGHT + LANE_Y_OFFSET;
-			uint end_y = start_y + LANE_HEIGHT - LANE_Y_OFFSET*2;
+		uint start_y = m_pu_offsets.at(task_assignment.processor) + task_assignment.processing_unit * LANE_HEIGHT + LANE_Y_OFFSET;
+		uint end_y = start_y + LANE_HEIGHT - LANE_Y_OFFSET*2;
+		m_img.draw_rectangle((uint) (start_x + LANE_X_OFFSET), start_y, end_x, end_y, CYAN);
 
-			m_img.draw_rectangle((uint) (start_x + LANE_X_OFFSET), start_y, end_x, end_y, CYAN);
-
-			std::string label = task + ": " + std::to_string(task_data.length) + "ms";
-			m_img.draw_text((uint) (start_x + 10), (uint) (start_y + 3), label.c_str(), WHITE, CYAN);
-		}
+		std::string label = task_assignment.task + ": " + std::to_string(task_assignment.length) + "ms";
+		m_img.draw_text((uint) (start_x + 10), (uint) (start_y + 3), label.c_str(), WHITE, CYAN);
 	}
 
-	uint end_x = start_x + window.length*TIME_SCALE;
+	uint end_x = window_start_x + window.length*TIME_SCALE;
 	m_img.draw_line(end_x, min_y, end_x, max_y, RED, 1, LINE_DASHED);
 
 	uint window_end = window_start_time + window.length;

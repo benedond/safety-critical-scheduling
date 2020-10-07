@@ -1,68 +1,123 @@
 {
-  "environment": {
-    "processors": [
+   "environment":{
+      "processors":[
+         {
+            "name":"A53",
+            "processingUnits":4
+         },
+         {
+            "name":"A72",
+            "processingUnits":2
+         },
+         {
+            "name":"GPU",
+            "processingUnits":2
+         }
+      ],
+      "mainFrameLength":200
+   },
+   "tasks":[
       {
-        "name": "A53",
-        "processingUnits": 4
+         "name":"T1",
+         "processors":[
+            {
+               "processor":"A53",
+               "processingUnits":1
+            }
+         ],
+         "length":30
       },
       {
-        "name": "A72",
-        "processingUnits": 2
+         "name":"T2",
+         "processors":[
+            {
+               "processor":"A53",
+               "processingUnits":1
+            },
+            {
+               "processor":"GPU",
+               "processingUnits":1
+            }
+         ],
+         "length":20
       },
       {
-        "name": "GPU",
-        "processingUnits": 2
+         "name":"T3",
+         "processors":[
+            {
+               "processor":"A72",
+               "processingUnits":1
+            },
+            {
+               "processor":"GPU",
+               "processingUnits":1
+            }
+         ],
+         "length":40
+      },
+      {
+         "name":"T4",
+         "processors":[
+            {
+               "processor":"A72",
+               "processingUnits":1
+            },
+            {
+               "processor":"GPU",
+               "processingUnits":1
+            }
+         ],
+         "length":15
+      },
+      {
+         "name":"T5",
+         "processors":[
+            {
+               "processor":"A72",
+               "processingUnits":1
+            }
+         ],
+         "length":30
+      },
+      {
+         "name":"T6",
+         "processors":[
+            {
+               "processor":"A53",
+               "processingUnits":1
+            }
+         ],
+         "length":50
+      },
+      {
+         "name":"T7",
+         "processors":[
+            {
+               "processor":"A53",
+               "processingUnits":1
+            }
+         ],
+         "length":28
+      },
+      {
+         "name":"T8",
+         "processors":[
+            {
+               "processor":"A53",
+               "processingUnits":1
+            }
+         ],
+         "length":28
+      },
+      {
+         "name":"T9",
+         "processors":[
+            {
+               "processor":"A72",
+               "processingUnits":1
+            }
+         ],
+         "length":12
       }
-    ],
-
-    "mainFrameLength": 200
-  },
-
-  "tasks": [
-    {
-      "name": "T1",
-      "processors": ["A53"],
-      "length": 30
-    },
-    {
-      "name": "T2",
-      "processors": ["A53", "GPU"],
-      "length": 20
-    },
-    {
-      "name": "T3",
-      "processors": ["A72", "GPU"],
-      "length": 40
-    },
-    {
-      "name": "T4",
-      "processors": ["A72", "GPU"],
-      "length": 15
-    },
-    {
-      "name": "T5",
-      "processors": ["A72"],
-      "length": 30
-    },
-    {
-      "name": "T6",
-      "processors": ["A53"],
-      "length": 50
-    },
-    {
-      "name": "T7",
-      "processors": ["A53"],
-      "length": 28
-    },
-    {
-      "name": "T8",
-      "processors": ["A53"],
-      "length": 28
-    },
-    {
-      "name": "T9",
-      "processors": ["A72"],
-      "length": 12
-    }
-  ]
+   ]
 }

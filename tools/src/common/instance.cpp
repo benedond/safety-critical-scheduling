@@ -1,8 +1,8 @@
 #include "instance.h"
 
-Environment parse_environment(const nlohmann::json& json)
+environment parse_environment(const nlohmann::json& json)
 {
-	Environment e;
+	environment e;
 
 	auto& env = json["environment"];
 
@@ -18,46 +18,49 @@ Environment parse_environment(const nlohmann::json& json)
 	return e;
 }
 
-std::unordered_map<std::string, Task> parse_tasks(const nlohmann::json& json)
+task_map parse_tasks(const nlohmann::json& json)
 {
-	std::unordered_map<std::string, Task> t;
+	task_map t;
 
 	auto& tasks = json["tasks"];
 	for (auto& task : tasks)
 	{
 		std::string name = task["name"];
-		auto& processors = task["processors"];
+		auto& processor_assignments = task["processors"];
 
-		std::vector<std::string> p;
-		for (auto& processor : processors)
-		{
-			p.push_back((std::string) processor);
-		}
+		std::vector<task::processor_assignment> pas;
+		for (auto& processor_assignment : processor_assignments)
+			pas.push_back({ .processor = processor_assignment["processor"],
+				            .processing_units = processor_assignment["processingUnits"] });
 
-		t[name] = { .name = name, .length = task["length"], .processors = std::move(p) };
+		t[name] = { .name = name, .length = task["length"], .processors = std::move(pas) };
 	}
 
 	return t;
 }
 
-Solution parse_solution(const nlohmann::json& json)
+solution parse_solution(const nlohmann::json& json)
 {
-	Solution s;
+	solution s;
 
 	auto& solution = json["solution"];
 
 	auto& windows = solution["windows"];
 	for (auto& window : windows)
 	{
-		std::vector<std::string> t;
+		std::vector<window::task_assignment> tas;
 
-		auto& tasks = window["tasks"];
-		for (auto& task : tasks)
+		auto& task_assignments = window["tasks"];
+		for (auto& task_assignment : task_assignments)
 		{
-			t.push_back((std::string) task);
+			tas.push_back({ .task = task_assignment["task"],
+							.processor = task_assignment["processor"],
+							.processing_unit = task_assignment["processingUnit"],
+							.start = task_assignment["start"],
+							.length = task_assignment["length"] });
 		}
 
-		s.windows.push_back({ .length = window["length"], .tasks = std::move(t) });
+		s.windows.push_back({ .length = window["length"], .task_assignments = std::move(tas) });
 	}
 
 	s.feasible = solution["feasible"];
@@ -65,12 +68,12 @@ Solution parse_solution(const nlohmann::json& json)
 	return s;
 }
 
-void write_solution(nlohmann::json& json, const Solution& solution)
+void write_solution(nlohmann::json& json, const solution& solution)
 {
 	auto& json_solution = json["solution"];
 	json_solution["feasible"] = solution.feasible;
 
-	int i=0;
+	int i = 0;
 	auto& json_windows = json_solution["windows"];
 
 	if (solution.feasible)
@@ -79,7 +82,20 @@ void write_solution(nlohmann::json& json, const Solution& solution)
 		{
 			auto& json_window = json_windows[i];
 			json_window["length"] = w.length;
-			json_window["tasks"] = w.tasks;
+
+			auto& json_tasks = json_window["tasks"];
+			int j = 0;
+			for (auto& task_assignment : w.task_assignments)
+			{
+				auto& json_task = json_tasks[j];
+				json_task["task"] = task_assignment.task;
+				json_task["processor"] = task_assignment.processor;
+				json_task["processingUnit"] = task_assignment.processing_unit;
+				json_task["start"] = task_assignment.start;
+				json_task["length"] = task_assignment.length;
+				j++;
+			}
+
 			i++;
 		}
 	}

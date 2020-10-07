@@ -50,6 +50,7 @@ int main(int argc, char** argv)
 					std::cerr << "failed to open output file " << next_arg << std::endl;
 					return EXIT_FAILURE;
 				}
+
 				i++;
 				break;
 			}
@@ -63,8 +64,8 @@ int main(int argc, char** argv)
 	}
 
 	nlohmann::json json;
-	Environment environment;
-	std::unordered_map<std::string, Task> tasks;
+	environment environment;
+	task_map tasks;
 
 	try
 	{

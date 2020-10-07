@@ -15,12 +15,11 @@ public:
 	void display();
 	void export_bmp(const std::string& filename);
 
-	visualiser(const Environment& e, const std::unordered_map<std::string, Task>& t, const Solution& s);
+	visualiser(const environment& e, const solution& s);
 
 private:
-	const Environment& m_environment;
-	const std::unordered_map<std::string, Task>& m_tasks;
-	const Solution& m_solution;
+	const environment& m_environment;
+	const solution& m_solution;
 
 	std::unordered_map<std::string, uint> m_pu_offsets;
 	std::vector<std::string> m_processing_units;
@@ -30,7 +29,7 @@ private:
 
 	void init_img();
 	void draw_grid();
-	uint draw_window(const Window& window, uint window_start_time);
+	uint draw_window(const window& window, uint window_start_time);
 	void draw_infeasible_solution();
 	void build_image();
 };

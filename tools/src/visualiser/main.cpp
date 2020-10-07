@@ -68,16 +68,14 @@ int main(int argc, char** argv)
 	}
 
 	nlohmann::json json;
-	Environment environment;
-	std::unordered_map<std::string, Task> tasks;
-	Solution solution;
+	environment environment;
+	solution solution;
 
 	try
 	{
 		auto& input_stream = input_file == nullptr ? std::cin : *input_file;
 		input_stream >> json;
 		environment = parse_environment(json);
-		tasks = parse_tasks(json);
 		solution = parse_solution(json);
 		delete input_file;
 	}
@@ -87,7 +85,7 @@ int main(int argc, char** argv)
 		return EXIT_FAILURE;
 	}
 
-	visualiser v(environment, tasks, solution);
+	visualiser v(environment, solution);
 
 	if (!output_filename.empty())
 		v.export_bmp(output_filename);

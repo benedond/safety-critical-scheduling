@@ -1,17 +1,17 @@
 #include <iostream>
-#include <unordered_set>
 #include <vector>
 #include <cassert>
 #include <cmath>
+#include <set>
 
 #include "simple_solver.h"
 
-simple_solver::simple_solver(const Environment &e, const std::unordered_map<std::string, Task> &t)
+simple_solver::simple_solver(const environment& e, const task_map& t)
 		: m_environment(e), m_tasks(t), m_solved(false), m_feasible(false)
 {
 }
 
-Solution simple_solver::get_solution()
+solution simple_solver::get_solution()
 {
 	if (!m_solved)
 		solve();
@@ -28,38 +28,45 @@ void simple_solver::solve()
 		return;
 	m_solved = true;
 
-	std::vector<const Task*> tasks;
-	std::unordered_set<const Task*> assigned_tasks(m_tasks.size());
+	const static auto task_comparator = [](const task* a, const task* b) { return a->length != b->length ? a->length > b->length : a > b; };
+	std::set<const task*, decltype(task_comparator)> unassigned_tasks(task_comparator);
 
-	tasks.reserve(m_tasks.size());
 	for (auto& task : m_tasks)
-		tasks.push_back(&task.second);
+		unassigned_tasks.insert(&task.second);
 
-	std::sort(tasks.begin(), tasks.end(), [](const Task* a, const Task* b) {
-		return a->length > b->length;
-	});
-
-	auto task_count = m_tasks.size();
-	Window window { .length = -1 };
-
+	window window { .length = -1 };
 	std::unordered_map<std::string, int> proc_unit_allocation;
 
-	while (assigned_tasks.size() < task_count)
+	while (!unassigned_tasks.empty())
 	{
-		for (auto& task : tasks)
+		for (auto& task : unassigned_tasks)
 		{
-			if (assigned_tasks.find(task) != assigned_tasks.end())
-				continue;
-
 			// can task be assigned to all required processors?
 			for (auto& p : task->processors)
-				if (proc_unit_allocation[p] >= m_environment.processors.at(p).processing_units)
-					goto task_assignment_loop; // can't assign task to current window, try to find another one
-
-			// task can be assigned: assign it to all required processors
 			{
+				int required_processing_units = p.processing_units;
+				int available_processing_units = m_environment.processors.at(p.processor).processing_units - proc_unit_allocation[p.processor];
+
+				if (available_processing_units < required_processing_units)
+					goto task_assignment_loop; // can't assign task to current window, try to find another one
+			}
+
+			// task can be assigned: assign it to all required processors by generating appropriate task assignments
+			{
+				std::vector<window::task_assignment> task_assignments;
 				for (auto& p : task->processors)
-					proc_unit_allocation[p] = proc_unit_allocation[p] + 1;
+				{
+					int start_proc_unit = proc_unit_allocation[p.processor];
+					for (int i=0; i<p.processing_units; i++)
+					{
+						task_assignments.push_back({ .task = task->name,
+							     					 .processor = p.processor,
+								                     .processing_unit = start_proc_unit+i,
+								                     .start = 0,
+								                     .length = task->length });
+					}
+					proc_unit_allocation[p.processor] = start_proc_unit + p.processing_units;
+				}
 
 				// check window length
 				float wl = ceilf((float) task->length / 0.6f);
@@ -67,22 +74,15 @@ void simple_solver::solve()
 					window.length = (int) wl;
 
 				// assign task to current window
-				window.tasks.push_back(task->name);
-				assigned_tasks.insert(task);
+				for (auto& task_assignment : task_assignments)
+					window.task_assignments.push_back(std::move(task_assignment));
 
-				//goto solver_loop; // continue with task assignment
-				//task_assigned = true;
-				//break;
+				unassigned_tasks.erase(task);
 			}
 
 			task_assignment_loop:;
 		}
 
-		//if (window.length == -1)
-		//{
-		//	std::cerr << "ERROR";
-		//	break;
-		//}
 		assert(window.length > 0);
 
 		window = save_window(std::move(window));
@@ -90,13 +90,12 @@ void simple_solver::solve()
 			return;
 
 		proc_unit_allocation.clear();
-		solver_loop:;
 	}
 
 	m_feasible = true;
 }
 
-Window simple_solver::save_window(Window&& window)
+window simple_solver::save_window(window&& window)
 {
 	m_windows.push_back(std::move(window));
 	return { .length = -1 };

@@ -6,41 +6,56 @@
 #include <unordered_map>
 #include <nlohmann/json.hpp>
 
-struct Processor
+struct processor
 {
 	std::string name;
 	int processing_units;
 };
 
-struct Environment
+struct environment
 {
-	std::unordered_map<std::string, Processor> processors;
+	std::unordered_map<std::string, processor> processors;
 	int main_frame_length;
 };
 
-struct Task
+struct task
 {
+	struct processor_assignment
+	{
+		std::string processor;
+		int processing_units;
+	};
+
 	std::string name;
 	int length;
-	std::vector<std::string> processors;
+	std::vector<processor_assignment> processors;
 };
 
-struct Window
+struct window
 {
+	struct task_assignment
+	{
+		std::string task, processor;
+		int processing_unit;
+		int start, length;
+	};
+
 	int length;
-	std::vector<std::string> tasks;
+	std::vector<task_assignment> task_assignments;
 };
 
-struct Solution
+struct solution
 {
 	bool feasible;
-	std::vector<Window> windows;
+	std::vector<window> windows;
 };
 
-Environment parse_environment(const nlohmann::json& json);
-std::unordered_map<std::string, Task> parse_tasks(const nlohmann::json& json);
-Solution parse_solution(const nlohmann::json& json);
+typedef std::unordered_map<std::string, task> task_map;
 
-void write_solution(nlohmann::json& json, const Solution& solution);
+environment parse_environment(const nlohmann::json& json);
+task_map parse_tasks(const nlohmann::json& json);
+solution parse_solution(const nlohmann::json& json);
+
+void write_solution(nlohmann::json& json, const solution& solution);
 
 #endif // _INSTANCE_H
