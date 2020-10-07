@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 #include <unordered_map>
-#include "lib/nlohmann/json.hpp"
+#include <nlohmann/json.hpp>
 
 struct Processor
 {

@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
 
-#include "instance.h"
+#include "../common/instance.h"
 #include "visualiser.h"
 
 void print_help()

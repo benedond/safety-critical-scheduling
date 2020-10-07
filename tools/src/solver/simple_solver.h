@@ -1,7 +1,7 @@
 #ifndef _SIMPLE_SOLVER_H
 #define _SIMPLE_SOLVER_H
 
-#include "instance.h"
+#include "../common/instance.h"
 
 class simple_solver
 {

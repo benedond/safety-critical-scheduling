@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
+#include <nlohmann/json.hpp>
 
-#include "lib/nlohmann/json.hpp"
 #include "simple_solver.h"
 
 #define EXIT_INFEASIBLE_SOLUTION 2

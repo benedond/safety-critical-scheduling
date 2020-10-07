@@ -1,8 +1,9 @@
 #ifndef _VISUALISER_H
 #define _VISUALISER_H
 
-#include "lib/CImg.h"
-#include "instance.h"
+#include <CImg.h>
+
+#include "../common/instance.h"
 
 class visualiser
 {
