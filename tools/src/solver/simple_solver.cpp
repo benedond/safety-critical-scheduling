@@ -39,8 +39,11 @@ void simple_solver::solve()
 
 	while (!unassigned_tasks.empty())
 	{
-		for (auto& task : unassigned_tasks)
+		for (auto itt = unassigned_tasks.begin(); itt != unassigned_tasks.end(); )
 		{
+			auto task = *itt;
+			bool can_assign_task = true;
+
 			// can task be assigned to all required processors?
 			for (auto& p : task->processors)
 			{
@@ -48,10 +51,17 @@ void simple_solver::solve()
 				int available_processing_units = m_environment.processors.at(p.processor).processing_units - proc_unit_allocation[p.processor];
 
 				if (available_processing_units < required_processing_units)
-					goto task_assignment_loop; // can't assign task to current window, try to find another one
+				{
+					// can't assign task to current window, try to find another one
+					//goto task_assignment_loop;
+					can_assign_task = false;
+					itt++;
+					break;
+				}
 			}
 
 			// task can be assigned: assign it to all required processors by generating appropriate task assignments
+			if (can_assign_task)
 			{
 				std::vector<window::task_assignment> task_assignments;
 				for (auto& p : task->processors)
@@ -77,10 +87,8 @@ void simple_solver::solve()
 				for (auto& task_assignment : task_assignments)
 					window.task_assignments.push_back(std::move(task_assignment));
 
-				unassigned_tasks.erase(task);
+				itt = unassigned_tasks.erase(itt);
 			}
-
-			task_assignment_loop:;
 		}
 
 		assert(window.length > 0);
