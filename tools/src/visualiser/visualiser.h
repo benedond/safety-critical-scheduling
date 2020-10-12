@@ -1,5 +1,5 @@
-#ifndef _VISUALISER_H
-#define _VISUALISER_H
+#ifndef VISUALISER_H
+#define VISUALISER_H
 
 #include <CImg.h>
 
@@ -18,6 +18,8 @@ public:
 	visualiser(const environment& e, const solution& s);
 
 private:
+	const std::array<int, 1> m_supported_problem_versions{ 1 };
+
 	const environment& m_environment;
 	const solution& m_solution;
 
@@ -34,4 +36,4 @@ private:
 	void build_image();
 };
 
-#endif // _VISUALISER_H
+#endif // VISUALISER_H

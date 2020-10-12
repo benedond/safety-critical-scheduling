@@ -1,21 +1,32 @@
-#ifndef _INSTANCE_H
-#define _INSTANCE_H
+#ifndef INSTANCE_H
+#define INSTANCE_H
 
 #include <string>
 #include <vector>
 #include <unordered_map>
+#include <cstdint>
 #include <nlohmann/json.hpp>
+
+enum class processor_type
+{
+	invalid_type,
+	main_processor,
+	coprocessor
+};
 
 struct processor
 {
 	std::string name;
 	int processing_units;
+	processor_type type;
 };
 
 struct environment
 {
 	std::unordered_map<std::string, processor> processors;
+	std::vector<processor*> processors_list;
 	int main_frame_length;
+	int problem_version;
 };
 
 struct task
@@ -47,6 +58,9 @@ struct window
 struct solution
 {
 	bool feasible;
+	std::string solver_name;
+	uint64_t solution_time;
+	std::unordered_map<std::string, std::string> solver_metadata;
 	std::vector<window> windows;
 };
 
@@ -56,6 +70,10 @@ environment parse_environment(const nlohmann::json& json);
 task_map parse_tasks(const nlohmann::json& json);
 solution parse_solution(const nlohmann::json& json);
 
+void write_tasks(nlohmann::json& json, const std::vector<task>& tasks);
 void write_solution(nlohmann::json& json, const solution& solution);
 
-#endif // _INSTANCE_H
+bool read_json_from_file(nlohmann::json& json, const std::string& filename);
+bool write_json_to_file(const nlohmann::json& json, const std::string& filename);
+
+#endif // INSTANCE_H

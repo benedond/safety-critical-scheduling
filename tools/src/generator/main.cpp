@@ -2,27 +2,18 @@
 
 #include "../common/instance.h"
 #include "../common/arg_parser.h"
-#include "visualiser.h"
+#include "generator.h"
 
 int main(int argc, char** argv)
 {
 	arg_parser args(argc, argv);
 
-	bool display_visualisation = args.is_arg_present("--display");
-	std::string output_filename = args.get_arg_value("--output");
-
-	if (!display_visualisation && output_filename.empty())
-	{
-		std::cerr << "nothing to do" << std::endl;
-		return EXIT_SUCCESS;
-	}
-
 	nlohmann::json json;
 
-	std::string input_filename = args.get_arg_value("--input");
-	if (!input_filename.empty())
+	std::string environment_filename = args.get_arg_value("--environment");
+	if (!environment_filename.empty())
 	{
-		if (!read_json_from_file(json, input_filename))
+		if (!read_json_from_file(json, environment_filename))
 			return EXIT_FAILURE;
 	}
 	else
@@ -31,12 +22,13 @@ int main(int argc, char** argv)
 	}
 
 	environment environment;
-	solution solution;
-
+	std::vector<task> tasks;
 	try
 	{
 		environment = parse_environment(json);
-		solution = parse_solution(json);
+		generator g(args, environment);
+		tasks = g.generate();
+		write_tasks(json, tasks);
 	}
 	catch (const nlohmann::detail::parse_error& error)
 	{
@@ -49,13 +41,16 @@ int main(int argc, char** argv)
 		return EXIT_FAILURE;
 	}
 
-	visualiser v(environment, solution);
-
+	std::string output_filename = args.get_arg_value("--output");
 	if (!output_filename.empty())
-		v.export_bmp(output_filename);
-
-	if (display_visualisation)
-		v.display();
+	{
+		if (!write_json_to_file(json, output_filename))
+			return EXIT_FAILURE;
+	}
+	else
+	{
+		std::cout << json;
+	}
 
 	return EXIT_SUCCESS;
 }

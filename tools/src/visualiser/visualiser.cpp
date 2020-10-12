@@ -23,8 +23,12 @@ constexpr visualiser::uchar RED[] = { 0xFF, 0x00, 0x00 };
 constexpr visualiser::uchar CYAN[] = { 0x00, 0x80, 0x80 };
 
 visualiser::visualiser(const environment& e, const solution& s) :
-		m_environment(e), m_solution(s), m_img_built(false), m_img_width(0), m_img_height(0)
+		m_environment(e), m_solution(s), m_img_width(0), m_img_height(0), m_img_built(false)
 {
+	if (std::find(m_supported_problem_versions.begin(),
+				  m_supported_problem_versions.end(),
+				  m_environment.problem_version) == m_supported_problem_versions.end())
+		throw std::invalid_argument("problem version is not supported");
 }
 
 void visualiser::display()
@@ -71,9 +75,9 @@ void visualiser::build_image()
 
 void visualiser::init_img()
 {
-	for (auto& p : m_environment.processors)
-		for (int i=0; i<p.second.processing_units; i++)
-			m_processing_units.push_back(p.first);
+	for (auto& p : m_environment.processors_list)
+		for (int i=0; i<p->processing_units; i++)
+			m_processing_units.push_back(p->name);
 
 	m_img_width = m_environment.main_frame_length * TIME_SCALE + 2 * X_OFFSET + LANE_X_START;
 	m_img_height = m_processing_units.size() * LANE_HEIGHT + 2 * Y_OFFSET;

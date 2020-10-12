@@ -2,37 +2,31 @@
 #include <vector>
 #include <cassert>
 #include <cmath>
-#include <set>
+#include <random>
+#include <chrono>
 
-#include "simple_solver.h"
+#include "random_task_order_solver.h"
 
-simple_solver::simple_solver(const environment& e, const task_map& t)
-		: m_environment(e), m_tasks(t), m_solved(false), m_feasible(false)
+random_task_order_solver::random_task_order_solver(const environment& e, const task_map& t)
+		: solver(e, t), m_seed(std::chrono::high_resolution_clock::now().time_since_epoch().count())
 {
 }
 
-solution simple_solver::get_solution()
-{
-	if (!m_solved)
-		solve();
-
-	if (m_feasible)
-		return { .feasible = true, .windows = m_windows };
-	else
-		return { .feasible = false };
-}
-
-void simple_solver::solve()
+void random_task_order_solver::solve()
 {
 	if (m_solved)
 		return;
 	m_solved = true;
 
-	const static auto task_comparator = [](const task* a, const task* b) { return a->length != b->length ? a->length > b->length : a > b; };
-	std::set<const task*, decltype(task_comparator)> unassigned_tasks(task_comparator);
+	/*const static auto task_comparator = [](const task* a, const task* b) { return a->length != b->length ? a->length > b->length : a > b; };
+	std::set<const task*, decltype(task_comparator)> unassigned_tasks(task_comparator);*/
+	std::vector<const task*> unassigned_tasks;
 
 	for (auto& task : m_tasks)
-		unassigned_tasks.insert(&task.second);
+		unassigned_tasks.push_back(&task.second);
+
+	std::mt19937 random_generator(m_seed);
+	std::shuffle(unassigned_tasks.begin(), unassigned_tasks.end(), random_generator);
 
 	window window { .length = -1 };
 	std::unordered_map<std::string, int> proc_unit_allocation;
@@ -70,10 +64,10 @@ void simple_solver::solve()
 					for (int i=0; i<p.processing_units; i++)
 					{
 						task_assignments.push_back({ .task = task->name,
-							     					 .processor = p.processor,
-								                     .processing_unit = start_proc_unit+i,
-								                     .start = 0,
-								                     .length = task->length });
+														   .processor = p.processor,
+														   .processing_unit = start_proc_unit+i,
+														   .start = 0,
+														   .length = task->length });
 					}
 					proc_unit_allocation[p.processor] = start_proc_unit + p.processing_units;
 				}
@@ -103,23 +97,21 @@ void simple_solver::solve()
 	m_feasible = true;
 }
 
-window simple_solver::save_window(window&& window)
+bool random_task_order_solver::check_problem_compatibility() const
 {
-	m_windows.push_back(std::move(window));
-	return { .length = -1 };
+	return std::find(m_supported_problem_versions.begin(),
+					 m_supported_problem_versions.end(),
+					 m_environment.problem_version) != m_supported_problem_versions.end();
 }
 
-bool simple_solver::check_feasibility()
+std::string random_task_order_solver::get_solver_name() const
 {
-	int total_time = 0;
-	for (auto& w : m_windows)
-		total_time += w.length;
+	return "random task order solver";
+}
 
-	if (total_time > m_environment.main_frame_length)
-	{
-		std::cerr << "solution is infeasible - total_time: " << total_time << " main_frame_length: " << m_environment.main_frame_length << std::endl;
-		return false;
-	}
-
-	return true;
+solver::metadata_map random_task_order_solver::get_solver_metadata() const
+{
+	return metadata_map {
+			{"seed", std::to_string(m_seed)}
+	};
 }

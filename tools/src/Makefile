@@ -3,10 +3,14 @@ LINK_DIRS =
 
 OUTPUT_DIR = ../bin
 COMMON_DIR = common
+GENERATOR_DIR = generator
 VISUALISER_DIR = visualiser
 SOLVER_DIR = solver
+STAT_DIR = stat
+GENERATOR_OUTPUT_FILE = generator.exe
 SOLVER_OUTPUT_FILE = solver.exe
 VISUALISER_OUTPUT_FILE = visualiser.exe
+STAT_OUTPUT_FILE = stat.exe
 
 
 CXX=g++
@@ -14,30 +18,31 @@ LIBS =
 INCLUDE_FLAGS=$(INCLUDE_DIRS:%=-I%)
 LINK_FLAGS=$(LINK_DIRS:%=-L%)
 LIB_FLAGS=$(LIBS:%=-l%)
-CXXFLAGS = -std=c++14 $(INCLUDE_FLAGS) $(LINK_FLAGS) $(LIB_FLAGS)
+CXXFLAGS = -std=c++14 $(INCLUDE_FLAGS) $(LINK_FLAGS) $(LIB_FLAGS) -U__STRICT_ANSI__
 RELEASE_FLAGS = -O3 
 DEBUG_FLAGS = -Og -Wall 
 
-COMMON_FILES = $(COMMON_DIR)/instance.cpp
-SOLVER_FILES = $(SOLVER_DIR)/main.cpp $(SOLVER_DIR)/simple_solver.cpp 
-VISUALISER_FILES = $(VISUALISER_DIR)/visualiser.cpp $(VISUALISER_DIR)/main.cpp
+COMMON_FILES = $(COMMON_DIR)/instance.cpp $(COMMON_DIR)/arg_parser.cpp
+GENERATOR_FILES = $(GENERATOR_DIR)/main.cpp $(GENERATOR_DIR)/generator.cpp
+SOLVER_FILES = $(SOLVER_DIR)/main.cpp $(SOLVER_DIR)/solver.cpp  $(SOLVER_DIR)/longest_tasks_first_solver.cpp $(SOLVER_DIR)/random_task_order_solver.cpp 
+VISUALISER_FILES = $(VISUALISER_DIR)/main.cpp $(VISUALISER_DIR)/visualiser.cpp 
+STAT_FILES = $(STAT_DIR)/main.cpp
 
-release: solver visualiser
 
-display: solver visualiser-display
 
-solver: common.o
-	$(CXX) $(CXXFLAGS) $(RELEASE_FLAGS) $(SOLVER_FILES) common.o -o $(OUTPUT_DIR)/$(SOLVER_OUTPUT_FILE)
+release: generator solver visualiser stat
 
-visualiser: common.o
-	$(CXX) $(CXXFLAGS) $(RELEASE_FLAGS) $(VISUALISER_FILES) common.o -Dcimg_display=0 -o $(OUTPUT_DIR)/$(VISUALISER_OUTPUT_FILE)
+generator: $(COMMON_FILES) $(GENERATOR_FILES)
+	$(CXX) $(CXXFLAGS) $(RELEASE_FLAGS) $(COMMON_FILES) $(GENERATOR_FILES) -o $(OUTPUT_DIR)/$(GENERATOR_OUTPUT_FILE)
 
-visualiser-display: common.o
-	$(CXX) $(CXXFLAGS) $(RELEASE_FLAGS) $(VISUALISER_FILES) common.o -o $(OUTPUT_DIR)/$(VISUALISER_OUTPUT_FILE)
+solver: $(COMMON_FILES) $(SOLVER_FILES)
+	$(CXX) $(CXXFLAGS) $(RELEASE_FLAGS) $(COMMON_FILES) $(SOLVER_FILES) -o $(OUTPUT_DIR)/$(SOLVER_OUTPUT_FILE)
 
-common.o:
-	$(CXX) $(CXXFLAGS) $(RELEASE_FLAGS) -c $(COMMON_FILES) -o common.o
+visualiser: $(COMMON_FILES) $(VISUALISER_FILES)
+	$(CXX) $(CXXFLAGS) $(RELEASE_FLAGS) $(COMMON_FILES) $(VISUALISER_FILES) -Dcimg_display=0 -o $(OUTPUT_DIR)/$(VISUALISER_OUTPUT_FILE)
 
-#debug: main.cpp
-#	$(PROTOBUF_GENERATE)
-#	$(CXX) $(CXXFLAGS) $(DEBUG_FLAGS) $(CPP_FILES) -o $(OUTPUT_FILE)
+visualiser-display: $(COMMON_FILES) $(VISUALISER_FILES)
+	$(CXX) $(CXXFLAGS) -lgdi32 $(RELEASE_FLAGS) $(COMMON_FILES) $(VISUALISER_FILES) -o $(OUTPUT_DIR)/display-$(VISUALISER_OUTPUT_FILE)
+
+stat: $(COMMON_FILES) $(STAT_FILES)
+	$(CXX) $(CXXFLAGS) $(RELEASE_FLAGS) $(COMMON_FILES) $(STAT_FILES) -o $(OUTPUT_DIR)/$(STAT_OUTPUT_FILE)
