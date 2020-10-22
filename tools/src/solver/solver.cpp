@@ -17,9 +17,9 @@ solution solver::get_solution()
 		if (!check_problem_compatibility())
 			throw std::invalid_argument("problem version is not supported");
 
-		auto start = std::chrono::steady_clock::now();
+		auto start = std::chrono::high_resolution_clock::now();
 		solve();
-		auto end = std::chrono::steady_clock::now();
+		auto end = std::chrono::high_resolution_clock::now();
 
 		m_solution_time = std::chrono::duration_cast<std::chrono::milliseconds>(end-start).count();
 	}

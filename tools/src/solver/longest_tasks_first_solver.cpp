@@ -23,11 +23,18 @@ void longest_tasks_first_solver::solve()
 	for (auto& task : m_tasks)
 		unassigned_tasks.insert(&task.second);
 
+	int primary_processor_count = 0;
+	for (auto& p : m_environment.processors)
+		if (p.second.type == processor_type::main_processor)
+			primary_processor_count++;
+
 	window window { .length = -1 };
 	std::unordered_map<std::string, int> proc_unit_allocation;
 
 	while (!unassigned_tasks.empty())
 	{
+		int full_primary_processors_count = 0;
+
 		for (auto itt = unassigned_tasks.begin(); itt != unassigned_tasks.end(); )
 		{
 			auto task = *itt;
@@ -66,6 +73,13 @@ void longest_tasks_first_solver::solve()
 								                     .length = task->length });
 					}
 					proc_unit_allocation[p.processor] = start_proc_unit + p.processing_units;
+
+					auto& processor_data = m_environment.processors.at(p.processor);
+					if (processor_data.type == processor_type::main_processor &&
+						proc_unit_allocation[p.processor] >= processor_data.processing_units)
+					{
+						full_primary_processors_count++;
+					}
 				}
 
 				// check window length
@@ -79,6 +93,9 @@ void longest_tasks_first_solver::solve()
 
 				itt = unassigned_tasks.erase(itt);
 			}
+
+			if (full_primary_processors_count >= primary_processor_count)
+				break;
 		}
 
 		assert(window.length > 0);
