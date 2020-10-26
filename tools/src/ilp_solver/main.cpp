@@ -58,14 +58,14 @@ solution solve(const environment& e, const task_map& tasks)
     {
         for (int j = 0; j < windows_ub; j++)
         {
-            GRBLinExpr resource_capacity_contraint;
+            GRBLinExpr resource_capacity_constraint;
             for (int i = 0; i < num_tasks; i++)
             {
                 for (auto& processor : task_list[i]->processors)
                 {
                     if (processor.processor == resource->name)
                     {
-                        resource_capacity_contraint += w[i][j] * processor.processing_units;
+                        resource_capacity_constraint += w[i][j] * processor.processing_units;
                         break;
                     }
                 }
