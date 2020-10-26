@@ -70,7 +70,7 @@ solution solve(const environment& e, const task_map& tasks)
                     }
                 }
             }
-            model.addConstr(resource_capacity_contraint <= resource->processing_units);
+            model.addConstr(resource_capacity_constraint <= resource->processing_units);
         }
     }
 
