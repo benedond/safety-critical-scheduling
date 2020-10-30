@@ -51,17 +51,7 @@ task_map parse_tasks(const nlohmann::json& json)
 
 	return t;
 }
-/*
- * struct solution
-{
-	bool feasible;
-	std::string solver_name;
-	uint64_t solution_time;
-	std::unordered_map<std::string, std::string> solver_metadata;
-	std::vector<window> windows;
-};
 
- */
 solution parse_solution(const nlohmann::json& json)
 {
 	solution s;
@@ -100,6 +90,7 @@ solution parse_solution(const nlohmann::json& json)
 void write_tasks(nlohmann::json& json, const std::vector<task>& tasks)
 {
 	auto& json_tasks = json["tasks"];
+	json_tasks.clear();
 
 	int i = 0;
 	for (auto& task : tasks)
@@ -125,6 +116,8 @@ void write_tasks(nlohmann::json& json, const std::vector<task>& tasks)
 void write_solution(nlohmann::json& json, const solution& solution)
 {
 	auto& json_solution = json["solution"];
+	json_solution.clear();
+
 	json_solution["feasible"] = solution.feasible;
 	json_solution["solverName"] = solution.solver_name;
 	json_solution["solutionTime"] = solution.solution_time;
