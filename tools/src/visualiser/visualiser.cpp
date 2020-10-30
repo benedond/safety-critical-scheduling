@@ -20,7 +20,8 @@ constexpr visualiser::uchar WHITE[] = { 0xFF, 0xFF, 0xFF };
 constexpr visualiser::uchar BLACK[] = { 0x00, 0x00, 0x00 };
 constexpr visualiser::uchar RED[] = { 0xFF, 0x00, 0x00 };
 //constexpr visualiser::uchar BLUE[] = { 0x00, 0x00, 0xFF };
-constexpr visualiser::uchar CYAN[] = { 0x00, 0x80, 0x80 };
+//constexpr visualiser::uchar CYAN[] = { 0x00, 0x80, 0x80 };
+constexpr visualiser::uchar LIGHT_VIOLET[] = { 0x96, 0x96, 0xFA };
 
 visualiser::visualiser(const environment& e, const solution& s) :
 		m_environment(e), m_solution(s), m_img_width(0), m_img_height(0), m_img_built(false)
@@ -133,10 +134,10 @@ visualiser::uint visualiser::draw_window(const window& window, uint window_start
 
 		uint start_y = m_pu_offsets.at(task_assignment.processor) + task_assignment.processing_unit * LANE_HEIGHT + LANE_Y_OFFSET;
 		uint end_y = start_y + LANE_HEIGHT - LANE_Y_OFFSET*2;
-		m_img.draw_rectangle((uint) (start_x + LANE_X_OFFSET), start_y, end_x, end_y, CYAN);
+		m_img.draw_rectangle((uint) (start_x + LANE_X_OFFSET), start_y, end_x, end_y, LIGHT_VIOLET);
 
 		std::string label = task_assignment.task + ": " + std::to_string(task_assignment.length) + "ms";
-		m_img.draw_text((uint) (start_x + 10), (uint) (start_y + 3), label.c_str(), WHITE, CYAN);
+		m_img.draw_text((uint) (start_x + 10), (uint) (start_y + 3), label.c_str(), BLACK);
 	}
 
 	uint end_x = window_start_x + window.length*TIME_SCALE;
