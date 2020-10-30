@@ -51,6 +51,9 @@ solution solve(const environment& e, const task_map& tasks)
 
         for (int i = 0; i < num_tasks; i++)
             model.addConstr(l[j] >= (w[i][j] * task_list[i]->length)/0.6);
+
+        if (j > 0)
+			model.addConstr(l[j] <= l[j-1]);
     }
     model.addConstr(window_length_sum <= e.main_frame_length);
     
