@@ -52,6 +52,37 @@ task_map parse_tasks(const nlohmann::json& json)
 	return t;
 }
 
+assignment_characteristic_list parse_assignment_characteristics(const nlohmann::json& json)
+{
+	assignment_characteristic_list ac;
+
+	auto& assignment_characteristics = json["assignmentCharacteristics"];
+	for (auto& assignment_char : assignment_characteristics)
+	{
+		assignment_characteristic a { .task = assignment_char["task"] };
+
+		auto& resource_assignments = assignment_char["resourceAssignments"];
+		for (auto& res_ass : resource_assignments)
+		{
+			assignment_characteristic::resource_assignment ra { .energy_consumption = res_ass["energyConsumption"],
+													            .length = res_ass["length"] };
+
+			auto& processors = res_ass["processors"];
+			for (auto& processor : processors)
+			{
+				ra.processors.push_back({ .processor = processor["processor"],
+							              .processing_units = processor["processingUnits"] });
+			}
+
+			a.resource_assignments.push_back(std::move(ra));
+		}
+
+		ac.push_back(std::move(a));
+	}
+
+	return ac;
+}
+
 solution parse_solution(const nlohmann::json& json)
 {
 	solution s;

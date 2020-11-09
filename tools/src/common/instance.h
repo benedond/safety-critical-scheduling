@@ -42,6 +42,19 @@ struct task
 	std::vector<processor_assignment> processors;
 };
 
+struct assignment_characteristic
+{
+	struct resource_assignment
+	{
+		float energy_consumption;
+		int length;
+		std::vector<task::processor_assignment> processors;
+	};
+
+	std::string task;
+	std::vector<resource_assignment> resource_assignments;
+};
+
 struct window
 {
 	struct task_assignment
@@ -65,9 +78,11 @@ struct solution
 };
 
 typedef std::unordered_map<std::string, task> task_map;
+typedef std::vector<assignment_characteristic> assignment_characteristic_list;
 
 environment parse_environment(const nlohmann::json& json);
 task_map parse_tasks(const nlohmann::json& json);
+assignment_characteristic_list parse_assignment_characteristics(const nlohmann::json& json);
 solution parse_solution(const nlohmann::json& json);
 
 void write_tasks(nlohmann::json& json, const std::vector<task>& tasks);
