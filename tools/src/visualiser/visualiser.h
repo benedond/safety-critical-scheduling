@@ -14,11 +14,12 @@ public:
 
 	void display();
 	void export_bmp(const std::string& filename);
+	void export_png(const std::string& filename);
 
 	visualiser(const environment& e, const solution& s);
 
 private:
-	const std::array<int, 1> m_supported_problem_versions{ 1 };
+	const std::array<int, 1> m_supported_problem_versions { 1 };
 
 	const environment& m_environment;
 	const solution& m_solution;

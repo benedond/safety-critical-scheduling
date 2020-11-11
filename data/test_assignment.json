@@ -1,0 +1,105 @@
+{
+	"environment": {
+		"processors": [
+			{
+				"name": "A53",
+				"processingUnits": 4,
+				"type": "main_processor"
+			},
+			{
+				"name": "A72",
+				"processingUnits": 2,
+				"type": "main_processor"
+			},
+			{
+				"name": "GPU",
+				"processingUnits": 2,
+				"type": "coprocessor"
+			}
+		],
+
+		"mainFrameLength": 200,
+		"problemVersion": 1
+	},
+
+	"assignmentCharacteristics": [
+		{
+			"task": "T1",
+			"resourceAssignments": [
+				{
+					"energyConsumption": 0.3,
+					"length": 10,
+					"processors": [
+						{
+							"processor": "A53",
+							"processingUnits": 1
+						}
+					]
+				},
+				{
+					"energyConsumption": 0.6,
+					"length": 5,
+					"processors": [
+						{
+							"processor": "A72",
+							"processingUnits": 1
+						}
+					]
+				},
+				{
+					"energyConsumption": 0.8,
+					"length": 3,
+					"processors": [
+						{
+							"processor": "A72",
+							"processingUnits": 1
+						},
+						{
+							"processor": "GPU",
+							"processingUnits": 1
+						}
+					]
+				}
+			]
+		},
+		{
+			"task": "T2",
+			"resourceAssignments": [
+				{
+					"energyConsumption": 0.6,
+					"length": 8,
+					"processors": [
+						{
+							"processor": "A53",
+							"processingUnits": 1
+						}
+					]
+				},
+				{
+					"energyConsumption": 0.8,
+					"length": 8,
+					"processors": [
+						{
+							"processor": "A72",
+							"processingUnits": 1
+						}
+					]
+				},
+				{
+					"energyConsumption": 0.9,
+					"length": 8,
+					"processors": [
+						{
+							"processor": "A72",
+							"processingUnits": 1
+						},
+						{
+							"processor": "GPU",
+							"processingUnits": 1
+						}
+					]
+				}
+			]
+		}
+	]
+}

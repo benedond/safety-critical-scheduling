@@ -52,7 +52,23 @@ int main(int argc, char** argv)
 	visualiser v(environment, solution);
 
 	if (!output_filename.empty())
-		v.export_bmp(output_filename);
+	{
+		if (output_filename.size() < 5)
+		{
+			std::cerr << "output filename error" << std::endl;
+		}
+		else
+		{
+			auto format = output_filename.substr(output_filename.size()-4, output_filename.size()-1);
+
+			if (format == ".bmp")
+				v.export_bmp(output_filename);
+			else if (format == ".png")
+				v.export_png(output_filename);
+			else
+				std::cerr << "output error: unsupported format" << std::endl;
+		}
+	}
 
 	if (display_visualisation)
 		v.display();

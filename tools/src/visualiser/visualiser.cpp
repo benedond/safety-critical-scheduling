@@ -1,4 +1,6 @@
 #include <iostream>
+#include <cstdint>
+#include <lodepng.h>
 
 #include "visualiser.h"
 
@@ -50,6 +52,26 @@ void visualiser::export_bmp(const std::string& filename)
 {
 	build_image();
 	m_img.save_bmp(filename.c_str());
+}
+
+void visualiser::export_png(const std::string& filename)
+{
+	build_image();
+
+	const uint64_t img_buffer_size = m_img_width * m_img_height * 3;
+	std::vector<uchar> buffer(img_buffer_size);
+
+	for (uint64_t i=0; i<img_buffer_size; i+=3)
+	{
+		const uint64_t x = (i/3) % m_img_width;
+		const uint64_t y = (i/3) / m_img_width;
+
+		buffer[i+0] = m_img.atXYZC(x, y, 1, 0);
+		buffer[i+1] = m_img.atXYZC(x, y, 1, 1);
+		buffer[i+2] = m_img.atXYZC(x, y, 1, 2);
+	}
+
+	lodepng_encode24_file(filename.c_str(), buffer.begin().base(), m_img_width, m_img_height);
 }
 
 void visualiser::build_image()
