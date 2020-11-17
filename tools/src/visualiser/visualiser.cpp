@@ -102,7 +102,7 @@ void visualiser::init_img()
 		for (int i=0; i<p->processing_units; i++)
 			m_processing_units.push_back(p->name);
 
-	m_img_width = m_environment.main_frame_length * TIME_SCALE + 2 * X_OFFSET + LANE_X_START;
+	m_img_width = m_environment.major_frame_length * TIME_SCALE + 2 * X_OFFSET + LANE_X_START;
 	m_img_height = m_processing_units.size() * LANE_HEIGHT + 2 * Y_OFFSET;
 	m_img = img_type(m_img_width, m_img_height, 1, 3);
 	m_img.draw_rectangle(0, 0, m_img_width, m_img_height, WHITE);
@@ -133,11 +133,11 @@ void visualiser::draw_grid()
 	// vertikalni cary
 	const uint min_y = Y_OFFSET;
 	const uint max_y = m_img_height - Y_OFFSET;
-	const uint end_x = LANE_X_START + m_environment.main_frame_length * TIME_SCALE;
+	const uint end_x = LANE_X_START + m_environment.major_frame_length * TIME_SCALE;
 	m_img.draw_line(LANE_X_START, min_y, LANE_X_START, max_y, BLACK);
 	m_img.draw_line(end_x, min_y, end_x, max_y, BLACK);
 
-	std::string mf_label = "MF: " + std::to_string(m_environment.main_frame_length) + "ms";
+	std::string mf_label = "MF: " + std::to_string(m_environment.major_frame_length) + "ms";
 	m_img.draw_text((uint) (end_x - 20), (uint) (max_y + 1), mf_label.c_str(), BLACK, WHITE);
 }
 

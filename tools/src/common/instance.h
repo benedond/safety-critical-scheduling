@@ -25,7 +25,7 @@ struct environment
 {
 	std::unordered_map<std::string, processor> processors;
 	std::vector<processor*> processors_list;
-	int main_frame_length;
+	int major_frame_length;
 	int problem_version;
 };
 

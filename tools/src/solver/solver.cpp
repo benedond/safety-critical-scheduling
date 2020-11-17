@@ -67,9 +67,9 @@ bool solver::check_feasibility() const
 	for (auto& w : m_windows)
 		total_time += w.length;
 
-	if (total_time > m_environment.main_frame_length)
+	if (total_time > m_environment.major_frame_length)
 	{
-		std::cerr << "solution is infeasible - total_time: " << total_time << " main_frame_length: " << m_environment.main_frame_length << std::endl;
+		std::cerr << "solution is infeasible - total_time: " << total_time << " major_frame_length: " << m_environment.major_frame_length << std::endl;
 		return false;
 	}
 

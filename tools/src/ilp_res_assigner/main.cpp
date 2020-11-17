@@ -81,7 +81,7 @@ std::vector<task> solve(const environment& e, const assignment_characteristic_li
             i++;
         }
 
-        model.addConstr(resource_capacity_contraint_expr <= e.main_frame_length * processor->processing_units);
+        model.addConstr(resource_capacity_contraint_expr <= e.major_frame_length * processor->processing_units);
     }
 
     model.optimize();    

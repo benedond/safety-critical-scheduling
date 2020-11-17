@@ -80,7 +80,7 @@ solution solve(const environment& e, const task_map& tasks)
         if (j > 0)
             model.addConstr(l[j] <= l[j-1]);
     }
-    model.addConstr(window_length_sum <= e.main_frame_length);
+    model.addConstr(window_length_sum <= e.major_frame_length);
     
     for (auto& resource : e.processors_list)
     {
