@@ -25,7 +25,7 @@ environment parse_environment(const nlohmann::json& json)
 		e.processors_list.push_back(&e.processors.at(name));
 	}
 
-	e.major_frame_length = env["mainFrameLength"];
+	e.major_frame_length = env["majorFrameLength"];
 	e.problem_version = env["problemVersion"];
 
 	return e;
