@@ -7,20 +7,20 @@
 #include "../common/arg_parser.h"
 
 #define EXIT_INFEASIBLE_SOLUTION 2
-#define INFEASIBLE_MODEL_FILENAME std::string("infeasible_res_assignment.ilp")
+#define INFEASIBLE_MODEL_FILENAME std::string("infeasible_res_assignment")
 
 inline void write_iis(GRBModel& model)
 {
     model.computeIIS();
-    
-    std::string infeasible_filename(INFEASIBLE_MODEL_FILENAME);
-    
+
+    std::string infeasible_filename(INFEASIBLE_MODEL_FILENAME + ".ilp");
+
     for (int i = 1; i < 1000; i++)
     {
         std::ifstream file(infeasible_filename);
         if (file.is_open())
         {
-            infeasible_filename = INFEASIBLE_MODEL_FILENAME + "." + std::to_string(i);
+            infeasible_filename = INFEASIBLE_MODEL_FILENAME + "-" + std::to_string(i) + ".ilp";
         }
         else
         {
@@ -31,30 +31,34 @@ inline void write_iis(GRBModel& model)
     }
 }
 
-std::vector<task> solve(const environment& e, const assignment_characteristic_list& assignment_characteristics)
+std::vector<task> solve(const environment& e, const assignment_characteristic_list& assignment_characteristics, const assignment_cut_list& assignment_cuts)
 {
     if (e.problem_version != 1)
         throw std::invalid_argument("problem version is not supported");
 
     std::vector<std::vector<GRBVar>> a;
+    std::unordered_map<std::string, int> task_index_map;
 
     GRBEnv env;
     env.set(GRB_IntParam_OutputFlag, 0);
     GRBModel model(env);
     
+    int ix = 0;
     for (auto& task : assignment_characteristics)
     {
+        task_index_map[task.task] = ix++;
+
         std::vector<GRBVar> a_i;
         GRBLinExpr assignment_constraint_expr;
 
         for (auto& assignment_characteristic : task.resource_assignments)
         {
-            GRBVar a_ik = model.addVar(0, 1, assignment_characteristic.energy_consumption, GRB_BINARY);
+            GRBVar a_ik = model.addVar(0, 1, assignment_characteristic.energy_consumption, GRB_BINARY, "a" + std::to_string(ix-1) + "," + std::to_string(a_i.size()));
             assignment_constraint_expr += a_ik;
             a_i.push_back(std::move(a_ik));
         }
 
-        model.addConstr(assignment_constraint_expr == 1);
+        model.addConstr(assignment_constraint_expr == 1, task.task + " assigned");
         a.push_back(std::move(a_i));
     }
 
@@ -81,7 +85,20 @@ std::vector<task> solve(const environment& e, const assignment_characteristic_li
             i++;
         }
 
-        model.addConstr(resource_capacity_contraint_expr <= e.major_frame_length * processor->processing_units);
+        model.addConstr(resource_capacity_contraint_expr <= e.major_frame_length * processor->processing_units, processor->name + " capacity (relaxed)");
+    }
+
+    for (auto& assignment_cut : assignment_cuts)
+    {
+        GRBLinExpr assignment_cut_constraint;
+
+        for (auto& assignment : assignment_cut)
+        {
+            int task_index = task_index_map[assignment.task];
+            assignment_cut_constraint += a[task_index][assignment.assignment_index];
+        }
+
+        model.addConstr(assignment_cut_constraint <= assignment_cut.size()-1, "assignment cut");
     }
 
     model.optimize();    
@@ -102,7 +119,7 @@ std::vector<task> solve(const environment& e, const assignment_characteristic_li
 
             auto& t = assignment_characteristics[i];
             auto& c = t.resource_assignments[used_assignment_ix];
-            tasks.push_back({ .name = t.task, .length = c.length, .processors = c.processors });
+            tasks.push_back({ .name = t.task, .length = c.length, .assignment_index = used_assignment_ix, .processors = c.processors });
         }
     }
     else
@@ -131,12 +148,14 @@ int main(int argc, char** argv)
 
     environment environment;
     assignment_characteristic_list assignment_characteristics;
+    assignment_cut_list assignment_cuts;
     std::vector<task> tasks;
 
     try
     {
         environment = parse_environment(json);
         assignment_characteristics = parse_assignment_characteristics(json);
+        assignment_cuts = parse_assignment_cuts(json);
     }
     catch (const nlohmann::detail::parse_error& error)
     {
@@ -146,7 +165,7 @@ int main(int argc, char** argv)
 
     try
     {
-        tasks = solve(environment, assignment_characteristics);
+        tasks = solve(environment, assignment_characteristics, assignment_cuts);
         write_tasks(json, tasks);
     }
     catch (const std::invalid_argument& error)

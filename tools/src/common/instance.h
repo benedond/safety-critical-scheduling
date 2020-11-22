@@ -39,6 +39,7 @@ struct task
 
 	std::string name;
 	int length;
+	int assignment_index;
 	std::vector<processor_assignment> processors;
 };
 
@@ -77,13 +78,21 @@ struct solution
 	std::vector<window> windows;
 };
 
+struct assignment_cut
+{
+	std::string task;
+	int assignment_index;
+};
+
 typedef std::unordered_map<std::string, task> task_map;
 typedef std::vector<assignment_characteristic> assignment_characteristic_list;
+typedef std::vector<std::vector<assignment_cut>> assignment_cut_list;
 
 environment parse_environment(const nlohmann::json& json);
 task_map parse_tasks(const nlohmann::json& json);
 assignment_characteristic_list parse_assignment_characteristics(const nlohmann::json& json);
 solution parse_solution(const nlohmann::json& json);
+assignment_cut_list parse_assignment_cuts(const nlohmann::json& json);
 
 void write_tasks(nlohmann::json& json, const std::vector<task>& tasks);
 void write_solution(nlohmann::json& json, const solution& solution);

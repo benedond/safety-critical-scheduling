@@ -8,20 +8,20 @@
 #include "../common/arg_parser.h"
 
 #define EXIT_INFEASIBLE_SOLUTION 2
-#define INFEASIBLE_MODEL_FILENAME std::string("infeasible_schedule.ilp")
+#define INFEASIBLE_MODEL_FILENAME std::string("infeasible_schedule")
 
 inline void write_iis(GRBModel& model)
 {
     model.computeIIS();
 
-    std::string infeasible_filename(INFEASIBLE_MODEL_FILENAME);
+    std::string infeasible_filename(INFEASIBLE_MODEL_FILENAME + ".ilp");
 
     for (int i = 1; i < 1000; i++)
     {
         std::ifstream file(infeasible_filename);
         if (file.is_open())
         {
-            infeasible_filename = INFEASIBLE_MODEL_FILENAME + "." + std::to_string(i);
+            infeasible_filename = INFEASIBLE_MODEL_FILENAME + "-" + std::to_string(i) + ".ilp";
         }
         else
         {
@@ -58,11 +58,11 @@ solution solve(const environment& e, const task_map& tasks)
 
         for (int j = 0; j < windows_ub; j++)
         {
-            w_i[j] = model.addVar(0, 1, 0, GRB_BINARY, "w_" + std::to_string(i) + "," + std::to_string(j));
+            w_i[j] = model.addVar(0, 1, 0, GRB_BINARY, "w" + std::to_string(i) + "," + std::to_string(j));
             assignment_constraint += w_i[j];
         }
 
-        model.addConstr(assignment_constraint == 1);
+        model.addConstr(assignment_constraint == 1, task_list[i]->name + " scheduled");
         w[i] = std::move(w_i);
     }
 
@@ -70,17 +70,17 @@ solution solve(const environment& e, const task_map& tasks)
     GRBLinExpr window_length_sum;
     for (int j = 0; j < windows_ub; j++)
     {
-        l[j] = model.addVar(0, GRB_INFINITY, 1, GRB_INTEGER, "l_" + std::to_string(j));
+        l[j] = model.addVar(0, GRB_INFINITY, 1, GRB_INTEGER, "l" + std::to_string(j));
         
         window_length_sum += l[j];
 
         for (int i = 0; i < num_tasks; i++)
-            model.addConstr(l[j] >= (w[i][j] * task_list[i]->length)/0.6);
+            model.addConstr(l[j] >= (w[i][j] * task_list[i]->length)/0.6, task_list[i]->name + " is at most 60% of l" + std::to_string(j));
 
         if (j > 0)
-            model.addConstr(l[j] <= l[j-1]);
+            model.addConstr(l[j] <= l[j-1], "window ordering");
     }
-    model.addConstr(window_length_sum <= e.major_frame_length);
+    model.addConstr(window_length_sum <= e.major_frame_length, "major frame length");
     
     for (auto& resource : e.processors_list)
     {
@@ -98,7 +98,7 @@ solution solve(const environment& e, const task_map& tasks)
                     }
                 }
             }
-            model.addConstr(resource_capacity_constraint <= resource->processing_units);
+            model.addConstr(resource_capacity_constraint <= resource->processing_units, resource->name + " capacity");
         }
     }
 
