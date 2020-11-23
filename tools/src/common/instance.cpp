@@ -3,30 +3,39 @@
 
 #include "instance.h"
 
+#define JSON_HAS_KEY(json, key) (json).find((key)) != (json).end()
+
 environment parse_environment(const nlohmann::json& json)
 {
 	environment e;
 
-	auto& env = json["environment"];
-
-	auto& processors = env["processors"];
-	for (auto& processor : processors)
+	if (JSON_HAS_KEY(json, "environment"))
 	{
-		std::string json_type = processor["type"];
-		std::string name = processor["name"];
-		processor_type type = processor_type::invalid_type;
+		auto& env = json["environment"];
 
-		if (json_type == "main_processor")
-			type = processor_type::main_processor;
-		else if (json_type == "coprocessor")
-			type = processor_type::coprocessor;
+		auto& processors = env["processors"];
+		for (auto& processor : processors)
+		{
+			std::string json_type = processor["type"];
+			std::string name = processor["name"];
+			processor_type type = processor_type::invalid_type;
 
-		e.processors[name] = { .name = name, .processing_units = processor["processingUnits"], .type = type };
-		e.processors_list.push_back(&e.processors.at(name));
+			if (json_type == "main_processor")
+				type = processor_type::main_processor;
+			else if (json_type == "coprocessor")
+				type = processor_type::coprocessor;
+
+			e.processors[name] = { .name = name, .processing_units = processor["processingUnits"], .type = type };
+			e.processors_list.push_back(&e.processors.at(name));
+		}
+
+		e.major_frame_length = env["majorFrameLength"];
+		e.problem_version = env["problemVersion"];
 	}
-
-	e.major_frame_length = env["majorFrameLength"];
-	e.problem_version = env["problemVersion"];
+	else
+	{
+		std::cerr << "warning: parse_environment called, but no environment data was found in source json" << std::endl;
+	}
 
 	return e;
 }
@@ -35,18 +44,28 @@ task_map parse_tasks(const nlohmann::json& json)
 {
 	task_map t;
 
-	auto& tasks = json["tasks"];
-	for (auto& task : tasks)
+	if (JSON_HAS_KEY(json, "tasks"))
 	{
-		std::string name = task["name"];
-		auto& processor_assignments = task["processors"];
+		auto& tasks = json["tasks"];
+		for (auto& task : tasks)
+		{
+			std::string name = task["name"];
+			auto& processor_assignments = task["processors"];
 
-		std::vector<task::processor_assignment> pas;
-		for (auto& processor_assignment : processor_assignments)
-			pas.push_back({ .processor = processor_assignment["processor"],
-							.processing_units = processor_assignment["processingUnits"] });
+			std::vector<task::processor_assignment> pas;
+			for (auto& processor_assignment : processor_assignments)
+				pas.push_back({ .processor = processor_assignment["processor"],
+								.processing_units = processor_assignment["processingUnits"] });
 
-		t[name] = { .name = name, .length = task["length"], .assignment_index = task["assignmentIndex"], .processors = std::move(pas) };
+			t[name] = { .name = name,
+			            .length = task["length"],
+			            .assignment_index = task.value("assignmentIndex", -1),
+			            .processors = std::move(pas) };
+		}
+	}
+	else
+	{
+		std::cerr << "warning: parse_tasks called, but no tasks were found in source json" << std::endl;
 	}
 
 	return t;
@@ -56,28 +75,35 @@ assignment_characteristic_list parse_assignment_characteristics(const nlohmann::
 {
 	assignment_characteristic_list ac;
 
-	auto& assignment_characteristics = json["assignmentCharacteristics"];
-	for (auto& assignment_char : assignment_characteristics)
+	if (JSON_HAS_KEY(json, "assignmentCharacteristics"))
 	{
-		assignment_characteristic a{ .task = assignment_char["task"] };
-
-		auto& resource_assignments = assignment_char["resourceAssignments"];
-		for (auto& res_ass : resource_assignments)
+		auto& assignment_characteristics = json["assignmentCharacteristics"];
+		for (auto& assignment_char : assignment_characteristics)
 		{
-			assignment_characteristic::resource_assignment ra{ .energy_consumption = res_ass["energyConsumption"],
-																.length = res_ass["length"] };
+			assignment_characteristic a{.task = assignment_char["task"]};
 
-			auto& processors = res_ass["processors"];
-			for (auto& processor : processors)
+			auto& resource_assignments = assignment_char["resourceAssignments"];
+			for (auto& res_ass : resource_assignments)
 			{
-				ra.processors.push_back({ .processor = processor["processor"],
-										  .processing_units = processor["processingUnits"] });
+				assignment_characteristic::resource_assignment ra{ .energy_consumption = res_ass["energyConsumption"],
+																   .length = res_ass["length"] };
+
+				auto& processors = res_ass["processors"];
+				for (auto& processor : processors)
+				{
+					ra.processors.push_back({ .processor = processor["processor"],
+							  				  .processing_units = processor["processingUnits"] });
+				}
+
+				a.resource_assignments.push_back(std::move(ra));
 			}
 
-			a.resource_assignments.push_back(std::move(ra));
+			ac.push_back(std::move(a));
 		}
-
-		ac.push_back(std::move(a));
+	}
+	else
+	{
+		std::cerr << "warning: parse_assignment_characteristics called, but no assignment characteristics were found in source json" << std::endl;
 	}
 
 	return ac;
@@ -87,32 +113,57 @@ solution parse_solution(const nlohmann::json& json)
 {
 	solution s;
 
-	auto& solution = json["solution"];
-
-	s.feasible = solution["feasible"];
-	s.solver_name = solution["solverName"];
-	s.solution_time = solution["solutionTime"];
-	auto& metadata = solution["solverMetadata"];
-
-	for (auto itt = metadata.begin(); itt != metadata.end(); itt++)
-		s.solver_metadata[itt.key()] = itt.value();
-
-	auto& windows = solution["windows"];
-	for (auto& window : windows)
+	if (JSON_HAS_KEY(json, "solution"))
 	{
-		std::vector<window::task_assignment> tas;
+		auto& solution = json["solution"];
 
-		auto& task_assignments = window["tasks"];
-		for (auto& task_assignment : task_assignments)
+		s.feasible = solution.value("feasible", false);
+		s.solver_name = solution.value("solverName", "unnamed solver");
+		s.solution_time = solution.value("solutionTime", -1);
+
+		if (JSON_HAS_KEY(solution, "solverMetadata"))
 		{
-			tas.push_back({ .task = task_assignment["task"],
-							.processor = task_assignment["processor"],
-							.processing_unit = task_assignment["processingUnit"],
-							.start = task_assignment["start"],
-							.length = task_assignment["length"] });
+			auto& metadata = solution["solverMetadata"];
+
+			for (auto itt = metadata.begin(); itt != metadata.end(); itt++)
+				s.solver_metadata[itt.key()] = itt.value();
 		}
 
-		s.windows.push_back({ .length = window["length"], .task_assignments = std::move(tas) });
+		if (JSON_HAS_KEY(solution, "windows"))
+		{
+			auto& windows = solution["windows"];
+			for (auto& window : windows)
+			{
+				std::vector<window::task_assignment> tas;
+
+				if (JSON_HAS_KEY(window, "tasks"))
+				{
+					auto& task_assignments = window["tasks"];
+					for (auto& task_assignment : task_assignments)
+					{
+						tas.push_back({ .task = task_assignment["task"],
+					  					.processor = task_assignment["processor"],
+										.processing_unit = task_assignment["processingUnit"],
+										.start = task_assignment["start"],
+										.length = task_assignment["length"]});
+					}
+				}
+				else
+				{
+					std::cerr << "warning: window is empty" << std::endl;
+				}
+
+				s.windows.push_back({ .length = window["length"], .task_assignments = std::move(tas) });
+			}
+		}
+		else
+		{
+			std::cerr << "info: solution has no windows" << std::endl;
+		}
+	}
+	else
+	{
+		std::cerr << "warning: parse_solution called, but no solution was found in source json" << std::endl;
 	}
 
 	return s;
@@ -122,16 +173,19 @@ assignment_cut_list parse_assignment_cuts(const nlohmann::json& json)
 {
 	assignment_cut_list acs;
 
-	auto& assignment_cuts = json["assignmentCuts"];
-
-	for (auto& cut : assignment_cuts)
+	if (JSON_HAS_KEY(json, "assignmentCuts"))
 	{
-		std::vector<assignment_cut> a;
+		auto& assignment_cuts = json["assignmentCuts"];
 
-		for (auto& assignment : cut)
-			a.push_back({ .task = assignment["task"], .assignment_index = assignment["assignmentIndex"] });
+		for (auto& cut : assignment_cuts)
+		{
+			std::vector<assignment_cut> a;
 
-		acs.push_back(std::move(a));
+			for (auto& assignment : cut)
+				a.push_back({.task = assignment["task"], .assignment_index = assignment["assignmentIndex"]});
+
+			acs.push_back(std::move(a));
+		}
 	}
 
 	return acs;
