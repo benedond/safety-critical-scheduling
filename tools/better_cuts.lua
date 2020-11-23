@@ -31,6 +31,21 @@ function printProgress(message)
 	print(message)
 end
 
+function findUnschedulableTasks(scheduleData)
+	tasks = {}
+	
+	lines = scheduleData:gmatch("[^\r\n]+")
+	for line in lines do
+		task = line:match("(.*)_scheduled")
+		if task ~= nil then
+			task = task:gsub("^%s*(.-)%s*$", "%1")
+			tasks[task] = task
+		end
+	end
+
+	return tasks
+end
+
 copyFile(inputFile, outputFile)
 
 iteration = 1
@@ -57,11 +72,14 @@ while iteration <= iterationLimit do
 	printProgress("adding cut:")
 
 	instance = json.decode(readFile(outputFile))
+	tasks = findUnschedulableTasks(readFile(infeasiblScheduleFile))
 
 	assignmentCut = {}
 	for i, task in pairs(instance["tasks"]) do
-		printProgress(task["name"] .. " -!-> " .. task["assignmentIndex"])
-		assignmentCut[#assignmentCut+1] = { task = task["name"], assignmentIndex = task["assignmentIndex"] }
+		if tasks[task["name"]] ~= nil then
+			printProgress(task["name"] .. " -!-> " .. task["assignmentIndex"])
+			assignmentCut[#assignmentCut+1] = { task = task["name"], assignmentIndex = task["assignmentIndex"] }
+		end
 	end
 
 	if instance["assignmentCuts"] == nil then instance["assignmentCuts"] = {} end
