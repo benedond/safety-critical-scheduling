@@ -263,6 +263,25 @@ void write_solution(nlohmann::json& json, const solution& solution)
 	}
 }
 
+void add_assignment_cuts(nlohmann::json& json, const std::vector<assignment_cut>& assignments)
+{
+	auto& assignment_cuts = json["assignmentCuts"];
+	
+	int num_assignments = assignments.size();
+	std::vector<nlohmann::json> json_assignments(num_assignments);
+
+	for (int i=0; i<num_assignments; i++)
+	{
+		auto& a = assignments[i];
+		auto& json_a = json_assignments[i];
+
+		json_a["task"] = a.task;
+		json_a["assignmentIndex"] = a.assignment_index;
+	}
+
+	assignment_cuts.push_back(json_assignments);
+}
+
 bool read_json_from_file(nlohmann::json& json, const std::string& filename)
 {
 	std::ifstream input_file(filename);

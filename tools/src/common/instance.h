@@ -96,6 +96,7 @@ assignment_cut_list parse_assignment_cuts(const nlohmann::json& json);
 
 void write_tasks(nlohmann::json& json, const std::vector<task>& tasks);
 void write_solution(nlohmann::json& json, const solution& solution);
+void add_assignment_cuts(nlohmann::json& json, const std::vector<assignment_cut>& assignments);
 
 bool read_json_from_file(nlohmann::json& json, const std::string& filename);
 bool write_json_to_file(const nlohmann::json& json, const std::string& filename);
