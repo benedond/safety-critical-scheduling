@@ -12,8 +12,6 @@
 
 inline void write_iis(GRBModel& model)
 {
-    model.computeIIS();
-
     std::string infeasible_filename(INFEASIBLE_MODEL_FILENAME + ".ilp");
 
     for (int i = 1; i < 1000; i++)
@@ -32,7 +30,7 @@ inline void write_iis(GRBModel& model)
     }
 }
 
-solution solve(const environment& e, const task_map& tasks)
+solution solve(const arg_parser& args, nlohmann::json& json, const environment& e, const task_map& tasks)
 {
     if (e.problem_version != 1)
         throw std::invalid_argument("problem version is not supported");
@@ -50,6 +48,7 @@ solution solve(const environment& e, const task_map& tasks)
     GRBModel model(env);
     
     std::vector<std::vector<GRBVar>> w(num_tasks);
+    std::vector<GRBConstr> assignment_constraints(num_tasks);
     for (int i = 0; i < num_tasks; i++)
     {
         std::vector<GRBVar> w_i(windows_ub);
@@ -62,7 +61,7 @@ solution solve(const environment& e, const task_map& tasks)
             assignment_constraint += w_i[j];
         }
 
-        model.addConstr(assignment_constraint == 1, task_list[i]->name + " scheduled");
+        assignment_constraints[i] = model.addConstr(assignment_constraint == 1, task_list[i]->name + " scheduled");
         w[i] = std::move(w_i);
     }
 
@@ -144,7 +143,41 @@ solution solve(const environment& e, const task_map& tasks)
     else
     {
         s.feasible = false;
-        write_iis(model);
+        
+        bool iis_output = !args.is_arg_present("--no-iis-output");
+        bool generate_naive_cuts = args.is_arg_present("--generate-naive-cuts");
+        bool generate_better_cuts = args.is_arg_present("--generate-better-cuts");
+
+        if (iis_output || generate_naive_cuts || generate_better_cuts)
+            model.computeIIS();
+
+        if (generate_naive_cuts || generate_better_cuts)
+        {
+            std::vector<assignment_cut> assignments;
+            
+            if (generate_better_cuts)
+            {
+                for (int i = 0; i < num_tasks; i++)
+                {
+                    auto& constraint = assignment_constraints[i];
+                    if (constraint.get(GRB_IntAttr_IISConstr) == 1)
+                    {
+                        auto& t = task_list[i];
+                        assignments.push_back({ .task = t->name, .assignment_index = t->assignment_index });
+                    }
+                }
+            }
+            else if (generate_naive_cuts)
+            {
+                for (auto& t : task_list)
+                    assignments.push_back({ .task = t->name, .assignment_index = t->assignment_index });
+            }
+
+            add_assignment_cuts(json, assignments);
+        }
+        
+        if (iis_output)
+            write_iis(model);
     }
 
     return s;
@@ -183,7 +216,7 @@ int main(int argc, char** argv)
     solution s;
     try
     {
-        s = solve(environment, tasks);
+        s = solve(args, json, environment, tasks);
         write_solution(json, s);
     }
     catch (const std::invalid_argument& error)

@@ -11,8 +11,6 @@
 
 inline void write_iis(GRBModel& model)
 {
-    model.computeIIS();
-
     std::string infeasible_filename(INFEASIBLE_MODEL_FILENAME + ".ilp");
 
     for (int i = 1; i < 1000; i++)
@@ -31,7 +29,7 @@ inline void write_iis(GRBModel& model)
     }
 }
 
-std::vector<task> solve(const environment& e, const assignment_characteristic_list& assignment_characteristics, const assignment_cut_list& assignment_cuts)
+std::vector<task> solve(const arg_parser& args, const environment& e, const assignment_characteristic_list& assignment_characteristics, const assignment_cut_list& assignment_cuts)
 {
     if (e.problem_version != 1)
         throw std::invalid_argument("problem version is not supported");
@@ -124,7 +122,12 @@ std::vector<task> solve(const environment& e, const assignment_characteristic_li
     }
     else
     {
-        write_iis(model);
+        bool iis_output = !args.is_arg_present("--no-iis-output");
+        if (iis_output)
+        {
+            model.computeIIS();
+            write_iis(model);
+        }
     }
 
     return tasks;
@@ -165,7 +168,7 @@ int main(int argc, char** argv)
 
     try
     {
-        tasks = solve(environment, assignment_characteristics, assignment_cuts);
+        tasks = solve(args, environment, assignment_characteristics, assignment_cuts);
         write_tasks(json, tasks);
     }
     catch (const std::invalid_argument& error)
