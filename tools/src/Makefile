@@ -6,6 +6,14 @@ INCLUDE_DIRS = lib
 LINK_DIRS = 
 
 OUTPUT_DIR = ../bin
+GENERATOR_OUTPUT_FILE = generator.exe
+SOLVER_OUTPUT_FILE = solver.exe
+VISUALISER_OUTPUT_FILE = visualiser.exe
+STAT_OUTPUT_FILE = stat.exe
+ILP_SOLVER_OUTPUT_FILE = ilp_solver.exe
+ILP_RES_ASSIGNER_OUTPUT_FILE = ilp_res_assigner.exe
+ILP_GLOBAL_SOLVER_OUTPUT_FILE = ilp_global_solver.exe
+
 COMMON_DIR = common
 GENERATOR_DIR = generator
 VISUALISER_DIR = visualiser
@@ -13,13 +21,7 @@ SOLVER_DIR = solver
 STAT_DIR = stat
 ILP_SOLVER_DIR = ilp_solver
 ILP_RES_ASSIGNER_DIR = ilp_res_assigner
-GENERATOR_OUTPUT_FILE = generator.exe
-SOLVER_OUTPUT_FILE = solver.exe
-VISUALISER_OUTPUT_FILE = visualiser.exe
-STAT_OUTPUT_FILE = stat.exe
-ILP_SOLVER_OUTPUT_FILE = ilp_solver.exe
-ILP_RES_ASSIGNER_OUTPUT_FILE = ilp_res_assigner.exe
-
+ILP_GLOBAL_SOLVER_DIR = ilp_global_solver
 
 CXX=g++
 LIBS = 
@@ -35,11 +37,13 @@ GENERATOR_FILES = $(GENERATOR_DIR)/main.cpp $(GENERATOR_DIR)/generator.cpp
 SOLVER_FILES = $(SOLVER_DIR)/main.cpp $(SOLVER_DIR)/solver.cpp  $(SOLVER_DIR)/longest_tasks_first_solver.cpp $(SOLVER_DIR)/random_task_order_solver.cpp 
 VISUALISER_FILES = $(VISUALISER_DIR)/main.cpp $(VISUALISER_DIR)/visualiser.cpp 
 STAT_FILES = $(STAT_DIR)/main.cpp
-ILP_SOLVER_FILES = $(ILP_SOLVER_DIR)/main.cpp
-ILP_RES_ASSIGNER_FILES = $(ILP_RES_ASSIGNER_DIR)/main.cpp
+ILP_COMMON_FILES = $(COMMON_DIR)/ilp_util.cpp
+ILP_SOLVER_FILES = $(ILP_COMMON_FILES) $(ILP_SOLVER_DIR)/main.cpp 
+ILP_RES_ASSIGNER_FILES = $(ILP_COMMON_FILES) $(ILP_RES_ASSIGNER_DIR)/main.cpp
+ILP_GLOBAL_SOLVER_FILES = $(ILP_COMMON_FILES) $(ILP_GLOBAL_SOLVER_DIR)/main.cpp
 
 
-.PHONY: generator solver visualiser visualiser-display stat ilp-solver ilp-res-assigner
+.PHONY: generator solver visualiser visualiser-display stat ilp-solver ilp-res-assigner ilp-global-solver
 release: generator solver visualiser stat
 
 generator: 
@@ -57,10 +61,13 @@ visualiser-display:
 stat: 
 	$(CXX) $(CXXFLAGS) $(RELEASE_FLAGS) $(COMMON_FILES) $(STAT_FILES) -o $(OUTPUT_DIR)/$(STAT_OUTPUT_FILE)
 
-ilp: ilp-solver ilp-res-assigner
+ilp: ilp-solver ilp-res-assigner ilp-global-solver
 
 ilp-solver:
 	$(CXX) $(CXXFLAGS) $(RELEASE_FLAGS) $(GUROBI_PARAMS) $(COMMON_FILES) $(ILP_SOLVER_FILES) $(GUROBI_INPUT) -o $(OUTPUT_DIR)/$(ILP_SOLVER_OUTPUT_FILE)
 
 ilp-res-assigner:
 	$(CXX) $(CXXFLAGS) $(RELEASE_FLAGS) $(GUROBI_PARAMS) $(COMMON_FILES) $(ILP_RES_ASSIGNER_FILES) $(GUROBI_INPUT) -o $(OUTPUT_DIR)/$(ILP_RES_ASSIGNER_OUTPUT_FILE)
+
+ilp-global-solver:
+	$(CXX) $(CXXFLAGS) $(RELEASE_FLAGS) $(GUROBI_PARAMS) $(COMMON_FILES) $(ILP_GLOBAL_SOLVER_FILES) $(GUROBI_INPUT) -o $(OUTPUT_DIR)/$(ILP_GLOBAL_SOLVER_OUTPUT_FILE)

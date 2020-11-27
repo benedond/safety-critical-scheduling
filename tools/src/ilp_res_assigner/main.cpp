@@ -5,29 +5,9 @@
 
 #include "../common/instance.h"
 #include "../common/arg_parser.h"
+#include "../common/ilp_util.h"
 
-#define EXIT_INFEASIBLE_SOLUTION 2
 #define INFEASIBLE_MODEL_FILENAME std::string("infeasible_res_assignment")
-
-inline void write_iis(GRBModel& model)
-{
-    std::string infeasible_filename(INFEASIBLE_MODEL_FILENAME + ".ilp");
-
-    for (int i = 1; i < 1000; i++)
-    {
-        std::ifstream file(infeasible_filename);
-        if (file.is_open())
-        {
-            infeasible_filename = INFEASIBLE_MODEL_FILENAME + "-" + std::to_string(i) + ".ilp";
-        }
-        else
-        {
-            file.close();
-            model.write(infeasible_filename);
-            return;
-        }
-    }
-}
 
 std::vector<task> solve(const arg_parser& args, const environment& e, const assignment_characteristic_list& assignment_characteristics, const assignment_cut_list& assignment_cuts)
 {
@@ -126,7 +106,7 @@ std::vector<task> solve(const arg_parser& args, const environment& e, const assi
         if (iis_output)
         {
             model.computeIIS();
-            write_iis(model);
+            write_iis(INFEASIBLE_MODEL_FILENAME, model);
         }
     }
 

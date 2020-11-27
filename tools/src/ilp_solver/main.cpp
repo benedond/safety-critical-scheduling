@@ -6,29 +6,9 @@
 
 #include "../common/instance.h"
 #include "../common/arg_parser.h"
+#include "../common/ilp_util.h"
 
-#define EXIT_INFEASIBLE_SOLUTION 2
 #define INFEASIBLE_MODEL_FILENAME std::string("infeasible_schedule")
-
-inline void write_iis(GRBModel& model)
-{
-    std::string infeasible_filename(INFEASIBLE_MODEL_FILENAME + ".ilp");
-
-    for (int i = 1; i < 1000; i++)
-    {
-        std::ifstream file(infeasible_filename);
-        if (file.is_open())
-        {
-            infeasible_filename = INFEASIBLE_MODEL_FILENAME + "-" + std::to_string(i) + ".ilp";
-        }
-        else
-        {
-            file.close();
-            model.write(infeasible_filename);
-            return;
-        }
-    }
-}
 
 solution solve(const arg_parser& args, nlohmann::json& json, const environment& e, const task_map& tasks)
 {
@@ -177,7 +157,7 @@ solution solve(const arg_parser& args, nlohmann::json& json, const environment& 
         }
         
         if (iis_output)
-            write_iis(model);
+            write_iis(INFEASIBLE_MODEL_FILENAME, model);
     }
 
     return s;
