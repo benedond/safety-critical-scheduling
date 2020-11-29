@@ -56,12 +56,26 @@ void demos_config_writer::write_partition(const task& task)
 
 void demos_config_writer::write_window(const window& window)
 {
-	output << YAML_INDENT << "- length: " << window.length << YAML_NEWLINE;
-	output << YAML_INDENT << YAML_INDENT << "slices:" << YAML_NEWLINE;
+	std::unordered_map<std::string, std::vector<int>> cpu_mappings;
 
 	for (auto& t : window.task_assignments)
 	{
-		output << YAML_INDENT << YAML_INDENT << YAML_INDENT << "- cpu: " << cpu_offset[t.processor] + t.processing_unit << YAML_NEWLINE;
-		output << YAML_INDENT << YAML_INDENT << YAML_INDENT << YAML_INDENT << "sc_partition: " << t.task << YAML_NEWLINE;
+		if (env.processors.at(t.processor).type == processor_type::main_processor)
+			cpu_mappings[t.task].push_back(cpu_offset[t.processor] + t.processing_unit);
+	}
+
+	output << YAML_INDENT << "- length: " << window.length << YAML_NEWLINE;
+	output << YAML_INDENT << YAML_INDENT << "slices:" << YAML_NEWLINE;
+
+	for (auto& t : cpu_mappings)
+	{
+		output << YAML_INDENT << YAML_INDENT << YAML_INDENT << "- cpu: ";
+
+		for (int cpu : t.second)
+			output << cpu << ",";
+		output.seekp(-1, std::stringstream::cur);
+		output << YAML_NEWLINE;
+
+		output << YAML_INDENT << YAML_INDENT << YAML_INDENT << YAML_INDENT << "sc_partition: " << t.first << YAML_NEWLINE;
 	}
 }
