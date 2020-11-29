@@ -58,6 +58,7 @@ task_map parse_tasks(const nlohmann::json& json)
 								.processing_units = processor_assignment["processingUnits"] });
 
 			t[name] = { .name = name,
+			   			.command = task.value("command", ""),
 			            .length = task["length"],
 			            .assignment_index = task.value("assignmentIndex", -1),
 			            .processors = std::move(pas) };
@@ -80,13 +81,13 @@ assignment_characteristic_list parse_assignment_characteristics(const nlohmann::
 		auto& assignment_characteristics = json["assignmentCharacteristics"];
 		for (auto& assignment_char : assignment_characteristics)
 		{
-			assignment_characteristic a{.task = assignment_char["task"]};
+			assignment_characteristic a { .task = assignment_char["task"], .command = assignment_char.value("command", "") };
 
 			auto& resource_assignments = assignment_char["resourceAssignments"];
 			for (auto& res_ass : resource_assignments)
 			{
-				assignment_characteristic::resource_assignment ra{ .energy_consumption = res_ass["energyConsumption"],
-																   .length = res_ass["length"] };
+				assignment_characteristic::resource_assignment ra { .energy_consumption = res_ass["energyConsumption"],
+																    .length = res_ass["length"] };
 
 				auto& processors = res_ass["processors"];
 				for (auto& processor : processors)
@@ -201,6 +202,7 @@ void write_tasks(nlohmann::json& json, const std::vector<task>& tasks)
 	{
 		auto& json_task = json_tasks[i];
 		json_task["name"] = task.name;
+		json_task["command"] = task.command;
 		json_task["length"] = task.length;
 		json_task["assignmentIndex"] = task.assignment_index;
 

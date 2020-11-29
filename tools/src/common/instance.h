@@ -38,6 +38,7 @@ struct task
 	};
 
 	std::string name;
+	std::string command;
 	int length;
 	int assignment_index;
 	std::vector<processor_assignment> processors;
@@ -53,6 +54,7 @@ struct assignment_characteristic
 	};
 
 	std::string task;
+	std::string command;
 	std::vector<resource_assignment> resource_assignments;
 };
 

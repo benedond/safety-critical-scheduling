@@ -97,7 +97,7 @@ std::vector<task> solve(const arg_parser& args, const environment& e, const assi
 
             auto& t = assignment_characteristics[i];
             auto& c = t.resource_assignments[used_assignment_ix];
-            tasks.push_back({ .name = t.task, .length = c.length, .assignment_index = used_assignment_ix, .processors = c.processors });
+            tasks.push_back({ .name = t.task, .command = t.command, .length = c.length, .assignment_index = used_assignment_ix, .processors = c.processors });
         }
     }
     else

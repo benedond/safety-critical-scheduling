@@ -10,6 +10,7 @@ GENERATOR_OUTPUT_FILE = generator.exe
 SOLVER_OUTPUT_FILE = solver.exe
 VISUALISER_OUTPUT_FILE = visualiser.exe
 STAT_OUTPUT_FILE = stat.exe
+DEMOS_CONFIG_EXPORT_OUTPUT_FILE = demos_config_export.exe
 ILP_SOLVER_OUTPUT_FILE = ilp_solver.exe
 ILP_RES_ASSIGNER_OUTPUT_FILE = ilp_res_assigner.exe
 ILP_GLOBAL_SOLVER_OUTPUT_FILE = ilp_global_solver.exe
@@ -19,6 +20,7 @@ GENERATOR_DIR = generator
 VISUALISER_DIR = visualiser
 SOLVER_DIR = solver
 STAT_DIR = stat
+DEMOS_CONFIG_EXPORT_DIR = demos_config_export
 ILP_SOLVER_DIR = ilp_solver
 ILP_RES_ASSIGNER_DIR = ilp_res_assigner
 ILP_GLOBAL_SOLVER_DIR = ilp_global_solver
@@ -37,14 +39,15 @@ GENERATOR_FILES = $(GENERATOR_DIR)/main.cpp $(GENERATOR_DIR)/generator.cpp
 SOLVER_FILES = $(SOLVER_DIR)/main.cpp $(SOLVER_DIR)/solver.cpp  $(SOLVER_DIR)/longest_tasks_first_solver.cpp $(SOLVER_DIR)/random_task_order_solver.cpp 
 VISUALISER_FILES = $(VISUALISER_DIR)/main.cpp $(VISUALISER_DIR)/visualiser.cpp 
 STAT_FILES = $(STAT_DIR)/main.cpp
+DEMOS_CONFIG_EXPORT_FILES = $(DEMOS_CONFIG_EXPORT_DIR)/main.cpp $(DEMOS_CONFIG_EXPORT_DIR)/demos_config_writer.cpp
 ILP_COMMON_FILES = $(COMMON_DIR)/ilp_util.cpp
 ILP_SOLVER_FILES = $(ILP_COMMON_FILES) $(ILP_SOLVER_DIR)/main.cpp 
 ILP_RES_ASSIGNER_FILES = $(ILP_COMMON_FILES) $(ILP_RES_ASSIGNER_DIR)/main.cpp
 ILP_GLOBAL_SOLVER_FILES = $(ILP_COMMON_FILES) $(ILP_GLOBAL_SOLVER_DIR)/main.cpp
 
 
-.PHONY: generator solver visualiser visualiser-display stat ilp-solver ilp-res-assigner ilp-global-solver
-release: generator solver visualiser stat
+.PHONY: generator solver visualiser visualiser-display stat demos-config-export ilp-solver ilp-res-assigner ilp-global-solver
+release: generator solver visualiser stat demos-config-export
 
 generator: 
 	$(CXX) $(CXXFLAGS) $(RELEASE_FLAGS) $(COMMON_FILES) $(GENERATOR_FILES) -o $(OUTPUT_DIR)/$(GENERATOR_OUTPUT_FILE)
@@ -60,6 +63,9 @@ visualiser-display:
 
 stat: 
 	$(CXX) $(CXXFLAGS) $(RELEASE_FLAGS) $(COMMON_FILES) $(STAT_FILES) -o $(OUTPUT_DIR)/$(STAT_OUTPUT_FILE)
+
+demos-config-export:
+	$(CXX) $(CXXFLAGS) $(RELEASE_FLAGS) $(COMMON_FILES) $(DEMOS_CONFIG_EXPORT_FILES) -o $(OUTPUT_DIR)/$(DEMOS_CONFIG_EXPORT_OUTPUT_FILE)
 
 ilp: ilp-solver ilp-res-assigner ilp-global-solver
 
