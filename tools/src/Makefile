@@ -47,7 +47,8 @@ ILP_GLOBAL_SOLVER_FILES = $(ILP_COMMON_FILES) $(ILP_GLOBAL_SOLVER_DIR)/main.cpp
 
 
 .PHONY: generator solver visualiser visualiser-display stat demos-config-export ilp-solver ilp-res-assigner ilp-global-solver
-release: generator solver visualiser stat demos-config-export
+tools: generator solver visualiser stat demos-config-export
+all: tools ilp
 
 generator: 
 	$(CXX) $(CXXFLAGS) $(RELEASE_FLAGS) $(COMMON_FILES) $(GENERATOR_FILES) -o $(OUTPUT_DIR)/$(GENERATOR_OUTPUT_FILE)
