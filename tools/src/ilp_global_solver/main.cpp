@@ -24,6 +24,7 @@ std::pair<solution, std::vector<task>> solve(const arg_parser& args, const envir
 	int num_tasks = assignment_characteristics.size();
 	int windows_ub = num_tasks;
 
+	GRBLinExpr energy_consumption_sum;
 	for (int i = 0; i < num_tasks; i++)
 	{
 		auto& task = assignment_characteristics[i];
@@ -37,7 +38,8 @@ std::pair<solution, std::vector<task>> solve(const arg_parser& args, const envir
 			// k
 			for (auto& assignment_characteristic : task.resource_assignments)
 			{
-				GRBVar a_ijk = model.addVar(0, 1, assignment_characteristic.energy_consumption, GRB_BINARY, "a" + std::to_string(i) + "," + std::to_string(j) + "," + std::to_string(a_ij.size()));
+				GRBVar a_ijk = model.addVar(0, 1, 0, GRB_BINARY, "a" + std::to_string(i) + "," + std::to_string(j) + "," + std::to_string(a_ij.size()));
+				energy_consumption_sum += a_ijk * assignment_characteristic.energy_consumption;
 				assignment_constraint_expr += a_ijk;
 				a_ij.push_back(std::move(a_ijk));
 			}
@@ -57,13 +59,18 @@ std::pair<solution, std::vector<task>> solve(const arg_parser& args, const envir
 
 		window_length_sum += l[j];
 
+		GRBLinExpr a_ik_sum;
 		for (int i = 0; i < num_tasks; i++)
 		{
 			auto& task = assignment_characteristics[i];
 			int k = 0;
 			for (auto& assignment_characteristic : task.resource_assignments)
+			{
+				a_ik_sum += a[i][j][k];
 				model.addConstr(l[j] >= (a[i][j][k++] * assignment_characteristic.length) / 0.6, task.task + " is at most 60% of l" + std::to_string(j));
+			}
 		}
+		model.addConstr(l[j] <= a_ik_sum * e.major_frame_length, "window " + std::to_string(j) + " is not empty");
 
 		if (j > 0)
 			model.addConstr(l[j] <= l[j - 1], "window ordering");
@@ -77,7 +84,7 @@ std::pair<solution, std::vector<task>> solve(const arg_parser& args, const envir
 		{
 			GRBLinExpr resource_capacity_contraint_expr;
 
-			for (int i=0; i<num_tasks; i++)
+			for (int i = 0; i < num_tasks; i++)
 			{
 				auto& task = assignment_characteristics[i];
 
@@ -99,6 +106,11 @@ std::pair<solution, std::vector<task>> solve(const arg_parser& args, const envir
 		}
 	}
 
+	model.setObjectiveN(energy_consumption_sum, 0, 1, 1.0, 0.0, 0.0, "min energy consumption");
+
+	if (!args.is_arg_present("--no-schedule-optimization"))
+		model.setObjectiveN(window_length_sum, 1, 0, 1.0, 0.0, 0.0, "min total schedule length");
+
 	auto start = std::chrono::high_resolution_clock::now();
 	model.optimize();
 	auto end = std::chrono::high_resolution_clock::now();
@@ -118,12 +130,12 @@ std::pair<solution, std::vector<task>> solve(const arg_parser& args, const envir
 				continue;
 
 			std::unordered_map<std::string, int> pu_allocations;
-			window win { .length = window_length };
+			window win{ .length = window_length };
 
 			for (int i = 0; i < num_tasks; i++)
 			{
 				auto& task_characteristic = assignment_characteristics[i];
-				task task_definition { .name = task_characteristic.task, .command = task_characteristic.command };
+				task task_definition{ .name = task_characteristic.task, .command = task_characteristic.command };
 				bool push_task = false;
 
 				int k = 0, aix = 0;

@@ -119,9 +119,10 @@ Input JSON requirements: environment, assignmentCharacteristics
 Output JSON will contain: environment, tasks, solution
 
 <pre>
---input &lt;file&gt;    input file [stdin]
---output &lt;file&gt;   output file [stdout]
---no-iis-output   if the model is infeasible, the solver will not compute IIS and the ILP model will not be written into a file
+--input &lt;file&gt;                input file [stdin]
+--output &lt;file&gt;               output file [stdout]
+--no-iis-output               if the model is infeasible, the solver will not compute IIS and the ILP model will not be written into a file
+--no-schedule-optimization    disables optimization of total schedule length as a secondary objective
 </pre>
 
 
