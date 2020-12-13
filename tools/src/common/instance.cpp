@@ -192,6 +192,43 @@ assignment_cut_list parse_assignment_cuts(const nlohmann::json& json)
 	return acs;
 }
 
+void write_assignment_characteristics(nlohmann::json& json, const std::vector<assignment_characteristic>& tasks)
+{
+	auto& json_assignment_characteristics = json["assignmentCharacteristics"];
+	json_assignment_characteristics.clear();
+
+	int i = 0;
+	for (auto& task : tasks)
+	{
+		auto& json_task = json_assignment_characteristics[i];
+		json_task["task"] = task.task;
+		if (!task.command.empty())
+			json_task["command"] = task.command;
+
+		auto& json_resource_assignments = json_task["resourceAssignments"];
+		int j=0;
+		for (auto& ra : task.resource_assignments)
+		{
+			auto& jra = json_resource_assignments[j];
+			jra["length"] = ra.length;
+			jra["energyConsumption"] = ra.energy_consumption;
+
+			auto& json_processors = jra["processors"];
+			int k=0;
+
+			for (auto& p : ra.processors)
+			{
+				auto& jp = json_processors[k];
+				jp["processor"] = p.processor;
+				jp["processingUnits"] = p.processing_units;
+			}
+			j++;
+		}
+
+		i++;
+	}
+}
+
 void write_tasks(nlohmann::json& json, const std::vector<task>& tasks)
 {
 	auto& json_tasks = json["tasks"];

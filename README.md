@@ -5,6 +5,7 @@ This repository contains source code of tools created for the <b>"Scheduling of 
 	<li>[Repository structure](#repository-structure)</li>
 	<li>[Available tools](#available-tools)
 		<ol>
+         <li>[p1_generator](#p1_generator)</li>
 			<li>[generator](#generator)</li>
 			<li>[solver](#solver)</li>
 			<li>[ilp_solver](#ilp_solver)</li>
@@ -38,6 +39,25 @@ generates a random problem instance of the scheduling phase, solves it with heur
 To better understand how the tools work, the following diagram illustrates how they fit together to form a data pipeline:
 
 ![data_pipeline](doc/data_pipeline.png "Data pipeline")
+
+
+<h4>p1_generator</h4>
+A generator of input data for the resource assignment phase (phase 1) of the problem. The output from this generator can be used with <i>ilp_res_assigner</i> and <i>ilp_global_solver</i>. Generates <i>&lt;task_count&gt;</i> of tasks with a random length that is uniformly distributed between <i>&lt;min-length&gt;</i> and <i>&lt;max-length&gt;</i>. [TODO: benchmark data]
+
+Input JSON requirements: environment
+
+Output JSON will contain: environment, assignment_characteristics
+
+Arguments:
+<pre>
+--environment &lt;file&gt;                                input file [stdin]
+--benchmark-data &lt;file&gt;                             csv file containing benchmark data   
+--output &lt;file&gt;                                     output file [stdout]
+--min-length &lt;length&gt;                               minimal length of a task [10]
+--max-length &lt;length&gt;                               maximal length of a task [50]
+--task-count &lt;count&gt;                                number of tasks to generate [10]
+</pre>
+
 
 <h4>generator</h4>
 A generator of input data for the scheduling phase (phase 2) of the problem. The output from this generator can be used with <i>solver</i> and <i>ilp_solver</i>. Generates <i>&lt;task_count&gt;</i> of tasks with a random length that is uniformly distributed between <i>&lt;min-length&gt;</i> and <i>&lt;max-length&gt;</i>. Each generated task has a <i>&lt;coprocessor-probability&gt;</i>% chance of using a coprocessor.

@@ -96,6 +96,7 @@ assignment_characteristic_list parse_assignment_characteristics(const nlohmann::
 solution parse_solution(const nlohmann::json& json);
 assignment_cut_list parse_assignment_cuts(const nlohmann::json& json);
 
+void write_assignment_characteristics(nlohmann::json& json, const std::vector<assignment_characteristic>& tasks);
 void write_tasks(nlohmann::json& json, const std::vector<task>& tasks);
 void write_solution(nlohmann::json& json, const solution& solution);
 void add_assignment_cuts(nlohmann::json& json, const std::vector<assignment_cut>& assignments);

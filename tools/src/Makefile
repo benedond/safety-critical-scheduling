@@ -6,6 +6,7 @@ LINK_DIRS =
 
 OUTPUT_DIR = ../bin
 GENERATOR_OUTPUT_FILE = generator.exe
+P1_GENERATOR_OUTPUT_FILE = p1_generator.exe
 SOLVER_OUTPUT_FILE = solver.exe
 VISUALISER_OUTPUT_FILE = visualiser.exe
 STAT_OUTPUT_FILE = stat.exe
@@ -16,6 +17,7 @@ ILP_GLOBAL_SOLVER_OUTPUT_FILE = ilp_global_solver.exe
 
 COMMON_DIR = common
 GENERATOR_DIR = generator
+P1_GENERATOR_DIR = p1_generator
 VISUALISER_DIR = visualiser
 SOLVER_DIR = solver
 STAT_DIR = stat
@@ -35,6 +37,7 @@ DEBUG_FLAGS = -Og -g -Wall
 
 COMMON_FILES = $(COMMON_DIR)/instance.cpp $(COMMON_DIR)/arg_parser.cpp
 GENERATOR_FILES = $(GENERATOR_DIR)/main.cpp $(GENERATOR_DIR)/generator.cpp
+P1_GENERATOR_FILES = $(P1_GENERATOR_DIR)/main.cpp $(P1_GENERATOR_DIR)/p1_generator.cpp
 SOLVER_FILES = $(SOLVER_DIR)/main.cpp $(SOLVER_DIR)/solver.cpp  $(SOLVER_DIR)/longest_tasks_first_solver.cpp $(SOLVER_DIR)/random_task_order_solver.cpp 
 VISUALISER_FILES = $(VISUALISER_DIR)/main.cpp $(VISUALISER_DIR)/visualiser.cpp 
 STAT_FILES = $(STAT_DIR)/main.cpp
@@ -45,12 +48,16 @@ ILP_RES_ASSIGNER_FILES = $(ILP_COMMON_FILES) $(ILP_RES_ASSIGNER_DIR)/main.cpp
 ILP_GLOBAL_SOLVER_FILES = $(ILP_COMMON_FILES) $(ILP_GLOBAL_SOLVER_DIR)/main.cpp
 
 
-.PHONY: generator solver visualiser visualiser-display stat demos-config-export ilp-solver ilp-res-assigner ilp-global-solver
-tools: generator solver visualiser stat demos-config-export
+.PHONY: generator p1-generator solver visualiser visualiser-display stat demos-config-export ilp-solver ilp-res-assigner ilp-global-solver
+tools: generator p1-generator solver visualiser stat demos-config-export
 all: tools ilp
+tools-vd: generator p1-generator solver visualiser-display stat demos-config-export
 
 generator: 
 	$(CXX) $(COMMON_FILES) $(GENERATOR_FILES) $(CXXFLAGS) $(RELEASE_FLAGS) -o $(OUTPUT_DIR)/$(GENERATOR_OUTPUT_FILE)
+
+p1-generator:
+	$(CXX) $(COMMON_FILES) $(P1_GENERATOR_FILES) $(CXXFLAGS) $(RELEASE_FLAGS) -o $(OUTPUT_DIR)/$(P1_GENERATOR_OUTPUT_FILE)	
 
 solver: 
 	$(CXX) $(COMMON_FILES) $(SOLVER_FILES) $(CXXFLAGS) $(RELEASE_FLAGS) -o $(OUTPUT_DIR)/$(SOLVER_OUTPUT_FILE)
