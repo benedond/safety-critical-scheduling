@@ -9,7 +9,8 @@
 
 struct benchmark_entry
 {
-	float slope, intercept;
+	float slope, intercept, proc_time, weight;
+	int proc_units;
 };
 
 class p1_generator

@@ -3,6 +3,7 @@
 #include <exception>
 #include <fstream>
 #include <unordered_set>
+#include <cmath>
 
 #include "p1_generator.h"
 
@@ -86,7 +87,8 @@ std::vector<assignment_characteristic> p1_generator::generate() const
 	{
 		assignment_characteristic task;
 
-		int length = task_length_dist(random_engine);
+		int base_length = task_length_dist(random_engine);
+		int num_iterations = -1;
 		int benchmark_ix = benchmark_dist(random_engine);
 
 		auto& benchmark_name = benchmarks[benchmark_ix];
@@ -96,7 +98,13 @@ std::vector<assignment_characteristic> p1_generator::generate() const
 		for (auto& pc : m_active_processor_combinations)
 		{
 			std::string pc_string = create_processor_combination_expression(pc);
-			assignment_characteristic::resource_assignment ra { .energy_consumption = m_benchmark_entries.at(benchmark_name).at(pc_string).slope,
+			auto& be = m_benchmark_entries.at(benchmark_name).at(pc_string);
+
+			if (num_iterations < 0)
+				num_iterations = (int) std::ceil((float) base_length / be.proc_time);
+			int length = (int) std::ceil((float) num_iterations * be.proc_time);
+
+			assignment_characteristic::resource_assignment ra { .energy_consumption = be.weight,
 													            .length = length };
 			for (auto& p : pc)
 				ra.processors.push_back({ .processor = p, .processing_units = 1 });
@@ -109,6 +117,7 @@ std::vector<assignment_characteristic> p1_generator::generate() const
 	return tasks;
 }
 
+//old parser for more complicated format
 //std::pair<std::vector<std::vector<std::string>>, std::unordered_map<std::string, std::unordered_map<std::string, benchmark_entry>>> parse_benchmark_data(
 //		const std::unordered_map<std::string, processor>& processors,
 //		std::ifstream& benchmark_data_file,
@@ -201,7 +210,7 @@ std::pair<std::vector<std::vector<std::string>>, std::unordered_map<std::string,
 			break;
 
 		auto line_parts = split_string(std::move(line), csv_separator);
-		if (line_parts.size() < 5)
+		if (line_parts.size() < 7)
 			break;
 
 		auto& combo_string = line_parts[0];
@@ -210,8 +219,11 @@ std::pair<std::vector<std::vector<std::string>>, std::unordered_map<std::string,
 		auto& be = benchmark_entries[line_parts[1]];
 		auto& benchmark_data = be[combo_string];
 
-		benchmark_data.slope = std::stof(line_parts[4]);
-		benchmark_data.intercept = std::stof(line_parts[3]);
+		benchmark_data.slope = std::stof(line_parts[3]);
+		benchmark_data.intercept = std::stof(line_parts[2]);
+		benchmark_data.proc_time = std::stof(line_parts[4]);
+		benchmark_data.weight = std::stof(line_parts[6]);
+		benchmark_data.proc_units = std::stoi(line_parts[5]);
 	}
 
 	active_processor_combinations.reserve(combo_strings.size());
