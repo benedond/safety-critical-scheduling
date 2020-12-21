@@ -65,6 +65,8 @@ p1_generator::p1_generator(const arg_parser& args,
 
 	if (m_min_length > m_max_length)
 		throw std::invalid_argument("min task length is greater than max task length");
+
+	m_adjust_weights_by_proc_time = args.is_arg_present("--adjust-weights");
 }
 
 std::vector<assignment_characteristic> p1_generator::generate() const
@@ -103,8 +105,9 @@ std::vector<assignment_characteristic> p1_generator::generate() const
 			if (num_iterations < 0)
 				num_iterations = (int) std::ceil((float) base_length / be.proc_time);
 			int length = (int) std::ceil((float) num_iterations * be.proc_time);
+			int weight_adjust_factor = m_adjust_weights_by_proc_time ? length : 1;
 
-			assignment_characteristic::resource_assignment ra { .energy_consumption = be.weight,
+			assignment_characteristic::resource_assignment ra { .energy_consumption = be.weight * weight_adjust_factor,
 													            .length = length };
 			for (auto& p : pc)
 				ra.processors.push_back({ .processor = p, .processing_units = 1 });
@@ -117,7 +120,7 @@ std::vector<assignment_characteristic> p1_generator::generate() const
 	return tasks;
 }
 
-//old parser for more complicated format
+//old parser for the more complicated format
 //std::pair<std::vector<std::vector<std::string>>, std::unordered_map<std::string, std::unordered_map<std::string, benchmark_entry>>> parse_benchmark_data(
 //		const std::unordered_map<std::string, processor>& processors,
 //		std::ifstream& benchmark_data_file,

@@ -42,7 +42,7 @@ To better understand how the tools work, the following diagram illustrates how t
 
 
 <h4>p1_generator</h4>
-A generator of input data for the resource assignment phase (phase 1) of the problem. The output from this generator can be used with <i>ilp_res_assigner</i> and <i>ilp_global_solver</i>. Generates <i>&lt;task_count&gt;</i> of tasks with a random length that is uniformly distributed between <i>&lt;min-length&gt;</i> and <i>&lt;max-length&gt;</i>. [TODO: benchmark data]
+A generator of input data for the resource assignment phase (phase 1) of the problem. The output from this generator can be used with <i>ilp_res_assigner</i> and <i>ilp_global_solver</i>. Generates <i>&lt;task_count&gt;</i> of tasks with a random length that is uniformly distributed between <i>&lt;min-length&gt;</i> and <i>&lt;max-length&gt;</i>. Tasks are generated based on provided benchmark data. [TODO: details about benchmark data and expected file format]
 
 Input JSON requirements: environment
 
@@ -56,6 +56,7 @@ Arguments:
 --min-length &lt;length&gt;                               minimal length of a task [10]
 --max-length &lt;length&gt;                               maximal length of a task [50]
 --task-count &lt;count&gt;                                number of tasks to generate [10]
+--adjust-weights                                    multiply weights of generated tasks by their randomly generated processing time [false]
 </pre>
 
 

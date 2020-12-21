@@ -31,6 +31,7 @@ private:
 
 	int m_min_length = 10, m_max_length = 50;
 	int m_task_count = 10;
+	bool m_adjust_weights_by_proc_time = false;
 };
 
 std::pair<std::vector<std::vector<std::string>>, std::unordered_map<std::string, std::unordered_map<std::string, benchmark_entry>>> parse_benchmark_data(
