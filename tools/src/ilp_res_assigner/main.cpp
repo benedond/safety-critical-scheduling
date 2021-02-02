@@ -111,7 +111,7 @@ std::vector<task> solve(const arg_parser& args, const environment& e, const assi
         if (iis_output)
         {
             model.computeIIS();
-            write_iis(model);
+            write_iis(INFEASIBLE_MODEL_FILENAME, model);
         }
     }
 
