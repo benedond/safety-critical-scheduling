@@ -19,7 +19,7 @@ public:
 	visualiser(const environment& e, const solution& s);
 
 private:
-	const std::array<int, 1> m_supported_problem_versions { 1 };
+	const std::array<int, 2> m_supported_problem_versions { 1, 2 };
 
 	const environment& m_environment;
 	const solution& m_solution;

@@ -65,8 +65,6 @@ p1_generator::p1_generator(const arg_parser& args,
 
 	if (m_min_length > m_max_length)
 		throw std::invalid_argument("min task length is greater than max task length");
-
-	m_adjust_weights_by_proc_time = args.is_arg_present("--adjust-weights");
 }
 
 std::vector<assignment_characteristic> p1_generator::generate() const
@@ -105,9 +103,9 @@ std::vector<assignment_characteristic> p1_generator::generate() const
 			if (num_iterations < 0)
 				num_iterations = (int) std::ceil((float) base_length / be.proc_time);
 			int length = (int) std::ceil((float) num_iterations * be.proc_time);
-			int weight_adjust_factor = m_adjust_weights_by_proc_time ? length : 1;
 
-			assignment_characteristic::resource_assignment ra { .energy_consumption = be.weight * weight_adjust_factor,
+			assignment_characteristic::resource_assignment ra { .slope = be.slope,
+													   			.intercept = be.intercept,
 													            .length = length };
 			for (auto& p : pc)
 				ra.processors.push_back({ .processor = p, .processing_units = 1 });
@@ -213,7 +211,7 @@ std::pair<std::vector<std::vector<std::string>>, std::unordered_map<std::string,
 			break;
 
 		auto line_parts = split_string(std::move(line), csv_separator);
-		if (line_parts.size() < 7)
+		if (line_parts.size() < 6)
 			break;
 
 		auto& combo_string = line_parts[0];
@@ -225,7 +223,6 @@ std::pair<std::vector<std::vector<std::string>>, std::unordered_map<std::string,
 		benchmark_data.slope = std::stof(line_parts[3]);
 		benchmark_data.intercept = std::stof(line_parts[2]);
 		benchmark_data.proc_time = std::stof(line_parts[4]);
-		benchmark_data.weight = std::stof(line_parts[6]);
 		benchmark_data.proc_units = std::stoi(line_parts[5]);
 	}
 

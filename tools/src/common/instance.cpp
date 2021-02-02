@@ -86,7 +86,8 @@ assignment_characteristic_list parse_assignment_characteristics(const nlohmann::
 			auto& resource_assignments = assignment_char["resourceAssignments"];
 			for (auto& res_ass : resource_assignments)
 			{
-				assignment_characteristic::resource_assignment ra { .energy_consumption = res_ass["energyConsumption"],
+				assignment_characteristic::resource_assignment ra { .slope = res_ass["slope"],
+																	.intercept = res_ass["intercept"],
 																    .length = res_ass["length"] };
 
 				auto& processors = res_ass["processors"];
@@ -211,7 +212,8 @@ void write_assignment_characteristics(nlohmann::json& json, const std::vector<as
 		{
 			auto& jra = json_resource_assignments[j];
 			jra["length"] = ra.length;
-			jra["energyConsumption"] = ra.energy_consumption;
+			jra["slope"] = ra.slope;
+			jra["intercept"] = ra.intercept;
 
 			auto& json_processors = jra["processors"];
 			int k=0;

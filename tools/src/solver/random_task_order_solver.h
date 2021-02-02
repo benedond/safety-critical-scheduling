@@ -15,7 +15,7 @@ protected:
 	metadata_map get_solver_metadata() const override;
 
 private:
-	const std::array<int, 1> m_supported_problem_versions{ 1 };
+	const std::array<int, 2> m_supported_problem_versions{ 1, 2 };
 	const int m_seed;
 };
 

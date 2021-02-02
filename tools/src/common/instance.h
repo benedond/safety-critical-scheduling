@@ -48,7 +48,7 @@ struct assignment_characteristic
 {
 	struct resource_assignment
 	{
-		float energy_consumption;
+		float slope, intercept;
 		int length;
 		std::vector<task::processor_assignment> processors;
 	};

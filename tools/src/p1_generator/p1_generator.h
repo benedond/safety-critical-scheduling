@@ -9,7 +9,7 @@
 
 struct benchmark_entry
 {
-	float slope, intercept, proc_time, weight;
+	float slope, intercept, proc_time;
 	int proc_units;
 };
 
@@ -23,7 +23,7 @@ public:
 			     const std::unordered_map<std::string, std::unordered_map<std::string, benchmark_entry>>& be);
 
 private:
-	const std::array<int, 1> m_supported_problem_versions{ 1 };
+	const std::array<int, 2> m_supported_problem_versions{ 1, 2 };
 
 	const environment& m_environment;
 	const std::unordered_map<std::string, std::unordered_map<std::string, benchmark_entry>>& m_benchmark_entries;
@@ -31,7 +31,6 @@ private:
 
 	int m_min_length = 10, m_max_length = 50;
 	int m_task_count = 10;
-	bool m_adjust_weights_by_proc_time = false;
 };
 
 std::pair<std::vector<std::vector<std::string>>, std::unordered_map<std::string, std::unordered_map<std::string, benchmark_entry>>> parse_benchmark_data(
