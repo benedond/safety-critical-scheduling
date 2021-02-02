@@ -8,6 +8,7 @@ This repository contains source code of tools created for the <b>"Scheduling of 
          <li>[p1_generator](#p1_generator)</li>
 			<li>[generator](#generator)</li>
 			<li>[solver](#solver)</li>
+         <li>[global_solver](#global_solver)</li>
 			<li>[ilp_solver](#ilp_solver)</li>
 			<li>[ilp_res_assigner](#ilp_res_assigner)</li>
 			<li>[ilp_global_solver](#ilp_global_solver)</li>
@@ -96,6 +97,19 @@ Arguments:
 --input &lt;file&gt;                     input file [stdin]
 --output &lt;file&gt;                    output file [stdout]
 --method &lt;algorithm identifier&gt;    identifier of the heuristic algorithm to be used [0]
+</pre>
+
+
+<h4>iglobal_solver</h4>
+Heuristic solver of the global problem - handles both resource assignment and scheduling. This solver is currently only capable of creating random schedules.
+
+Input JSON requirements: environment, assignmentCharacteristics
+
+Output JSON will contain: environment, tasks, solution
+
+<pre>
+--input &lt;file&gt;                input file [stdin]
+--output &lt;file&gt;               output file [stdout]
 </pre>
 
 
