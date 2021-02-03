@@ -51,8 +51,8 @@ ILP_RES_ASSIGNER_FILES = $(ILP_COMMON_FILES) $(ILP_RES_ASSIGNER_DIR)/main.cpp
 ILP_GLOBAL_SOLVER_FILES = $(ILP_COMMON_FILES) $(ILP_GLOBAL_SOLVER_DIR)/main.cpp
 
 
-.PHONY: generator p1-generator solver global_solver visualiser visualiser-display stat demos-config-export ilp-solver ilp-res-assigner ilp-global-solver
-tools: generator p1-generator solver global_solver visualiser stat demos-config-export
+.PHONY: generator p1-generator solver global-solver visualiser visualiser-display stat demos-config-export ilp-solver ilp-res-assigner ilp-global-solver
+tools: generator p1-generator solver global-solver visualiser stat demos-config-export
 all: tools ilp
 tools-vd: generator p1-generator solver visualiser-display stat demos-config-export
 
@@ -65,7 +65,7 @@ p1-generator:
 solver: 
 	$(CXX) $(COMMON_FILES) $(SOLVER_FILES) $(CXXFLAGS) $(RELEASE_FLAGS) -o $(OUTPUT_DIR)/$(SOLVER_OUTPUT_FILE)
 
-global_solver: 
+global-solver:
 	$(CXX) $(COMMON_FILES) $(GLOBAL_SOLVER_FILES) $(CXXFLAGS) $(RELEASE_FLAGS) -o $(OUTPUT_DIR)/$(GLOBAL_SOLVER_OUTPUT_FILE)
 
 visualiser: 
