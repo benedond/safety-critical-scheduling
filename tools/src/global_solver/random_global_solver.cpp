@@ -100,6 +100,12 @@ void random_global_solver::solve()
 					for (auto& task_assignment : task_assignments)
 						window.task_assignments.push_back(std::move(task_assignment));
 
+					m_tasks.push_back({ .name = task->task,
+						 .command = task->command,
+						 .length = assignment.length,
+						 .assignment_index = sel_assignment,
+						 .processors = assignment.processors });
+
 					break;
 				}
 			}

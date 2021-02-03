@@ -8,6 +8,7 @@ class global_solver
 public:
 	typedef std::unordered_map<std::string, std::string> metadata_map;
 	solution get_solution();
+	std::vector<task> get_tasks();
 
 	global_solver(const environment& e, const assignment_characteristic_list& ac);
 
@@ -17,6 +18,7 @@ protected:
 
 	bool m_solved, m_feasible;
 	std::vector<window> m_windows;
+	std::vector<task> m_tasks;
 
 	window save_window(window&& window);
 	bool check_feasibility() const;

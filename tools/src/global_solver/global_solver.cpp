@@ -35,6 +35,15 @@ solution global_solver::get_solution()
 	return s;
 }
 
+std::vector<task> global_solver::get_tasks()
+{
+	solution s = get_solution();
+	if (s.feasible)
+		return m_tasks;
+
+	return {};
+}
+
 void global_solver::solve()
 {
 	NOT_IMPLEMENTED;

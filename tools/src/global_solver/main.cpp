@@ -41,6 +41,7 @@ int main(int argc, char** argv)
 		random_global_solver solver(environment, assignments);
 		s = solver.get_solution();
 		write_solution(json, s);
+		write_tasks(json, solver.get_tasks());
 	}
 	catch (const std::invalid_argument& error)
 	{

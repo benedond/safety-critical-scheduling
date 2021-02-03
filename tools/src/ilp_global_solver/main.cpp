@@ -271,7 +271,8 @@ std::pair<solution, std::vector<task>> solve_v2(const arg_parser& args, const en
 			{
 				auto& x_ijk = x[i][j][k];
 				GRBVar A_ijk = model.addVar(0, GRB_INFINITY, 0, GRB_CONTINUOUS, "A" + std::to_string(i) + "," + std::to_string(j) + "," + std::to_string(k));
-				model.addGenConstrIndicator(x_ijk, 1, A_ijk == 0.6 * assignment_characteristic.slope * l[j], "A" + std::to_string(i) + "," + std::to_string(j) + "," + std::to_string(k) + " value");
+				//model.addGenConstrIndicator(x_ijk, 1, A_ijk == 0.6 * assignment_characteristic.slope * l[j], "A" + std::to_string(i) + "," + std::to_string(j) + "," + std::to_string(k) + " value");
+				model.addConstr(A_ijk == x_ijk * assignment_characteristic.slope * assignment_characteristic.length);
 				energy_consumption_sum += A_ijk;
 				//A_ij.push_back(std::move(A_ijk));
 				k++;
