@@ -1,0 +1,148 @@
+partitions:
+  - name: 16_wd_sort
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/wd_sort
+        budget: 131
+  - name: 15_dijkstra
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/dijkstra
+        budget: 119
+  - name: 14_wd_sort
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/wd_sort
+        budget: 108
+  - name: 12_dijkstra
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/dijkstra
+        budget: 151
+  - name: 4_wd_sort
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/wd_sort
+        budget: 104
+  - name: 6_wd_sort
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/wd_sort
+        budget: 100
+  - name: 11_wd_sort
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/wd_sort
+        budget: 107
+  - name: 9_dijkstra
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/dijkstra
+        budget: 173
+  - name: 17_dijkstra
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/dijkstra
+        budget: 103
+  - name: 1_sha
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/sha
+        budget: 292
+  - name: 10_sha
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/sha
+        budget: 204
+  - name: 20_susan
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/susan
+        budget: 90
+  - name: 7_susan
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/susan
+        budget: 145
+  - name: 0_sha
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/sha
+        budget: 266
+  - name: 21_dijkstra
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/dijkstra
+        budget: 143
+  - name: 18_wd_sort
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/wd_sort
+        budget: 113
+  - name: 3_dijkstra
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/dijkstra
+        budget: 175
+  - name: 2_dijkstra
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/dijkstra
+        budget: 135
+  - name: 5_sha
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/sha
+        budget: 246
+  - name: 19_wd_sort
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/wd_sort
+        budget: 80
+  - name: 8_wd_sort
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/wd_sort
+        budget: 124
+  - name: 13_sha
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/sha
+        budget: 220
+
+windows:
+  - length: 487
+    slices:
+      - cpu: 3
+        sc_partition: 10_sha
+      - cpu: 2
+        sc_partition: 9_dijkstra
+      - cpu: 0
+        sc_partition: 1_sha
+      - cpu: 4
+        sc_partition: 20_susan
+      - cpu: 1
+        sc_partition: 3_dijkstra
+  - length: 444
+    slices:
+      - cpu: 3
+        sc_partition: 21_dijkstra
+      - cpu: 4
+        sc_partition: 7_susan
+      - cpu: 2
+        sc_partition: 13_sha
+      - cpu: 0
+        sc_partition: 0_sha
+      - cpu: 1
+        sc_partition: 5_sha
+  - length: 252
+    slices:
+      - cpu: 3
+        sc_partition: 17_dijkstra
+      - cpu: 2
+        sc_partition: 12_dijkstra
+      - cpu: 0
+        sc_partition: 2_dijkstra
+      - cpu: 1
+        sc_partition: 6_wd_sort
+  - length: 219
+    slices:
+      - cpu: 3
+        sc_partition: 19_wd_sort
+      - cpu: 2
+        sc_partition: 18_wd_sort
+      - cpu: 0
+        sc_partition: 4_wd_sort
+      - cpu: 1
+        sc_partition: 8_wd_sort
+  - length: 219
+    slices:
+      - cpu: 3
+        sc_partition: 16_wd_sort
+      - cpu: 2
+        sc_partition: 15_dijkstra
+      - cpu: 0
+        sc_partition: 11_wd_sort
+      - cpu: 1
+        sc_partition: 14_wd_sort
+  - length: 29
+    slices:
+      - cpu: 0

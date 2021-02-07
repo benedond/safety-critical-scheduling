@@ -1,0 +1,147 @@
+partitions:
+  - name: 16_wd_sort
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/wd_sort
+        budget: 131
+  - name: 12_dijkstra
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/dijkstra
+        budget: 125
+  - name: 9_dijkstra
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/dijkstra
+        budget: 173
+  - name: 11_wd_sort
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/wd_sort
+        budget: 107
+  - name: 6_wd_sort
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/wd_sort
+        budget: 100
+  - name: 4_wd_sort
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/wd_sort
+        budget: 104
+  - name: 15_dijkstra
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/dijkstra
+        budget: 119
+  - name: 5_sha
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/sha
+        budget: 246
+  - name: 19_wd_sort
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/wd_sort
+        budget: 80
+  - name: 8_wd_sort
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/wd_sort
+        budget: 138
+  - name: 13_sha
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/sha
+        budget: 220
+  - name: 1_sha
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/sha
+        budget: 147
+  - name: 17_dijkstra
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/dijkstra
+        budget: 103
+  - name: 7_susan
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/susan
+        budget: 391
+  - name: 2_dijkstra
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/dijkstra
+        budget: 112
+  - name: 3_dijkstra
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/dijkstra
+        budget: 145
+  - name: 18_wd_sort
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/wd_sort
+        budget: 125
+  - name: 0_sha
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/sha
+        budget: 266
+  - name: 21_dijkstra
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/dijkstra
+        budget: 143
+  - name: 20_susan
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/susan
+        budget: 242
+  - name: 10_sha
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/sha
+        budget: 103
+  - name: 14_wd_sort
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/wd_sort
+        budget: 120
+
+windows:
+  - length: 652
+    slices:
+      - cpu: 5
+        sc_partition: 3_dijkstra
+      - cpu: 1
+        sc_partition: 0_sha
+      - cpu: 2
+        sc_partition: 5_sha
+      - cpu: 3
+        sc_partition: 20_susan
+      - cpu: 0
+        sc_partition: 7_susan
+      - cpu: 4
+        sc_partition: 1_sha
+  - length: 367
+    slices:
+      - cpu: 5
+        sc_partition: 12_dijkstra
+      - cpu: 1
+        sc_partition: 9_dijkstra
+      - cpu: 4
+        sc_partition: 8_wd_sort
+      - cpu: 0
+        sc_partition: 13_sha
+      - cpu: 2
+        sc_partition: 21_dijkstra
+      - cpu: 3
+        sc_partition: 16_wd_sort
+  - length: 209
+    slices:
+      - cpu: 3
+        sc_partition: 17_dijkstra
+      - cpu: 5
+        sc_partition: 14_wd_sort
+      - cpu: 4
+        sc_partition: 18_wd_sort
+      - cpu: 0
+        sc_partition: 15_dijkstra
+      - cpu: 1
+        sc_partition: 11_wd_sort
+      - cpu: 2
+        sc_partition: 4_wd_sort
+  - length: 187
+    slices:
+      - cpu: 0
+        sc_partition: 6_wd_sort
+      - cpu: 1
+        sc_partition: 19_wd_sort
+      - cpu: 4
+        sc_partition: 2_dijkstra
+      - cpu: 5
+        sc_partition: 10_sha
+  - length: 235
+    slices:
+      - cpu: 0
+
