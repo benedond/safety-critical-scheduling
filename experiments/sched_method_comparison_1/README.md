@@ -10,3 +10,5 @@
  - RA+LTF stands for "random assignment + longest tasks first"; in all instances for these schedules the same resource assignment as in the "RANDOM1" schedule was used
 
  - In instances 2 and 3, the optimality of the OPTIMAL2 schedule is not proven - the schedule is the best gurobi computed after 2 hours on the optim server
+
+ - T_inf was calculated as the average of the last 50 measured values of CPU_0_temp, ambient temperature as the average of the last 5 measured values of ambient, relative T_inf as T_inf minus ambient temperature
