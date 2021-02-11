@@ -2,7 +2,6 @@
 <html><head>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 	<meta charset="utf-8">
-	<title>Otázky Editor</title>
 	<style>
 		table, table td, table th {
 			border-collapse: collapse;
@@ -35,7 +34,6 @@
 
 
 	<script type="text/javascript">
-		
 		function floorFloat(float, places = 4, decimalSeparator) {
 		    if (!float) {
 		        float = 0;
@@ -51,7 +49,6 @@
 		    return rtn;
 		}
 
-		// importovat
 		document.querySelector("input[type='file']").addEventListener("change", e => {
 			const file = e.target.files[0];
 			
@@ -64,8 +61,9 @@
 				const fileContent = e.target.result;
 
 				try {
+					document.querySelector(".windows tbody").innerHTML = "";
 				  const data = JSON.parse(fileContent);
-				  
+
 				  if (!data) {
 				  	alert("chyba dat");
 				  	return;
