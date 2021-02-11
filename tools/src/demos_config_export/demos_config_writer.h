@@ -14,17 +14,18 @@ public:
 	std::string get_config();
 
 private:
-	const environment& env;
-	const task_map& tasks;
-	const solution& sol;
+	const environment& m_environment;
+	const task_map& m_tasks;
+	const solution& m_solution;
 
-	std::stringstream output;
-	std::unordered_map<std::string, int> cpu_offset;
-	bool config_exported;
+	std::stringstream m_output;
+	std::unordered_map<std::string, int> m_cpu_offset;
+	bool m_config_exported;
 
 	void write_config();
 	void write_partition(const task& task);
 	void write_window(const window& window);
+	void write_empty_window(int length);
 };
 
 #endif // DEMOS_CONFIG_WRITER_H

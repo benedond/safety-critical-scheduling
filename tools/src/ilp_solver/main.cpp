@@ -24,7 +24,6 @@ std::pair<solution, std::vector<assignment_cut>> solve(const arg_parser& args, c
 	const int windows_ub = num_tasks;
 
 	GRBEnv env;
-	env.set(GRB_IntParam_OutputFlag, 0);
 	GRBModel model(env);
 
 	std::vector<std::vector<GRBVar>> w(num_tasks);
@@ -54,7 +53,7 @@ std::pair<solution, std::vector<assignment_cut>> solve(const arg_parser& args, c
 		window_length_sum += l[j];
 
 		for (int i = 0; i < num_tasks; i++)
-			model.addConstr(l[j] >= (w[i][j] * task_list[i]->length)/0.6, task_list[i]->name + " is at most 60% of l" + std::to_string(j));
+			model.addConstr(l[j] >= (w[i][j] * task_list[i]->length)/e.sc_part, task_list[i]->name + " is at most " + std::to_string(e.sc_part*100) + "% of l" + std::to_string(j));
 
 		if (j > 0)
 			model.addConstr(l[j] <= l[j-1], "window ordering");
@@ -88,7 +87,7 @@ std::pair<solution, std::vector<assignment_cut>> solve(const arg_parser& args, c
 	solution s { .solver_name = "ILP Solver",
 			.solution_time = (uint64_t) std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() };
 	std::vector<assignment_cut> assignment_cuts;
-	if (model.get(GRB_IntAttr_Status) == GRB_OPTIMAL)
+	if (model.get(GRB_IntAttr_Status) == GRB_OPTIMAL || model.get(GRB_IntAttr_Status) == GRB_TIME_LIMIT)
 	{
 		s.feasible = true;
 

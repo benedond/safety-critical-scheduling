@@ -73,7 +73,7 @@ void random_task_order_solver::solve()
 				}
 
 				// check window length
-				float wl = ceilf((float) task->length / 0.6f);
+				float wl = ceilf((float) task->length / m_environment.sc_part);
 				if ((float) window.length < wl)
 					window.length = (int) wl;
 

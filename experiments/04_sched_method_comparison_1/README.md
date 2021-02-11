@@ -3,7 +3,7 @@
 ### Notes
 
  - only difference between INPUT1 and INPUT2 files is problemVersion - for problemVersion=1, the E_ik method was used (resulting in the OPTIMAL1 schedule), for problemVersion=2 the predictor method was used (resulting in the OPTIMAL2 schedule);
-  - for the E_ik method, E_ik = a_ik + b_ik/c_k, where a_ik is the slope of task i on resource k, b_ik is the intercept of task i on resource k, c_k is the capacity of resource k
+  - for the E_ik method, E_ik = (a_ik + b_ik/c_k)\*p_ik, where a_ik is the slope of task i on resource k, b_ik is the intercept of task i on resource k, c_k is the capacity of resource k, p_ik is the processing time of task i on resource k
 
  - fan settings of 0.2 was used during all measurements
 

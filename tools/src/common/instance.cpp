@@ -31,6 +31,9 @@ environment parse_environment(const nlohmann::json& json)
 
 		e.major_frame_length = env["majorFrameLength"];
 		e.problem_version = env["problemVersion"];
+
+		if (JSON_HAS_KEY(env, "scPart"))
+			e.sc_part = env["scPart"];
 	}
 	else
 	{

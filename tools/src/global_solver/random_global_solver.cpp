@@ -92,7 +92,7 @@ void random_global_solver::solve()
 					}
 
 					// check window length
-					float wl = ceilf((float) assignment.length / 0.6f);
+					float wl = ceilf((float) assignment.length / m_environment.sc_part);
 					if ((float) window.length < wl)
 						window.length = (int) wl;
 

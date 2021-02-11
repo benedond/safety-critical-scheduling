@@ -100,7 +100,7 @@ Arguments:
 </pre>
 
 
-<h4>iglobal_solver</h4>
+<h4>global_solver</h4>
 Heuristic solver of the global problem - handles both resource assignment and scheduling. This solver is currently only capable of creating random schedules.
 
 Input JSON requirements: environment, assignmentCharacteristics
@@ -156,7 +156,7 @@ Output JSON will contain: environment, tasks, solution
 --input &lt;file&gt;                input file [stdin]
 --output &lt;file&gt;               output file [stdout]
 --no-iis-output               if the model is infeasible, the solver will not compute IIS and the ILP model will not be written into a file
---no-schedule-optimization    disables optimization of total schedule length as a secondary objective
+--optimize-schedule           enables optimization of total schedule length as a secondary objective
 </pre>
 
 
@@ -241,6 +241,7 @@ The content of the JSONs that the tools use is best explained by an example. The
   "environment":{                    // environment data       
       "majorFrameLength":200,        // major frame length in ms (integer)
       "problemVersion":1,            // problem version - the tools should produce an error if used with unsupported problem version
+      "scPart":0.6,                  // optional: minimal amount of window length required for SC tasks (%) - if not specified, default value (0.6) will be used
       "processors":[                 // list of processors
          {                           // processor 0 (demos_config_export will use CPU indices 0-3 for this processor)
             "name":"A53",            // processor name 

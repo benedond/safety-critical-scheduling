@@ -18,7 +18,6 @@ std::vector<task> solve(const arg_parser& args, const environment& e, const assi
     std::unordered_map<std::string, int> task_index_map;
 
     GRBEnv env;
-    env.set(GRB_IntParam_OutputFlag, 0);
     GRBModel model(env);
 
     int ix = 0;
@@ -87,7 +86,7 @@ std::vector<task> solve(const arg_parser& args, const environment& e, const assi
     model.optimize();
 
     std::vector<task> tasks;
-    if (model.get(GRB_IntAttr_Status) == GRB_OPTIMAL)
+    if (model.get(GRB_IntAttr_Status) == GRB_OPTIMAL || model.get(GRB_IntAttr_Status) == GRB_TIME_LIMIT)
     {
         for (int i = 0; i < assignment_characteristics.size(); i++)
         {

@@ -27,6 +27,7 @@ struct environment
 	std::vector<processor*> processors_list;
 	int major_frame_length;
 	int problem_version;
+	float sc_part = 0.6f;
 };
 
 struct task

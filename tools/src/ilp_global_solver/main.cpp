@@ -18,7 +18,6 @@ std::pair<solution, std::vector<task>> solve_v1(const arg_parser& args, const en
 	std::vector<std::vector<std::vector<GRBVar>>> a;
 
 	GRBEnv env;
-	env.set(GRB_IntParam_OutputFlag, 0);
 	GRBModel model(env);
 
 	int num_tasks = assignment_characteristics.size();
@@ -72,7 +71,7 @@ std::pair<solution, std::vector<task>> solve_v1(const arg_parser& args, const en
 			for (auto& assignment_characteristic : task.resource_assignments)
 			{
 				a_ik_sum += a[i][j][k];
-				model.addConstr(l[j] >= (a[i][j][k++] * assignment_characteristic.length) / 0.6, task.task + " is at most 60% of l" + std::to_string(j));
+				model.addConstr(l[j] >= (a[i][j][k++] * assignment_characteristic.length) / e.sc_part, task.task + " is at most " + std::to_string(e.sc_part*100) + "% of l" + std::to_string(j));
 			}
 		}
 		model.addConstr(l[j] <= a_ik_sum * e.major_frame_length, "window " + std::to_string(j) + " is not empty");
@@ -113,7 +112,7 @@ std::pair<solution, std::vector<task>> solve_v1(const arg_parser& args, const en
 
 	model.setObjectiveN(energy_consumption_sum, 0, 1, 1.0, 0.0, 0.0, "min energy consumption");
 
-	if (!args.is_arg_present("--no-schedule-optimization"))
+	if (args.is_arg_present("--optimize-schedule"))
 		model.setObjectiveN(window_length_sum, 1, 0, 1.0, 0.0, 0.0, "min total schedule length");
 
 	auto start = std::chrono::high_resolution_clock::now();
@@ -124,7 +123,7 @@ std::pair<solution, std::vector<task>> solve_v1(const arg_parser& args, const en
 			.solution_time = (uint64_t)std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() };
 	std::vector<task> tasks;
 
-	if (model.get(GRB_IntAttr_Status) == GRB_OPTIMAL)
+	if (model.get(GRB_IntAttr_Status) == GRB_OPTIMAL || model.get(GRB_IntAttr_Status) == GRB_TIME_LIMIT)
 	{
 		s.feasible = true;
 
@@ -198,7 +197,6 @@ std::pair<solution, std::vector<task>> solve_v2(const arg_parser& args, const en
 	//std::vector<std::vector<GRBVar>> B;
 
 	GRBEnv env;
-	env.set(GRB_IntParam_OutputFlag, 0);
 	GRBModel model(env);
 
 	// x_ijk
@@ -245,7 +243,7 @@ std::pair<solution, std::vector<task>> solve_v2(const arg_parser& args, const en
 			for (auto& assignment_characteristic : task.resource_assignments)
 			{
 				a_ik_sum += x[i][j][k];
-				model.addConstr(l[j] >= (x[i][j][k++] * assignment_characteristic.length) / 0.6, task.task + " is at most 60% of l" + std::to_string(j));
+				model.addConstr(l[j] >= (x[i][j][k++] * assignment_characteristic.length) / e.sc_part, task.task + " is at most " + std::to_string(e.sc_part*100) + "% of l" + std::to_string(j));
 			}
 		}
 		model.addConstr(l[j] <= a_ik_sum * e.major_frame_length, "window " + std::to_string(j) + " is not empty");
@@ -271,7 +269,7 @@ std::pair<solution, std::vector<task>> solve_v2(const arg_parser& args, const en
 			{
 				auto& x_ijk = x[i][j][k];
 				GRBVar A_ijk = model.addVar(0, GRB_INFINITY, 0, GRB_CONTINUOUS, "A" + std::to_string(i) + "," + std::to_string(j) + "," + std::to_string(k));
-				//model.addGenConstrIndicator(x_ijk, 1, A_ijk == 0.6 * assignment_characteristic.slope * l[j], "A" + std::to_string(i) + "," + std::to_string(j) + "," + std::to_string(k) + " value");
+				//model.addGenConstrIndicator(x_ijk, 1, A_ijk == xxx0.6xxx * assignment_characteristic.slope * l[j], "A" + std::to_string(i) + "," + std::to_string(j) + "," + std::to_string(k) + " value");
 				model.addConstr(A_ijk == x_ijk * assignment_characteristic.slope * assignment_characteristic.length);
 				energy_consumption_sum += A_ijk;
 				//A_ij.push_back(std::move(A_ijk));
@@ -306,7 +304,7 @@ std::pair<solution, std::vector<task>> solve_v2(const arg_parser& args, const en
 							resource_capacity_contraint_expr += x[i][j][k] * acp.processing_units;
 
 							GRBVar B_ijk = model.addVar(0, GRB_INFINITY, 0, GRB_CONTINUOUS, "B_" + std::to_string(i) + "," + std::to_string(j) + "," + processor->name);
-							model.addGenConstrIndicator(x[i][j][k], 1, B_ijk == 0.6 * assignment_characteristic.intercept * l[j], "B_ijkVALUE(" + std::to_string(i) + "," + std::to_string(j) + "," + processor->name + ")");
+							model.addGenConstrIndicator(x[i][j][k], 1, B_ijk == e.sc_part * assignment_characteristic.intercept * l[j], "B_ijkVALUE(" + std::to_string(i) + "," + std::to_string(j) + "," + processor->name + ")");
 							//energy_consumption_sum += B_ijk;
 							B_j.push_back(std::move(B_ijk));
 						}
@@ -326,7 +324,7 @@ std::pair<solution, std::vector<task>> solve_v2(const arg_parser& args, const en
 
 	model.setObjectiveN(energy_consumption_sum * 1.0f/(float) e.major_frame_length, 0, 1, 1.0, 0.0, 0.0, "min energy consumption");
 
-	if (!args.is_arg_present("--no-schedule-optimization"))
+	if (args.is_arg_present("--optimize-schedule"))
 		model.setObjectiveN(window_length_sum, 1, 0, 1.0, 0.0, 0.0, "min total schedule length");
 
 	auto start = std::chrono::high_resolution_clock::now();
@@ -337,7 +335,7 @@ std::pair<solution, std::vector<task>> solve_v2(const arg_parser& args, const en
 			.solution_time = (uint64_t)std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() };
 	std::vector<task> tasks;
 
-	if (model.get(GRB_IntAttr_Status) == GRB_OPTIMAL)
+	if (model.get(GRB_IntAttr_Status) == GRB_OPTIMAL || model.get(GRB_IntAttr_Status) == GRB_TIME_LIMIT)
 	{
 		s.feasible = true;
 
