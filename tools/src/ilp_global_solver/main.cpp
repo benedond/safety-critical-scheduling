@@ -288,7 +288,6 @@ std::pair<solution, std::vector<task>> solve_v2(const arg_parser& args, const en
 		for (int j = 0; j < windows_ub; j++)
 		{
 			GRBLinExpr resource_capacity_contraint_expr;
-			std::vector<GRBVar> B_j;
 
 			for (int i = 0; i < num_tasks; i++)
 			{
@@ -302,11 +301,6 @@ std::pair<solution, std::vector<task>> solve_v2(const arg_parser& args, const en
 						if (acp.processor == processor->name)
 						{
 							resource_capacity_contraint_expr += x[i][j][k] * acp.processing_units;
-
-							GRBVar B_ijk = model.addVar(0, GRB_INFINITY, 0, GRB_CONTINUOUS, "B_" + std::to_string(i) + "," + std::to_string(j) + "," + processor->name);
-							model.addGenConstrIndicator(x[i][j][k], 1, B_ijk == e.sc_part * assignment_characteristic.intercept * l[j], "B_ijkVALUE(" + std::to_string(i) + "," + std::to_string(j) + "," + processor->name + ")");
-							//energy_consumption_sum += B_ijk;
-							B_j.push_back(std::move(B_ijk));
 						}
 					}
 					k++;
@@ -314,11 +308,6 @@ std::pair<solution, std::vector<task>> solve_v2(const arg_parser& args, const en
 			}
 
 			model.addConstr(resource_capacity_contraint_expr <= processor->processing_units, processor->name + " capacity (window " + std::to_string(j) + ")");
-
-			GRBVar B_j_max = model.addVar(0, GRB_INFINITY, 0, GRB_CONTINUOUS, "B_" + std::to_string(j) + "_max");
-			model.addGenConstrMax(B_j_max, B_j.data(), B_j.size(), 0, "B_" + std::to_string(j) + "_max_constr");
-			energy_consumption_sum += B_j_max;
-			//B.push_back(std::move(B_j));
 		}
 	}
 
