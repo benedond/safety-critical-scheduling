@@ -282,7 +282,7 @@ std::pair<solution, std::vector<task>> solve_v2(const arg_parser& args, const en
 		//A.push_back(std::move(A_i));
 	}
 
-	// processor+gpu capacity, B_ijk
+	// processor+gpu capacity
 	for (auto& processor : e.processors_list)
 	{
 		for (int j = 0; j < windows_ub; j++)
@@ -320,6 +320,40 @@ std::pair<solution, std::vector<task>> solve_v2(const arg_parser& args, const en
 			energy_consumption_sum += B_j_max;
 			//B.push_back(std::move(B_j));
 		}
+	}
+
+	
+	for (int j = 0; j < windows_ub; j++)
+	{
+		std::vector<GRBVar> B_j;
+		for (auto& processor : e.processors_list)
+		{
+			for (int i = 0; i < num_tasks; i++)
+			{
+				auto& task = assignment_characteristics[i];
+				int k = 0;
+				for (auto& assignment_characteristic : task.resource_assignments)
+				{
+					for (auto& acp : assignment_characteristic.processors)
+					{
+						if (acp.processor == processor->name)
+						{
+
+							GRBVar B_ijk = model.addVar(0, GRB_INFINITY, 0, GRB_CONTINUOUS, "B_" + std::to_string(i) + "," + std::to_string(j) + "," + processor->name);
+							model.addGenConstrIndicator(x[i][j][k], 1, B_ijk == e.sc_part * assignment_characteristic.intercept * l[j], "B_ijkVALUE(" + std::to_string(i) + "," + std::to_string(j) + "," + processor->name + ")");
+							//energy_consumption_sum += B_ijk;
+							B_j.push_back(std::move(B_ijk));
+						}
+					}
+					k++;
+				}
+			}
+		}
+
+		GRBVar B_j_max = model.addVar(0, GRB_INFINITY, 0, GRB_CONTINUOUS, "B_" + std::to_string(j) + "_max");
+		model.addGenConstrMax(B_j_max, B_j.data(), B_j.size(), 0, "B_" + std::to_string(j) + "_max_constr");
+		energy_consumption_sum += B_j_max;
+		//B.push_back(std::move(B_j));
 	}
 
 	model.setObjectiveN(energy_consumption_sum * 1.0f/(float) e.major_frame_length, 0, 1, 1.0, 0.0, 0.0, "min energy consumption");
