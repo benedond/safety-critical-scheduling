@@ -15,6 +15,8 @@
 		<label>File: <input type="file"></label>
 	</div>
 
+	<h4 class="hh"></h4>
+
 	<h2 class="crit"></h2>
 
 	<table class="windows">
@@ -22,10 +24,11 @@
 			<tr>
 				<th>w</th>
 				<th>A</th>
-				<th>&Sigma; A</th>
+				<th>&Sigma;A</th>
 				<th>B</th>
-				<th>A+B</th>
-				<th>(A+B)/h</th>
+				<th>max B</th>
+				<th>&Sigma;A+max B</th>
+				<th>(&Sigma;A+max B)/h</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -71,12 +74,14 @@
 
 				  let crit = 0;
 				  let mfLength = data.environment.majorFrameLength;
+				  document.querySelector(".hh").innerText = `h=${mfLength}`;
 
 				  let i=0;
 				  data.solution.windows.forEach(window => {
 				  	i++;
 				  	let A_ijk = [];
 				  	let B_ijk = -1;
+				  	let b_vals = "";
 
 				  	window.tasks.forEach(task => {
 				  		let name = task.task;
@@ -88,7 +93,10 @@
 				  		let task_a = ach.slope;
 				  		let task_b = ach.intercept;
 
-				  		B_ijk = Math.max(B_ijk, task_b * 0.6 * window.length);
+				  		let b_ijk = task_b * 0.6 * window.length;
+				  		b_vals += `${floorFloat(b_ijk)}, `;
+
+				  		B_ijk = Math.max(B_ijk, b_ijk);
 				  		A_ijk.push(task_a * task.length);
 				  	});
 
@@ -100,17 +108,15 @@
 				  		a_vals += floorFloat(a) + " + ";
 				  	});
 				  	a_vals = a_vals.substr(0, a_vals.length-2);
+				  	b_vals = b_vals.substr(0, b_vals.length-2);
 
-				  	let row = `<tr><td>window ${i}: ${window.length}ms</td><td>${a_vals}</td><td>${floorFloat(a_val)}</td><td>${floorFloat(B_ijk)}</td><td>${floorFloat(B_ijk+a_val)}</td><td>${floorFloat((B_ijk+a_val)/mfLength)}</td></tr>`;
+				  	let row = `<tr><td>window ${i}: ${window.length}ms</td><td>${a_vals}</td><td>${floorFloat(a_val)}</td><td>${b_vals}</td><td>${floorFloat(B_ijk)}</td><td>${floorFloat(B_ijk+a_val)}</td><td>${floorFloat((B_ijk+a_val)/mfLength)}</td></tr>`;
 				  	document.querySelector(".windows tbody").innerHTML += row;
 				  	crit += B_ijk;
 				  });
 
 				  crit /= mfLength;
 				  document.querySelector(".crit").innerText = `Value: ${crit}`
-
-				  // DATA
-
 				}
 				catch (e) {
 				  	alert("chyba dat");
