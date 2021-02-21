@@ -74,6 +74,7 @@
 
 				  let crit = 0;
 				  let mfLength = data.environment.majorFrameLength;
+				  let scPart = data.environment.scPart || 0.6;
 				  document.querySelector(".hh").innerText = `h=${mfLength}`;
 
 				  let i=0;
@@ -93,7 +94,7 @@
 				  		let task_a = ach.slope;
 				  		let task_b = ach.intercept;
 
-				  		let b_ijk = task_b * 0.6 * window.length;
+				  		let b_ijk = task_b * scPart * window.length;
 				  		b_vals += `${floorFloat(b_ijk)}, `;
 
 				  		B_ijk = Math.max(B_ijk, b_ijk);

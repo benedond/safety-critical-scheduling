@@ -1,0 +1,146 @@
+partitions:
+  - name: 18_sha
+    processes:
+      - cmd: sha
+        budget: 99
+  - name: 9_susan
+    processes:
+      - cmd: susan
+        budget: 96
+  - name: 1_sha
+    processes:
+      - cmd: sha
+        budget: 85
+  - name: 2_susan
+    processes:
+      - cmd: susan
+        budget: 102
+  - name: 14_sha
+    processes:
+      - cmd: sha
+        budget: 104
+  - name: 8_sha
+    processes:
+      - cmd: sha
+        budget: 109
+  - name: 16_susan
+    processes:
+      - cmd: susan
+        budget: 67
+  - name: 20_susan
+    processes:
+      - cmd: susan
+        budget: 103
+  - name: 12_wd_sort
+    processes:
+      - cmd: wd_sort
+        budget: 150
+  - name: 15_wd_sort
+    processes:
+      - cmd: wd_sort
+        budget: 148
+  - name: 19_susan
+    processes:
+      - cmd: susan
+        budget: 114
+  - name: 11_wd_sort
+    processes:
+      - cmd: wd_sort
+        budget: 159
+  - name: 0_dijkstra
+    processes:
+      - cmd: dijkstra
+        budget: 202
+  - name: 4_wd_sort
+    processes:
+      - cmd: wd_sort
+        budget: 100
+  - name: 13_sha
+    processes:
+      - cmd: sha
+        budget: 74
+  - name: 5_dijkstra
+    processes:
+      - cmd: dijkstra
+        budget: 104
+  - name: 17_wd_sort
+    processes:
+      - cmd: wd_sort
+        budget: 159
+  - name: 10_wd_sort
+    processes:
+      - cmd: wd_sort
+        budget: 117
+  - name: 6_sha
+    processes:
+      - cmd: sha
+        budget: 126
+  - name: 3_sha
+    processes:
+      - cmd: sha
+        budget: 124
+  - name: 7_susan
+    processes:
+      - cmd: susan
+        budget: 123
+
+windows:
+  - length: 202
+    slices:
+      - cpu: 4
+        sc_partition: 3_sha
+      - cpu: 0
+        sc_partition: 0_dijkstra
+      - cpu: 1
+        sc_partition: 11_wd_sort
+      - cpu: 5
+        sc_partition: 19_susan
+      - cpu: 2
+        sc_partition: 12_wd_sort
+      - cpu: 3
+        sc_partition: 17_wd_sort
+  - length: 148
+    slices:
+      - cpu: 4
+        sc_partition: 6_sha
+      - cpu: 3
+        sc_partition: 15_wd_sort
+      - cpu: 5
+        sc_partition: 7_susan
+      - cpu: 1
+        sc_partition: 5_dijkstra
+      - cpu: 0
+        sc_partition: 4_wd_sort
+      - cpu: 2
+        sc_partition: 10_wd_sort
+  - length: 109
+    slices:
+      - cpu: 5
+        sc_partition: 14_sha
+      - cpu: 4
+        sc_partition: 8_sha
+  - length: 103
+    slices:
+      - cpu: 5
+        sc_partition: 20_susan
+      - cpu: 4
+        sc_partition: 2_susan
+  - length: 99
+    slices:
+      - cpu: 5
+        sc_partition: 18_sha
+      - cpu: 4
+        sc_partition: 9_susan
+  - length: 85
+    slices:
+      - cpu: 5
+        sc_partition: 13_sha
+      - cpu: 4
+        sc_partition: 1_sha
+  - length: 67
+    slices:
+      - cpu: 4
+        sc_partition: 16_susan
+  - length: 207
+    slices:
+      - cpu: 0
