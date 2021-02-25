@@ -157,6 +157,7 @@ Output JSON will contain: environment, tasks, solution
 --output &lt;file&gt;               output file [stdout]
 --no-iis-output               if the model is infeasible, the solver will not compute IIS and the ILP model will not be written into a file
 --optimize-schedule           enables optimization of total schedule length as a secondary objective
+--maximize                    the primary criterion will be maximized
 </pre>
 
 

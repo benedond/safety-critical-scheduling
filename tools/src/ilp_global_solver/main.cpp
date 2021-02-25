@@ -22,6 +22,9 @@ std::pair<solution, std::vector<task>> solve_v1(const arg_parser& args, const en
 
 	int num_tasks = assignment_characteristics.size();
 	int windows_ub = num_tasks;
+	int sense = 1;
+	if (args.is_arg_present("--maximize"))
+		sense = -1;
 
 	GRBLinExpr energy_consumption_sum;
 	for (int i = 0; i < num_tasks; i++)
@@ -43,7 +46,7 @@ std::pair<solution, std::vector<task>> solve_v1(const arg_parser& args, const en
 				for (auto& p : assignment_characteristic.processors)
 					processor_capacity += e.processors.at(p.processor).processing_units;
 				float energy_consumption = assignment_characteristic.slope + (float) assignment_characteristic.intercept / (float) processor_capacity;
-				energy_consumption_sum += a_ijk * energy_consumption * assignment_characteristic.length;
+				energy_consumption_sum += a_ijk * energy_consumption * assignment_characteristic.length * sense;
 				assignment_constraint_expr += a_ijk;
 				a_ij.push_back(std::move(a_ijk));
 			}
@@ -192,6 +195,9 @@ std::pair<solution, std::vector<task>> solve_v2(const arg_parser& args, const en
 
 	int num_tasks = assignment_characteristics.size();
 	int windows_ub = num_tasks;
+	int sense = 1;
+	if (args.is_arg_present("--maximize"))
+		sense = -1;
 
 	std::vector<std::vector<std::vector<GRBVar>>> x;// , A;
 	//std::vector<std::vector<GRBVar>> B;
@@ -329,7 +335,10 @@ std::pair<solution, std::vector<task>> solve_v2(const arg_parser& args, const en
 						{
 
 							GRBVar B_ijk = model.addVar(0, GRB_INFINITY, 0, GRB_CONTINUOUS, "B_" + std::to_string(i) + "," + std::to_string(j) + "," + processor->name);
+
 							model.addGenConstrIndicator(x[i][j][k], 1, B_ijk == e.sc_part * assignment_characteristic.intercept * l[j], "B_ijkVALUE(" + std::to_string(i) + "," + std::to_string(j) + "," + processor->name + ")");
+							if (sense == -1)
+								model.addGenConstrIndicator(x[i][j][k], 0, B_ijk == 0, "B_ijkVALUE(" + std::to_string(i) + "," + std::to_string(j) + "," + processor->name + ")_BOUND");
 							//energy_consumption_sum += B_ijk;
 							B_j.push_back(std::move(B_ijk));
 						}
@@ -345,10 +354,23 @@ std::pair<solution, std::vector<task>> solve_v2(const arg_parser& args, const en
 		//B.push_back(std::move(B_j));
 	}
 
-	model.setObjectiveN(energy_consumption_sum * 1.0f/(float) e.major_frame_length, 0, 1, 1.0, 0.0, 0.0, "min energy consumption");
+	if (sense == 1)
+		model.setObjectiveN(energy_consumption_sum * 1.0f/(float) e.major_frame_length, 0, 1, 1.0, 0.0, 0.0, "min energy consumption");
+	else
+		model.setObjective(energy_consumption_sum * 1.0f/(float) e.major_frame_length, GRB_MAXIMIZE);
 
 	if (args.is_arg_present("--optimize-schedule"))
-		model.setObjectiveN(window_length_sum, 1, 0, 1.0, 0.0, 0.0, "min total schedule length");
+	{
+		if (sense == 1)
+		{
+			std::cerr << "warning: --optimize-schedule active with predictor method" << std::endl;
+			model.setObjectiveN(window_length_sum, 1, 0, 1.0, 0.0, 0.0, "min total schedule length");
+		}
+		else if (sense == -1)
+		{
+			std::cerr << "error: --optimize-schedule is not compatible with --maximize while using predictor method" << std::endl;
+		}
+	}
 
 	auto start = std::chrono::high_resolution_clock::now();
 	model.optimize();
