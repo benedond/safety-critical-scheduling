@@ -9,11 +9,10 @@
 
 const static std::string affinity_keyword = "affinity";
 const static std::string benchmark_keyword = "benchmark";
-//const static std::string utf8_benchmark_keyword = "\uFEFFbenchmark";
 const static std::string slope_keyword = "slope";
 const static std::string intercept_keyword = "intercept";
 const static std::string runtime_keyword = "runtime";
-const static std::string command_keyword = "intercept";
+const static std::string command_keyword = "command";
 const static std::string csv_header_expression_separator = "_";
 
 
