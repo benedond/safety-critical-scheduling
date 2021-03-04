@@ -12,7 +12,7 @@
 #define LANE_Y_OFFSET 5U
 #define LANE_X_OFFSET 1U
 
-#define TIME_SCALE 4
+#define TIME_SCALE 2
 
 #define LINE_DASHED 0xF00FF00F
 
@@ -111,7 +111,7 @@ void visualiser::init_img()
 void visualiser::draw_grid()
 {
 	const uint min_x = X_OFFSET;
-	const uint max_x = m_img_width - X_OFFSET;
+	const uint max_x = LANE_X_START + m_environment.major_frame_length*TIME_SCALE;
 	uint y_pos = Y_OFFSET;
 
 	// horizontalni cary
@@ -134,11 +134,13 @@ void visualiser::draw_grid()
 	const uint min_y = Y_OFFSET;
 	const uint max_y = m_img_height - Y_OFFSET;
 	const uint end_x = LANE_X_START + m_environment.major_frame_length * TIME_SCALE;
+	//m_img.draw_line(LANE_X_START-1, min_y, LANE_X_START-1, max_y, BLACK);
 	m_img.draw_line(LANE_X_START, min_y, LANE_X_START, max_y, BLACK);
 	m_img.draw_line(end_x, min_y, end_x, max_y, BLACK);
+	m_img.draw_line(end_x+1, min_y, end_x+1, max_y, BLACK);
 
 	std::string mf_label = "MF: " + std::to_string(m_environment.major_frame_length) + "ms";
-	m_img.draw_text((uint) (end_x - 20), (uint) (max_y + 1), mf_label.c_str(), BLACK, WHITE);
+	m_img.draw_text((uint) (end_x - 25), (uint) (Y_OFFSET - 15), mf_label.c_str(), BLACK, WHITE);
 }
 
 visualiser::uint visualiser::draw_window(const window& window, uint window_start_time)

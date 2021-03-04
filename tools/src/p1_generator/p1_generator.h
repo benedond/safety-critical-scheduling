@@ -10,7 +10,13 @@
 struct benchmark_entry
 {
 	float slope, intercept, proc_time;
-	int proc_units;
+};
+
+struct benchmark_data
+{
+	std::vector<std::vector<std::string>> active_processor_combinations;
+	std::unordered_map<std::string, std::unordered_map<std::string, benchmark_entry>> benchmark_entries;
+	std::unordered_map<std::string, std::unordered_map<std::string, std::string>> benchmark_commands;
 };
 
 class p1_generator
@@ -18,22 +24,19 @@ class p1_generator
 public:
 	std::vector<assignment_characteristic> generate() const;
 
-	p1_generator(const arg_parser& args, const environment& e,
-				 const std::vector<std::vector<std::string>>& apc,
-			     const std::unordered_map<std::string, std::unordered_map<std::string, benchmark_entry>>& be);
+	p1_generator(const arg_parser& args, const environment& e, const benchmark_data& bd);
 
 private:
 	const std::array<int, 2> m_supported_problem_versions{ 1, 2 };
 
 	const environment& m_environment;
-	const std::unordered_map<std::string, std::unordered_map<std::string, benchmark_entry>>& m_benchmark_entries;
-	const std::vector<std::vector<std::string>>& m_active_processor_combinations;
+	const benchmark_data& m_benchmark_data;
 
-	int m_min_length = 10, m_max_length = 50;
-	int m_task_count = 10;
+	int m_min_length = 50, m_max_length = 150;
+	int m_task_count = 15;
 };
 
-std::pair<std::vector<std::vector<std::string>>, std::unordered_map<std::string, std::unordered_map<std::string, benchmark_entry>>> parse_benchmark_data(
+benchmark_data parse_benchmark_data(
 		const std::unordered_map<std::string, processor>& processors,
 		std::ifstream& benchmark_data_file,
 		const std::string& csv_separator = ",");

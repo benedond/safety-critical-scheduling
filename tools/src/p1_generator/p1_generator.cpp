@@ -1,19 +1,21 @@
 #include <iostream>
 #include <chrono>
 #include <exception>
-#include <fstream>
 #include <unordered_set>
 #include <cmath>
+#include <fstream>
 
 #include "p1_generator.h"
 
+const static std::string affinity_keyword = "affinity";
 const static std::string benchmark_keyword = "benchmark";
-const static std::string utf8_benchmark_keyword = "\uFEFFbenchmark";
+//const static std::string utf8_benchmark_keyword = "\uFEFFbenchmark";
 const static std::string slope_keyword = "slope";
 const static std::string intercept_keyword = "intercept";
+const static std::string runtime_keyword = "runtime";
+const static std::string command_keyword = "intercept";
 const static std::string csv_header_expression_separator = "_";
-const static auto slope_substr_length = csv_header_expression_separator.length() + slope_keyword.length();
-const static auto intercept_substr_length = csv_header_expression_separator.length() + intercept_keyword.length();
+
 
 static inline std::string create_processor_combination_expression(const std::vector<std::string>& processors)
 {
@@ -50,9 +52,8 @@ static inline std::vector<std::string> split_string(std::string s, const std::st
 
 p1_generator::p1_generator(const arg_parser& args,
 		                   const environment& e,
-		                   const std::vector<std::vector<std::string>>& apc,
-						   const std::unordered_map<std::string, std::unordered_map<std::string, benchmark_entry>>& be)
-	: m_environment(e), m_active_processor_combinations(apc), m_benchmark_entries(be)
+		                   const benchmark_data& be)
+	: m_environment(e), m_benchmark_data(be)
 {
 	args.set_arg_value_int("--min-length", &this->m_min_length);
 	args.set_arg_value_int("--max-length", &this->m_max_length);
@@ -73,9 +74,9 @@ std::vector<assignment_characteristic> p1_generator::generate() const
 	tasks.reserve(m_task_count);
 
 	std::vector<std::string> benchmarks;
-	benchmarks.reserve(m_benchmark_entries.size());
+	benchmarks.reserve(m_benchmark_data.benchmark_entries.size());
 
-	for (auto& be : m_benchmark_entries)
+	for (auto& be : m_benchmark_data.benchmark_entries)
 		benchmarks.push_back(be.first);
 
 	std::mt19937 random_engine(std::chrono::high_resolution_clock::now().time_since_epoch().count());
@@ -88,20 +89,28 @@ std::vector<assignment_characteristic> p1_generator::generate() const
 		assignment_characteristic task;
 
 		int base_length = task_length_dist(random_engine);
-		int num_iterations = -1;
+		float num_iterations = -1;
 		int benchmark_ix = benchmark_dist(random_engine);
 
 		auto& benchmark_name = benchmarks[benchmark_ix];
 		task.task = std::to_string(i) + "_" + benchmark_name;
 		task.command = benchmark_name;
 
-		for (auto& pc : m_active_processor_combinations)
+		for (auto& pc : m_benchmark_data.active_processor_combinations)
 		{
 			std::string pc_string = create_processor_combination_expression(pc);
-			auto& be = m_benchmark_entries.at(benchmark_name).at(pc_string);
+			auto& be = m_benchmark_data.benchmark_entries.at(benchmark_name).at(pc_string);
 
 			if (num_iterations < 0)
-				num_iterations = (int) std::ceil((float) base_length / be.proc_time);
+			{
+				num_iterations = (float) base_length / be.proc_time;
+				if (m_benchmark_data.benchmark_commands.find(benchmark_name) != m_benchmark_data.benchmark_commands.end())
+				{
+					auto& bcmd = m_benchmark_data.benchmark_commands.at(benchmark_name);
+					if (bcmd.find(pc_string) != bcmd.end())
+						task.command = bcmd.at(pc_string);
+				}
+			}
 			int length = (int) std::ceil((float) num_iterations * be.proc_time);
 
 			assignment_characteristic::resource_assignment ra { .slope = be.slope,
@@ -118,90 +127,38 @@ std::vector<assignment_characteristic> p1_generator::generate() const
 	return tasks;
 }
 
-//old parser for the more complicated format
-//std::pair<std::vector<std::vector<std::string>>, std::unordered_map<std::string, std::unordered_map<std::string, benchmark_entry>>> parse_benchmark_data(
-//		const std::unordered_map<std::string, processor>& processors,
-//		std::ifstream& benchmark_data_file,
-//		const std::string& csv_separator)
-//{
-//	std::vector<std::vector<std::string>> active_processor_combinations;
-//	std::unordered_map<std::string, std::unordered_map<std::string, benchmark_entry>> benchmark_entries;
-//
-//	std::string header;
-//	std::getline(benchmark_data_file, header);
-//
-//	int benchmark_column_index = -1;
-//	std::unordered_map<std::string, int> slopes, intercepts;
-//
-//	auto columns = split_string(header, csv_separator);
-//	for (int i=0; i<columns.size(); i++)
-//	{
-//		auto& column = columns[i];
-//		auto column_parts = split_string(column, csv_header_expression_separator);
-//		auto column_parts_size = column_parts.size();
-//
-//		if (column_parts[column_parts_size-1] == benchmark_keyword || column_parts[column_parts_size-1] == utf8_benchmark_keyword)
-//		{
-//			benchmark_column_index = i;
-//		}
-//		else if (column_parts[column_parts_size-1] == slope_keyword)
-//		{
-//			std::string processor_combo_string = column.substr(0, column.length() - slope_substr_length);
-//			slopes[processor_combo_string] = i;
-//		}
-//		else if (column_parts[column_parts_size-1] == intercept_keyword)
-//		{
-//			std::string processor_combo_string = column.substr(0, column.length() - intercept_substr_length);
-//			intercepts[processor_combo_string] = i;
-//		}
-//		else
-//		{
-//          // todo a_p_c.push_back(column_parts) ?
-//			std::vector<std::string> processor_combination;
-//			for (auto& p : column_parts)
-//				processor_combination.push_back(p);
-//			active_processor_combinations.push_back(std::move(processor_combination));
-//		}
-//	}
-//
-//	int columns_required = 3*active_processor_combinations.size() + 1;
-//
-//	while (true)
-//	{
-//		std::string line;
-//		std::getline(benchmark_data_file, line);
-//		if (line.empty())
-//			break;
-//
-//		auto line_parts = split_string(std::move(line), csv_separator);
-//		if (line_parts.size() < columns_required)
-//			break;
-//
-//		auto& be = benchmark_entries[line_parts[benchmark_column_index]];
-//		for (auto& combo : active_processor_combinations)
-//		{
-//			std::string combo_string = create_processor_combination_expression(combo);
-//
-//			auto& data = be[combo_string];
-//			data.slope = std::stof(line_parts[slopes.at(combo_string)]);
-//			data.intercept = std::stof(line_parts[intercepts.at(combo_string)]);
-//		}
-//	}
-//
-//	return std::make_pair(active_processor_combinations, benchmark_entries);
-//}
-
-std::pair<std::vector<std::vector<std::string>>, std::unordered_map<std::string, std::unordered_map<std::string, benchmark_entry>>> parse_benchmark_data(
+benchmark_data parse_benchmark_data(
 		const std::unordered_map<std::string, processor>& processors,
 		std::ifstream& benchmark_data_file,
 		const std::string& csv_separator)
 {
+	int benchmark_column_index = 0,
+		affinity_column_index = 1,
+		slope_column_index = 2,
+		intercept_column_index = 3,
+		runtime_column_index = 4,
+		command_column_index = -1;
+
 	std::vector<std::vector<std::string>> active_processor_combinations;
 	std::unordered_map<std::string, std::unordered_map<std::string, benchmark_entry>> benchmark_entries;
+	std::unordered_map<std::string, std::unordered_map<std::string, std::string>> benchmark_commands;
 	std::unordered_set<std::string> combo_strings;
 
 	std::string header;
 	std::getline(benchmark_data_file, header);
+	auto header_parts = split_string(std::move(header), csv_separator);
+
+	int ix = 0;
+	for (auto& hp : header_parts)
+	{
+		if (hp == benchmark_keyword) benchmark_column_index = ix;
+		else if (hp == affinity_keyword) affinity_column_index = ix;
+		else if (hp == slope_keyword) slope_column_index = ix;
+		else if (hp == intercept_keyword) intercept_column_index = ix;
+		else if (hp == runtime_keyword) runtime_column_index = ix;
+		else if (hp == command_keyword) command_column_index = ix;
+		ix++;
+	}
 
 	while (true)
 	{
@@ -210,25 +167,34 @@ std::pair<std::vector<std::vector<std::string>>, std::unordered_map<std::string,
 		if (line.empty())
 			break;
 
-		auto line_parts = split_string(std::move(line), csv_separator);
-		if (line_parts.size() < 6)
-			break;
+		try
+		{
+			auto line_parts = split_string(std::move(line), csv_separator);
 
-		auto& combo_string = line_parts[0];
-		combo_strings.insert(combo_string);
+			auto& combo_string = line_parts[affinity_column_index];
+			combo_strings.insert(combo_string);
 
-		auto& be = benchmark_entries[line_parts[1]];
-		auto& benchmark_data = be[combo_string];
+			auto& benchmark = line_parts[benchmark_column_index];
+			auto& benchmark_data = benchmark_entries[benchmark][combo_string];
 
-		benchmark_data.slope = std::stof(line_parts[3]);
-		benchmark_data.intercept = std::stof(line_parts[2]);
-		benchmark_data.proc_time = std::stof(line_parts[4]);
-		benchmark_data.proc_units = std::stoi(line_parts[5]);
+			benchmark_data.slope = std::stof(line_parts[slope_column_index]);
+			benchmark_data.intercept = std::stof(line_parts[intercept_column_index]);
+			benchmark_data.proc_time = std::stof(line_parts[runtime_column_index]);
+			if (command_column_index != -1)
+				auto& bc = benchmark_commands[benchmark][combo_string] = line_parts[command_column_index];
+		}
+		catch (std::exception& e)
+		{
+			std::cerr << "error parsing benchmark data";
+			exit(1);
+		}
 	}
 
 	active_processor_combinations.reserve(combo_strings.size());
 	for (auto& cs : combo_strings)
 		active_processor_combinations.push_back(split_string(cs, csv_header_expression_separator));
 
-	return std::make_pair(active_processor_combinations, benchmark_entries);
+	return { .active_processor_combinations = std::move(active_processor_combinations),
+		  	 .benchmark_entries = std::move(benchmark_entries),
+		  	 .benchmark_commands = std::move(benchmark_commands) };
 }

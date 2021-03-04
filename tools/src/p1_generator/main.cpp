@@ -42,7 +42,7 @@ int main(int argc, char** argv)
 	{
 		environment = parse_environment(json);
 		auto benchmark_data = parse_benchmark_data(environment.processors, benchmark_data_file);
-		p1_generator g(args, environment, benchmark_data.first, benchmark_data.second);
+		p1_generator g(args, environment, benchmark_data);
 		tasks = g.generate();
 		write_assignment_characteristics(json, tasks);
 	}
