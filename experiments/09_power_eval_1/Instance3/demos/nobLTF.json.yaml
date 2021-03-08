@@ -1,0 +1,218 @@
+partitions:
+  - name: 28_wd_sort
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/wd_sort
+        budget: 78
+  - name: 9_dijkstra
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/dijkstra
+        budget: 72
+  - name: 32_sha
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/sha
+        budget: 107
+  - name: 31_tinyrenderer
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/tinyrenderer/tinyrenderer /root/tinyrenderer/obj/diablo3_pose/diablo3_pose.obj
+        budget: 44
+  - name: 6_sha
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/sha
+        budget: 107
+  - name: 20_wd_sort
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/wd_sort
+        budget: 156
+  - name: 12_wd_sort
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/wd_sort
+        budget: 99
+  - name: 30_dijkstra
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/dijkstra
+        budget: 257
+  - name: 0_test3
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/test3
+        budget: 206
+  - name: 25_sha
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/sha
+        budget: 155
+  - name: 4_wd_sort
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/wd_sort
+        budget: 62
+  - name: 13_test3
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/test3
+        budget: 63
+  - name: 18_wd_sort
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/wd_sort
+        budget: 80
+  - name: 23_wd_fft
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/wd_fft
+        budget: 47
+  - name: 17_tinyrenderer
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/tinyrenderer/tinyrenderer /root/tinyrenderer/obj/diablo3_pose/diablo3_pose.obj
+        budget: 206
+  - name: 24_test3
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/test3
+        budget: 142
+  - name: 21_wd_sort
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/wd_sort
+        budget: 134
+  - name: 11_wd_fft
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/wd_fft
+        budget: 261
+  - name: 22_dijkstra
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/dijkstra
+        budget: 216
+  - name: 15_fft
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/fft
+        budget: 313
+  - name: 1_sha
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/sha
+        budget: 147
+  - name: 10_wd_sort
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/wd_sort
+        budget: 183
+  - name: 29_tinyrenderer
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/tinyrenderer/tinyrenderer /root/tinyrenderer/obj/diablo3_pose/diablo3_pose.obj
+        budget: 210
+  - name: 26_wd_fft
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/wd_fft
+        budget: 271
+  - name: 3_wd_fft
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/wd_fft
+        budget: 56
+  - name: 14_tinyrenderer
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/tinyrenderer/tinyrenderer /root/tinyrenderer/obj/diablo3_pose/diablo3_pose.obj
+        budget: 205
+  - name: 27_tinyrenderer
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/tinyrenderer/tinyrenderer /root/tinyrenderer/obj/diablo3_pose/diablo3_pose.obj
+        budget: 187
+  - name: 5_wd_sort
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/wd_sort
+        budget: 181
+  - name: 7_wd_sort
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/wd_sort
+        budget: 180
+  - name: 2_dijkstra
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/dijkstra
+        budget: 216
+  - name: 19_sha
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/sha
+        budget: 177
+  - name: 8_wd_sort
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/wd_sort
+        budget: 160
+  - name: 16_dijkstra
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/dijkstra
+        budget: 160
+
+windows:
+  - length: 313
+    slices:
+      - cpu: 1
+        sc_partition: 26_wd_fft
+      - cpu: 0
+        sc_partition: 15_fft
+      - cpu: 2
+        sc_partition: 11_wd_fft
+      - cpu: 3
+        sc_partition: 30_dijkstra
+      - cpu: 5
+        sc_partition: 13_test3
+      - cpu: 4
+        sc_partition: 25_sha
+  - length: 216
+    slices:
+      - cpu: 5
+        sc_partition: 23_wd_fft
+      - cpu: 1
+        sc_partition: 2_dijkstra
+      - cpu: 0
+        sc_partition: 22_dijkstra
+      - cpu: 2
+        sc_partition: 29_tinyrenderer
+      - cpu: 3
+        sc_partition: 17_tinyrenderer
+      - cpu: 4
+        sc_partition: 3_wd_fft
+  - length: 206
+    slices:
+      - cpu: 3
+        sc_partition: 10_wd_sort
+      - cpu: 4
+        sc_partition: 31_tinyrenderer
+      - cpu: 2
+        sc_partition: 27_tinyrenderer
+      - cpu: 0
+        sc_partition: 0_test3
+      - cpu: 1
+        sc_partition: 14_tinyrenderer
+  - length: 181
+    slices:
+      - cpu: 2
+        sc_partition: 19_sha
+      - cpu: 0
+        sc_partition: 5_wd_sort
+      - cpu: 3
+        sc_partition: 16_dijkstra
+      - cpu: 1
+        sc_partition: 7_wd_sort
+  - length: 160
+    slices:
+      - cpu: 2
+        sc_partition: 1_sha
+      - cpu: 0
+        sc_partition: 8_wd_sort
+      - cpu: 3
+        sc_partition: 24_test3
+      - cpu: 1
+        sc_partition: 20_wd_sort
+  - length: 134
+    slices:
+      - cpu: 3
+        sc_partition: 12_wd_sort
+      - cpu: 2
+        sc_partition: 6_sha
+      - cpu: 0
+        sc_partition: 21_wd_sort
+      - cpu: 1
+        sc_partition: 32_sha
+  - length: 80
+    slices:
+      - cpu: 3
+        sc_partition: 4_wd_sort
+      - cpu: 2
+        sc_partition: 9_dijkstra
+      - cpu: 0
+        sc_partition: 18_wd_sort
+      - cpu: 1
+        sc_partition: 28_wd_sort
+  - length: 10
+    slices:
+      - cpu: 0
