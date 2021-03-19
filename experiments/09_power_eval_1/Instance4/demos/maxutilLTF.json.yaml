@@ -1,0 +1,169 @@
+partitions:
+  - name: 24_wd_fft
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/wd_fft
+        budget: 60
+  - name: 23_dijkstra
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/dijkstra
+        budget: 176
+  - name: 3_membench_rw_r_1M
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/membench_rw_r_1M
+        budget: 67
+  - name: 11_fft
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/fft
+        budget: 262
+  - name: 10_wd_sort
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/wd_sort
+        budget: 75
+  - name: 19_membench_rw_r_1M
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/membench_rw_r_1M
+        budget: 68
+  - name: 7_fft
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/fft
+        budget: 313
+  - name: 1_fft
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/fft
+        budget: 393
+  - name: 25_sha
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/sha
+        budget: 276
+  - name: 6_fft
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/fft
+        budget: 277
+  - name: 15_sha
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/sha
+        budget: 366
+  - name: 12_tinyrenderer
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/tinyrenderer/tinyrenderer /root/tinyrenderer/obj/diablo3_pose/diablo3_pose.obj
+        budget: 121
+  - name: 20_wd_fft
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/wd_fft
+        budget: 65
+  - name: 18_test3
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/test3
+        budget: 171
+  - name: 16_fft
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/fft
+        budget: 289
+  - name: 4_wd_sort
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/wd_sort
+        budget: 69
+  - name: 13_fft
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/fft
+        budget: 432
+  - name: 0_membench_rw_r_1M
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/membench_rw_r_1M
+        budget: 104
+  - name: 8_sha
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/sha
+        budget: 238
+  - name: 14_sha
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/sha
+        budget: 219
+  - name: 2_test3
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/test3
+        budget: 237
+  - name: 9_test3
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/test3
+        budget: 243
+  - name: 17_dijkstra
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/dijkstra
+        budget: 171
+  - name: 21_fft
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/fft
+        budget: 149
+  - name: 5_wd_fft
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/wd_fft
+        budget: 56
+  - name: 22_dijkstra
+    processes:
+      - cmd: TB_OPTS="--count=0" /root/benchmarks/executable/dijkstra
+        budget: 93
+
+windows:
+  - length: 432
+    slices:
+      - cpu: 1
+        sc_partition: 1_fft
+      - cpu: 2
+        sc_partition: 15_sha
+      - cpu: 0
+        sc_partition: 13_fft
+      - cpu: 5
+        sc_partition: 0_membench_rw_r_1M
+      - cpu: 3
+        sc_partition: 7_fft
+      - cpu: 4
+        sc_partition: 12_tinyrenderer
+  - length: 289
+    slices:
+      - cpu: 5
+        sc_partition: 10_wd_sort
+      - cpu: 1
+        sc_partition: 6_fft
+      - cpu: 3
+        sc_partition: 11_fft
+      - cpu: 0
+        sc_partition: 16_fft
+      - cpu: 4
+        sc_partition: 22_dijkstra
+      - cpu: 2
+        sc_partition: 25_sha
+  - length: 243
+    slices:
+      - cpu: 5
+        sc_partition: 19_membench_rw_r_1M
+      - cpu: 1
+        sc_partition: 8_sha
+      - cpu: 3
+        sc_partition: 14_sha
+      - cpu: 0
+        sc_partition: 9_test3
+      - cpu: 2
+        sc_partition: 2_test3
+      - cpu: 4
+        sc_partition: 4_wd_sort
+  - length: 176
+    slices:
+      - cpu: 5
+        sc_partition: 20_wd_fft
+      - cpu: 1
+        sc_partition: 18_test3
+      - cpu: 2
+        sc_partition: 17_dijkstra
+      - cpu: 0
+        sc_partition: 23_dijkstra
+      - cpu: 3
+        sc_partition: 21_fft
+      - cpu: 4
+        sc_partition: 3_membench_rw_r_1M
+  - length: 60
+    slices:
+      - cpu: 5
+        sc_partition: 5_wd_fft
+      - cpu: 4
+        sc_partition: 24_wd_fft
