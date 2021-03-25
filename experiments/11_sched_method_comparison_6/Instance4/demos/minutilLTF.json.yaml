@@ -1,0 +1,177 @@
+partitions:
+  - name: 6_membench_rw_r_1M
+    processes:
+      - cmd: membench_rw_r_1M
+        budget: 45
+  - name: 8_fft
+    processes:
+      - cmd: fft
+        budget: 105
+  - name: 22_susan
+    processes:
+      - cmd: susan
+        budget: 130
+  - name: 11_membench_rw_r_1M
+    processes:
+      - cmd: membench_rw_r_1M
+        budget: 82
+  - name: 5_fft
+    processes:
+      - cmd: fft
+        budget: 124
+  - name: 10_fft
+    processes:
+      - cmd: fft
+        budget: 157
+  - name: 24_membench_rw_r_1M
+    processes:
+      - cmd: membench_rw_r_1M
+        budget: 122
+  - name: 12_dijkstra
+    processes:
+      - cmd: dijkstra
+        budget: 130
+  - name: 3_prime
+    processes:
+      - cmd: prime
+        budget: 55
+  - name: 7_fft
+    processes:
+      - cmd: fft
+        budget: 143
+  - name: 15_prime
+    processes:
+      - cmd: prime
+        budget: 98
+  - name: 2_susan
+    processes:
+      - cmd: susan
+        budget: 141
+  - name: 0_fft
+    processes:
+      - cmd: fft
+        budget: 88
+  - name: 1_prime
+    processes:
+      - cmd: prime
+        budget: 83
+  - name: 19_fft
+    processes:
+      - cmd: fft
+        budget: 80
+  - name: 13_fft
+    processes:
+      - cmd: fft
+        budget: 79
+  - name: 4_membench_rw_r_1M
+    processes:
+      - cmd: membench_rw_r_1M
+        budget: 77
+  - name: 17_membench_rw_r_1M
+    processes:
+      - cmd: membench_rw_r_1M
+        budget: 45
+  - name: 9_susan
+    processes:
+      - cmd: susan
+        budget: 114
+  - name: 16_fft
+    processes:
+      - cmd: fft
+        budget: 91
+  - name: 18_fft
+    processes:
+      - cmd: fft
+        budget: 71
+  - name: 23_test3
+    processes:
+      - cmd: test3
+        budget: 76
+  - name: 20_test3
+    processes:
+      - cmd: test3
+        budget: 68
+  - name: 14_fft
+    processes:
+      - cmd: fft
+        budget: 53
+  - name: 21_prime
+    processes:
+      - cmd: prime
+        budget: 51
+
+windows:
+  - length: 157
+    slices:
+      - cpu: 0
+        sc_partition: 11_membench_rw_r_1M
+      - cpu: 4
+        sc_partition: 10_fft
+      - cpu: 5
+        sc_partition: 7_fft
+  - length: 141
+    slices:
+      - cpu: 5
+        sc_partition: 22_susan
+      - cpu: 4
+        sc_partition: 2_susan
+  - length: 130
+    slices:
+      - cpu: 5
+        sc_partition: 5_fft
+      - cpu: 4
+        sc_partition: 12_dijkstra
+  - length: 122
+    slices:
+      - cpu: 5
+        sc_partition: 9_susan
+      - cpu: 4
+        sc_partition: 24_membench_rw_r_1M
+  - length: 105
+    slices:
+      - cpu: 5
+        sc_partition: 15_prime
+      - cpu: 4
+        sc_partition: 8_fft
+  - length: 91
+    slices:
+      - cpu: 5
+        sc_partition: 0_fft
+      - cpu: 4
+        sc_partition: 16_fft
+  - length: 83
+    slices:
+      - cpu: 5
+        sc_partition: 19_fft
+      - cpu: 4
+        sc_partition: 1_prime
+  - length: 79
+    slices:
+      - cpu: 5
+        sc_partition: 4_membench_rw_r_1M
+      - cpu: 4
+        sc_partition: 13_fft
+  - length: 76
+    slices:
+      - cpu: 5
+        sc_partition: 18_fft
+      - cpu: 4
+        sc_partition: 23_test3
+  - length: 68
+    slices:
+      - cpu: 5
+        sc_partition: 3_prime
+      - cpu: 4
+        sc_partition: 20_test3
+  - length: 53
+    slices:
+      - cpu: 5
+        sc_partition: 21_prime
+      - cpu: 4
+        sc_partition: 14_fft
+  - length: 45
+    slices:
+      - cpu: 5
+        sc_partition: 6_membench_rw_r_1M
+      - cpu: 4
+        sc_partition: 17_membench_rw_r_1M
