@@ -1,7 +1,6 @@
 #include <iostream>
 #include <chrono>
 #include <unordered_map>
-#include <fstream>
 #include <gurobi_c++.h>
 
 #include "../common/instance.h"
@@ -174,7 +173,7 @@ std::pair<solution, std::vector<task>> solve_eik(const arg_parser& args, const e
 	else
 	{
 		s.feasible = false;
-		bool iis_output = !args.is_arg_present("--no-iis-output");
+		bool iis_output = args.is_arg_present("--iis-output");
 		if (iis_output)
 		{
 			model.computeIIS();
@@ -182,7 +181,7 @@ std::pair<solution, std::vector<task>> solve_eik(const arg_parser& args, const e
 		}
 	}
 
-	return std::make_pair(s, tasks);
+	return std::make_pair(std::move(s), std::move(tasks));
 }
 
 std::pair<solution, std::vector<task>> solve_predictor(const arg_parser& args, const environment& e, const assignment_characteristic_list& assignment_characteristics)
@@ -413,7 +412,7 @@ std::pair<solution, std::vector<task>> solve_predictor(const arg_parser& args, c
 	else
 	{
 		s.feasible = false;
-		bool iis_output = !args.is_arg_present("--no-iis-output");
+		bool iis_output = args.is_arg_present("--iis-output");
 		if (iis_output)
 		{
 			model.computeIIS();
@@ -421,7 +420,7 @@ std::pair<solution, std::vector<task>> solve_predictor(const arg_parser& args, c
 		}
 	}
 
-	return std::make_pair(s, tasks);
+	return std::make_pair(std::move(s), std::move(tasks));
 }
 
 std::pair<solution, std::vector<task>> solve_utilization(const arg_parser& args, const environment& e, const assignment_characteristic_list& assignment_characteristics)
@@ -587,7 +586,7 @@ std::pair<solution, std::vector<task>> solve_utilization(const arg_parser& args,
 	else
 	{
 		s.feasible = false;
-		bool iis_output = !args.is_arg_present("--no-iis-output");
+		bool iis_output = args.is_arg_present("--iis-output");
 		if (iis_output)
 		{
 			model.computeIIS();
@@ -595,9 +594,8 @@ std::pair<solution, std::vector<task>> solve_utilization(const arg_parser& args,
 		}
 	}
 
-	return std::make_pair(s, tasks);
+	return std::make_pair(std::move(s), std::move(tasks));
 }
-
 
 std::pair<solution, std::vector<task>> solve(const arg_parser& args, const environment& e, const assignment_characteristic_list& assignment_characteristics)
 {

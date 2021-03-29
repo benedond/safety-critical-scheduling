@@ -30,7 +30,14 @@ solution global_solver::get_solution()
 			     .solver_metadata = get_solver_metadata() };
 
 	if (m_feasible)
+	{
+		// remove empty windows
+		for (auto itt = m_windows.begin(); itt<m_windows.end(); itt++)
+			if (itt->length <= 0)
+				itt = m_windows.erase(itt);
+
 		s.windows = m_windows;
+	}
 
 	return s;
 }
@@ -76,11 +83,5 @@ bool global_solver::check_feasibility() const
 	for (auto& w : m_windows)
 		total_time += w.length;
 
-	if (total_time > m_environment.major_frame_length)
-	{
-		std::cerr << "solution is infeasible - total_time: " << total_time << " major_frame_length: " << m_environment.major_frame_length << std::endl;
-		return false;
-	}
-
-	return true;
+	return total_time <= m_environment.major_frame_length;
 }
