@@ -1,0 +1,178 @@
+partitions:
+  - name: 17_fft
+    processes:
+      - cmd: fft
+        budget: 57
+  - name: 7_sha
+    processes:
+      - cmd: sha
+        budget: 41
+  - name: 24_tinyrenderer
+    processes:
+      - cmd: tinyrenderer
+        budget: 142
+  - name: 15_susan
+    processes:
+      - cmd: susan
+        budget: 122
+  - name: 11_dijkstra
+    processes:
+      - cmd: dijkstra
+        budget: 103
+  - name: 19_prime
+    processes:
+      - cmd: prime
+        budget: 138
+  - name: 14_prime
+    processes:
+      - cmd: prime
+        budget: 142
+  - name: 2_prime
+    processes:
+      - cmd: prime
+        budget: 81
+  - name: 21_test3
+    processes:
+      - cmd: test3
+        budget: 135
+  - name: 8_test3
+    processes:
+      - cmd: test3
+        budget: 130
+  - name: 6_susan
+    processes:
+      - cmd: susan
+        budget: 134
+  - name: 18_tinyrenderer
+    processes:
+      - cmd: tinyrenderer
+        budget: 132
+  - name: 22_susan
+    processes:
+      - cmd: susan
+        budget: 73
+  - name: 4_prime
+    processes:
+      - cmd: prime
+        budget: 109
+  - name: 16_susan
+    processes:
+      - cmd: susan
+        budget: 139
+  - name: 5_tinyrenderer
+    processes:
+      - cmd: tinyrenderer
+        budget: 146
+  - name: 10_prime
+    processes:
+      - cmd: prime
+        budget: 121
+  - name: 20_fft
+    processes:
+      - cmd: fft
+        budget: 124
+  - name: 0_test3
+    processes:
+      - cmd: test3
+        budget: 131
+  - name: 23_tinyrenderer
+    processes:
+      - cmd: tinyrenderer
+        budget: 115
+  - name: 9_prime
+    processes:
+      - cmd: prime
+        budget: 101
+  - name: 1_fft
+    processes:
+      - cmd: fft
+        budget: 102
+  - name: 3_dijkstra
+    processes:
+      - cmd: dijkstra
+        budget: 114
+  - name: 12_dijkstra
+    processes:
+      - cmd: dijkstra
+        budget: 100
+  - name: 13_tinyrenderer
+    processes:
+      - cmd: tinyrenderer
+        budget: 77
+
+windows:
+  - length: 146
+    slices:
+      - cpu: 1
+        sc_partition: 11_dijkstra
+      - cpu: 0
+        sc_partition: 4_prime
+      - cpu: 2
+        sc_partition: 2_prime
+      - cpu: 4
+        sc_partition: 5_tinyrenderer
+      - cpu: 5
+        sc_partition: 24_tinyrenderer
+  - length: 142
+    slices:
+      - cpu: 5
+        sc_partition: 16_susan
+      - cpu: 4
+        sc_partition: 14_prime
+  - length: 138
+    slices:
+      - cpu: 5
+        sc_partition: 21_test3
+      - cpu: 4
+        sc_partition: 19_prime
+  - length: 134
+    slices:
+      - cpu: 5
+        sc_partition: 18_tinyrenderer
+      - cpu: 4
+        sc_partition: 6_susan
+  - length: 131
+    slices:
+      - cpu: 5
+        sc_partition: 8_test3
+      - cpu: 4
+        sc_partition: 0_test3
+  - length: 124
+    slices:
+      - cpu: 5
+        sc_partition: 15_susan
+      - cpu: 4
+        sc_partition: 20_fft
+  - length: 121
+    slices:
+      - cpu: 5
+        sc_partition: 23_tinyrenderer
+      - cpu: 4
+        sc_partition: 10_prime
+  - length: 114
+    slices:
+      - cpu: 5
+        sc_partition: 1_fft
+      - cpu: 4
+        sc_partition: 3_dijkstra
+  - length: 101
+    slices:
+      - cpu: 5
+        sc_partition: 12_dijkstra
+      - cpu: 4
+        sc_partition: 9_prime
+  - length: 77
+    slices:
+      - cpu: 5
+        sc_partition: 22_susan
+      - cpu: 4
+        sc_partition: 13_tinyrenderer
+  - length: 57
+    slices:
+      - cpu: 5
+        sc_partition: 7_sha
+      - cpu: 4
+        sc_partition: 17_fft
+  - length: 5
+    slices:
+      - cpu: 0
