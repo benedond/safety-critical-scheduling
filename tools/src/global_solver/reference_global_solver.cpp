@@ -2,7 +2,7 @@
 #include <vector>
 #include <unordered_set>
 #include <set>
-
+#include <cmath>
 
 #include "reference_global_solver.h"
 
@@ -62,12 +62,13 @@ void reference_global_solver::solve()
 	std::unordered_map<int, std::unordered_map<std::string, int>> pu_allocations;
 	m_tasks.reserve(num_of_tasks_to_schedule);
 	m_windows.push_back({});
-	for (const auto& assignment : tasks_to_schedule)
+	for (auto& assignment : tasks_to_schedule)
 	{
 		if (scheduled_tasks.find(assignment.task) != scheduled_tasks.end())
 			continue;
 
 		// try to find an available window
+		int assignment_length = (int) ceilf((float) assignment.length / m_environment.sc_part);
 		int target_window = -1;
 		for (int w=0; w<m_windows.size(); w++)
 		{
@@ -89,11 +90,14 @@ void reference_global_solver::solve()
 
 			if (can_assign_task)
 			{
+				int target_window_length = target_window == -1 ? 0 : m_windows[target_window].length;
+				int w_length = m_windows[w].length;
+
 				if (target_window == -1 ||
-					(m_windows[target_window].length - assignment.length < 0 && m_windows[w].length - assignment.length >= 0) ||
-					(std::abs(m_windows[w].length - assignment.length) < std::abs(m_windows[target_window].length - assignment.length)) &&
-						((m_windows[target_window].length - assignment.length < 0 && m_windows[w].length - assignment.length < 0) ||
-					 	(m_windows[target_window].length - assignment.length >= 0 && m_windows[w].length - assignment.length >= 0))
+					(target_window_length - assignment_length < 0 && w_length - assignment_length >= 0) ||
+					(std::abs(w_length - assignment_length) < std::abs(target_window_length - assignment_length)) &&
+						((target_window_length - assignment_length < 0 && w_length - assignment_length < 0) ||
+					 	(target_window_length - assignment_length >= 0 && w_length - assignment_length >= 0))
 					)
 					target_window = w;
 			}
@@ -113,8 +117,8 @@ void reference_global_solver::solve()
 		{
 			int old_window_length = window.length;
 			window.length = (int) wl;
-			// check mf constraint
 
+			// check mf constraint
 			if (!check_feasibility())
 			{
 				// REJECT ASSIGNMENT
