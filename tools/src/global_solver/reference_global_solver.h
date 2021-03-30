@@ -1,5 +1,5 @@
-#ifndef REFERENCE_SOLVER_H
-#define REFERENCE_SOLVER_H
+#ifndef REFERENCE_GLOBAL_SOLVER_H
+#define REFERENCE_GLOBAL_SOLVER_H
 
 #include "global_solver.h"
 
@@ -18,4 +18,4 @@ private:
 	const std::array<int, 2> m_supported_problem_versions{ 1, 2 };
 };
 
-#endif // REFERENCE_SOLVER_H
+#endif // REFERENCE_GLOBAL_SOLVER_H

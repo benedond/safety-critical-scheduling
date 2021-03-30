@@ -1,5 +1,5 @@
-#ifndef SOLVER_H
-#define SOLVER_H
+#ifndef GLOBAL_SOLVER_H
+#define GLOBAL_SOLVER_H
 
 #include "../common/instance.h"
 
@@ -31,4 +31,4 @@ private:
 	uint64_t m_solution_time;
 };
 
-#endif // SOLVER_H
+#endif // GLOBAL_SOLVER_H

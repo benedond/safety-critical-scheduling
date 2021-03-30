@@ -101,15 +101,24 @@ Arguments:
 
 
 <h4>global_solver</h4>
-Heuristic solver of the global problem - handles both resource assignment and scheduling. This solver is currently only capable of creating random schedules.
+Heuristic solver of the global problem, capable of handling both resource assignment and scheduling. 
+
+Available heuristic algorithms:
+<table>
+   <tr><th>Name</th><th>Description</th></tr>
+   <tr><td>reference</td><td>Reference heuristic (assignment + schedule)</td></tr>
+   <tr><td>random-schedule</td><td>Random assignments + random schedule (each window will be at least 5/6 full)</td></tr>
+   <tr><td>random-assignment</td><td>Produces random resource assignments without a schedule. Schedule feasibility is not guaranteed.</td></tr>
+</table>
 
 Input JSON requirements: environment, assignmentCharacteristics
 
-Output JSON will contain: environment, tasks, solution
+Output JSON will contain: environment, tasks, (solution)
 
 <pre>
 --input &lt;file&gt;                input file [stdin]
 --output &lt;file&gt;               output file [stdout]
+--method &lt;algorithm name&gt;    name of the algorithm to be used [reference]
 </pre>
 
 
@@ -155,7 +164,7 @@ Output JSON will contain: environment, tasks, solution
 <pre>
 --input &lt;file&gt;                input file [stdin]
 --output &lt;file&gt;               output file [stdout]
---no-iis-output               if the model is infeasible, the solver will not compute IIS and the ILP model will not be written into a file
+--iis-output                  if the model is infeasible, the solver will compute IIS and output it into a file
 --optimize-schedule           enables optimization of total schedule length as a secondary objective
 --maximize                    the primary criterion will be maximized
 --method &lt;method name&gt;         optimization method to be used. If no value is specified, then the decision will be made base on environment problemVersion
@@ -277,8 +286,9 @@ The content of the JSONs that the tools use is best explained by an example. The
          "command":"yes >/dev/null",          // optional: command to be executed (for DEmOS config)
          "resourceAssignments":[              // list of possible assignments to resources
             {                                 // possible assignment 1:
-               "energyConsumption":20,        //   has this energy consumption score (integer)
-               "length":80,                   //   has this processing time in ms (integer)
+               "slope": 0.2,                  //   has this slope,
+               "intercept": 0.3,              //   this intercept,
+               "length":80,                   //   and this processing time in ms (integer)
                "processors":[                 //   is an assignment to the following processors:
                   {
                      "processingUnits":1,     //     requires 1 processing unit (integer)

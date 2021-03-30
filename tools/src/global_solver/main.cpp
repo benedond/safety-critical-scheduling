@@ -3,6 +3,7 @@
 #include "../common/arg_parser.h"
 #include "reference_global_solver.h"
 #include "random_global_solver.h"
+#include "random_assignment_solver.h"
 
 #define EXIT_INFEASIBLE_SOLUTION 2
 
@@ -40,20 +41,29 @@ int main(int argc, char** argv)
 	try
 	{
 		std::unique_ptr<global_solver> solver;
+		bool assignment_only = false;
 		if (args.is_arg_present("--method"))
 		{
 			auto method = args.get_arg_value("--method");
 
 			if (method == "reference") solver = std::make_unique<reference_global_solver>(environment, assignments);
 			else if (method == "random-schedule") solver = std::make_unique<random_global_solver>(environment, assignments);
+			else if (method == "random-assignment")
+			{
+				solver = std::make_unique<random_assignment_solver>(environment, assignments);
+				assignment_only = true;
+			}
 		}
 		else
 		{
 			solver = std::make_unique<reference_global_solver>(environment, assignments);
 		}
 
-		s = solver->get_solution();
-		write_solution(json, s);
+		if (!assignment_only)
+		{
+			s = solver->get_solution();
+			write_solution(json, s);
+		}
 		write_tasks(json, solver->get_tasks());
 	}
 	catch (const std::invalid_argument& error)

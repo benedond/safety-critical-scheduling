@@ -1,12 +1,12 @@
-#ifndef RANDOM_GLOBAL_SOLVER_H
-#define RANDOM_GLOBAL_SOLVER_H
+#ifndef RANDOM_ASSIGNMENT_SOLVER_H
+#define RANDOM_ASSIGNMENT_SOLVER_H
 
 #include "global_solver.h"
 
-class random_global_solver : public global_solver
+class random_assignment_solver : public global_solver
 {
 public:
-	random_global_solver(const environment& e, const assignment_characteristic_list& t);
+	random_assignment_solver(const environment& e, const assignment_characteristic_list& t);
 
 protected:
 	void solve() override;
@@ -19,4 +19,4 @@ private:
 	const int m_seed;
 };
 
-#endif // RANDOM_GLOBAL_SOLVER_H
+#endif // RANDOM_ASSIGNMENT_SOLVER_H
