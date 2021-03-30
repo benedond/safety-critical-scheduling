@@ -252,7 +252,7 @@ std::vector<task> solve_reference(const arg_parser& args, const environment& e, 
 	std::vector<task> tasks;
 
 	std::set<simple_task_assignment, std::greater<>> tasks_to_schedule;
-	std::unordered_map<std::string, std::set<const simple_task_assignment*, std::less<>>> possible_task_assignments;
+	std::unordered_map<std::string, std::set<simple_task_assignment, std::less<>>> possible_task_assignments;
 	std::unordered_set<std::string> assigned_tasks;
 
 	for (auto& ac : assignment_characteristics)
@@ -268,7 +268,7 @@ std::vector<task> solve_reference(const arg_parser& args, const environment& e, 
 					.assignment_index = i++,
 					.processors = ra.processors};
 
-			possible_task_assignments[ac.task].insert(&ta);
+			possible_task_assignments[ac.task].insert(ta);
 			tasks_to_schedule.insert(std::move(ta));
 		}
 	}
@@ -283,11 +283,11 @@ std::vector<task> solve_reference(const arg_parser& args, const environment& e, 
 
 		for (auto& assignment : possible_task_assignments[task.task])
 		{
-			tasks.push_back({ .name = assignment->task,
-									.command = assignment->command,
-									.length = assignment->length,
-									.assignment_index = assignment->assignment_index,
-									.processors = assignment->processors });
+			tasks.push_back({ .name = assignment.task,
+									.command = assignment.command,
+									.length = assignment.length,
+									.assignment_index = assignment.assignment_index,
+									.processors = assignment.processors });
 
 			if (feasible_schedule_exists(args, e, assignment_characteristics, tasks))
 			{
