@@ -6,29 +6,6 @@
 
 #include "reference_global_solver.h"
 
-struct simple_task_assignment
-{
-	std::string task, command;
-	float slope, intercept;
-	int length, assignment_index;
-	std::vector<task::processor_assignment> processors;
-
-	float sort_value() const
-	{
-		return (float) length * slope;
-	}
-
-	bool operator<(const simple_task_assignment& other) const
-	{
-		return sort_value() < other.sort_value();
-	}
-
-	bool operator>(const simple_task_assignment& other) const
-	{
-		return sort_value() > other.sort_value();
-	}
-};
-
 reference_global_solver::reference_global_solver(const environment& e, const assignment_characteristic_list& t)
 		: global_solver(e, t)
 {
@@ -154,7 +131,6 @@ void reference_global_solver::solve()
 
 
 		scheduled_tasks.insert(assignment.task);
-
 	}
 
 	assert(scheduled_tasks.size() <= num_of_tasks_to_schedule);

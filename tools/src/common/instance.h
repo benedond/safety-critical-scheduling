@@ -59,6 +59,18 @@ struct assignment_characteristic
 	std::vector<resource_assignment> resource_assignments;
 };
 
+struct simple_task_assignment
+{
+	std::string task, command;
+	float slope, intercept;
+	int length, assignment_index;
+	std::vector<task::processor_assignment> processors;
+
+	float sort_value() const;
+	bool operator<(const simple_task_assignment& other) const;
+	bool operator>(const simple_task_assignment& other) const;
+};
+
 struct window
 {
 	struct task_assignment
