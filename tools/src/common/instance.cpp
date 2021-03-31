@@ -12,12 +12,30 @@ float simple_task_assignment::sort_value() const
 
 bool simple_task_assignment::operator<(const simple_task_assignment& other) const
 {
-	return sort_value() < other.sort_value();
+	auto t = sort_value();
+	auto o = other.sort_value();
+
+	if (t == o)
+	{
+		if (task == other.task)
+		{
+			std::string tp, op;
+			for (auto& tpp : processors)
+				tp += tpp.processor + std::to_string(tpp.processing_units);
+			for (auto& opp: other.processors)
+				op += opp.processor + std::to_string(opp.processing_units);
+			return tp < op;
+		}
+
+		return task < other.task;
+	}
+
+	return t < o;
 }
 
 bool simple_task_assignment::operator>(const simple_task_assignment& other) const
 {
-	return sort_value() > other.sort_value();
+	return other < *this;
 }
 
 environment parse_environment(const nlohmann::json& json)
