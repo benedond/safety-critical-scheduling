@@ -57,6 +57,7 @@ Arguments:
 --min-length &lt;length&gt;                               minimal length of a task [50]
 --max-length &lt;length&gt;                               maximal length of a task [150]
 --task-count &lt;count&gt;                                number of tasks to generate [15]
+--keep-environment-mf                               majorFrameLength will not be overwritten by the generator
 </pre>
 
 

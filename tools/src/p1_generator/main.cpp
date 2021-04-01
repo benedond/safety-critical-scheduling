@@ -45,6 +45,11 @@ int main(int argc, char** argv)
 		p1_generator g(args, environment, benchmark_data);
 		tasks = g.generate();
 		write_assignment_characteristics(json, tasks);
+
+		if (!args.is_arg_present("--keep-environment-mf"))
+		{
+			json["environment"]["majorFrameLength"] = compute_major_frame_length(tasks);
+		}
 	}
 	catch (const nlohmann::detail::parse_error& error)
 	{

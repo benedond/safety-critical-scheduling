@@ -197,3 +197,27 @@ benchmark_data parse_benchmark_data(
 		  	 .benchmark_entries = std::move(benchmark_entries),
 		  	 .benchmark_commands = std::move(benchmark_commands) };
 }
+
+int compute_major_frame_length(const std::vector<assignment_characteristic>& assignment_characteristics)
+{
+	const static float alpha = 2*3.5f;
+
+	int proc_time_sum = 0;
+	for (auto& ac : assignment_characteristics)
+		for (auto& a : ac.resource_assignments)
+			proc_time_sum += a.length;
+
+	float raw_mf_length = std::ceil((float) proc_time_sum / alpha);
+	int mf_length = (int) raw_mf_length;
+
+	if (mf_length > 10)
+	{
+		bool round_up = mf_length % 10 > 4;
+		mf_length /= 10;
+		mf_length *= 10;
+		if (round_up)
+			mf_length += 10;
+	}
+
+	return mf_length;
+}
