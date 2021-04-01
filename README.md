@@ -143,6 +143,13 @@ Output JSON will contain: environment, tasks, (assignmentCuts), solution
 <h4>ilp_res_assigner</h4>
 ILP solver of the resource assignment phase (phase 1) of the problem. If the model is infeasible, the solver will by default compute IIS and write the model to a file.
 
+Available heuristic algorithms:
+<table>
+   <tr><th>Name</th><th>Description</th></tr>
+   <tr><td>reference</td><td>Reference assignment method</td></tr>
+   <tr><td>old</td><td>Old Eik assignment method</td></tr>
+</table>
+
 Input JSON requirements: environment, assignmentCharacteristics, (assignmentCuts)
 
 Output JSON will contain: environment, tasks, (assignmentCuts will be preserved from input JSON)
@@ -150,12 +157,21 @@ Output JSON will contain: environment, tasks, (assignmentCuts will be preserved 
 <pre>
 --input &lt;file&gt;    input file [stdin]
 --output &lt;file&gt;   output file [stdout]
---no-iis-output   if the model is infeasible, the solver will not compute IIS and the ILP model will not be written into a file
+--iis-output   if the model is infeasible, the solver will compute IIS and output it into a file
+--method &lt;method name&gt;        method to be used [reference]
 </pre>
 
 
 <h4>ilp_global_solver</h4>
 ILP solver of the global problem - handles both resource assignment and scheduling. If the model is infeasible, the solver will by default compute IIS and write the model to a file.
+
+Available optimization methods:
+<table>
+   <tr><th>Name</th><th>Default for problem version</th></tr>
+   <tr><td>eik</td><td>1</td></tr>
+   <tr><td>predictor</td><td>2</td></tr>
+   <tr><td>utilization</td><td></td></tr>
+</table>
 
 Input JSON requirements: environment, assignmentCharacteristics
 
@@ -167,16 +183,8 @@ Output JSON will contain: environment, tasks, solution
 --iis-output                  if the model is infeasible, the solver will compute IIS and output it into a file
 --optimize-schedule           enables optimization of total schedule length as a secondary objective
 --maximize                    the primary criterion will be maximized
---method &lt;method name&gt;         optimization method to be used. If no value is specified, then the decision will be made base on environment problemVersion
+--method &lt;method name&gt;        optimization method to be used. If no value is specified, then the decision will be made base on environment problemVersion
 </pre>
-
-Available optimization methods:
-<table>
-   <tr><th>Name</th><th>Default for problem version</th></tr>
-   <tr><td>eik</td><td>1</td></tr>
-   <tr><td>predictor</td><td>2</td></tr>
-   <tr><td>utilization</td><td></td></tr>
-</table>
 
 
 <h4>visualiser</h4>

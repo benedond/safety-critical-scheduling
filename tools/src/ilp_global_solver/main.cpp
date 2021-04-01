@@ -58,7 +58,7 @@ std::pair<solution, std::vector<task>> solve_eik(const arg_parser& args, const e
 	GRBLinExpr window_length_sum;
 	for (int j = 0; j < windows_ub; j++)
 	{
-		l[j] = model.addVar(0, GRB_INFINITY, 1, GRB_INTEGER, "l" + std::to_string(j));
+		l[j] = model.addVar(0, GRB_INFINITY, 0, GRB_INTEGER, "l" + std::to_string(j));
 
 		window_length_sum += l[j];
 
@@ -118,7 +118,7 @@ std::pair<solution, std::vector<task>> solve_eik(const arg_parser& args, const e
 	model.optimize();
 	auto end = std::chrono::high_resolution_clock::now();
 
-	solution s{ .solver_name = "ILP Solver (global)",
+	solution s{ .solver_name = "ILP Solver (global):eik",
 			.solution_time = (uint64_t)std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() };
 	std::vector<task> tasks;
 
@@ -229,7 +229,7 @@ std::pair<solution, std::vector<task>> solve_predictor(const arg_parser& args, c
 	GRBLinExpr window_length_sum;
 	for (int j = 0; j < windows_ub; j++)
 	{
-		l[j] = model.addVar(0, GRB_INFINITY, 1, GRB_INTEGER, "l" + std::to_string(j));
+		l[j] = model.addVar(0, GRB_INFINITY, 0, GRB_INTEGER, "l" + std::to_string(j));
 
 		window_length_sum += l[j];
 
@@ -357,7 +357,7 @@ std::pair<solution, std::vector<task>> solve_predictor(const arg_parser& args, c
 	model.optimize();
 	auto end = std::chrono::high_resolution_clock::now();
 
-	solution s{ .solver_name = "ILP Solver (global)",
+	solution s{ .solver_name = "ILP Solver (global):predictor",
 			.solution_time = (uint64_t)std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() };
 	std::vector<task> tasks;
 
@@ -452,9 +452,6 @@ std::pair<solution, std::vector<task>> solve_utilization(const arg_parser& args,
 			{
 				GRBVar a_ijk = model.addVar(0, 1, 0, GRB_BINARY, "a" + std::to_string(i) + "," + std::to_string(j) + "," + std::to_string(a_ij.size()));
 
-				int processor_capacity = 0;
-				for (auto& p : assignment_characteristic.processors)
-					processor_capacity += e.processors.at(p.processor).processing_units;
 				energy_consumption_sum += a_ijk * assignment_characteristic.length * sense;
 				assignment_constraint_expr += a_ijk;
 				a_ij.push_back(std::move(a_ijk));
@@ -471,7 +468,7 @@ std::pair<solution, std::vector<task>> solve_utilization(const arg_parser& args,
 	GRBLinExpr window_length_sum;
 	for (int j = 0; j < windows_ub; j++)
 	{
-		l[j] = model.addVar(0, GRB_INFINITY, 1, GRB_INTEGER, "l" + std::to_string(j));
+		l[j] = model.addVar(0, GRB_INFINITY, 0, GRB_INTEGER, "l" + std::to_string(j));
 
 		window_length_sum += l[j];
 
@@ -522,7 +519,7 @@ std::pair<solution, std::vector<task>> solve_utilization(const arg_parser& args,
 		}
 	}
 
-	model.setObjectiveN(energy_consumption_sum, 0, 1, 1.0, 0.0, 0.0, "min energy consumption");
+	model.setObjectiveN(energy_consumption_sum, 0, 1, 1.0, 0.0, 0.0, "optimize utilization");
 
 	if (args.is_arg_present("--optimize-schedule"))
 		model.setObjectiveN(window_length_sum, 1, 0, 1.0, 0.0, 0.0, "min total schedule length");
@@ -531,7 +528,7 @@ std::pair<solution, std::vector<task>> solve_utilization(const arg_parser& args,
 	model.optimize();
 	auto end = std::chrono::high_resolution_clock::now();
 
-	solution s{ .solver_name = "ILP Solver (global)",
+	solution s{ .solver_name = "ILP Solver (global):utilization",
 			.solution_time = (uint64_t)std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() };
 	std::vector<task> tasks;
 
