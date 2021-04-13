@@ -79,7 +79,7 @@ Arguments:
 </pre>
 
 
-<h4>ilp_schedule_solver</h4>
+<h4>schedule_solver</h4>
 Heuristic solver of the scheduling phase (phase 2) of the problem.
 
 Available heuristic algorithms:
