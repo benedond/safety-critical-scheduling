@@ -2,9 +2,9 @@
 #include <chrono>
 #include <exception>
 
-#include "generator.h"
+#include "assignment_generator.h"
 
-generator::generator(const arg_parser& args, const environment& e) : m_environment(e)
+assignment_generator::assignment_generator(const arg_parser& args, const environment& e) : m_environment(e)
 {
 	args.set_arg_value_int("--min-length", &this->m_min_length);
 	args.set_arg_value_int("--max-length", &this->m_max_length);
@@ -20,7 +20,7 @@ generator::generator(const arg_parser& args, const environment& e) : m_environme
 		throw std::invalid_argument("min task length is greater than max task length");
 }
 
-std::vector<task> generator::generate() const
+std::vector<task> assignment_generator::generate() const
 {
 	std::vector<task> tasks;
 

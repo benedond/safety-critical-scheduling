@@ -1,5 +1,5 @@
-#ifndef P1_GENERATOR_H
-#define P1_GENERATOR_H
+#ifndef INSTANCE_GENERATOR_H
+#define INSTANCE_GENERATOR_H
 
 #include <random>
 #include <array>
@@ -19,12 +19,12 @@ struct benchmark_data
 	std::unordered_map<std::string, std::unordered_map<std::string, std::string>> benchmark_commands;
 };
 
-class p1_generator
+class instance_generator
 {
 public:
 	std::vector<assignment_characteristic> generate() const;
 
-	p1_generator(const arg_parser& args, const environment& e, const benchmark_data& bd);
+	instance_generator(const arg_parser& args, const environment& e, const benchmark_data& bd);
 
 private:
 	const std::array<int, 2> m_supported_problem_versions{ 1, 2 };
@@ -32,8 +32,8 @@ private:
 	const environment& m_environment;
 	const benchmark_data& m_benchmark_data;
 
-	int m_min_length = 50, m_max_length = 150;
-	int m_task_count = 15;
+	int m_min_length = 40, m_max_length = 160;
+	int m_task_count = 20;
 };
 
 benchmark_data parse_benchmark_data(
@@ -43,4 +43,4 @@ benchmark_data parse_benchmark_data(
 
 int compute_major_frame_length(const environment& env, const std::vector<assignment_characteristic>& assignment_characteristics);
 
-#endif // P1_GENERATOR_H
+#endif // INSTANCE_GENERATOR_H

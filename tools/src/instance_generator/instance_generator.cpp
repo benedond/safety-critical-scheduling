@@ -5,7 +5,7 @@
 #include <cmath>
 #include <fstream>
 
-#include "p1_generator.h"
+#include "instance_generator.h"
 
 const static std::string affinity_keyword = "affinity";
 const static std::string benchmark_keyword = "benchmark";
@@ -49,9 +49,9 @@ static inline std::vector<std::string> split_string(std::string s, const std::st
 	return items;
 }
 
-p1_generator::p1_generator(const arg_parser& args,
-		                   const environment& e,
-		                   const benchmark_data& be)
+instance_generator::instance_generator(const arg_parser& args,
+		                  			   const environment& e,
+		                  			   const benchmark_data& be)
 	: m_environment(e), m_benchmark_data(be)
 {
 	args.set_arg_value_int("--min-length", &this->m_min_length);
@@ -67,7 +67,7 @@ p1_generator::p1_generator(const arg_parser& args,
 		throw std::invalid_argument("min task length is greater than max task length");
 }
 
-std::vector<assignment_characteristic> p1_generator::generate() const
+std::vector<assignment_characteristic> instance_generator::generate() const
 {
 	std::vector<assignment_characteristic> tasks;
 	tasks.reserve(m_task_count);

@@ -5,17 +5,17 @@ This repository contains source code of tools created for the <b>"Scheduling of 
 	<li>[Repository structure](#repository-structure)</li>
 	<li>[Available tools](#available-tools)
 		<ol>
-         <li>[p1_generator](#p1_generator)</li>
-			<li>[generator](#generator)</li>
-			<li>[solver](#solver)</li>
+         <li>[instance_generator](#instance_generator)</li>
+			<li>[assignment_generator](#assignment_generator)</li>
+			<li>[schedule_solver](#schedule_solver)</li>
          <li>[global_solver](#global_solver)</li>
-			<li>[ilp_solver](#ilp_solver)</li>
-			<li>[ilp_res_assigner](#ilp_res_assigner)</li>
+			<li>[ilp_schedule_solver](#ilp_schedule_solver)</li>
+			<li>[ilp_assignment_solver](#ilp_assignment_solver)</li>
 			<li>[ilp_global_solver](#ilp_global_solver)</li>
 			<li>[visualiser](#visualiser)</li>
 			<li>[stat](#stat)</li>
 			<li>[demos_config_export](#demos_config_export)</li>
-			<li>[Helper scripts](#helper-scripts)</li>
+			<!--li>[Helper scripts](#helper-scripts)</li-->
 		</ol>
 	</li>
 	<li>[Compiling](#compiling)</li>
@@ -42,7 +42,7 @@ To better understand how the tools work, the following diagram illustrates how t
 ![data_pipeline](doc/data_pipeline.png "Data pipeline")
 
 
-<h4>p1_generator</h4>
+<h4>instance_generator</h4>
 A generator of input data for the resource assignment phase (phase 1) of the problem. The output from this generator can be used with <i>ilp_res_assigner</i> and <i>ilp_global_solver</i>. Generates <i>&lt;task_count&gt;</i> of tasks with a random length that is uniformly distributed between <i>&lt;min-length&gt;</i> and <i>&lt;max-length&gt;</i>. Tasks are generated based on provided benchmark data. [TODO: details about benchmark data and expected file format]
 
 Input JSON requirements: environment
@@ -54,15 +54,15 @@ Arguments:
 --environment &lt;file&gt;                                input file [stdin]
 --benchmark-data &lt;file&gt;                             csv file containing benchmark data   
 --output &lt;file&gt;                                     output file [stdout]
---min-length &lt;length&gt;                               minimal length of a task [50]
---max-length &lt;length&gt;                               maximal length of a task [150]
---task-count &lt;count&gt;                                number of tasks to generate [15]
+--min-length &lt;length&gt;                               minimal length of a task [40]
+--max-length &lt;length&gt;                               maximal length of a task [160]
+--task-count &lt;count&gt;                                number of tasks to generate [20]
 --keep-environment-mf                               majorFrameLength will not be overwritten by the generator
 </pre>
 
 
-<h4>generator</h4>
-A generator of input data for the scheduling phase (phase 2) of the problem. The output from this generator can be used with <i>solver</i> and <i>ilp_solver</i>. Generates <i>&lt;task_count&gt;</i> of tasks with a random length that is uniformly distributed between <i>&lt;min-length&gt;</i> and <i>&lt;max-length&gt;</i>. Each generated task has a <i>&lt;coprocessor-probability&gt;</i>% chance of using a coprocessor.
+<h4>assignment_generator</h4>
+A generator of random assignment data: input data for the scheduling phase of the problem. The output from this generator can be used with <i>solver</i> and <i>ilp_solver</i>. Generates <i>&lt;task_count&gt;</i> of tasks with a random length that is uniformly distributed between <i>&lt;min-length&gt;</i> and <i>&lt;max-length&gt;</i>. Each generated task has a <i>&lt;coprocessor-probability&gt;</i>% chance of using a coprocessor.
 
 Input JSON requirements: environment
 
@@ -79,7 +79,7 @@ Arguments:
 </pre>
 
 
-<h4>solver</h4>
+<h4>ilp_schedule_solver</h4>
 Heuristic solver of the scheduling phase (phase 2) of the problem.
 
 Available heuristic algorithms:
@@ -124,7 +124,7 @@ Output JSON will contain: environment, tasks, (solution)
 
 
 
-<h4>ilp_solver</h4>
+<h4>ilp_schedule_solver</h4>
 ILP solver of the scheduling phase (phase 2) of the problem. If the model is infeasible, the solver will, by default, compute IIS and write the model to a file.
 
 Input JSON requirements: environment, tasks
@@ -141,7 +141,7 @@ Output JSON will contain: environment, tasks, (assignmentCuts), solution
 
 
 
-<h4>ilp_res_assigner</h4>
+<h4>ilp_assignment_solver</h4>
 ILP solver of the resource assignment phase (phase 1) of the problem. If the model is infeasible, the solver will by default compute IIS and write the model to a file.
 
 Available heuristic algorithms:
@@ -237,7 +237,7 @@ Arguments:
 --output &lt;file&gt;   output file [stdout]
 </pre>
 
-
+<!--
 <h3>Helper scripts</h3>
 Helper scripts come in Windows (.bat) and Linux (.sh) variant unless otherwise specified. The scripts expect that the compiled tools are in PATH environmental variable. The following helper scripts are provided:
 
@@ -246,7 +246,7 @@ Helper scripts come in Windows (.bat) and Linux (.sh) variant unless otherwise s
 	<li><b>naive_cuts:</b> does the same as <i>better_cuts</i> except for using the "naive cuts" method.</li>
 	<li><b>random_instance:</b> Windows only, not supported by the author.</li>
 </ul>
-
+-->
 
 <h2>Compiling</h2>
 Compiling requires gcc capable of compiling C++14 standard (tested with gcc version 9.3.0), and GNU make.

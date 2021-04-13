@@ -1,8 +1,9 @@
 #include <iostream>
+#include <fstream>
 
 #include "../common/instance.h"
 #include "../common/arg_parser.h"
-#include "generator.h"
+#include "instance_generator.h"
 
 int main(int argc, char** argv)
 {
@@ -21,14 +22,34 @@ int main(int argc, char** argv)
 		std::cin >> json;
 	}
 
+	std::string benchmark_data_filename = args.get_arg_value("--benchmark-data");
+	if (benchmark_data_filename.empty())
+	{
+		std::cerr << "unable to continue: no benchmark data provided" << std::endl;
+		return EXIT_FAILURE;
+	}
+
+	std::ifstream benchmark_data_file(benchmark_data_filename);
+	if (!benchmark_data_file.is_open())
+	{
+		std::cerr << "unable to continue: cannot open benchmark data file" << std::endl;
+		return EXIT_FAILURE;
+	}
+
 	environment environment;
-	std::vector<task> tasks;
+	std::vector<assignment_characteristic> tasks;
 	try
 	{
 		environment = parse_environment(json);
-		generator g(args, environment);
+		auto benchmark_data = parse_benchmark_data(environment.processors, benchmark_data_file);
+		instance_generator g(args, environment, benchmark_data);
 		tasks = g.generate();
-		write_tasks(json, tasks);
+		write_assignment_characteristics(json, tasks);
+
+		if (!args.is_arg_present("--keep-environment-mf"))
+		{
+			json["environment"]["majorFrameLength"] = compute_major_frame_length(environment, tasks);
+		}
 	}
 	catch (const nlohmann::detail::parse_error& error)
 	{

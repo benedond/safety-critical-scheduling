@@ -1,5 +1,5 @@
-#ifndef GENERATOR_H
-#define GENERATOR_H
+#ifndef ASSIGNMENT_GENERATOR_H
+#define ASSIGNMENT_GENERATOR_H
 
 #include <random>
 #include <array>
@@ -7,12 +7,12 @@
 #include "../common/instance.h"
 #include "../common/arg_parser.h"
 
-class generator
+class assignment_generator
 {
 public:
 	std::vector<task> generate() const;
 
-	generator(const arg_parser& args, const environment& e);
+	assignment_generator(const arg_parser& args, const environment& e);
 
 private:
 	const std::array<int, 2> m_supported_problem_versions{ 1, 2 };
@@ -24,4 +24,4 @@ private:
 	int m_task_count = 12;
 };
 
-#endif // GENERATOR_H
+#endif // ASSIGNMENT_GENERATOR_H
