@@ -1,0 +1,180 @@
+partitions:
+  - name: 15_sha
+    processes:
+      - cmd: sha
+        budget: 44
+  - name: 9_puwmod-4M
+    processes:
+      - cmd: puwmod-4M
+        budget: 54
+  - name: 17_tblook-4M
+    processes:
+      - cmd: tblook-4M
+        budget: 121
+  - name: 2_a2time-4M
+    processes:
+      - cmd: a2time-4M
+        budget: 123
+  - name: 14_bitmnp-4M
+    processes:
+      - cmd: bitmnp-4M
+        budget: 141
+  - name: 22_aifirf-4M
+    processes:
+      - cmd: aifirf-4M
+        budget: 121
+  - name: 16_sha
+    processes:
+      - cmd: sha
+        budget: 142
+  - name: 3_bitmnp-4M
+    processes:
+      - cmd: bitmnp-4M
+        budget: 73
+  - name: 11_susan
+    processes:
+      - cmd: susan
+        budget: 156
+  - name: 13_idctrn-4M
+    processes:
+      - cmd: idctrn-4M
+        budget: 128
+  - name: 10_tblook-4M
+    processes:
+      - cmd: tblook-4M
+        budget: 140
+  - name: 19_puwmod-4M
+    processes:
+      - cmd: puwmod-4M
+        budget: 85
+  - name: 12_tblook-4M
+    processes:
+      - cmd: tblook-4M
+        budget: 124
+  - name: 4_canrdr-4M
+    processes:
+      - cmd: canrdr-4M
+        budget: 150
+  - name: 8_tinyrenderer
+    processes:
+      - cmd: tinyrenderer
+        budget: 123
+  - name: 6_idctrn-4M
+    processes:
+      - cmd: idctrn-4M
+        budget: 102
+  - name: 20_test3
+    processes:
+      - cmd: test3
+        budget: 84
+  - name: 24_susan
+    processes:
+      - cmd: susan
+        budget: 91
+  - name: 1_susan
+    processes:
+      - cmd: susan
+        budget: 82
+  - name: 7_idctrn-4M
+    processes:
+      - cmd: idctrn-4M
+        budget: 145
+  - name: 21_matrix-4M
+    processes:
+      - cmd: matrix-4M
+        budget: 64
+  - name: 5_canrdr-4M
+    processes:
+      - cmd: canrdr-4M
+        budget: 75
+  - name: 0_test3
+    processes:
+      - cmd: test3
+        budget: 72
+  - name: 18_prime
+    processes:
+      - cmd: prime
+        budget: 124
+  - name: 23_a2time-4M
+    processes:
+      - cmd: a2time-4M
+        budget: 70
+
+windows:
+  - length: 156
+    slices:
+      - cpu: 4
+        sc_partition: 11_susan
+      - cpu: 0
+        sc_partition: 19_puwmod-4M
+      - cpu: 5
+        sc_partition: 4_canrdr-4M
+  - length: 145
+    slices:
+      - cpu: 5
+        sc_partition: 16_sha
+      - cpu: 4
+        sc_partition: 7_idctrn-4M
+  - length: 141
+    slices:
+      - cpu: 5
+        sc_partition: 10_tblook-4M
+      - cpu: 4
+        sc_partition: 14_bitmnp-4M
+  - length: 128
+    slices:
+      - cpu: 5
+        sc_partition: 12_tblook-4M
+      - cpu: 4
+        sc_partition: 13_idctrn-4M
+  - length: 124
+    slices:
+      - cpu: 5
+        sc_partition: 8_tinyrenderer
+      - cpu: 4
+        sc_partition: 18_prime
+  - length: 123
+    slices:
+      - cpu: 5
+        sc_partition: 22_aifirf-4M
+      - cpu: 4
+        sc_partition: 2_a2time-4M
+  - length: 121
+    slices:
+      - cpu: 5
+        sc_partition: 6_idctrn-4M
+      - cpu: 4
+        sc_partition: 17_tblook-4M
+  - length: 91
+    slices:
+      - cpu: 5
+        sc_partition: 20_test3
+      - cpu: 4
+        sc_partition: 24_susan
+  - length: 82
+    slices:
+      - cpu: 5
+        sc_partition: 5_canrdr-4M
+      - cpu: 4
+        sc_partition: 1_susan
+  - length: 73
+    slices:
+      - cpu: 5
+        sc_partition: 0_test3
+      - cpu: 4
+        sc_partition: 3_bitmnp-4M
+  - length: 70
+    slices:
+      - cpu: 5
+        sc_partition: 21_matrix-4M
+      - cpu: 4
+        sc_partition: 23_a2time-4M
+  - length: 54
+    slices:
+      - cpu: 5
+        sc_partition: 15_sha
+      - cpu: 4
+        sc_partition: 9_puwmod-4M
+  - length: 2
+    slices:
+      - cpu: 0

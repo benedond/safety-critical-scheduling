@@ -1,0 +1,178 @@
+partitions:
+  - name: 12_pntrch-4M
+    processes:
+      - cmd: pntrch-4M
+        budget: 57
+  - name: 17_pntrch-4M
+    processes:
+      - cmd: pntrch-4M
+        budget: 45
+  - name: 19_canrdr-4M
+    processes:
+      - cmd: canrdr-4M
+        budget: 130
+  - name: 4_aifirf-4M
+    processes:
+      - cmd: aifirf-4M
+        budget: 90
+  - name: 16_rspeed-4M
+    processes:
+      - cmd: rspeed-4M
+        budget: 77
+  - name: 21_bitmnp-4M
+    processes:
+      - cmd: bitmnp-4M
+        budget: 148
+  - name: 18_ttsprk-4M
+    processes:
+      - cmd: ttsprk-4M
+        budget: 152
+  - name: 3_a2time-4M
+    processes:
+      - cmd: a2time-4M
+        budget: 137
+  - name: 2_puwmod-4M
+    processes:
+      - cmd: puwmod-4M
+        budget: 101
+  - name: 0_pntrch-4M
+    processes:
+      - cmd: pntrch-4M
+        budget: 111
+  - name: 7_canrdr-4M
+    processes:
+      - cmd: canrdr-4M
+        budget: 83
+  - name: 13_tblook-4M
+    processes:
+      - cmd: tblook-4M
+        budget: 122
+  - name: 8_puwmod-4M
+    processes:
+      - cmd: puwmod-4M
+        budget: 119
+  - name: 9_idctrn-4M
+    processes:
+      - cmd: idctrn-4M
+        budget: 60
+  - name: 24_bitmnp-4M
+    processes:
+      - cmd: bitmnp-4M
+        budget: 158
+  - name: 15_canrdr-4M
+    processes:
+      - cmd: canrdr-4M
+        budget: 119
+  - name: 23_canrdr-4M
+    processes:
+      - cmd: canrdr-4M
+        budget: 117
+  - name: 10_idctrn-4M
+    processes:
+      - cmd: idctrn-4M
+        budget: 145
+  - name: 22_pntrch-4M
+    processes:
+      - cmd: pntrch-4M
+        budget: 74
+  - name: 14_tblook-4M
+    processes:
+      - cmd: tblook-4M
+        budget: 115
+  - name: 20_iirflt-4M
+    processes:
+      - cmd: iirflt-4M
+        budget: 125
+  - name: 11_aifirf-4M
+    processes:
+      - cmd: aifirf-4M
+        budget: 105
+  - name: 1_ttsprk-4M
+    processes:
+      - cmd: ttsprk-4M
+        budget: 113
+  - name: 5_aifirf-4M
+    processes:
+      - cmd: aifirf-4M
+        budget: 87
+  - name: 6_idctrn-4M
+    processes:
+      - cmd: idctrn-4M
+        budget: 58
+
+windows:
+  - length: 158
+    slices:
+      - cpu: 2
+        sc_partition: 7_canrdr-4M
+      - cpu: 1
+        sc_partition: 2_puwmod-4M
+      - cpu: 0
+        sc_partition: 8_puwmod-4M
+      - cpu: 4
+        sc_partition: 24_bitmnp-4M
+      - cpu: 5
+        sc_partition: 18_ttsprk-4M
+  - length: 148
+    slices:
+      - cpu: 5
+        sc_partition: 10_idctrn-4M
+      - cpu: 4
+        sc_partition: 21_bitmnp-4M
+  - length: 137
+    slices:
+      - cpu: 5
+        sc_partition: 19_canrdr-4M
+      - cpu: 4
+        sc_partition: 3_a2time-4M
+  - length: 125
+    slices:
+      - cpu: 5
+        sc_partition: 13_tblook-4M
+      - cpu: 4
+        sc_partition: 20_iirflt-4M
+  - length: 119
+    slices:
+      - cpu: 5
+        sc_partition: 23_canrdr-4M
+      - cpu: 4
+        sc_partition: 15_canrdr-4M
+  - length: 115
+    slices:
+      - cpu: 5
+        sc_partition: 1_ttsprk-4M
+      - cpu: 4
+        sc_partition: 14_tblook-4M
+  - length: 111
+    slices:
+      - cpu: 5
+        sc_partition: 11_aifirf-4M
+      - cpu: 4
+        sc_partition: 0_pntrch-4M
+  - length: 90
+    slices:
+      - cpu: 5
+        sc_partition: 5_aifirf-4M
+      - cpu: 4
+        sc_partition: 4_aifirf-4M
+  - length: 77
+    slices:
+      - cpu: 5
+        sc_partition: 22_pntrch-4M
+      - cpu: 4
+        sc_partition: 16_rspeed-4M
+  - length: 60
+    slices:
+      - cpu: 5
+        sc_partition: 6_idctrn-4M
+      - cpu: 4
+        sc_partition: 9_idctrn-4M
+  - length: 57
+    slices:
+      - cpu: 5
+        sc_partition: 17_pntrch-4M
+      - cpu: 4
+        sc_partition: 12_pntrch-4M
+  - length: 13
+    slices:
+      - cpu: 0
