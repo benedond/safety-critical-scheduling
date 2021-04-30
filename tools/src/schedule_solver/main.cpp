@@ -1,4 +1,5 @@
 #include <iostream>
+#include <unordered_set>
 
 #include "../common/arg_parser.h"
 #include "longest_tasks_first_solver.h"

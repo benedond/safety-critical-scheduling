@@ -25,7 +25,7 @@ std::string arg_parser::get_arg_value(const std::string& arg) const
 	 	return "";
 
 	 // argument has no value
-	 int val_pos = m_arg_pos_itt->second+1;
+	 size_t val_pos = m_arg_pos_itt->second+1;
 	 if (val_pos >= m_args.size())
 	 	return "";
 

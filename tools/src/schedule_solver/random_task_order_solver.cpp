@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <unordered_set>
 #include <cassert>
 #include <cmath>
 #include <random>
@@ -99,9 +100,7 @@ void random_task_order_solver::solve()
 
 bool random_task_order_solver::check_problem_compatibility() const
 {
-	return std::find(m_supported_problem_versions.begin(),
-					 m_supported_problem_versions.end(),
-					 m_environment.problem_version) != m_supported_problem_versions.end();
+	return m_supported_problem_versions.find(m_environment.problem_version) != m_supported_problem_versions.end();
 }
 
 std::string random_task_order_solver::get_solver_name() const

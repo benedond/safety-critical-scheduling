@@ -1,5 +1,5 @@
-#ifndef SIMPLE_SOLVER_H
-#define SIMPLE_SOLVER_H
+#ifndef LONGEST_TASKS_FIRST_SOLVER_H
+#define LONGEST_TASKS_FIRST_SOLVER_H
 
 #include "solver.h"
 
@@ -15,8 +15,8 @@ protected:
 	metadata_map get_solver_metadata() const override;
 
 private:
-	const std::array<int, 2> m_supported_problem_versions{ 1, 2 };
+	const std::unordered_set<int> m_supported_problem_versions{ 1, 2 };
 	int m_out_of_order_task_count;
 };
 
-#endif // SIMPLE_SOLVER_H
+#endif // LONGEST_TASKS_FIRST_SOLVER_H

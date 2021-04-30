@@ -28,9 +28,7 @@ constexpr visualiser::uchar LIGHT_VIOLET[] = { 0x96, 0x96, 0xFA };
 visualiser::visualiser(const environment& e, const solution& s) :
 		m_environment(e), m_solution(s), m_img_width(0), m_img_height(0), m_img_built(false)
 {
-	if (std::find(m_supported_problem_versions.begin(),
-				  m_supported_problem_versions.end(),
-				  m_environment.problem_version) == m_supported_problem_versions.end())
+	if (m_supported_problem_versions.find(e.problem_version) == m_supported_problem_versions.end())
 		throw std::invalid_argument("problem version is not supported");
 }
 

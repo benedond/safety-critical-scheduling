@@ -58,9 +58,7 @@ instance_generator::instance_generator(const arg_parser& args,
 	args.set_arg_value_int("--max-length", &this->m_max_length);
 	args.set_arg_value_int("--task-count", &this->m_task_count);
 
-	if (std::find(m_supported_problem_versions.begin(),
-				  m_supported_problem_versions.end(),
-				  m_environment.problem_version) == m_supported_problem_versions.end())
+	if (m_supported_problem_versions.find(e.problem_version) == m_supported_problem_versions.end())
 		throw std::invalid_argument("problem version is not supported");
 
 	if (m_min_length > m_max_length)
@@ -180,7 +178,7 @@ benchmark_data parse_benchmark_data(
 			benchmark_data.intercept = std::stof(line_parts[intercept_column_index]);
 			benchmark_data.proc_time = std::stof(line_parts[runtime_column_index]);
 			if (command_column_index != -1)
-				auto& bc = benchmark_commands[benchmark][combo_string] = line_parts[command_column_index];
+				benchmark_commands[benchmark][combo_string] = line_parts[command_column_index];
 		}
 		catch (std::exception& e)
 		{

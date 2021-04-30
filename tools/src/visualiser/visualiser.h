@@ -2,6 +2,7 @@
 #define VISUALISER_H
 
 #include <CImg.h>
+#include <unordered_set>
 
 #include "../common/instance.h"
 
@@ -19,7 +20,7 @@ public:
 	visualiser(const environment& e, const solution& s);
 
 private:
-	const std::array<int, 2> m_supported_problem_versions { 1, 2 };
+	const std::unordered_set<int> m_supported_problem_versions { 1, 2 };
 
 	const environment& m_environment;
 	const solution& m_solution;

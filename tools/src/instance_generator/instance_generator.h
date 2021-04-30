@@ -2,7 +2,7 @@
 #define INSTANCE_GENERATOR_H
 
 #include <random>
-#include <array>
+#include <unordered_set>
 
 #include "../common/instance.h"
 #include "../common/arg_parser.h"
@@ -27,7 +27,7 @@ public:
 	instance_generator(const arg_parser& args, const environment& e, const benchmark_data& bd);
 
 private:
-	const std::array<int, 2> m_supported_problem_versions{ 1, 2 };
+	const std::unordered_set<int> m_supported_problem_versions{ 1, 2 };
 
 	const environment& m_environment;
 	const benchmark_data& m_benchmark_data;

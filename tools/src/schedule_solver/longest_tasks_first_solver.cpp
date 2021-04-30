@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <unordered_set>
 #include <cassert>
 #include <cmath>
 #include <set>
@@ -112,9 +113,7 @@ void longest_tasks_first_solver::solve()
 
 bool longest_tasks_first_solver::check_problem_compatibility() const
 {
-	return std::find(m_supported_problem_versions.begin(),
-				  m_supported_problem_versions.end(),
-				  m_environment.problem_version) != m_supported_problem_versions.end();
+	return m_supported_problem_versions.find(m_environment.problem_version) != m_supported_problem_versions.end();
 }
 
 std::string longest_tasks_first_solver::get_solver_name() const
