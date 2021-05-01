@@ -21,7 +21,7 @@ All of the provided tools expect a JSON on their input. The tools then output th
 
 <code>instance_generator.exe --environment environment.json --benchmark-data data.csv | assignment_solver.exe --method reference | schedule_solver.exe --output solution.json </code>
 
-generates a random problem instance, solves the resource and window assignment separately with the provided solvers and output solution to `solution.json` file. Note that for this to work, output of the gurobi solver must be turned off. This can be done with the help of `gurobi.env` file present in the working directory with the following content:
+generates a random problem instance, solves the resource and window assignment separately with the provided solvers and outputs solution to `solution.json` file. Note that for this to work, output of the gurobi solver must be turned off. This can be done with the help of `gurobi.env` file present in the working directory with the following content:
 
 <pre>
 OutputFlag 0
@@ -55,7 +55,7 @@ If this column is not provided, name of the benchmark will be used instead.
 
 Input JSON requirements: environment
 
-Output JSON will contain: environment, assignment_characteristics
+Output JSON will contain: environment, assignmentCharacteristics
 
 Arguments:
 <pre>
@@ -91,8 +91,8 @@ Resource assignment solver.
 Available methods:
 <table>
    <tr><th>Name</th><th>Description</th><th>Note</th></tr>
-   <tr><td>reference</td><td>Reference assignment heuristic</td></tr>
-   <tr><td>minutil</td><td>Resource assignment minimizing resource utilization</td></tr>
+   <tr><td>reference</td><td>Reference assignment heuristic</td><td></td></tr>
+   <tr><td>minutil</td><td>Resource assignment minimizing resource utilization</td><td></td></tr>
    <tr><td>random</td><td>Random resource assignment</td><td>The resource are selected with uniform probability.</td></tr>
 </table>
 
@@ -101,9 +101,9 @@ Input JSON requirements: environment, assignmentCharacteristics
 Output JSON will contain: environment, tasks
 
 <pre>
---input &lt;file&gt;    input file [stdin]
---output &lt;file&gt;   output file [stdout]
---iis-output   if an infeasible ILP model is encountered, the solver will compute IIS and output it into a file
+--input &lt;file&gt;          input file [stdin]
+--output &lt;file&gt;         output file [stdout]
+--iis-output            if an infeasible ILP model is encountered, the solver will compute IIS and output it into a file
 --method &lt;method name&gt;        resource assignment method to be used [reference]
 </pre>
 
@@ -125,7 +125,7 @@ Arguments:
 
 
 <h4>visualiser</h4>
-Solution visualiser, that transforms a JSON with solution to an image file containing a Gantt-like chart. Supported image formats are BMP and PNG.
+Solution visualiser, that transforms a JSON with solution to an image file containing a Gantt-like chart. Supported image formats are BMP and PNG. The output format is decided based on the output file name (.bmp or .png file extension).
 
 Input JSON requirements: environment, solution
 
