@@ -1,41 +1,31 @@
-This repository contains source code of tools created for the <b>"Scheduling of the safety-critical workloads for embedded systems"</b> project and documents related to this project.
 
 <h1>Contents</h1>
 <ol>
-	<li>[Repository structure](#repository-structure)</li>
 	<li>[Available tools](#available-tools)
 		<ol>
          <li>[instance_generator](#instance_generator)</li>
-			<li>[assignment_generator](#assignment_generator)</li>
-			<li>[schedule_solver](#schedule_solver)</li>
-         <li>[global_solver](#global_solver)</li>
-			<li>[ilp_schedule_solver](#ilp_schedule_solver)</li>
-			<li>[ilp_assignment_solver](#ilp_assignment_solver)</li>
-			<li>[ilp_global_solver](#ilp_global_solver)</li>
+         <li>[ilp_global_solver](#ilp_global_solver)</li>
+         <li>[assignment_solver](#ilp_assignment_solver)</li>
+			<li>[schedule_solver](#schedule_solver)</li>         
 			<li>[visualiser](#visualiser)</li>
-			<li>[stat](#stat)</li>
 			<li>[demos_config_export](#demos_config_export)</li>
-			<!--li>[Helper scripts](#helper-scripts)</li-->
 		</ol>
 	</li>
 	<li>[Compiling](#compiling)</li>
 	<li>[Data format](#data-format)</li>
 </ol>
 
-<h2>Repository structure</h2>
-<ul>
-	<li><b>data:</b> contains example data that can be used with the tools.</li>
-	<li><b>doc:</b> contains documents related to the tools.</li>
-	<li><b>experiments:</b> contains files from conducted experiments, such as experiment descriptions, helper scripts, input and output data, etc.</li>
-	<li><b>tools:</b> contains helper scripts and source code of the tools (subdirectory <i>src</i>).</li>
-</ul>
 
 <h2>Available tools</h2>
-All of the provided tools expect a JSON file on their input. The tools then output the same JSON with additional data based on the purpose of the used tool. No data will be deleted between the input and the output. However, some fields can be overwritten (for example, if a JSON already containing a solution is provided as an input to a solver, then the solution will be overwritten). For details about the JSON structure, please see the [Data format](#data-format) section of this readme. Unless stated otherwise, if no input file is specified, then the tools read input from stdin. Similarly, if no output file is specified, then the tools write their output to stdout. This allows for chaining of the tools in a single command, for example:
+All of the provided tools expect a JSON on their input. The tools then output the same JSON with additional data based on the purpose of the used tool. No data will be deleted between the input and the output. However, some fields may be overwritten (for example, if a JSON already containing a solution is provided as an input to a solver, then the solution will be overwritten). For details about the JSON structure, please see the [Data format](#data-format) section of this readme. Unless stated otherwise, if no input file is specified, then the tools read input from stdin. Similarly, if no output file is specified, then the tools write their output to stdout. This allows for chaining of the tools in a single command, for example:
 
-<code>generator.exe --input environment.json | solver.exe | visualiser.exe --output random_instance.png</code>
+<code>instance_generator.exe --environment environment.json --benchmark-data data.csv | assignment_solver.exe --method reference | schedule_solver.exe --output solution.json </code>
 
-generates a random problem instance of the scheduling phase, solves it with heuristic solver, and creates a visualisation of that solution.
+generates a random problem instance, solves the resource and window assignment separately with the provided solvers and output solution to `solution.json` file. Note that for this to work, output of the gurobi solver must be turned off. This can be done with the help of `gurobi.env` file present in the working directory with the following content:
+
+<pre>
+OutputFlag 0
+</pre>
 
 To better understand how the tools work, the following diagram illustrates how they fit together to form a data pipeline:
 
@@ -43,7 +33,25 @@ To better understand how the tools work, the following diagram illustrates how t
 
 
 <h4>instance_generator</h4>
-A generator of input data for the resource assignment phase (phase 1) of the problem. The output from this generator can be used with <i>ilp_res_assigner</i> and <i>ilp_global_solver</i>. Generates <i>&lt;task_count&gt;</i> of tasks with a random length that is uniformly distributed between <i>&lt;min-length&gt;</i> and <i>&lt;max-length&gt;</i>. Tasks are generated based on provided benchmark data. [TODO: details about benchmark data and expected file format]
+A problem instance generator. Generates <i>&lt;task_count&gt;</i> of tasks with a random length that is uniformly distributed between <i>&lt;min-length&gt;</i> and <i>&lt;max-length&gt;</i>. The task length is generated randomly for an arbitrarily chosen resource, and scaled accordingly to other available resources. Tasks are generated based on provided benchmark data in CSV file. 
+
+The expected format of the CSV file containing benchmark data is as follows:
+
+<pre>
+benchmark,affinity,intercept,slope,runtime
+dijkstra,A53,0.2281,5.6082,0.017534
+dijkstra,A72,0.8893,5.6123,0.010800
+</pre>
+
+an optional column `command` can be added to provide values for the `assignmentCharacteristic.command` field in the JSON output:
+
+<pre>
+benchmark,affinity,intercept,slope,runtime,command
+dijkstra,A53,0.2281,5.6082,0.017534,/root/benchmarks/executable/dijkstra
+dijkstra,A72,0.8893,5.6123,0.010800,/root/benchmarks/executable/dijkstra
+</pre>
+
+If this column is not provided, name of the benchmark will be used instead.
 
 Input JSON requirements: environment
 
@@ -52,7 +60,7 @@ Output JSON will contain: environment, assignment_characteristics
 Arguments:
 <pre>
 --environment &lt;file&gt;                                input file [stdin]
---benchmark-data &lt;file&gt;                             csv file containing benchmark data   
+--benchmark-data &lt;file&gt;                             CSV file containing the benchmark data   
 --output &lt;file&gt;                                     output file [stdout]
 --min-length &lt;length&gt;                               minimal length of a task [40]
 --max-length &lt;length&gt;                               maximal length of a task [160]
@@ -61,118 +69,9 @@ Arguments:
 </pre>
 
 
-<h4>assignment_generator</h4>
-A generator of random assignment data: input data for the scheduling phase of the problem. The output from this generator can be used with <i>solver</i> and <i>ilp_solver</i>. Generates <i>&lt;task_count&gt;</i> of tasks with a random length that is uniformly distributed between <i>&lt;min-length&gt;</i> and <i>&lt;max-length&gt;</i>. Each generated task has a <i>&lt;coprocessor-probability&gt;</i>% chance of using a coprocessor.
-
-Input JSON requirements: environment
-
-Output JSON will contain: environment, tasks
-
-Arguments:
-<pre>
---environment &lt;file&gt;                                input file [stdin]
---output &lt;file&gt;                                     output file [stdout]
---min-length &lt;length&gt;                               minimal length of a task [1]
---max-length &lt;length&gt;                               maximal length of a task [40]
---coprocessor-probability &lt;probability (0-100)&gt;     probability, that a generated task will use a coprocessor [30]
---task-count &lt;count&gt;                                number of tasks to generate [12]
-</pre>
-
-
-<h4>schedule_solver</h4>
-Heuristic solver of the scheduling phase (phase 2) of the problem.
-
-Available heuristic algorithms:
-<table>
-	<tr><th>Identifier</th><th>Algorithm</th></tr>
-	<tr><td>0</td><td>Longest tasks first</td></tr>
-	<tr><td>1</td><td>Random task order</td></tr>
-</table>
-
-Input JSON requirements: environment, tasks
-
-Output JSON will contain: environment, tasks, solution
-
-Arguments:
-<pre>
---input &lt;file&gt;                     input file [stdin]
---output &lt;file&gt;                    output file [stdout]
---method &lt;algorithm identifier&gt;    identifier of the heuristic algorithm to be used [0]
-</pre>
-
-
-<h4>global_solver</h4>
-Heuristic solver of the global problem, capable of handling both resource assignment and scheduling. 
-
-Available heuristic algorithms:
-<table>
-   <tr><th>Name</th><th>Description</th></tr>
-   <tr><td>reference</td><td>Reference heuristic (assignment + schedule)</td></tr>
-   <tr><td>random-schedule</td><td>Random assignments + random schedule (each window will be at least 5/6 full)</td></tr>
-   <tr><td>random-assignment</td><td>Produces random resource assignments without a schedule. Schedule feasibility is not guaranteed.</td></tr>
-</table>
-
-Input JSON requirements: environment, assignmentCharacteristics
-
-Output JSON will contain: environment, tasks, (solution)
-
-<pre>
---input &lt;file&gt;                input file [stdin]
---output &lt;file&gt;               output file [stdout]
---method &lt;algorithm name&gt;    name of the algorithm to be used [reference]
-</pre>
-
-
-
-<h4>ilp_schedule_solver</h4>
-ILP solver of the scheduling phase (phase 2) of the problem. If the model is infeasible, the solver will, by default, compute IIS and write the model to a file.
-
-Input JSON requirements: environment, tasks
-
-Output JSON will contain: environment, tasks, (assignmentCuts), solution
-
-<pre>
---input &lt;file&gt;          input file [stdin]
---output &lt;file&gt;         output file [stdout]
---no-iis-output         if the model is infeasible, the ILP model will not be written into a file (if no parameter for generating assignment cuts is specified, the solver will not compute IIS)
---generate-naive-cuts   if the model is infeasible, Bender's cut of the infeasible resource assignment will be added to the output JSON ("naive" cut method)
---generate-better-cuts  if the model is infeasible, Bender's cut of the infeasible resource assignment will be added to the output JSON ("better" cut method)
-</pre>
-
-
-
-<h4>ilp_assignment_solver</h4>
-ILP solver of the resource assignment phase (phase 1) of the problem. If the model is infeasible, the solver will by default compute IIS and write the model to a file.
-
-Available heuristic algorithms:
-<table>
-   <tr><th>Name</th><th>Description</th></tr>
-   <tr><td>reference</td><td>Reference assignment method</td></tr>
-   <tr><td>old</td><td>Old Eik assignment method</td></tr>
-</table>
-
-Input JSON requirements: environment, assignmentCharacteristics, (assignmentCuts)
-
-Output JSON will contain: environment, tasks, (assignmentCuts will be preserved from input JSON)
-
-<pre>
---input &lt;file&gt;    input file [stdin]
---output &lt;file&gt;   output file [stdout]
---iis-output   if the model is infeasible, the solver will compute IIS and output it into a file
---method &lt;method name&gt;        method to be used [reference]
-</pre>
-
 
 <h4>ilp_global_solver</h4>
-ILP solver of the global problem - handles both resource assignment and scheduling. If the model is infeasible, the solver will by default compute IIS and write the model to a file.
-
-Available optimization methods:
-<table>
-   <tr><th>Name</th><th>Default for problem version</th></tr>
-   <tr><td>eik</td><td>1</td></tr>
-   <tr><td>predictor</td><td>2</td></tr>
-   <tr><td>utilization</td><td></td></tr>
-</table>
+Solver for the global-ILP model.
 
 Input JSON requirements: environment, assignmentCharacteristics
 
@@ -182,10 +81,47 @@ Output JSON will contain: environment, tasks, solution
 --input &lt;file&gt;                input file [stdin]
 --output &lt;file&gt;               output file [stdout]
 --iis-output                  if the model is infeasible, the solver will compute IIS and output it into a file
---optimize-schedule           enables optimization of total schedule length as a secondary objective
---maximize                    the primary criterion will be maximized
---method &lt;method name&gt;        optimization method to be used. If no value is specified, then the decision will be made base on environment problemVersion
 </pre>
+
+
+
+<h4>assignment_solver</h4>
+Resource assignment solver.
+
+Available methods:
+<table>
+   <tr><th>Name</th><th>Description</th><th>Note</th></tr>
+   <tr><td>reference</td><td>Reference assignment heuristic</td></tr>
+   <tr><td>minutil</td><td>Resource assignment minimizing resource utilization</td></tr>
+   <tr><td>random</td><td>Random resource assignment</td><td>The resource are selected with uniform probability.</td></tr>
+</table>
+
+Input JSON requirements: environment, assignmentCharacteristics
+
+Output JSON will contain: environment, tasks
+
+<pre>
+--input &lt;file&gt;    input file [stdin]
+--output &lt;file&gt;   output file [stdout]
+--iis-output   if an infeasible ILP model is encountered, the solver will compute IIS and output it into a file
+--method &lt;method name&gt;        resource assignment method to be used [reference]
+</pre>
+
+
+<h4>schedule_solver</h4>
+Window assignment solver.
+
+Input JSON requirements: environment, tasks
+
+Output JSON will contain: environment, tasks, solution
+
+Arguments:
+<pre>
+--input &lt;file&gt;                     input file [stdin]
+--output &lt;file&gt;                    output file [stdout]
+</pre>
+
+
 
 
 <h4>visualiser</h4>
@@ -199,22 +135,6 @@ Arguments:
 <pre>
 --input &lt;file&gt;    input file [stdin]
 --output &lt;file&gt;   output image file
-</pre>
-
-
-<h4>stat</h4>
-Solution data aggregator that transforms a JSON with solution to a single line of CSV data.
-
-Input JSON requirements: environment, solution
-
-This tool does not produce JSON output. Instead, it outputs CSV data. For details about the output columns, run it with <code>--no-input --write-header</code> arguments.
-
-Arguments:
-<pre>
---input &lt;file&gt;          input file [stdin]
---output &lt;file&gt;         output file (output is appended to this file) [stdout]
---write-header          write CSV header before data 
---no-input              do not wait for/ignore input data
 </pre>
 
 
@@ -237,39 +157,25 @@ Arguments:
 --output &lt;file&gt;   output file [stdout]
 </pre>
 
-<!--
-<h3>Helper scripts</h3>
-Helper scripts come in Windows (.bat) and Linux (.sh) variant unless otherwise specified. The scripts expect that the compiled tools are in PATH environmental variable. The following helper scripts are provided:
-
-<ul>
-	<li><b>better_cuts:</b> uses Bender's cuts to solve the global problem with ilp_res_assigner and ilp_solver. Uses the "better cuts" method of generating cuts. Stops when either ilp_solver finds a solution, ilp_res_assigner can no longer find a feasible solution, or iteration limit is reached (by default 1000 iterations). Syntax: <code>./better_cuts.sh &lt;input file&gt; &lt;output file&gt;</code></li>
-	<li><b>naive_cuts:</b> does the same as <i>better_cuts</i> except for using the "naive cuts" method.</li>
-	<li><b>random_instance:</b> Windows only, not supported by the author.</li>
-</ul>
--->
 
 <h2>Compiling</h2>
-Compiling requires gcc capable of compiling C++14 standard (tested with gcc version 9.3.0), and GNU make.
+Compiling requires C++ compiler capable of compiling C++14 standard and GNU make. The described process was tested to work with gcc version 9.3.0
 
-Non-ILP tools have no external dependencies and can be compiled by changing into <code>tools/src</code> directory and executing <code>make</code>.
+Tools solving ILP model require the gurobi solver to be installed. To them, first ensure that the variable GUROBI_HOME in the <code>tools/src/Makefile</code> file contains a path to gurobi installation on the system (this should be the gurobi directory that has bin, lib, docs, and other subdirectories). Once this variable is correctly set, change to <code>tools/src</code> directory and execute <code>make</code>. The tools were tested to work with gurobi version 9.0 and 9.1.
 
-ILP tools require gurobi to be installed. To compile ILP tools, first ensure that the variable GUROBI_HOME in the <code>tools/src/Makefile</code> file contains a path to where gurobi is installed on the system (this should be the gurobi directory that has bin, lib, docs, and other subdirectories). Once this variable is correctly set, change to <code>tools/src</code> directory and execute <code>make ilp</code>. ILP tools were tested with gurobi 9.0 and 9.1.
-
-If you wish to compile all tools at once, it is also possible to execute <code>make all</code> in the <code>tools/src</code> directory. Note that this requires the GUROBI_HOME variable to be correctly set in the Makefile. To speed up the compiling, it might be desirable to compile several tools at once. To do this, execute the <code>make</code> command with <code>-j#</code> argument, where # is the number of tools to be compiled simultaneously. A good value is the number of CPU threads on your computer. Example: <code>make all -j4</code>
+To speed up the compiling, it might be desirable to compile multiple tools at once. To do this, execute the <code>make</code> command with <code>-j#</code> argument, where # is the number of tools to be compiled simultaneously. A good value is the number of CPU threads on your computer. Example: <code>make all -j4</code>
 
 Once the compiling has succeeded, the compiled tools will be in the <code>tools/bin</code> directory.
 
-Compilation with other C++ compilers should be possible but is not supported by the author.
-
 <h2>Data format</h2>
-The content of the JSONs that the tools use is best explained by an example. The JSON requirements and output referenced in the [Available tools](#available-tools) section of this readme refer to the names of the top-level object in the JSON. The following example contains all posible field the provided tools recognize, but some fields that repeat multiple times have been truncated for brevity. The full version of this example JSON without comments can be found [here](data/all_fields.json).
+The content of the JSONs that the tools use is best explained by an example. The JSON requirements and output referenced in the [Available tools](#available-tools) section of this readme refer to the names of the top-level object in the JSON. The following example contains all posible field the provided tools recognize, but some fields that repeat multiple times have been truncated for brevity.
 
 <pre>
 {
   "environment":{                    // environment data       
       "majorFrameLength":200,        // major frame length in ms (integer)
       "problemVersion":1,            // problem version - the tools should produce an error if used with unsupported problem version
-      "scPart":0.6,                  // optional: minimal amount of window length required for SC tasks (%) - if not specified, default value (0.6) will be used
+      "scPart":1.0,                  // optional: minimal amount of window length required for SC tasks (%) - if not specified, default value (0.6) will be used
       "processors":[                 // list of processors
          {                           // processor 0 (demos_config_export will use CPU indices 0-3 for this processor)
             "name":"A53",            // processor name 
@@ -353,38 +259,6 @@ The content of the JSONs that the tools use is best explained by an example. The
          "task":"T5",
          "resourceAssignments":[ ... ]
       }
-   ],
-
-   "assignmentCuts":[                     // resource assignment groups, which cannot occur simultaneously
-      [                                   // group 1: T1[1], T2[1], T3[0] - these assignments together are not allowed
-         {
-            "assignmentIndex":0,          // item index from assignmentCharacteristics.resourceAssignment array
-            "task":"T3"                   // assignmentCharacteristics.task
-         },
-         {
-            "assignmentIndex":1,
-            "task":"T1"
-         },
-         {
-            "assignmentIndex":1,
-            "task":"T2"
-         }
-      ],
-
-      [                                    // group 2: T1[1], T2[2], T3[0] - these assignments together are not allowed
-         {
-            "assignmentIndex":0,
-            "task":"T3"
-         },
-         {
-            "assignmentIndex":1,
-            "task":"T1"
-         },
-         {
-            "assignmentIndex":2,
-            "task":"T2"
-         }
-      ]
    ],
 
    "tasks":[                            // tasks with fixed resource assignment: input for scheduling phase (phase 2)
