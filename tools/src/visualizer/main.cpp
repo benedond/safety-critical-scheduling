@@ -2,16 +2,16 @@
 
 #include "../common/instance.h"
 #include "../common/arg_parser.h"
-#include "visualiser.h"
+#include "visualizer.h"
 
 int main(int argc, char** argv)
 {
 	arg_parser args(argc, argv);
 
-	bool display_visualisation = args.is_arg_present("--display");
+	bool display_visualization = args.is_arg_present("--display");
 	std::string output_filename = args.get_arg_value("--output");
 
-	if (!display_visualisation && output_filename.empty())
+	if (!display_visualization && output_filename.empty())
 	{
 		std::cerr << "nothing to do" << std::endl;
 		return EXIT_SUCCESS;
@@ -49,7 +49,7 @@ int main(int argc, char** argv)
 		return EXIT_FAILURE;
 	}
 
-	visualiser v(environment, solution);
+	visualizer v(environment, solution);
 
 	if (!output_filename.empty())
 	{
@@ -70,7 +70,7 @@ int main(int argc, char** argv)
 		}
 	}
 
-	if (display_visualisation)
+	if (display_visualization)
 		v.display();
 
 	return EXIT_SUCCESS;

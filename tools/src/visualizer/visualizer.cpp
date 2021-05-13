@@ -2,7 +2,7 @@
 #include <cstdint>
 #include <lodepng.h>
 
-#include "visualiser.h"
+#include "visualizer.h"
 
 #define Y_OFFSET 30U
 #define X_OFFSET 20U
@@ -18,41 +18,41 @@
 
 using namespace cimg_library;
 
-constexpr visualiser::uchar WHITE[] = { 0xFF, 0xFF, 0xFF };
-constexpr visualiser::uchar BLACK[] = { 0x00, 0x00, 0x00 };
-constexpr visualiser::uchar RED[] = { 0xFF, 0x00, 0x00 };
-//constexpr visualiser::uchar BLUE[] = { 0x00, 0x00, 0xFF };
-//constexpr visualiser::uchar CYAN[] = { 0x00, 0x80, 0x80 };
-constexpr visualiser::uchar LIGHT_VIOLET[] = { 0x96, 0x96, 0xFA };
+const visualizer::uchar WHITE[] = { 0xFF, 0xFF, 0xFF };
+const visualizer::uchar BLACK[] = { 0x00, 0x00, 0x00 };
+const visualizer::uchar RED[] = { 0xFF, 0x00, 0x00 };
+//constexpr visualizer::uchar BLUE[] = { 0x00, 0x00, 0xFF };
+//constexpr visualizer::uchar CYAN[] = { 0x00, 0x80, 0x80 };
+const visualizer::uchar LIGHT_VIOLET[] = { 0x96, 0x96, 0xFA };
 
-visualiser::visualiser(const environment& e, const solution& s) :
+visualizer::visualizer(const environment& e, const solution& s) :
 		m_environment(e), m_solution(s), m_img_width(0), m_img_height(0), m_img_built(false)
 {
 	if (m_supported_problem_versions.find(e.problem_version) == m_supported_problem_versions.end())
 		throw std::invalid_argument("problem version is not supported");
 }
 
-void visualiser::display()
+void visualizer::display()
 {
 #if (cimg_display == 0)
 	std::cerr << "display is not supported, please recompile with display support" << std::endl;
 #else
 	build_image();
 
-	CImgDisplay disp(m_img, "visualiser");
+	CImgDisplay disp(m_img, "visualizer");
 	while (!disp.is_closed())
 		disp.wait();
 #endif
 
 }
 
-void visualiser::export_bmp(const std::string& filename)
+void visualizer::export_bmp(const std::string& filename)
 {
 	build_image();
 	m_img.save_bmp(filename.c_str());
 }
 
-void visualiser::export_png(const std::string& filename)
+void visualizer::export_png(const std::string& filename)
 {
 	build_image();
 
@@ -72,7 +72,7 @@ void visualiser::export_png(const std::string& filename)
 	lodepng_encode24_file(filename.c_str(), buffer.begin().base(), m_img_width, m_img_height);
 }
 
-void visualiser::build_image()
+void visualizer::build_image()
 {
 	if (m_img_built)
 		return;
@@ -94,7 +94,7 @@ void visualiser::build_image()
 	}
 }
 
-void visualiser::init_img()
+void visualizer::init_img()
 {
 	for (auto& p : m_environment.processors_list)
 		for (int i=0; i<p->processing_units; i++)
@@ -106,7 +106,7 @@ void visualiser::init_img()
 	m_img.draw_rectangle(0, 0, m_img_width, m_img_height, WHITE);
 }
 
-void visualiser::draw_grid()
+void visualizer::draw_grid()
 {
 	const uint min_x = X_OFFSET;
 	const uint max_x = LANE_X_START + m_environment.major_frame_length*TIME_SCALE;
@@ -141,7 +141,7 @@ void visualiser::draw_grid()
 	m_img.draw_text((uint) (end_x - 25), (uint) (Y_OFFSET - 15), mf_label.c_str(), BLACK, WHITE);
 }
 
-visualiser::uint visualiser::draw_window(const window& window, uint window_start_time)
+visualizer::uint visualizer::draw_window(const window& window, uint window_start_time)
 {
 	const uint min_y = Y_OFFSET;
 	const uint max_y = m_img_height - Y_OFFSET;
@@ -172,7 +172,7 @@ visualiser::uint visualiser::draw_window(const window& window, uint window_start
 	return window_end;
 }
 
-void visualiser::draw_infeasible_solution()
+void visualizer::draw_infeasible_solution()
 {
 	m_img.draw_text(X_OFFSET, Y_OFFSET, "SOLUTION INFEASIBLE", RED, WHITE, 1, 18);
 }

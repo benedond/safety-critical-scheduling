@@ -9,8 +9,10 @@
 
 #define INFEASIBLE_MODEL_FILENAME std::string("infeasible_global_problem")
 
+// old ILP
 std::pair<solution, std::vector<task>> solve_eik(const arg_parser& args, const environment& e, const assignment_characteristic_list& assignment_characteristics)
 {
+	// leftover model from development
 	std::vector<std::vector<std::vector<GRBVar>>> a;
 
 	GRBEnv env;
@@ -184,8 +186,10 @@ std::pair<solution, std::vector<task>> solve_eik(const arg_parser& args, const e
 	return std::make_pair(std::move(s), std::move(tasks));
 }
 
+// global-ILP
 std::pair<solution, std::vector<task>> solve_global_ILP(const arg_parser& args, const environment& e, const assignment_characteristic_list& assignment_characteristics)
 {
+	// global-ILP model model
 	int num_tasks = assignment_characteristics.size();
 	int windows_ub = num_tasks;
 	int sense = 1;
@@ -197,8 +201,7 @@ std::pair<solution, std::vector<task>> solve_global_ILP(const arg_parser& args, 
 	GRBEnv env;
 	GRBModel model(env);
 
-	// x_ijk
-	GRBLinExpr energy_consumption_sum;
+	// x_ijk variables
 	for (int i = 0; i < num_tasks; i++)
 	{
 		auto& task = assignment_characteristics[i];
@@ -209,7 +212,7 @@ std::pair<solution, std::vector<task>> solve_global_ILP(const arg_parser& args, 
 		{
 			std::vector<GRBVar> x_ij;
 
-			// k
+			// task assignment constraint
 			for (auto& assignment_characteristic : task.resource_assignments)
 			{
 				GRBVar x_ijk = model.addVar(0, 1, 0, GRB_BINARY, "x" + std::to_string(i) + "," + std::to_string(j) + "," + std::to_string(x_ij.size()));
@@ -224,7 +227,7 @@ std::pair<solution, std::vector<task>> solve_global_ILP(const arg_parser& args, 
 		x.push_back(std::move(x_i));
 	}
 
-	// l_j
+	// l_j variables
 	std::vector<GRBVar> l(windows_ub);
 	GRBLinExpr window_length_sum;
 	for (int j = 0; j < windows_ub; j++)
@@ -241,24 +244,29 @@ std::pair<solution, std::vector<task>> solve_global_ILP(const arg_parser& args, 
 			for (auto& assignment_characteristic : task.resource_assignments)
 			{
 				a_ik_sum += x[i][j][k];
+				// sc part constraint
 				model.addConstr(l[j] >= (x[i][j][k++] * assignment_characteristic.length) / e.sc_part, task.task + " is at most " + std::to_string(e.sc_part*100) + "% of l" + std::to_string(j));
 			}
 		}
+
+		// window length constraint
 		model.addConstr(l[j] <= a_ik_sum * e.major_frame_length, "window " + std::to_string(j) + " is not empty");
 
+		// window ordering constraint
 		if (j > 0)
 			model.addConstr(l[j] <= l[j - 1], "window ordering");
 	}
+	// major frame length constraint
 	model.addConstr(window_length_sum <= e.major_frame_length, "major frame length");
 
-	// A_ijk
+	// A_ijk variables (=x_ijk*p_ik*a_ik), objective function
+	GRBLinExpr energy_consumption_sum;
 	for (int i = 0; i < num_tasks; i++)
 	{
 		auto& task = assignment_characteristics[i];
 
 		for (int j = 0; j < windows_ub; j++)
 		{
-			// k
 			int k = 0;
 			for (auto& assignment_characteristic : task.resource_assignments)
 			{
@@ -271,7 +279,7 @@ std::pair<solution, std::vector<task>> solve_global_ILP(const arg_parser& args, 
 		}
 	}
 
-	// processor+gpu capacity
+	// resource capacity constraint
 	for (auto& processor : e.processors_list)
 	{
 		for (int j = 0; j < windows_ub; j++)
@@ -300,7 +308,7 @@ std::pair<solution, std::vector<task>> solve_global_ILP(const arg_parser& args, 
 		}
 	}
 
-
+	// B_ijk variables
 	for (int j = 0; j < windows_ub; j++)
 	{
 		std::vector<GRBVar> B_j;
@@ -335,11 +343,13 @@ std::pair<solution, std::vector<task>> solve_global_ILP(const arg_parser& args, 
 		energy_consumption_sum += B_j_max;
 	}
 
+	// minimize (default)/maximize objective
 	if (sense == 1)
-		model.setObjectiveN(energy_consumption_sum * 1.0f/(float) e.major_frame_length, 0, 1, 1.0, 0.0, 0.0, "min energy consumption");
+		model.setObjectiveN(energy_consumption_sum * 1.0f/(float) e.major_frame_length, 0, 1, 1.0, 0.0, 0.0, "min avg power consumption");
 	else
 		model.setObjective(energy_consumption_sum * 1.0f/(float) e.major_frame_length, GRB_MAXIMIZE);
 
+	// enable C_max (schedule length) optimization (not recommended for global_ilp, leftover from development)
 	if (args.is_arg_present("--optimize-schedule"))
 	{
 		if (sense == 1)
@@ -353,6 +363,7 @@ std::pair<solution, std::vector<task>> solve_global_ILP(const arg_parser& args, 
 		}
 	}
 
+	// optimize the model
 	auto start = std::chrono::high_resolution_clock::now();
 	model.optimize();
 	auto end = std::chrono::high_resolution_clock::now();
@@ -361,8 +372,9 @@ std::pair<solution, std::vector<task>> solve_global_ILP(const arg_parser& args, 
 			.solution_time = (uint64_t)std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() };
 	std::vector<task> tasks;
 
-	if (model.get(GRB_IntAttr_Status) == GRB_OPTIMAL || model.get(GRB_IntAttr_Status) == GRB_TIME_LIMIT)
+	if (model.get(GRB_IntAttr_Status) == GRB_OPTIMAL || (model.get(GRB_IntAttr_Status) == GRB_TIME_LIMIT && model.get(GRB_IntAttr_SolCount) > 0))
 	{
+		// feasible solution
 		s.feasible = true;
 
 		for (int j = 0; j < windows_ub; j++)
@@ -411,6 +423,7 @@ std::pair<solution, std::vector<task>> solve_global_ILP(const arg_parser& args, 
 	}
 	else
 	{
+		// infeasible solution
 		s.feasible = false;
 		bool iis_output = args.is_arg_present("--iis-output");
 		if (iis_output)

@@ -196,16 +196,16 @@ benchmark_data parse_benchmark_data(
 		  	 .benchmark_commands = std::move(benchmark_commands) };
 }
 
-int compute_major_frame_length(const environment& env, const std::vector<assignment_characteristic>& assignment_characteristics)
+int calculate_major_frame_length(const environment& env, const std::vector<assignment_characteristic>& assignment_characteristics)
 {
-	const static float alpha = 2*3.5f;
+	const static float twokappa = 2 * 3.5f;
 
 	int proc_time_sum = 0;
 	for (auto& ac : assignment_characteristics)
 		for (auto& a : ac.resource_assignments)
 			proc_time_sum += a.length;
 
-	float raw_mf_length = std::ceil(((float) proc_time_sum / env.sc_part) / alpha);
+	float raw_mf_length = std::ceil(((float) proc_time_sum / env.sc_part) / twokappa);
 	int mf_length = (int) raw_mf_length;
 
 	if (mf_length > 10)

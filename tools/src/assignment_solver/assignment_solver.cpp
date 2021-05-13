@@ -13,12 +13,14 @@
 
 #define INFEASIBLE_MODEL_FILENAME std::string("infeasible_res_assignment")
 
+// feasible-schedule-ILP
 static bool feasible_schedule_exists(const arg_parser& args,
 							  		 const environment& e,
 							  		 const assignment_characteristic_list& assignment_characteristics,
 							  		 const std::vector<task>& assigned_tasks)
 {
-	std::vector<std::vector<std::vector<GRBVar>>> a;
+	// feasible-schedule-ILP model
+	std::vector<std::vector<std::vector<GRBVar>>> x;
 	std::unordered_map<std::string, int> task_index_map;
 
 	GRBEnv env;
@@ -27,33 +29,35 @@ static bool feasible_schedule_exists(const arg_parser& args,
 	int num_tasks = assignment_characteristics.size();
 	int windows_ub = num_tasks;
 
+	// x_ijk variables
 	for (int i = 0; i < num_tasks; i++)
 	{
 		auto& task = assignment_characteristics[i];
-		std::vector<std::vector<GRBVar>> a_i;
+		std::vector<std::vector<GRBVar>> x_i;
 		GRBLinExpr assignment_constraint_expr;
 		task_index_map[task.task] = i;
 
 		for (int j = 0; j < windows_ub; j++)
 		{
-			std::vector<GRBVar> a_ij;
+			std::vector<GRBVar> x_ij;
 
-			// k
+			// task assignment constraint
 			for (auto& assignment_characteristic : task.resource_assignments)
 			{
-				GRBVar a_ijk = model.addVar(0, 1, 0, GRB_BINARY, "a" + std::to_string(i) + "," + std::to_string(j) + "," + std::to_string(a_ij.size()));
+				GRBVar x_ijk = model.addVar(0, 1, 0, GRB_BINARY, "x" + std::to_string(i) + "," + std::to_string(j) + "," + std::to_string(x_ij.size()));
 
-				assignment_constraint_expr += a_ijk;
-				a_ij.push_back(std::move(a_ijk));
+				assignment_constraint_expr += x_ijk;
+				x_ij.push_back(std::move(x_ijk));
 			}
 
-			a_i.push_back(std::move(a_ij));
+			x_i.push_back(std::move(x_ij));
 		}
 
 		model.addConstr(assignment_constraint_expr == 1, task.task + " assigned");
-		a.push_back(std::move(a_i));
+		x.push_back(std::move(x_i));
 	}
 
+	// l_j variables
 	std::vector<GRBVar> l(windows_ub);
 	GRBLinExpr window_length_sum;
 	for (int j = 0; j < windows_ub; j++)
@@ -69,18 +73,23 @@ static bool feasible_schedule_exists(const arg_parser& args,
 			int k = 0;
 			for (auto& assignment_characteristic : task.resource_assignments)
 			{
-				a_ik_sum += a[i][j][k];
-				model.addConstr(l[j] >= (a[i][j][k++] * assignment_characteristic.length) / e.sc_part, task.task + " is at most " + std::to_string(e.sc_part*100) + "% of l" + std::to_string(j));
+				a_ik_sum += x[i][j][k];
+				// sc part constraint
+				model.addConstr(l[j] >= (x[i][j][k++] * assignment_characteristic.length) / e.sc_part, task.task + " is at most " + std::to_string(e.sc_part * 100) + "% of l" + std::to_string(j));
 			}
 		}
+
+		// window length constraint
 		model.addConstr(l[j] <= a_ik_sum * e.major_frame_length, "window " + std::to_string(j) + " is not empty");
 
+		// window ordering constraint
 		if (j > 0)
 			model.addConstr(l[j] <= l[j - 1], "window ordering");
 	}
+	// major frame length constraint
 	model.addConstr(window_length_sum <= e.major_frame_length, "major frame length");
 
-	// constraint 5(+6)
+	// resource capacity constraint
 	for (auto& processor : e.processors_list)
 	{
 		for (int j = 0; j < windows_ub; j++)
@@ -98,7 +107,7 @@ static bool feasible_schedule_exists(const arg_parser& args,
 					{
 						if (acp.processor == processor->name)
 						{
-							resource_capacity_contraint_expr += a[i][j][k] * acp.processing_units;
+							resource_capacity_contraint_expr += x[i][j][k] * acp.processing_units;
 						}
 					}
 					k++;
@@ -117,19 +126,21 @@ static bool feasible_schedule_exists(const arg_parser& args,
 		GRBLinExpr assignment_constr;
 
 		for (int j=0; j<windows_ub; j++)
-			assignment_constr += a[i][j][k];
+			assignment_constr += x[i][j][k];
 
 		model.addConstr(assignment_constr == 1);
 	}
 
 	model.optimize();
 
-	if (model.get(GRB_IntAttr_Status) == GRB_OPTIMAL || model.get(GRB_IntAttr_Status) == GRB_TIME_LIMIT)
+	if (model.get(GRB_IntAttr_Status) == GRB_OPTIMAL || (model.get(GRB_IntAttr_Status) == GRB_TIME_LIMIT && model.get(GRB_IntAttr_SolCount) > 0))
 	{
+		// feasible solution exists
 		return true;
 	}
 	else
 	{
+		// feasible solution does not exist
 		bool iis_output = args.is_arg_present("--iis-output");
 		if (iis_output)
 		{
@@ -140,12 +151,13 @@ static bool feasible_schedule_exists(const arg_parser& args,
 	}
 }
 
-
+// old ILP
 std::vector<task> solve_old(const arg_parser& args,
 							const environment& e,
 							const assignment_characteristic_list& assignment_characteristics,
 							const assignment_cut_list& assignment_cuts)
 {
+	// leftover model from development
 	if (e.problem_version != 1)
 		throw std::invalid_argument("problem version is not supported");
 
@@ -252,49 +264,55 @@ std::vector<task> solve_old(const arg_parser& args,
 	return tasks;
 }
 
+// minutil-ILP
 std::vector<task> solve_utilization(const arg_parser& args,
 									const environment& e,
 									const assignment_characteristic_list& assignment_characteristics)
 {
-	std::vector<std::vector<std::vector<GRBVar>>> a;
+	// minutil-ILP model
+	std::vector<std::vector<std::vector<GRBVar>>> x;
 
 	GRBEnv env;
 	GRBModel model(env);
 
 	int num_tasks = assignment_characteristics.size();
 	int windows_ub = num_tasks;
+
+	// minimize (default)/maximize objective
 	int sense = 1;
 	if (args.is_arg_present("--maximize"))
 		sense = -1;
 
-	GRBLinExpr energy_consumption_sum;
+	// x_ijk variables, objective function
+	GRBLinExpr processing_time_sum;
 	for (int i = 0; i < num_tasks; i++)
 	{
 		auto& task = assignment_characteristics[i];
-		std::vector<std::vector<GRBVar>> a_i;
+		std::vector<std::vector<GRBVar>> x_i;
 		GRBLinExpr assignment_constraint_expr;
 
 		for (int j = 0; j < windows_ub; j++)
 		{
-			std::vector<GRBVar> a_ij;
+			std::vector<GRBVar> x_ij;
 
-			// k
+			// task assigned constraint
 			for (auto& assignment_characteristic : task.resource_assignments)
 			{
-				GRBVar a_ijk = model.addVar(0, 1, 0, GRB_BINARY, "a" + std::to_string(i) + "," + std::to_string(j) + "," + std::to_string(a_ij.size()));
+				GRBVar x_ijk = model.addVar(0, 1, 0, GRB_BINARY, "x" + std::to_string(i) + "," + std::to_string(j) + "," + std::to_string(x_ij.size()));
 
-				energy_consumption_sum += a_ijk * assignment_characteristic.length * sense;
-				assignment_constraint_expr += a_ijk;
-				a_ij.push_back(std::move(a_ijk));
+				processing_time_sum += x_ijk * assignment_characteristic.length * sense;
+				assignment_constraint_expr += x_ijk;
+				x_ij.push_back(std::move(x_ijk));
 			}
 
-			a_i.push_back(std::move(a_ij));
+			x_i.push_back(std::move(x_ij));
 		}
 
 		model.addConstr(assignment_constraint_expr == 1, task.task + " assigned");
-		a.push_back(std::move(a_i));
+		x.push_back(std::move(x_i));
 	}
 
+	// l_j variables
 	std::vector<GRBVar> l(windows_ub);
 	GRBLinExpr window_length_sum;
 	for (int j = 0; j < windows_ub; j++)
@@ -310,22 +328,28 @@ std::vector<task> solve_utilization(const arg_parser& args,
 			int k = 0;
 			for (auto& assignment_characteristic : task.resource_assignments)
 			{
-				a_ik_sum += a[i][j][k];
-				model.addConstr(l[j] >= (a[i][j][k++] * assignment_characteristic.length) / e.sc_part, task.task + " is at most " + std::to_string(e.sc_part*100) + "% of l" + std::to_string(j));
+				a_ik_sum += x[i][j][k];
+				// sc part constraint
+				model.addConstr(l[j] >= (x[i][j][k++] * assignment_characteristic.length) / e.sc_part, task.task + " is at most " + std::to_string(e.sc_part * 100) + "% of l" + std::to_string(j));
 			}
 		}
+
+		// window length constraint
 		model.addConstr(l[j] <= a_ik_sum * e.major_frame_length, "window " + std::to_string(j) + " is not empty");
 
+		// window ordering constraint
 		if (j > 0)
 			model.addConstr(l[j] <= l[j - 1], "window ordering");
 	}
+	// major frame length constraint
 	model.addConstr(window_length_sum <= e.major_frame_length, "major frame length");
 
+	// resource capacity constraint
 	for (auto& processor : e.processors_list)
 	{
 		for (int j = 0; j < windows_ub; j++)
 		{
-			GRBLinExpr resource_capacity_contraint_expr;
+			GRBLinExpr resource_capacity_constraint_expr;
 
 			for (int i = 0; i < num_tasks; i++)
 			{
@@ -338,28 +362,31 @@ std::vector<task> solve_utilization(const arg_parser& args,
 					{
 						if (acp.processor == processor->name)
 						{
-							resource_capacity_contraint_expr += a[i][j][k] * acp.processing_units;
+							resource_capacity_constraint_expr += x[i][j][k] * acp.processing_units;
 						}
 					}
 					k++;
 				}
 			}
 
-			model.addConstr(resource_capacity_contraint_expr <= processor->processing_units, processor->name + " capacity (window " + std::to_string(j) + ")");
+			model.addConstr(resource_capacity_constraint_expr <= processor->processing_units, processor->name + " capacity (window " + std::to_string(j) + ")");
 		}
 	}
 
-	model.setObjectiveN(energy_consumption_sum, 0, 1, 1.0, 0.0, 0.0, "optimize utilization");
+	// enable C_max (schedule length) optimization
+	model.setObjectiveN(processing_time_sum, 0, 1, 1.0, 0.0, 0.0, "optimize utilization");
 
 	if (args.is_arg_present("--optimize-schedule"))
 		model.setObjectiveN(window_length_sum, 1, 0, 1.0, 0.0, 0.0, "min total schedule length");
 
+	// optimize the model
 	model.optimize();
 
 	std::vector<task> tasks;
 
-	if (model.get(GRB_IntAttr_Status) == GRB_OPTIMAL || model.get(GRB_IntAttr_Status) == GRB_TIME_LIMIT)
+	if (model.get(GRB_IntAttr_Status) == GRB_OPTIMAL || (model.get(GRB_IntAttr_Status) == GRB_TIME_LIMIT && model.get(GRB_IntAttr_SolCount) > 0))
 	{
+		// feasible solution
 		for (int j = 0; j < windows_ub; j++)
 		{
 			int window_length = (int)l[j].get(GRB_DoubleAttr_X);
@@ -375,7 +402,7 @@ std::vector<task> solve_utilization(const arg_parser& args,
 				int k = 0, aix = 0;
 				for (auto& assignment_characteristic : task_characteristic.resource_assignments)
 				{
-					if (a[i][j][k++].get(GRB_DoubleAttr_X) > 0.5)
+					if (x[i][j][k++].get(GRB_DoubleAttr_X) > 0.5)
 					{
 						for (auto& p : assignment_characteristic.processors)
 						{
@@ -395,6 +422,7 @@ std::vector<task> solve_utilization(const arg_parser& args,
 	}
 	else
 	{
+		// infeasible solution
 		bool iis_output = args.is_arg_present("--iis-output");
 		if (iis_output)
 		{
@@ -406,10 +434,12 @@ std::vector<task> solve_utilization(const arg_parser& args,
 	return tasks;
 }
 
+// reference assignment heuristic
 std::vector<task> solve_reference(const arg_parser& args,
 								  const environment& e,
 								  const assignment_characteristic_list& assignment_characteristics)
 {
+	// reference assignment heuristic
 	std::vector<task> tasks;
 
 	std::set<simple_task_assignment, std::greater<>> tasks_to_schedule;
@@ -471,7 +501,7 @@ std::vector<task> solve_reference(const arg_parser& args,
 	assert(assigned_tasks.size() <= assignment_characteristics.size());
 	assert(assigned_tasks.size() == tasks.size());
 
-	// infeasible
+	// infeasible resource assignment
 	if (tasks.size() != assignment_characteristics.size())
 	{
 		tasks.clear();
@@ -481,7 +511,8 @@ std::vector<task> solve_reference(const arg_parser& args,
 	return tasks;
 }
 
-std::vector<task> solver_random(const arg_parser& args, const environment& e, const assignment_characteristic_list& assignment_characteristics)
+// random resource assignment
+std::vector<task> solve_random(const arg_parser& args, const environment& e, const assignment_characteristic_list& assignment_characteristics)
 {
 	std::vector<const assignment_characteristic*> tasks_to_assign;
 	tasks_to_assign.reserve(assignment_characteristics.size());

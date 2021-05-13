@@ -7,7 +7,7 @@ LINK_DIRS =
 OUTPUT_DIR = ../bin
 P1_GENERATOR_OUTPUT_FILE = instance_generator.exe
 SOLVER_OUTPUT_FILE = schedule_solver.exe
-VISUALISER_OUTPUT_FILE = visualiser.exe
+VISUALISER_OUTPUT_FILE = visualizer.exe
 DEMOS_CONFIG_EXPORT_OUTPUT_FILE = demos_config_export.exe
 ILP_RES_ASSIGNER_OUTPUT_FILE = assignment_solver.exe
 ILP_GLOBAL_SOLVER_OUTPUT_FILE = ilp_global_solver.exe
@@ -16,7 +16,7 @@ COMMON_DIR = common
 
 P1_GENERATOR_DIR = instance_generator
 SOLVER_DIR = schedule_solver
-VISUALISER_DIR = visualiser
+VISUALISER_DIR = visualizer
 DEMOS_CONFIG_EXPORT_DIR = demos_config_export
 ILP_RES_ASSIGNER_DIR = assignment_solver
 ILP_GLOBAL_SOLVER_DIR = ilp_global_solver
@@ -34,15 +34,15 @@ COMMON_FILES = $(COMMON_DIR)/instance.cpp $(COMMON_DIR)/arg_parser.cpp
 
 P1_GENERATOR_FILES = $(P1_GENERATOR_DIR)/main.cpp $(P1_GENERATOR_DIR)/instance_generator.cpp
 SOLVER_FILES = $(SOLVER_DIR)/main.cpp $(SOLVER_DIR)/solver.cpp  $(SOLVER_DIR)/longest_tasks_first_solver.cpp $(SOLVER_DIR)/random_task_order_solver.cpp 
-VISUALISER_FILES = $(VISUALISER_DIR)/main.cpp $(VISUALISER_DIR)/visualiser.cpp 
+VISUALISER_FILES = $(VISUALISER_DIR)/main.cpp $(VISUALISER_DIR)/visualizer.cpp 
 DEMOS_CONFIG_EXPORT_FILES = $(DEMOS_CONFIG_EXPORT_DIR)/main.cpp $(DEMOS_CONFIG_EXPORT_DIR)/demos_config_writer.cpp
 ILP_COMMON_FILES = $(COMMON_DIR)/ilp_util.cpp
 ILP_RES_ASSIGNER_FILES = $(ILP_COMMON_FILES) $(ILP_RES_ASSIGNER_DIR)/main.cpp $(ILP_RES_ASSIGNER_DIR)/assignment_solver.cpp
 ILP_GLOBAL_SOLVER_FILES = $(ILP_COMMON_FILES) $(ILP_GLOBAL_SOLVER_DIR)/main.cpp $(ILP_GLOBAL_SOLVER_DIR)/ilp_global_solver.cpp
 
 
-.PHONY: instance_generator schedule_solver visualiser visualiser-display demos_config_export assignment_solver ilp_global_solver
-all: instance_generator schedule_solver visualiser demos_config_export assignment_solver ilp_global_solver
+.PHONY: instance_generator schedule_solver visualizer visualizer-display demos_config_export assignment_solver ilp_global_solver
+all: instance_generator schedule_solver visualizer demos_config_export assignment_solver ilp_global_solver
 
 instance_generator:
 	$(CXX) $(COMMON_FILES) $(P1_GENERATOR_FILES) $(CXXFLAGS) $(RELEASE_FLAGS) -o $(OUTPUT_DIR)/$(P1_GENERATOR_OUTPUT_FILE)	
@@ -50,10 +50,10 @@ instance_generator:
 schedule_solver: 
 	$(CXX) $(COMMON_FILES) $(SOLVER_FILES) $(CXXFLAGS) $(RELEASE_FLAGS) -o $(OUTPUT_DIR)/$(SOLVER_OUTPUT_FILE)
 
-visualiser: 
+visualizer: 
 	$(CXX) $(COMMON_FILES) $(VISUALISER_FILES) lib/lodepng.cpp -Dcimg_display=0 -U__STRICT_ANSI__ $(CXXFLAGS) $(RELEASE_FLAGS) -o $(OUTPUT_DIR)/$(VISUALISER_OUTPUT_FILE)
 
-visualiser-display: 
+visualizer-display: 
 	$(CXX) $(COMMON_FILES) $(VISUALISER_FILES) lib/lodepng.cpp -U__STRICT_ANSI__ $(CXXFLAGS) -lgdi32 $(RELEASE_FLAGS) -o $(OUTPUT_DIR)/$(VISUALISER_OUTPUT_FILE)
 
 demos_config_export:

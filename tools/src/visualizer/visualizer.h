@@ -1,12 +1,12 @@
-#ifndef VISUALISER_H
-#define VISUALISER_H
+#ifndef VISUALIZER_H
+#define VISUALIZER_H
 
 #include <CImg.h>
 #include <unordered_set>
 
 #include "../common/instance.h"
 
-class visualiser
+class visualizer
 {
 public:
 	typedef unsigned int uint;
@@ -17,7 +17,7 @@ public:
 	void export_bmp(const std::string& filename);
 	void export_png(const std::string& filename);
 
-	visualiser(const environment& e, const solution& s);
+	visualizer(const environment& e, const solution& s);
 
 private:
 	const std::unordered_set<int> m_supported_problem_versions { 1, 2 };
@@ -38,4 +38,4 @@ private:
 	void build_image();
 };
 
-#endif // VISUALISER_H
+#endif // VISUALIZER_H

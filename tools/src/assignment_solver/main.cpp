@@ -46,7 +46,7 @@ int main(int argc, char** argv)
 
     		if (method == "reference") tasks = solve_reference(args, environment, assignment_characteristics);
     		else if (method == "utilization") tasks = solve_utilization(args, environment, assignment_characteristics);
-    		else if (method == "random") tasks = solver_random(args, environment, assignment_characteristics);
+    		else if (method == "random") tasks = solve_random(args, environment, assignment_characteristics);
     		else if (method == "old") tasks = solve_old(args, environment, assignment_characteristics, assignment_cuts);
 		}
     	else tasks = solve_reference(args, environment, assignment_characteristics);

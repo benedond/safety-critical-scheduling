@@ -41,6 +41,6 @@ benchmark_data parse_benchmark_data(
 		std::ifstream& benchmark_data_file,
 		const std::string& csv_separator = ",");
 
-int compute_major_frame_length(const environment& env, const std::vector<assignment_characteristic>& assignment_characteristics);
+int calculate_major_frame_length(const environment& env, const std::vector<assignment_characteristic>& assignment_characteristics);
 
 #endif // INSTANCE_GENERATOR_H

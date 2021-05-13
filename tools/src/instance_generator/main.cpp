@@ -48,7 +48,7 @@ int main(int argc, char** argv)
 
 		if (!args.is_arg_present("--keep-environment-mf"))
 		{
-			json["environment"]["majorFrameLength"] = compute_major_frame_length(environment, tasks);
+			json["environment"]["majorFrameLength"] = calculate_major_frame_length(environment, tasks);
 		}
 	}
 	catch (const nlohmann::detail::parse_error& error)
