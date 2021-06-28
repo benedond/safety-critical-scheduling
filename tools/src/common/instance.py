@@ -3,50 +3,6 @@ from typing import Mapping, List, Dict
 import json
 import sys
 
-# class Instance:
-#     def __init__(self, data) -> None:
-#         """
-#         INPUT:
-#         data - json contaiing the instance parameters
-#         """
-#         self.data = data
-
-#     def __str__(self) -> str:
-#         return json.dumps(self.data, indent=2)
-
-#     def get_h(self) -> int:
-#         return self.data["environment"]["majorFrameLength"]
-
-#     def get_processors(self) -> List[dict]:
-#         return self.data["environment"]["processors"]
-
-#     def get_task_ids(self):
-#         return sorted([t["task"] for t in self.data["assignmentCharacteristics"]])
-
-
-"""
-class Job:
-
-    __slots__ = [
-        'id',
-        'index',
-        'machine_idx',
-        'processing_time'
-    ]
-
-    def __init__(self, job_id: int, index: int, machine_idx: int, processing_time: int):
-        self.id = job_id
-        self.index = index
-        self.machine_idx = machine_idx
-        self.processing_time = processing_time
-
-    def __hash__(self):
-        return hash(self.id)
-
-    def __eq__(self, other):
-        return self.id == other.id 
-"""
-
 
 class ProcessorType(IntEnum):
     InvalidType = 0,
@@ -66,6 +22,12 @@ class Processor:
         self.processing_units = processing_units
         self.processor_type = processor_type
 
+    def to_dict(self) -> dict:
+        return {
+            "name": self.name,
+            "processingUnits": self.processing_units,
+            "type": self.processor_type
+        }            
 
 class Environment:
     __slots__ = [
@@ -83,13 +45,13 @@ class Environment:
         self.problem_version = problem_version
         self.sc_part = sc_part
 
-    @staticmethod
-    def from_json(s: str, instance_filename: str = None):
-        inst_raw = json.loads(s)
-
-        pass
-
-        return Environment()
+    def to_dict(self) -> dict:
+        return {
+            "majorFrameLength": self.major_frame_length,
+            "problemVersion": self.problem_version,
+            "scPart": self.sc_part,
+            "processors": [p.to_dict() for p in self.processors]
+        }
 
 class ProcessorAssignment:
     __slots__ = [
@@ -100,6 +62,12 @@ class ProcessorAssignment:
     def __init__(self, processor: str, processing_units: int):
         self.processor = processor
         self.processing_units = processing_units
+
+    def to_dict(self) -> dict:
+        return {
+            "processor": self.processor,
+            "processingUnits": self.processing_units
+        }
 
 
 class Task:
@@ -118,6 +86,15 @@ class Task:
         self.assignment_index = assignment_index
         self.processors = processors
 
+    def to_dict(self) -> dict:
+        return {
+            "assignmentIndex": self.assignment_index,
+            "command": self.command,
+            "length": self.length,
+            "name": self.name,
+            "processors": [ac.to_dict() for ac in self.processors]
+        }
+
 
 class ResourceAssignment:
     __slots__ = [
@@ -133,6 +110,14 @@ class ResourceAssignment:
         self.length = length
         self.processors = processors
 
+    def to_dict(self) -> dict:
+        return {
+            "slope": self.slope,
+            "intercept": self.intercept,
+            "length": self.length,
+            "processors": [pa.to_dict() for pa in self.processors]
+        }
+
 
 class AssignmentCharacteristic:
     __slots__ = [
@@ -145,6 +130,13 @@ class AssignmentCharacteristic:
         self.task = task
         self.command = command
         self.resource_assignmnets = resource_assignmnets
+
+    def to_dict(self) -> dict:
+        return {
+            "task": self.task,
+            "command": self.command,
+            "resourceAssignments": [ra.to_dict() for ra in self.resource_assignmnets]
+        }
 
 
 class TaskAssignment:
@@ -163,6 +155,15 @@ class TaskAssignment:
         self.start = start
         self.length = length
 
+    def to_dict(self) -> dict:
+        return {
+            "length": self.length,
+            "processingUnit": self.processing_unit,
+            "processor": self.processor,
+            "start": self.start,
+            "task": self.task
+        }
+
 
 class Window:
     __slots__ = [
@@ -173,6 +174,12 @@ class Window:
     def __init__(self, length: int, task_assignments: List[TaskAssignment]):
         self.length = length
         self.task_assignments = task_assignments
+
+    def to_dict(self) -> dict:
+        return {
+            "length": self.length,
+            "tasks": [ta.to_dict() for ta in self.task_assignments]
+        }
 
 
 class Solution:
@@ -190,6 +197,15 @@ class Solution:
         self.solution_time = solution_time
         self.solver_metadata = solver_metadata
         self.windows = windows
+
+    def to_dict(self) -> dict:
+        return {
+            "feasible": self.feasible,
+            "solutionTime": self.solution_time,
+            "solverMetadata": self.solver_metadata,
+            "solverName": self.solver_name,
+            "windows": [w.to_dict() for w in self.windows]
+        }
 
 
 def parse_environment(s: dict) -> Environment:
@@ -323,7 +339,16 @@ def get_val(dct, key, default):
     return default
 
 
-# void write_assignment_characteristics(nlohmann::json& json, const std::vector<assignment_characteristic>& tasks);
+def write_assignment_characteristics(data: dict, ac: List[AssignmentCharacteristic]):
+    data.pop("assignmentCharacteristics", None)  # Clear the field, if used previously
+    {"task": a.task,
+     for a in ac}
+    for a in ac:
+        json_task = a.task
+        json_cmd = a.command
+        json.        
+
+
 # void write_tasks(nlohmann::json& json, const std::vector<task>& tasks);
 # void write_solution(nlohmann::json& json, const solution& solution);
 
