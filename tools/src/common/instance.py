@@ -314,6 +314,8 @@ def parse_solution(s: dict) -> Solution:
                 s_windows.append(Window(w["length"], task_assignments))
         else:            
             print("info: solution has no windows", file=sys.stderr)
+
+        solution = Solution(s_feasible, s_solver_name, s_solution_time, s_solver_metadata, s_windows)
     else:
         print("warning: parse_solution called, but no solution was found in source json", file=sys.stderr)
 
@@ -339,16 +341,7 @@ def get_val(dct, key, default):
     return default
 
 
-def write_assignment_characteristics(data: dict, ac: List[AssignmentCharacteristic]):
-    data.pop("assignmentCharacteristics", None)  # Clear the field, if used previously
-    {"task": a.task,
-     for a in ac}
-    for a in ac:
-        json_task = a.task
-        json_cmd = a.command
-        json.        
-
-
+# def write_assignment_characteristics(data: dict, ac: List[AssignmentCharacteristic]):
 # void write_tasks(nlohmann::json& json, const std::vector<task>& tasks);
 # void write_solution(nlohmann::json& json, const solution& solution);
 
@@ -359,3 +352,6 @@ if __name__ == "__main__":
     tasks = parse_tasks(data)
     sol = parse_solution(data)
     ass_char = parse_assignment_characteristics(data)
+
+    print(env.to_dict())
+    print(sol.to_dict())
