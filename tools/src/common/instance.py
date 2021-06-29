@@ -341,10 +341,15 @@ def get_val(dct, key, default):
     return default
 
 
-# def write_assignment_characteristics(data: dict, ac: List[AssignmentCharacteristic]):
-# void write_tasks(nlohmann::json& json, const std::vector<task>& tasks);
-# void write_solution(nlohmann::json& json, const solution& solution);
+def write_tasks(s: dict, tasks: List[Task]):
+    s["tasks"] = [t.to_dict() for t in tasks]
 
+    
+def write_solution(s: dict, sol: Solution):
+    s["solution"] = sol.to_dict()
+
+
+# def write_assignment_characteristics(data: dict, ac: List[AssignmentCharacteristic]):
 
 if __name__ == "__main__":
     data = read_json_from_file("./data/all_fields.json")
