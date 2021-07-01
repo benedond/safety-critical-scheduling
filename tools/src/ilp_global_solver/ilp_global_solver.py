@@ -104,9 +104,10 @@ class Solver:
         s_solver_name="ILP Solver (global):predictor (Python)"
         s_solution_time=int(round((t_end - t_start)*1000))  # to ms
         s_windows=[]
-        s_metadata={}
+        s_metadata={"objective": -1}
 
         if s_feasible:
+            s_metadata["objective"] = str(model.ObjVal)
             for j in range(windows_ub):
                 window_length=int(round(l_j[j].X))
                 window_tasks_assignments=[]
@@ -114,7 +115,7 @@ class Solver:
                     continue
 
                 # processor-unit allocation (start with all processors empty)
-                pu_allocations={p: 0 for p in env.processors_list}
+                pu_allocations={p.name: 0 for p in env.processors_list}
 
                 for i in range(num_tasks):
                     push_task=False
@@ -146,13 +147,13 @@ class Solver:
                                                    length=task_length,
                                                    assignment_index=k,
                                                    processors=task_processors))
+            
+                s_windows.append(instance.Window(window_length, window_tasks_assignments))
         else:  # infeasible solution            
             s_feasible=False
             if self.arg_parser.is_arg_present("--iis-output"):
                 model.computeIIS()
                 model.write(self.arg_parser.get_arg_value("--iis-output") + ".ilp")
-
-        solution=instance.Solution(
-            s_feasible, s_solver_name, solution_time, solver_metadata, windows)
+        solution = instance.Solution(s_feasible, s_solver_name, s_solution_time, s_metadata, s_windows)
         
         return (solution, tasks)
