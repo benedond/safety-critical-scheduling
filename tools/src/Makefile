@@ -1,4 +1,4 @@
-GUROBI_HOME = /opt/gurobi910/linux64
+GUROBI_HOME = /home/benedond/Apps/gurobi/gurobi912/linux64
 GUROBI_PARAMS = -I$(GUROBI_HOME)/include -L$(GUROBI_HOME)/lib -lgurobi_g++5.2 -lgurobi91
 
 INCLUDE_DIRS = lib
