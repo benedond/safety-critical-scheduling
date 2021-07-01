@@ -208,6 +208,44 @@ class Solution:
         }
 
 
+class Pattern:
+    __slots__ = [
+        'cost',
+        'length',
+        'task_mapping'
+    ]
+    
+    def __init__(self, cost: float, length: int, task_mapping: Mapping[str, int]):
+        self.cost = cost
+        self.length = length
+        self.task_mapping = task_mapping  # mapping Task.name -> assignment index of ac
+        
+    def to_dict(self) -> dict:
+        return {
+            "cost": self.cost,
+            "length": self.length,
+            "task_mapping": self.task_mapping
+        }
+        
+def get_patterns(s: dict) -> List[Pattern]:
+    tasks = parse_tasks(s)
+    solution = parse_solution(s)
+    ascs = parse_assignment_characteristics(s)
+    
+    patterns = []
+    
+    task_to_ra = get_task_to_ra(tasks, ascs)
+    
+    for w in solution.windows:
+        p_cost = get_objective_window(w, task_to_ra)                
+        t_names = [t.task for t in w.task_assignments]
+        p_task_mapping = {t: tasks[t].assignment_index for t in tasks}
+                
+        patterns.append(Pattern(p_cost, w.length, p_task_mapping))
+        
+    return patterns
+
+
 def parse_environment(s: dict) -> Environment:
     env = None
     if "environment" not in s:
@@ -290,8 +328,7 @@ def parse_assignment_characteristics(s: dict) -> List[AssignmentCharacteristic]:
 
 # solution parse_solution(const nlohmann::json& json);
 def parse_solution(s: dict) -> Solution:
-    solution = None
-
+    solution = None    
     if "solution" in s:
         s_feasible = get_val(s["solution"], "feasible", False)
         s_solver_name = get_val(s["solution"], "solverName", "unnamed solver")
@@ -327,6 +364,19 @@ def get_solution_length(sol: Solution):
     return sum([w.length for w in sol.windows]) if sol.windows else 0
 
 
+def get_objective_window(w: Window, task_to_ra: Mapping[str, ResourceAssignment]) -> float:     
+        A_j = sum([task_to_ra[t.task].slope * task_to_ra[t.task].length for t in w.task_assignments])
+        B_j = max([task_to_ra[t.task].intercept * w.length for t in w.task_assignments])
+        return A_j + B_j
+
+def get_task_to_ra(tasks: Mapping[str, Task], ascs: List[AssignmentCharacteristic]):
+    task_to_ra = {}    
+    for t in tasks:                
+        for asc in ascs:
+            if t == asc.task:                
+                task_to_ra[t] = asc.resource_assignmnets[tasks[t].assignment_index]
+    return task_to_ra
+
 def  get_solution_objective(data: dict):
     sol = parse_solution(data)
     tasks = parse_tasks(data)
@@ -334,21 +384,14 @@ def  get_solution_objective(data: dict):
     env = parse_environment(data)        
     
     # Prepare resource assignments for the individual tasks
-    task_to_ra = {}    
-    for t in tasks:                
-        for asc in ascs:
-            if t == asc.task:                
-                task_to_ra[t] = asc.resource_assignmnets[tasks[t].assignment_index]
+    task_to_ra = get_task_to_ra(tasks, ascs)
+    
     obj = 0
-    for w in sol.windows:
-        print("window", w.length)        
-        print("A", [task_to_ra[t.task].slope * task_to_ra[t.task].length for t in w.task_assignments])
-        print("B", [task_to_ra[t.task].intercept * w.length for t in w.task_assignments])
-        A_j = sum([task_to_ra[t.task].slope * task_to_ra[t.task].length for t in w.task_assignments])
-        B_j = max([task_to_ra[t.task].intercept * w.length for t in w.task_assignments])
-        print("sum A", A_j)
-        print("max B", B_j)
-        obj += A_j + B_j
+    for w in sol.windows:        
+        # print("window", w.length)        
+        # print("A", [task_to_ra[t.task].slope * task_to_ra[t.task].length for t in w.task_assignments])
+        # print("B", [task_to_ra[t.task].intercept * w.length for t in w.task_assignments])                
+        obj += get_objective_window(w, task_to_ra)
     
     obj /= env.major_frame_length    
     return obj
