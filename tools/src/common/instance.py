@@ -360,7 +360,7 @@ def read_json_from_file(path: str) -> dict:
 
 def write_to_file(data: dict, path:str):
     with open(path, "w") as f_out:
-        json.dump(data, f_out)
+        json.dump(data, f_out, indent=4)
 
 
 def get_val(dct, key, default):
