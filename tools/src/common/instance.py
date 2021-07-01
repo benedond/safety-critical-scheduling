@@ -326,6 +326,31 @@ def parse_solution(s: dict) -> Solution:
 def get_solution_length(sol: Solution):
     return sum([w.length for w in sol.windows]) if sol.windows else 0
 
+def  get_solution_objective(data: dict):
+    sol = parse_solution(data)
+    tasks = parse_tasks(data)
+    ascs = parse_assignment_characteristics(data)
+    env = parse_environment(data)        
+    
+    # Prepare resource assignments for the individual tasks
+    task_to_ra = {}    
+    for t in tasks:                
+        for asc in ascs:
+            if t == asc.task:                
+                task_to_ra[t] = asc.resource_assignmnets[tasks[t].assignment_index]
+    obj = 0
+    for w in sol.windows:
+        print("window", w.length)        
+        print("A", [task_to_ra[t.task].slope * task_to_ra[t.task].length for t in w.task_assignments])
+        print("B", [task_to_ra[t.task].intercept * w.length for t in w.task_assignments])
+        A_j = sum([task_to_ra[t.task].slope * task_to_ra[t.task].length for t in w.task_assignments])
+        B_j = max([task_to_ra[t.task].intercept * w.length for t in w.task_assignments])
+        print("sum A", A_j)
+        print("max B", B_j)
+        obj += A_j + B_j
+    
+    obj /= env.major_frame_length    
+    return obj
 def read_json_from_file(path: str) -> dict:
     data = {}
     with open(path, "r") as f_in:
