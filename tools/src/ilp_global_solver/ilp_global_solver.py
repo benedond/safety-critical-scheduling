@@ -17,6 +17,7 @@ class Solver:
     def solve(self) -> Tuple[instance.Solution, List[instance.Task]]:
         num_tasks = len(self.acs)
         windows_ub = num_tasks
+        env = self.env
 
         model = grb.Model()
 
@@ -41,7 +42,7 @@ class Solver:
                          for i in range(num_tasks))
         
         # - window length constraint - batching
-        model.addConstrs(l_j[j] >= ((x_ijk[i, j, k] * self.acs[i].length) / env.sc_part)
+        model.addConstrs(l_j[j] >= ((x_ijk[i, j, k] * self.acs[i].resource_assignmnets[k].length) / env.sc_part)
                          for i in range(num_tasks)
                          for j in range(windows_ub)
                          for k in range(len(self.acs[i].resource_assignmnets)))
@@ -59,17 +60,28 @@ class Solver:
                         name="major frame length")
 
         # - resource capacity constraint
+        # model.update()
+        # for j in range(windows_ub):
+        #     print("window", j)
+        #     for processor in env.processors_list:
+        #         print("processor", processor)
+        #         print(grb.quicksum(x_ijk[i, j, k] * acp.processing_units
+        #                                for i in range(num_tasks)
+        #                                for k in range(len(self.acs[i].resource_assignmnets))
+        #                                for acp in self.acs[i].resource_assignmnets[k].processors if acp.processor == processor))
+        
         model.addConstrs((grb.quicksum(x_ijk[i, j, k] * acp.processing_units
                                        for i in range(num_tasks)
-                                       for k in acs[i].resource_assignments
-                                       for acp in acs[i].resource_assignments[k] if acp.processor == processor.name)
+                                       for k in range(len(self.acs[i].resource_assignmnets))
+                                       for acp in self.acs[i].resource_assignmnets[k].processors if acp.processor == processor.name)
+                          <= processor.processing_units
                          for processor in env.processors_list
                          for j in range(windows_ub)), name="resource capacity")
 
-        # - link B_j with  b_ik coefficients
-        M=env.major_frame_length * max([self.acs[i].resource_assignmnets[k].intercept
-                                          for i in range(num_tasks)
-                                          for k in range(len(self.acs[i].resource_assignmnets))])
+        # - link B_j with  b_ik coefficients        
+        M = env.major_frame_length * max([self.acs[i].resource_assignmnets[k].intercept
+                                            for i in range(num_tasks)
+                                            for k in range(len(self.acs[i].resource_assignmnets))])
         model.addConstrs((B_j[j] >= env.sc_part * l_j[j] * self.acs[i].resource_assignmnets[k].intercept - M * (1-x_ijk[i, j, k])
                           for i in range(num_tasks)
                           for j in range(windows_ub)
@@ -153,7 +165,7 @@ class Solver:
             s_feasible=False
             if self.arg_parser.is_arg_present("--iis-output"):
                 model.computeIIS()
-                model.write(self.arg_parser.get_arg_value("--iis-output") + ".ilp")
+                model.write(self.arg_parser.get_arg_value("--iis-output") + ".ilp")        
         solution = instance.Solution(s_feasible, s_solver_name, s_solution_time, s_metadata, s_windows)
         
         return (solution, tasks)
