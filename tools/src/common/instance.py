@@ -214,7 +214,7 @@ def parse_environment(s: dict) -> Environment:
         print("warning: parse_environment called, but no environment data was found in source json", file=sys.stderr)
     else:        
         # Parse the processors
-        processors = []    
+        processors = {}    
         processors_list = []
         for p in s["environment"]["processors"]:
             p_name = p["name"]
@@ -227,8 +227,9 @@ def parse_environment(s: dict) -> Environment:
                 processor_type = ProcessorType.Coprocessor
             
             # - create new processor
-            processors.append(Processor(p_name, p["processingUnits"], processor_type))
-            processors_list.append(p_name)
+            proc = Processor(p_name, p["processingUnits"], processor_type)
+            processors[proc.name] = proc
+            processors_list.append(proc)
 
         # Parse major frame length
         major_frame_length = s["environment"]["majorFrameLength"]
