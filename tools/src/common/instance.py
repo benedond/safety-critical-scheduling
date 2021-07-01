@@ -326,6 +326,7 @@ def parse_solution(s: dict) -> Solution:
 def get_solution_length(sol: Solution):
     return sum([w.length for w in sol.windows]) if sol.windows else 0
 
+
 def  get_solution_objective(data: dict):
     sol = parse_solution(data)
     tasks = parse_tasks(data)
@@ -351,6 +352,7 @@ def  get_solution_objective(data: dict):
     
     obj /= env.major_frame_length    
     return obj
+
 def read_json_from_file(path: str) -> dict:
     data = {}
     with open(path, "r") as f_in:
@@ -379,13 +381,3 @@ def write_solution(s: dict, sol: Solution):
 
 
 # def write_assignment_characteristics(data: dict, ac: List[AssignmentCharacteristic]):
-
-if __name__ == "__main__":
-    data = read_json_from_file("./data/all_fields.json")
-    env = parse_environment(data)
-    tasks = parse_tasks(data)
-    sol = parse_solution(data)
-    ass_char = parse_assignment_characteristics(data)
-
-    print(env.to_dict())
-    print(sol.to_dict())
