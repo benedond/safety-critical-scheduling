@@ -365,7 +365,7 @@ def write_to_file(data: dict, path:str):
 
 def get_val(dct, key, default):
     """Get value from dct[key]; if not defined, return default value"""
-    if key in dct and dct[key]:
+    if key in dct and (dct[key] is not None):
         return dct[key]
     return default
 
