@@ -1,3 +1,4 @@
+#! /usr/bin/python3
 from common import arg_parser as ap
 from common import instance
 from typing import List, Tuple
