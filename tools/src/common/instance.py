@@ -323,6 +323,9 @@ def parse_solution(s: dict) -> Solution:
     return solution
 
 
+def get_solution_length(sol: Solution):
+    return sum([w.length for w in sol.windows]) if sol.windows else 0
+
 def read_json_from_file(path: str) -> dict:
     data = {}
     with open(path, "r") as f_in:
