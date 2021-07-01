@@ -20,21 +20,21 @@ if __name__ == "__main__":
         json_data = json.load(sys.stdin)
 
     # parse the instance
-    try:
-        env = instance.parse_environment(json_data)
-        acs = instance.parse_assignment_characteristics(json_data)
-    except:
-        print("failed to parse input json", file=sys.stderr)
+    #try:
+    env = instance.parse_environment(json_data)
+    acs = instance.parse_assignment_characteristics(json_data)
+    #except:
+    #    print("failed to parse input json", file=sys.stderr)
 
-    # solve the instance
-    try:
-        solver = ilp_global_solver.Solver(ap, env, acs)
-        solution, tasks = solver.solve()
+    # solve the instance            
+    # try:
+    solver = ilp_global_solver.Solver(ap, env, acs)
+    solution, tasks = solver.solve()        
 
-        instance.write_solution(json_data, solution)
-        instance.write_tasks(json_data, tasks)
-    except:
-        print("failed to solve the instance", file=sys.stderr)
+    instance.write_solution(json_data, solution)
+    instance.write_tasks(json_data, tasks)
+    # except:
+    #     print("failed to solve the instance", file=sys.stderr)
 
     output_filename = ap.get_arg_value("--output")
     if output_filename:
