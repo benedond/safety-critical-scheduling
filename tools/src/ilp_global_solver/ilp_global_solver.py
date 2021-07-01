@@ -102,7 +102,7 @@ class Solver:
         s_feasible=True if model.Status == grb.GRB.OPTIMAL or (
             model.Status == grb.GRB.TIME_LIMIT and model.SolCount > 0) else False
         s_solver_name="ILP Solver (global):predictor (Python)"
-        s_solution_time=t_end - t_start
+        s_solution_time=int(round((t_end - t_start)*1000))  # to ms
         s_windows=[]
         s_metadata={}
 
