@@ -226,6 +226,40 @@ class Pattern:
             "length": self.length,
             "task_mapping": self.task_mapping
         }
+    
+    def compute_cost(self, acs: AssignmentCharacteristic) -> float:
+        sum_a = 0
+        max_b = 0
+        length = self.compute_length(acs)
+        for i,t in enumerate(acs):
+            if t.task in self.task_mapping:
+                cur_ra = acs[i].resource_assignmnets[self.task_mapping[t.task]]
+                sum_a += cur_ra.slope * cur_ra.length
+                max_b = max(max_b, cur_ra.intercept)
+        cost = sum_a + max_b * length    
+                
+        return cost
+    
+    def check_cost(self, acs: AssignmentCharacteristic) -> bool:               
+        cost = self.compute_cost(acs)
+        
+        if abs(cost - self.cost) < 1e-5:
+            print("cost OK")
+            return True
+        else:
+            print("warning: computed ({:f}) and reported ({:f}) cost of the pattern do not match".format(cost, self.cost), file=sys.stderr)
+            return False
+    
+    def compute_length(self, acs) -> int:
+        return max([acs[i].resource_assignmnets[self.task_mapping[t.task]].length for i,t in enumerate(acs) if t.task in self.task_mapping])
+    
+    def check_length(self, acs: AssignmentCharacteristic) -> bool:
+        length = self.compute_length(acs)
+        if length == self.length:            
+            return True
+        else:
+            print("warning: computed ({:f}) and reported ({:f}) length of the pattern do not match".format(length, self.length), file=sys.stderr)
+            return False        
         
 def get_patterns(s: dict) -> List[Pattern]:
     tasks = parse_tasks(s)
@@ -237,9 +271,10 @@ def get_patterns(s: dict) -> List[Pattern]:
     task_to_ra = get_task_to_ra(tasks, ascs)
     
     for w in solution.windows:
+        win_tasks = [t.task for t in w.task_assignments]  # names of tasks allcated to this window
         p_cost = get_objective_window(w, task_to_ra)                
         t_names = [t.task for t in w.task_assignments]
-        p_task_mapping = {t: tasks[t].assignment_index for t in tasks}
+        p_task_mapping = {t: tasks[t].assignment_index for t in tasks if t in win_tasks}
                 
         patterns.append(Pattern(p_cost, w.length, p_task_mapping))
         
@@ -369,7 +404,7 @@ def get_objective_window(w: Window, task_to_ra: Mapping[str, ResourceAssignment]
         B_j = max([task_to_ra[t.task].intercept * w.length for t in w.task_assignments])
         return A_j + B_j
 
-def get_task_to_ra(tasks: Mapping[str, Task], ascs: List[AssignmentCharacteristic]):
+def get_task_to_ra(tasks: Mapping[str, Task], ascs: List[AssignmentCharacteristic]) -> Mapping[str,AssignmentCharacteristic]:
     task_to_ra = {}    
     for t in tasks:                
         for asc in ascs:
