@@ -321,7 +321,7 @@ def parse_environment(s: dict) -> Environment:
 def parse_tasks(s: dict) -> Mapping[str, Task]:
     task_map = {}
     
-    if "tasks" not in s:
+    if "tasks" not in s or not s["tasks"]:
         print("warning: parse_tasks called, but no tasks were found in source json", file=sys.stderr)
     else:
         for t in s["tasks"]:
@@ -375,7 +375,7 @@ def parse_solution(s: dict) -> Solution:
             for k in s["solution"]["solverMetadata"]:
                 s_solver_metadata[k] = s["solution"]["solverMetadata"][k]
 
-        if "windows" in s["solution"]:
+        if "windows" in s["solution"] and s["solution"]["windows"]:
             for w in s["solution"]["windows"]:
                 task_assignments = []
                 if "tasks" in w:
