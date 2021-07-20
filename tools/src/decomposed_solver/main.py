@@ -32,5 +32,15 @@ if __name__ == "__main__":
         #exit(0)
         
     bap = decomposed_solver.BranchAndPriceSolver(arg_parser, env, acs, init_data_path)
-    sol = bap.solve()     
+    solution, tasks = bap.solve()
+
+    instance.write_solution(json_data, solution)
+    instance.write_tasks(json_data, tasks)
+
+    output_filename = ap.get_arg_value("--output")
+    if output_filename:
+        instance.write_to_file(json_data, output_filename)
+    else:
+        json.dump(json_data, sys.stdout, indent=4)
+ 
     
