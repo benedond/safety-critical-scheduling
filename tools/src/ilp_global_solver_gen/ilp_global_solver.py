@@ -103,7 +103,7 @@ class Solver:
         s_solver_name="ILP Solver (global):predictor (Python-gen)"
         s_solution_time=int(round((t_end - t_start)*1000))  # to ms
         s_windows=[]
-        s_metadata={"objective": -1}
+        s_metadata={"objective": "-1"}
 
         if s_feasible:
             s_metadata["objective"] = str(model.ObjVal)
