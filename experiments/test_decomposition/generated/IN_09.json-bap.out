@@ -1,0 +1,283 @@
+{
+    "assignmentCharacteristics": [
+        {
+            "command": "",
+            "task": "task-0",
+            "resourceAssignments": [
+                {
+                    "slope": 0.6169547023546008,
+                    "intercept": 0.07727076088308871,
+                    "length": 46,
+                    "processors": [
+                        {
+                            "processingUnits": 1,
+                            "processor": "A53"
+                        }
+                    ]
+                },
+                {
+                    "slope": 0.5705718339737573,
+                    "intercept": 0.054336741179771275,
+                    "length": 7,
+                    "processors": [
+                        {
+                            "processingUnits": 1,
+                            "processor": "A72"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "command": "",
+            "task": "task-1",
+            "resourceAssignments": [
+                {
+                    "slope": 0.8881709899968181,
+                    "intercept": 0.5653211898890937,
+                    "length": 18,
+                    "processors": [
+                        {
+                            "processingUnits": 1,
+                            "processor": "A53"
+                        }
+                    ]
+                },
+                {
+                    "slope": 0.822241809901137,
+                    "intercept": 0.48181488624170676,
+                    "length": 94,
+                    "processors": [
+                        {
+                            "processingUnits": 1,
+                            "processor": "A72"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "command": "",
+            "task": "task-2",
+            "resourceAssignments": [
+                {
+                    "slope": 0.8441041698808216,
+                    "intercept": 0.34095605773003257,
+                    "length": 67,
+                    "processors": [
+                        {
+                            "processingUnits": 1,
+                            "processor": "A53"
+                        }
+                    ]
+                },
+                {
+                    "slope": 0.7303571516567825,
+                    "intercept": 0.9551237416263633,
+                    "length": 48,
+                    "processors": [
+                        {
+                            "processingUnits": 1,
+                            "processor": "A72"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "command": "",
+            "task": "task-3",
+            "resourceAssignments": [
+                {
+                    "slope": 0.5096042161455406,
+                    "intercept": 0.24040895632467896,
+                    "length": 12,
+                    "processors": [
+                        {
+                            "processingUnits": 1,
+                            "processor": "A53"
+                        }
+                    ]
+                },
+                {
+                    "slope": 0.7913117617130083,
+                    "intercept": 0.04553264565460491,
+                    "length": 2,
+                    "processors": [
+                        {
+                            "processingUnits": 1,
+                            "processor": "A72"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "command": "",
+            "task": "task-4",
+            "resourceAssignments": [
+                {
+                    "slope": 0.5657116570169368,
+                    "intercept": 0.01615903613308811,
+                    "length": 73,
+                    "processors": [
+                        {
+                            "processingUnits": 1,
+                            "processor": "A53"
+                        }
+                    ]
+                },
+                {
+                    "slope": 0.5199093970834808,
+                    "intercept": 0.49375421153658716,
+                    "length": 74,
+                    "processors": [
+                        {
+                            "processingUnits": 1,
+                            "processor": "A72"
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "environment": {
+        "majorFrameLength": 88.75310123351127,
+        "problemVersion": 1,
+        "processors": [
+            {
+                "name": "A53",
+                "processingUnits": 3,
+                "type": "main_processor"
+            },
+            {
+                "name": "A72",
+                "processingUnits": 1,
+                "type": "main_processor"
+            }
+        ],
+        "scPart": 1.0
+    },
+    "solution": {
+        "feasible": true,
+        "solutionTime": 1,
+        "solverMetadata": {
+            "objective": "158.8971694787382"
+        },
+        "solverName": "BAP",
+        "windows": [
+            {
+                "length": 2,
+                "tasks": [
+                    {
+                        "length": 2,
+                        "processingUnit": 0,
+                        "processor": "A72",
+                        "start": 0,
+                        "task": "task-3"
+                    }
+                ]
+            },
+            {
+                "length": 74,
+                "tasks": [
+                    {
+                        "length": 18,
+                        "processingUnit": 0,
+                        "processor": "A53",
+                        "start": 0,
+                        "task": "task-1"
+                    },
+                    {
+                        "length": 67,
+                        "processingUnit": 1,
+                        "processor": "A53",
+                        "start": 0,
+                        "task": "task-2"
+                    },
+                    {
+                        "length": 74,
+                        "processingUnit": 0,
+                        "processor": "A72",
+                        "start": 0,
+                        "task": "task-4"
+                    }
+                ]
+            },
+            {
+                "length": 7,
+                "tasks": [
+                    {
+                        "length": 7,
+                        "processingUnit": 0,
+                        "processor": "A72",
+                        "start": 0,
+                        "task": "task-0"
+                    }
+                ]
+            }
+        ]
+    },
+    "tasks": [
+        {
+            "assignmentIndex": 1,
+            "command": "",
+            "length": 2,
+            "name": "task-3",
+            "processors": [
+                {
+                    "processor": "A72",
+                    "processingUnits": 1
+                }
+            ]
+        },
+        {
+            "assignmentIndex": 0,
+            "command": "",
+            "length": 18,
+            "name": "task-1",
+            "processors": [
+                {
+                    "processor": "A53",
+                    "processingUnits": 1
+                }
+            ]
+        },
+        {
+            "assignmentIndex": 0,
+            "command": "",
+            "length": 67,
+            "name": "task-2",
+            "processors": [
+                {
+                    "processor": "A53",
+                    "processingUnits": 1
+                }
+            ]
+        },
+        {
+            "assignmentIndex": 1,
+            "command": "",
+            "length": 74,
+            "name": "task-4",
+            "processors": [
+                {
+                    "processor": "A72",
+                    "processingUnits": 1
+                }
+            ]
+        },
+        {
+            "assignmentIndex": 1,
+            "command": "",
+            "length": 7,
+            "name": "task-0",
+            "processors": [
+                {
+                    "processor": "A72",
+                    "processingUnits": 1
+                }
+            ]
+        }
+    ]
+}
