@@ -14,6 +14,26 @@ from typing import List, Tuple, Mapping
 
 if __name__ == "__main__":
 
+
+    # Problematic example with 5 tasks, branching is ambiguous
+    #[('task-3', 'task-4'), ('task-1', 'task-0'), ('task-1', 'task-2'), ('task-0', 'task-2')], on diff = [('task-3', 'task-1'), ('task-3', 'task-0'), ('task-3', 'task-2'), ('task-1', 'task-4'), ('task-4', 'task-0'), ('task-4', 'task-2')]
+    # mm = decomposed_solver.MasterModel([
+    #     instance.Pattern(18.152188598995025, 16, {'task-3': 1, 'task-4': 0}),
+    #     instance.Pattern(252.35088519544485, 70, {'task-0': 0, 'task-1': 1, 'task-2': 0}),
+    #     instance.Pattern(122.1437022103734, 88, {'task-0': 0, 'task-1': 0, 'task-2': 1}),
+    #     instance.Pattern(139.84092026697834, 75, {'task-0': 1, 'task-1': 0, 'task-2': 0})
+
+    # ], 95, ["task-0", "task-1", "task-2", "task-3", "task-4"])
+
+    # mm.solve()
+
+    # for i in range(len(mm.alpha)):
+    #     print(mm.alpha[i].X)
+
+    # print("is int?", mm.is_solution_integer())
+
+    # exit(0)
+
     ap = arg_parser.ArgParser()
     input_filename = ap.get_arg_value("--input")
 
