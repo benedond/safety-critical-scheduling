@@ -102,10 +102,10 @@ class MasterModel(ILPSolver):
 
         s_feasible=True if self.model.Status == grb.GRB.OPTIMAL or (
             model.Status == grb.GRB.TIME_LIMIT and model.SolCount > 0) else False
-        s_solver_name="BAP-MasterModel"
+        s_solver_name="BAP"
         s_solution_time=int(round(self.solving_time*1000))  # to ms
         s_windows=[]
-        s_metadata={"objective": -1}
+        s_metadata={"objective": "-1"}
 
         if s_feasible:
             s_metadata["objective"] = str(self.model.ObjVal)                                    
@@ -230,7 +230,8 @@ class SubproblemModelILP(ILPSolver):
         m.addConstrs(l >= x_ik[i, k] * self.acs[i].resource_assignmnets[k].length
                      for i in range(num_tasks)
                      for k in range(len(self.acs[i].resource_assignmnets)))
-        
+        m.addConstr(l <= self.env.major_frame_length)
+
         # - branching constraints
         for t1, t2 in self.on_same:
             i1 = task_to_idx[t1]
@@ -369,12 +370,12 @@ class RecoveryModel(ILPSolver):
         for t1, t2 in self.on_same:
             i1 = task_to_idx[t1]
             i2 = task_to_idx[t2]
-            m.addConstrs(x_ijk.sum(i1, j, "*") == x_ik.sum(i2, j, "*") for j in range(num_tasks))  # in same window
+            m.addConstrs(x_ijk.sum(i1, j, "*") == x_ijk.sum(i2, j, "*") for j in range(num_tasks))  # in same window
 
         for t1, t2 in self.on_diff:
             i1 = task_to_idx[t1]
             i2 = task_to_idx[t2]
-            m.addConstrs(x_ik.sum(i1, j, "*") + x_ik.sum(i2, j, "*") <= 1 for j in range(num_tasks))  # in different windows
+            m.addConstrs(x_ijk.sum(i1, j, "*") + x_ijk.sum(i2, j, "*") <= 1 for j in range(num_tasks))  # in different windows
                         
         # objective
         # either none (just check feasibility) or minimize the total length
@@ -432,7 +433,7 @@ class BranchAndPriceSolver:
             print("info: trying the RecoveryModel")
             
             rm = RecoveryModel(self.env, self.acs, [], [])
-            rm.solve()
+            rm.solve()            
             patterns = rm.get_patterns()
             self.best_objective = sum([p.cost for p in patterns])                                    
         
@@ -446,10 +447,37 @@ class BranchAndPriceSolver:
             print("info: search ended")
             if sol:
                 print("info: solution quality {:f}".format(self.best_objective))
+            else:
+                sol = instance.Solution(False, "BAP", self.solving_time, {}, []), []                                            
+                # TODO - initial solution is the best, reconstruct it 
+                # TODO : is it necessary? can this branch be reached?
+                #rm_patterns = rm.get_patterns()                
+                # solution = instance.Solution(True, "BAP", self.solving_time, {"objective": self.best_objective}, [p.to_window() for p in rm_patterns])  # TODO: rm.get_patterns not necessart
+                # tasks = []
+                
+                # for p in rm_patterns:
+                #     for t in p.task_mapping:
+                #         for a in self.acs:
+                #             if t != a.task:
+                #                 continue
+                #             else:                                
+                #                 task_processors = []                                    
+                #                 for p in ac.processors:
+                #                     task_processors.append(instance.ProcessorAssignment(p.processor, p.processing_units))
+                                
+                #                 tasks.append(instance.Task(name=t,
+                #                                            command=a.command,
+                #                                             length=a[p.task_mapping[t]].length,
+                #                                             assignment_index=p.task_mapping[t],
+                #                                             processors=task_processors))                    
+        
+                
+
+
         else:
             print("warning: no patterns were provided or recovery model could not find any solution", file=sys.stderr)
-            sol = None 
             self.solving_time = 0           
+            sol = instance.Solution(False, "BAP", self.solving_time, {}, []), []            
         
         return sol
 
@@ -482,8 +510,9 @@ class BranchAndPriceSolver:
             if not ss.feasible:
                 print("warning: subproblem model is not feasible.", file=sys.stderr)
                 return None
-            
-            if ss.model.ObjVal >= 0:  # no more improving patterns exist
+                        
+            EPS = 1e-4
+            if ss.model.ObjVal >= -EPS:  # no more improving patterns exist
                 print("info: subproblem objective was non-negative; ending the iteration.")
                 break
                 # for s in mm.get_solution():
@@ -526,11 +555,10 @@ class BranchAndPriceSolver:
             return None
 
         if mm.is_solution_integer():  # Check if solution is integer            
-            EPS = 1e-4
-            # TODO: update best so far
+            EPS = 1e-4            
             if mm.get_objective() < self.best_objective + EPS:
                 self.best_objective = mm.get_objective()
-            #     glob_best_obj = master_model.model.objVal
+                print("info: best objective was updated to:", self.best_objective)            
                                     
             return mm.get_solution_and_tasks(self.env, self.acs)
         else:
@@ -542,6 +570,8 @@ class BranchAndPriceSolver:
             if pair is None:  # There was no pair to generate
                 print("warning: there is no pair to generate for branching.", file=sys.stderr)
                 return None
+            else:
+                print("info: branching on pair", pair)
 
             # Generate new lists
             on_same_new = on_same.copy()
@@ -558,7 +588,9 @@ class BranchAndPriceSolver:
             rm = RecoveryModel(self.env, self.acs, on_same_new, on_diff)
             rm.solve()
             if rm.feasible:
-                p_same.extend(rm.get_patterns())                            
+                for p in rm.get_patterns():
+                    if p.task_mapping not in [x.task_mapping for x in p_same]:
+                        p_same.append(p)                
                 sol_same = self.branch_and_price(on_same_new, on_diff, p_same)
             else:
                 print("info: RecoveryModel was not feasible (on_same)")
@@ -568,7 +600,9 @@ class BranchAndPriceSolver:
             rm = RecoveryModel(self.env, self.acs, on_same, on_diff_new)
             rm.solve()
             if rm.feasible:
-                p_diff.extend(rm.get_patterns)
+                for p in rm.get_patterns():
+                    if p.task_mapping not in [x.task_mapping for x in p_diff]:
+                        p_diff.append(p)                                
                 sol_diff = self.branch_and_price(on_same, on_diff_new, p_diff)
             else:
                 print("info: RecoveryModel was not feasible (on_diff)")
