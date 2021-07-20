@@ -137,6 +137,8 @@ class Solver:
 
                     for k, ac in enumerate(task_characteristic.resource_assignmnets):
                         if x_ijk[i, j, k].X > 0.5:
+                            task_ass_idx = k
+                            push_task=True   
                             for p in ac.processors:
                                 window_tasks_assignments.append(instance.TaskAssignment(task=task_characteristic.task,
                                                                                         processor=p.processor,
@@ -147,7 +149,6 @@ class Solver:
                                 # increment the processor units
                                 pu_allocations[p.processor] += p.processing_units
 
-                                push_task=True
                                 task_processors.append(instance.ProcessorAssignment(
                                     p.processor, p.processing_units))
                                 task_length=ac.length
@@ -157,7 +158,7 @@ class Solver:
                         tasks.append(instance.Task(name=task_characteristic.task,
                                                    command=task_characteristic.command,
                                                    length=task_length,
-                                                   assignment_index=k,
+                                                   assignment_index=task_ass_idx,
                                                    processors=task_processors))
             
                 s_windows.append(instance.Window(window_length, window_tasks_assignments))
