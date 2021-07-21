@@ -569,8 +569,13 @@ class BranchAndPriceSolver:
             pair = get_pair(mm.get_selected_patterns(), on_same, on_diff)        
             
             if pair is None:  # There was no pair to generate
-                print("warning: there is no pair to generate for branching.", file=sys.stderr)
-                return None
+                m_global = ilp_global_solver.Solver(self.arg_parser, self.env, self.acs, on_same, on_diff)
+                solution, tasks = m_global.solve()
+                
+                global_obj = float(solution.solver_metadata["objective"])
+                if global_obj and global_obj >= 0 and global_obj < self.best_objective:
+                    self.best_objective = global_obj                
+                return solution, tasks                                
             else:
                 print("info: branching on pair", pair)
 
