@@ -2,10 +2,14 @@
 from common import arg_parser as ap
 from common import instance
 from typing import List, Tuple, Mapping
+from ilp_global_solver import ilp_global_solver
 import gurobipy as grb
 import sys
 import time
 import itertools
+from numpy import random
+import logging
+from common.union_find import UnionFind
 
 
 class ILPSolver:    
@@ -79,9 +83,9 @@ class MasterModel(ILPSolver):
                      
     def get_dual_prices(self) -> Tuple[float, Mapping[str, float]]:
         if not self.solved:
-            print("warning: get_dual_prices cannot be called for unsolved model; call solve() first", file=sys.stderr)
+            logging.warning("get_dual_prices cannot be called for unsolved model; call solve() first")            
         if not self.feasible:
-            print("warning: model is not feasible, dual prices cannot be obtained", file=sys.stderr)
+            logging.warning("model is not feasible, dual prices cannot be obtained")
         return self.c0.Pi, {t: self.ct[t].Pi for t in self.tasks}
     
     def get_solution(self):
@@ -108,7 +112,7 @@ class MasterModel(ILPSolver):
         s_metadata={"objective": "-1"}
 
         if s_feasible:
-            s_metadata["objective"] = str(self.model.ObjVal)                                    
+            s_metadata["objective"] = str(self.model.ObjVal / self.major_frame_length) 
             
             for j, p in enumerate(self.patterns):
                 if self.alpha[j].X > 0:  # TODO: comparison
@@ -157,7 +161,7 @@ class MasterModel(ILPSolver):
 
 
 def get_pair(selected_patterns: List[instance.Pattern], on_same: List[Tuple[str,str]], on_diff: List[Tuple[str,str]]) -> Tuple[str,str]:
-    def pair_selection_heuristis(lst: List[Tuple[str,str]]) -> Tuple[str,str]:
+    def pair_selection_heuristis(lst: List[Tuple[str,str]]) -> Tuple[str,str]:                
         lst = sorted(lst, key=lambda x: task_counter[x[0]] + task_counter[x[1]], reverse=False)
         
         return lst[0]  # TODO: implement some heuristic
@@ -275,10 +279,10 @@ class SubproblemModelILP(ILPSolver):
         
     def get_pattern(self) -> instance.Pattern:
         if not self.solved:
-            print("warning: the model was not solved", f=sys.stderr)
+            logging.warning("model was not solved")
             return None
         if not self.feasible:
-            print("warning: the model is not feasible", f=sys.stderr)
+            logging.warning("model is not feasible")
             return None
         
         p_len = int(round(self.l.X))
@@ -301,10 +305,10 @@ class SubproblemModelILP(ILPSolver):
    
     def get_patterns(self) -> List[instance.Pattern]:
         if not self.solved:
-            print("warning: the model was not solved", f=sys.stderr)
+            logging.warning("model was not solved")
             return None
         if not self.feasible:
-            print("warning: the model is not feasible", f=sys.stderr)
+            logging.warning("model is not feasible")
             return None
         
         patterns = []
@@ -431,32 +435,32 @@ class BranchAndPriceSolver:
         self.arg_parser = arg_parser
         self.env = env
         self.acs = acs
+        self.task_to_ac = instance.get_task_to_acs_map(self.acs)
         self.init_data_path = init_data_path
         self.patterns = None
         
         self.number_of_nodes = 0
-        self.best_objective = float('inf')
-        self.best_solution = None
-        self.solving_time = None
+        self.best_objective = float('inf')        
+        self.solving_time = 0
         
 
     def solve(self) -> Tuple[instance.Solution, List[instance.Task]]:        
         # INITIAL SOLUTION
         if self.init_data_path:  # initialize from data file
             json_data = instance.read_json_from_file(self.init_data_path)
-                        
+            
                         
             patterns = instance.get_patterns(json_data)
             self.best_objective = instance.get_solution_objective(json_data)        
-        else:  # use Recovery model for initialization
+        else:  # use Recovery model for initialization            
             logging.info("no init data provided, trying the RecoveryModel")            
             rm = RecoveryModel(self.env, self.acs, [], [])
-            rm.solve()            
+            rm.solve()
             patterns = rm.get_patterns()
             self.best_objective = sum([p.cost for p in patterns]) / self.env.major_frame_length
-        
+                        
         # BRANCH AND PRICE
-        if patterns:        
+        if patterns:
             logging.info("initial objective {:f}".format(self.best_objective))
             sol = instance.Solution(True, "BAP", self.solving_time,
                                          {"objective": str(self.best_objective)}, 
@@ -469,28 +473,28 @@ class BranchAndPriceSolver:
             t_end=time.time()
 
             self.solving_time = int((t_end - t_start) * 1000)  # to ms
-        
+                    
             logging.info("search ended")
             logging.info("solution quality {:f}".format(self.best_objective))
-                
+            
             if bab_s:  # use the initial solution if nothing better was found
                 sol, tasks = bab_s
-        else:
+        else:        
             logging.info("no initial solution was provided/found")
             sol = instance.Solution(False, "BAP", self.solving_time, {}, [])
             tasks = []
-        
+                    
         return sol, tasks
 
     def branch_and_price(self, on_same: List[Tuple[str,str]], on_diff: List[Tuple[str,str]], patterns: List[instance.Pattern]):
         env = self.env 
         acs = self.acs      
         tasks = [ac.task for ac in acs]
-        print("info: branching, on same = {:s}, on diff = {:s}".format(str(on_same), str(on_diff)))    
+        logging.info("branching, on same = {:s}, on diff = {:s}".format(str(on_same), str(on_diff)))            
         
-        print("PATTERNS")
+        logging.info("PATTERNS {:d}".format(len(patterns)))
         for p in patterns:
-            print("    ", p.to_dict())
+            logging.info("    {:s}".format(str(p.to_dict())))
 
         # Iterate - master -> subproblem
         while True:            
@@ -499,7 +503,7 @@ class BranchAndPriceSolver:
             mm.solve()
             
             if not mm.feasible:
-                print("warning: master model is not feasible.", file=sys.stderr)
+                logging.warning("master model is not feasible.")
                 return None
             
             pi0, pit = mm.get_dual_prices()
@@ -509,25 +513,16 @@ class BranchAndPriceSolver:
             ss.solve()
             
             if not ss.feasible:
-                print("warning: subproblem model is not feasible.", file=sys.stderr)
+                logging.warning("subproblem model is not feasible.")
                 return None
                         
             EPS = 1e-4
             if ss.model.ObjVal >= -EPS:  # no more improving patterns exist
-                print("info: subproblem objective was non-negative; ending the iteration.")
-                break
-                # for s in mm.get_solution():
-                #     print(s)       
-                # mm.model.write("MP.sol")     
-                # mm.model.write("MP.lp") 
-                
-                # for i, p in enumerate(patterns):
-                #     print(i, p.to_dict())  
-                #     # p.check_cost(acs)      
-                #     # p.check_length(acs)                                      
+                logging.info("subproblem objective was non-negative; ending the iteration.")
+                break                                    
             else:
                 p = ss.get_pattern()
-                print("  info: found pattern", p.to_dict())
+                logging.info("  found pattern {:s}".format(str(p.to_dict())))
                 patterns.append(p)                                              
         # END of pattern generation phase ----------------------------------------------------------------------------------
 
@@ -538,37 +533,32 @@ class BranchAndPriceSolver:
         
 
         if not mm.solved:
-            print("warning: master model was not solved.", file=sys.stderr)
+            logging.warning("master model was not solved.")
             return None
 
         # BRANCHING
         if not mm.feasible:
-            print("warning: master model was not feasible.", file=sys.stderr)            
+            logging.warning("master model was not feasible.") 
             return None
-
-        # if master_model.alpha_is_not_zero():  # If alpha > 0 - there is no solution to relaxed master model without alpha
-        #     if params.PRINT_BB:
-        #         print("[B&P:] Master model - alpha is not zero: alpha =", master_model.alpha.X)
-        #     return None
-        EPS = 1e-4
-        if mm.get_objective() > self.best_objective + EPS:  # Check if master model is worse than best so far solution
-            print("info: master model solution ({:f}) is worse than best-so-far solution ({:f}).".format(mm.get_objective(), self.best_objective))
+                
+        if mm.get_objective() >= self.best_objective:  # Check if master model is worse than best so far solution
+            logging.info("master model solution ({:f}) is worse than best-so-far solution ({:f}).".format(mm.get_objective(), self.best_objective))
             return None
-
         if mm.is_solution_integer():  # Check if solution is integer            
-            EPS = 1e-4            
-            if mm.get_objective() < self.best_objective + EPS:
+                        
+            if mm.get_objective() < self.best_objective:
                 self.best_objective = mm.get_objective()
-                print("info: best objective was updated to:", self.best_objective)            
-                                    
+                logging.info("best objective was updated to: {:f}".format(self.best_objective))                
+            
             return mm.get_solution_and_tasks(self.env, self.acs)
         else:
-            print("info: master model solution is not integer.")
+            logging.info("master model solution is not integer")
 
             # Create two branches and return better solution
             pair = get_pair(mm.get_selected_patterns(), on_same, on_diff)        
             
-            if pair is None:  # There was no pair to generate
+            if pair is None:  # There was no pair to generate                
+                logging.info("leaf solution was reached, but MP was not integer, use global model instead")
                 m_global = ilp_global_solver.Solver(self.arg_parser, self.env, self.acs, on_same, on_diff)
                 solution, tasks = m_global.solve()
                 
@@ -577,7 +567,7 @@ class BranchAndPriceSolver:
                     self.best_objective = global_obj                
                 return solution, tasks                                
             else:
-                print("info: branching on pair", pair)
+                logging.info("branching on pair {:s}".format(str(pair)))
 
             # Generate new lists
             on_same_new = on_same.copy()
@@ -599,7 +589,7 @@ class BranchAndPriceSolver:
                         p_same.append(p)                
                 sol_same = self.branch_and_price(on_same_new, on_diff, p_same)
             else:
-                print("info: RecoveryModel was not feasible (on_same)")
+                logging.info("RecoveryModel was not feasible (on_same)")
                 sol_same = None
                 
             # - on diff
@@ -611,7 +601,7 @@ class BranchAndPriceSolver:
                         p_diff.append(p)                                
                 sol_diff = self.branch_and_price(on_same, on_diff_new, p_diff)
             else:
-                print("info: RecoveryModel was not feasible (on_diff)")
+                logging.info("RecoveryModel was not feasible (on_diff)")
                 sol_diff = None
 
             return get_better_sol(sol_same, sol_diff)
@@ -624,7 +614,7 @@ def get_better_sol(sol1: Tuple[instance.Solution, List[instance.Task]], sol2: Tu
     elif sol1 is not None and sol2 is None:
         return sol1
     else:
-        if sol1[0].solver_metadata["objective"] < sol2[0].solver_metadata["objective"]:
+        if float(sol1[0].solver_metadata["objective"]) < float(sol2[0].solver_metadata["objective"]):
             return sol1
         else:
             return sol2
