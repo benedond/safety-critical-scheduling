@@ -9,10 +9,13 @@ import time
 
 class Solver:
 
-    def __init__(self, arg_parser: ap.ArgParser, env: instance.Environment, acs: List[instance.AssignmentCharacteristic]):
+    def __init__(self, arg_parser: ap.ArgParser, env: instance.Environment, acs: List[instance.AssignmentCharacteristic], 
+                 on_same: List[Tuple[str,str]]=None, on_diff: List[Tuple[str,str]]=None):
         self.arg_parser = arg_parser
         self.env = env
         self.acs = acs
+        self.on_same = on_same
+        self.on_diff = on_diff
 
     def solve(self) -> Tuple[instance.Solution, List[instance.Task]]:
         num_tasks = len(self.acs)
@@ -86,6 +89,23 @@ class Solver:
                           for i in range(num_tasks)
                           for j in range(windows_ub)
                           for k in range(len(self.acs[i].resource_assignmnets))), name="B_j value link")
+
+        # BRANCHING CONSTRAINTS USED FOR RECOVERY:
+        task_to_idx = {}
+        for i, a in enumerate(self.acs):
+            task_to_idx[a.task] = i
+            
+        if self.on_same:   # in same window      
+            for t1, t2 in self.on_same:
+                i1 = task_to_idx[t1]
+                i2 = task_to_idx[t2]
+                model.addConstrs(x_ijk.sum(i1, j, "*") == x_ijk.sum(i2, j, "*") for j in range(windows_ub)) 
+        
+        if self.on_diff:   # in different windowsss
+            for t1, t2 in self.on_diff:
+                i1 = task_to_idx[t1]
+                i2 = task_to_idx[t2]
+                model.addConstrs(x_ijk.sum(i1, j, "*") + x_ijk.sum(i2, j, "*") <= 1 for j in range(windows_ub))
 
         # OBJECTIVE
         energy_consumption_sum=grb.quicksum(B_j[j] + grb.quicksum(x_ijk[i, j, k]
