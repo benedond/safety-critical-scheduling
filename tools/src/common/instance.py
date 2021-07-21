@@ -261,13 +261,21 @@ class Pattern:
             print("warning: computed ({:f}) and reported ({:f}) length of the pattern do not match".format(length, self.length), file=sys.stderr)
             return False        
         
-    def to_window(self) -> Window:
-        # TODO: !!! Transform pattern to Window
-        tasks = []
+    def to_window(self, env: Environment, task_to_ac: Mapping[str, AssignmentCharacteristic]) -> Window:        
+        pu_allocations={p.name: 0 for p in env.processors_list}
+        window_tasks_assignments = []
         for t in self.task_mapping:
+            t_ac = task_to_ac[t]
+            t_len = t_ac.resource_assignmnets[self.task_mapping[t]].length
+            for p in t_ac.resource_assignmnets[self.task_mapping[t]].processors:
+                window_tasks_assignments.append(TaskAssignment(task=t,
+                                                               processor=p.processor,
+                                                               processing_unit=pu_allocations[p.processor],
+                                                               start=0,
+                                                               length=t_len))
+                pu_allocations[p.processor] += p.processing_units
 
-            TaskAssignment(t, processor, processing_unit, 0, length)
-        return Window(self.length, self.task_mapping)
+        return Window(self.length, window_tasks_assignments)
         
 def get_patterns(s: dict) -> List[Pattern]:
     tasks = parse_tasks(s)
