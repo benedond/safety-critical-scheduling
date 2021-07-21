@@ -2,6 +2,7 @@ from enum import IntEnum
 from typing import Mapping, List, Dict
 import json
 import sys
+import logging
 
 
 class ProcessorType(IntEnum):
@@ -243,11 +244,10 @@ class Pattern:
     def check_cost(self, acs: AssignmentCharacteristic) -> bool:               
         cost = self.compute_cost(acs)
         
-        if abs(cost - self.cost) < 1e-5:
-            print("cost OK")
+        if abs(cost - self.cost) < 1e-5:            
             return True
         else:
-            print("warning: computed ({:f}) and reported ({:f}) cost of the pattern do not match".format(cost, self.cost), file=sys.stderr)
+            logging.warning("computed ({:f}) and reported ({:f}) cost of the pattern do not match".format(cost, self.cost))
             return False
     
     def compute_length(self, acs) -> int:
@@ -258,7 +258,7 @@ class Pattern:
         if length == self.length:            
             return True
         else:
-            print("warning: computed ({:f}) and reported ({:f}) length of the pattern do not match".format(length, self.length), file=sys.stderr)
+            logging.warning("computed ({:f}) and reported ({:f}) length of the pattern do not match".format(length, self.length))
             return False        
         
     def to_window(self, env: Environment, task_to_ac: Mapping[str, AssignmentCharacteristic]) -> Window:        
@@ -274,7 +274,7 @@ class Pattern:
                                                                start=0,
                                                                length=t_len))
                 pu_allocations[p.processor] += p.processing_units
-
+            
         return Window(self.length, window_tasks_assignments)
         
 def get_patterns(s: dict) -> List[Pattern]:
@@ -315,7 +315,7 @@ def patterns_to_task(patterns: List[Pattern], task_to_ac: Mapping[str, Assignmen
 def parse_environment(s: dict) -> Environment:
     env = None
     if "environment" not in s:
-        print("warning: parse_environment called, but no environment data was found in source json", file=sys.stderr)
+        logging.error("parse_environment called, but no environment data was found in source json")
     else:        
         # Parse the processors
         processors = {}    
@@ -353,7 +353,7 @@ def parse_tasks(s: dict) -> Mapping[str, Task]:
     task_map = {}
     
     if "tasks" not in s or not s["tasks"]:
-        print("warning: parse_tasks called, but no tasks were found in source json", file=sys.stderr)
+        logging.error("parse_tasks called, but no tasks were found in source json")
     else:
         for t in s["tasks"]:
             t_name = t["name"]
@@ -372,7 +372,7 @@ def parse_tasks(s: dict) -> Mapping[str, Task]:
 def parse_assignment_characteristics(s: dict) -> List[AssignmentCharacteristic]:
     ac_list = []
     if "assignmentCharacteristics" not in s:
-        print("warning: parse_assignment_characteristics called, but no assignment characteristics were found in source json", file=sys.stderr)
+        logging.error("parse_assignment_characteristics called, but no assignment characteristics were found in source json")
     else:
         ac_list = []
 
@@ -413,15 +413,15 @@ def parse_solution(s: dict) -> Solution:
                     for t_ass in w["tasks"]:
                         task_assignments.append(TaskAssignment(t_ass["task"], t_ass["processor"], t_ass["processingUnit"], t_ass["start"], t_ass["length"]))
                 else:
-                    print("warning: window is empty", file=sys.stderr)
+                    logging.warning("window is empty")
                 
                 s_windows.append(Window(w["length"], task_assignments))
         else:            
-            print("info: solution has no windows", file=sys.stderr)
+            logging.info("solution has no windows")
 
         solution = Solution(s_feasible, s_solver_name, s_solution_time, s_solver_metadata, s_windows)
     else:
-        print("warning: parse_solution called, but no solution was found in source json", file=sys.stderr)
+        logging.error("parse_solution called, but no solution was found in source json")
 
     return solution
 
@@ -444,6 +444,8 @@ def get_task_to_ra(tasks: Mapping[str, Task], ascs: List[AssignmentCharacteristi
     return task_to_ra
 
 def get_task_to_acs_map(acs: List[AssignmentCharacteristic]) -> Mapping[str, AssignmentCharacteristic]:
+    return {a.task: a for a in acs}
+
 def  get_solution_objective(data: dict):
     sol = parse_solution(data)
     tasks = parse_tasks(data)
@@ -454,10 +456,7 @@ def  get_solution_objective(data: dict):
     task_to_ra = get_task_to_ra(tasks, ascs)
     
     obj = 0
-    for w in sol.windows:        
-        # print("window", w.length)        
-        # print("A", [task_to_ra[t.task].slope * task_to_ra[t.task].length for t in w.task_assignments])
-        # print("B", [task_to_ra[t.task].intercept * w.length for t in w.task_assignments])                
+    for w in sol.windows:                
         obj += get_objective_window(w, task_to_ra)
     
     obj /= env.major_frame_length    
