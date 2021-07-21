@@ -443,6 +443,7 @@ def get_task_to_ra(tasks: Mapping[str, Task], ascs: List[AssignmentCharacteristi
                 task_to_ra[t] = asc.resource_assignmnets[tasks[t].assignment_index]
     return task_to_ra
 
+def get_task_to_acs_map(acs: List[AssignmentCharacteristic]) -> Mapping[str, AssignmentCharacteristic]:
 def  get_solution_objective(data: dict):
     sol = parse_solution(data)
     tasks = parse_tasks(data)
