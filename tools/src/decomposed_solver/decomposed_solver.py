@@ -158,14 +158,32 @@ class MasterModel(ILPSolver):
 
 def get_pair(selected_patterns: List[instance.Pattern], on_same: List[Tuple[str,str]], on_diff: List[Tuple[str,str]]) -> Tuple[str,str]:
     def pair_selection_heuristis(lst: List[Tuple[str,str]]) -> Tuple[str,str]:
+        lst = sorted(lst, key=lambda x: task_counter[x[0]] + task_counter[x[1]], reverse=False)
+        
         return lst[0]  # TODO: implement some heuristic
+        #return lst[random.randint(0,len(lst))]
     
     all_tasks = set()
     for p in selected_patterns:
         all_tasks.update(p.task_mapping.keys())
     
+    task_counter = {t: 0 for t in all_tasks}
+    for a,b in on_same:
+        task_counter[a] += 1
+        task_counter[b] += 1
+    for a,b in on_diff:
+        task_counter[a] += 1
+        task_counter[b] += 1
+        
+    task_to_idx = {t: i for i, t in enumerate(all_tasks)}        
+    uf = UnionFind(len(all_tasks))
+    
+    for a,b in on_same:
+        uf.union(task_to_idx[a], task_to_idx[b])        
+            
     all_pairs = itertools.combinations(all_tasks, 2)  # combine the tasks
     all_pairs = [p for p in all_pairs if p not in on_same and p not in on_diff]  # filter already used tasks
+    all_pairs = [p for p in all_pairs if not uf.find(task_to_idx[p[0]], task_to_idx[p[1]])]  # filter on same components
     
     if all_pairs:
         return pair_selection_heuristis(all_pairs)
