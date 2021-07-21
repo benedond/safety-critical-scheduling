@@ -1,5 +1,5 @@
 import sys
-
+import logging
 
 class ArgParser:
 
@@ -15,8 +15,8 @@ class ArgParser:
             if idx + 1 < len(self.args):
                 return self.args[idx+1]
             else:
-                print("{} is the last argument, value not found.".format(a), file=sys.stderr)
+                logging.error("{} is the last argument, value not found.".format(a))
         else:
-            print("{} is not in the arguments list.".format(a), file=sys.stderr)
+            logging.warning("{} is not in the arguments list.".format(a))
             
         return None
