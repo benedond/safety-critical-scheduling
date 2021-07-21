@@ -296,6 +296,21 @@ def get_patterns(s: dict) -> List[Pattern]:
         
     return patterns
 
+def patterns_to_task(patterns: List[Pattern], task_to_ac: Mapping[str, AssignmentCharacteristic]) -> List[Task]:
+    tasks = []
+    for p in patterns:
+        for t in p.task_mapping:
+            t_ac = task_to_ac[t]                         
+            task_processors = []                                    
+            for pr in t_ac.resource_assignmnets[p.task_mapping[t]].processors:
+                task_processors.append(ProcessorAssignment(pr.processor, pr.processing_units))
+            
+            tasks.append(Task(name=t,
+                              command=t_ac.command,
+                              length=t_ac.resource_assignmnets[p.task_mapping[t]].length,
+                              assignment_index=p.task_mapping[t],
+                              processors=task_processors))
+    return tasks
 
 def parse_environment(s: dict) -> Environment:
     env = None
