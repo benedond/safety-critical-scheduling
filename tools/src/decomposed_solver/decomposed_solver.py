@@ -441,63 +441,46 @@ class BranchAndPriceSolver:
         
 
     def solve(self) -> Tuple[instance.Solution, List[instance.Task]]:        
+        # INITIAL SOLUTION
         if self.init_data_path:  # initialize from data file
             json_data = instance.read_json_from_file(self.init_data_path)
+                        
                         
             patterns = instance.get_patterns(json_data)
             self.best_objective = instance.get_solution_objective(json_data)        
         else:  # use Recovery model for initialization
-            print("warning: the method has not been initialized.", file=sys.stderr)
-            print("info: trying the RecoveryModel")
-            
+            logging.info("no init data provided, trying the RecoveryModel")            
             rm = RecoveryModel(self.env, self.acs, [], [])
             rm.solve()            
             patterns = rm.get_patterns()
-            self.best_objective = sum([p.cost for p in patterns])                                    
+            self.best_objective = sum([p.cost for p in patterns]) / self.env.major_frame_length
         
+        # BRANCH AND PRICE
         if patterns:        
+            logging.info("initial objective {:f}".format(self.best_objective))
+            sol = instance.Solution(True, "BAP", self.solving_time,
+                                         {"objective": str(self.best_objective)}, 
+                                         [p.to_window(self.env, self.task_to_ac) for p in patterns])
+            tasks = instance.patterns_to_task(patterns, self.task_to_ac)
+            
+            # Start beanch-and-price
             t_start=time.time()    
-            sol = self.branch_and_price([], [], patterns)
+            bab_s = self.branch_and_price([], [], patterns)
             t_end=time.time()
 
             self.solving_time = int((t_end - t_start) * 1000)  # to ms
         
-            print("info: search ended")
-            if sol:
-                print("info: solution quality {:f}".format(self.best_objective))
-            else:
-                sol = instance.Solution(False, "BAP", self.solving_time, {}, []), []                                            
-                # TODO - initial solution is the best, reconstruct it 
-                # TODO : is it necessary? can this branch be reached?
-                #rm_patterns = rm.get_patterns()                
-                # solution = instance.Solution(True, "BAP", self.solving_time, {"objective": self.best_objective}, [p.to_window() for p in rm_patterns])  # TODO: rm.get_patterns not necessart
-                # tasks = []
+            logging.info("search ended")
+            logging.info("solution quality {:f}".format(self.best_objective))
                 
-                # for p in rm_patterns:
-                #     for t in p.task_mapping:
-                #         for a in self.acs:
-                #             if t != a.task:
-                #                 continue
-                #             else:                                
-                #                 task_processors = []                                    
-                #                 for p in ac.processors:
-                #                     task_processors.append(instance.ProcessorAssignment(p.processor, p.processing_units))
-                                
-                #                 tasks.append(instance.Task(name=t,
-                #                                            command=a.command,
-                #                                             length=a[p.task_mapping[t]].length,
-                #                                             assignment_index=p.task_mapping[t],
-                #                                             processors=task_processors))                    
-        
-                
-
-
+            if bab_s:  # use the initial solution if nothing better was found
+                sol, tasks = bab_s
         else:
-            print("warning: no patterns were provided or recovery model could not find any solution", file=sys.stderr)
-            self.solving_time = 0           
-            sol = instance.Solution(False, "BAP", self.solving_time, {}, []), []            
+            logging.info("no initial solution was provided/found")
+            sol = instance.Solution(False, "BAP", self.solving_time, {}, [])
+            tasks = []
         
-        return sol
+        return sol, tasks
 
     def branch_and_price(self, on_same: List[Tuple[str,str]], on_diff: List[Tuple[str,str]], patterns: List[instance.Pattern]):
         env = self.env 
