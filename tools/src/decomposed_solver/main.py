@@ -8,6 +8,7 @@ from common import arg_parser
 import decomposed_solver
 import json
 from typing import List, Tuple, Mapping
+import logging
 
 # python tools/src/decomposed_solver/main.py --input ./experiments/test_decomposition/IN_20.json 
 
@@ -33,6 +34,9 @@ if __name__ == "__main__":
     # print("is int?", mm.is_solution_integer())
 
     # exit(0)
+    
+    # Set logging
+    logging.basicConfig(level=logging.INFO)
 
     ap = arg_parser.ArgParser()
     input_filename = ap.get_arg_value("--input")
@@ -45,13 +49,13 @@ if __name__ == "__main__":
     env = instance.parse_environment(json_data)
     acs = instance.parse_assignment_characteristics(json_data)    
 
-    init_data_path = ap.get_arg_value("--init")    
-
-    if not init_data_path:
-        print("No path to initial data was provided.")
-        #exit(0)
+    if ap.is_arg_present("--init"):
+        init_data_path = ap.get_arg_value("--init")
+    else:    
+        init_data_path = None
+        logging.info("No path to initial data was provided.")        
         
-    bap = decomposed_solver.BranchAndPriceSolver(arg_parser, env, acs, init_data_path)
+    bap = decomposed_solver.BranchAndPriceSolver(ap, env, acs, init_data_path)
     solution, tasks = bap.solve()
 
     instance.write_solution(json_data, solution)
