@@ -1,10 +1,16 @@
 import pandas as pd
+import sys
+import os
 
-df = pd.read_csv("stats.csv")
+path = sys.argv[1]
+num = int(sys.argv[2])
 
-for i in range(100):
-    obj1 = float(df[(df["instance"]=="IN_{:02d}.json-global.out".format(i))]["objective"])
-    obj2 = float(df[(df["instance"]=="IN_{:02d}.json-bap.out".format(i))]["objective"])
+df = pd.read_csv(path)
+ 
+
+for i in range(num):
+    obj1 = float(df[(df["instance"]=="IN_{:03d}.json-global.out".format(i))]["objective"])
+    obj2 = float(df[(df["instance"]=="IN_{:03d}.json-bap.out".format(i))]["objective"])
     if (obj1 != obj2):
-        print(i, obj1, obj2)
+        print(i, obj1, obj2, obj2-obj1)
 

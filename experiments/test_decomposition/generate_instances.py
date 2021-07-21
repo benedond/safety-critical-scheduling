@@ -44,7 +44,7 @@ def generate_instance(path: str, n_tasks: int):
     
     h_coef = rnd.random() * 0.7 + 0.8  # [0.8, 1.5)
     
-    inst["environment"] = {"majorFrameLength": total_A53 / units_A53 * h_coef,
+    inst["environment"] = {"majorFrameLength": int(round(total_A53 / units_A53 * h_coef)),
                            "problemVersion": 1,
                            "processors": [{"name": "A53",
                                            "processingUnits": units_A53,
@@ -72,7 +72,7 @@ if __name__ == "__main__":
     n_inst =  int(sys.argv[3])
     
     for i in range(n_inst):
-        generate_instance(os.path.join(dest, "IN_{:02d}.json".format(i)), n_tasks)
+        generate_instance(os.path.join(dest, "IN_{:03d}.json".format(i)), n_tasks)
     
     
     
