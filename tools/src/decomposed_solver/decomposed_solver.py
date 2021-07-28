@@ -37,7 +37,7 @@ class ILPSolver:
 
 
 class MasterModel(ILPSolver):
-    def __init__(self, patterns: List[instance.Pattern], major_frame_length: int, tasks: List[str]):
+    def __init__(self, patterns: List[instance.Pattern], major_frame_length: int, tasks: List[str], bin_vars: bool=False):
         self.alpha = None
         self.patterns = patterns
         self.major_frame_length = major_frame_length
@@ -58,7 +58,7 @@ class MasterModel(ILPSolver):
         if self.bin_vars:
             alpha = m.addVars(len(self.patterns), vtype=grb.GRB.BINARY, lb=0, ub=1, name="alpha")
         else:
-        alpha = m.addVars(len(self.patterns), vtype=grb.GRB.CONTINUOUS, lb=0, ub=1, name="alpha")
+            alpha = m.addVars(len(self.patterns), vtype=grb.GRB.CONTINUOUS, lb=0, ub=1, name="alpha")
         
         
         # constraints
@@ -192,8 +192,8 @@ def get_pair(selected_patterns: List[instance.Pattern], on_same: List[Tuple[str,
     uf = UnionFind(len(all_tasks))
     
     for a,b in on_same:
-        uf.union(task_to_idx[a], task_to_idx[b])        
-            
+        uf.union(task_to_idx[a], task_to_idx[b])      
+        
     used_by_on_diff = set()
     for i,j in on_diff:
         used_by_on_diff.add((uf._root(task_to_idx[i]), uf._root(task_to_idx[j])))  
@@ -474,12 +474,15 @@ class BranchAndPriceSolver:
         self.time_sub_init = 0
         self.time_sub_solving = 0
         self.time_global_solving = 0
-        self.master_relaxation = None
+        self.time_get_pair = 0
+        self.time_recovery = 0
+        self.master_relaxation = -1
         self.patterns_generated_num = []  # number of generated patterns in each node 
         
         
 
     def solve(self) -> Tuple[instance.Solution, List[instance.Task]]:        
+        t_s = time.time()
         # INITIAL SOLUTION
         if self.init_data_path:  # initialize from data file
             json_data = instance.read_json_from_file(self.init_data_path)
@@ -493,6 +496,7 @@ class BranchAndPriceSolver:
             rm.solve()
             patterns = rm.get_patterns()
             self.best_objective = sum([p.cost for p in patterns]) / self.env.major_frame_length
+            self.time_recovery += rm.solving_time + rm.init_time
                         
         # BRANCH AND PRICE
         if patterns:
@@ -518,15 +522,24 @@ class BranchAndPriceSolver:
             logging.info("no initial solution was provided/found")
             sol = instance.Solution(False, "BAP", self.solving_time, {}, [])
             tasks = []
+            
+        t_e = time.time()
         
+        sol.solution_time = int(round((t_e - t_s) * 1000))
         # add metadata
         sol.solver_metadata["number_of_nodes"] = str(self.number_of_nodes)
         sol.solver_metadata["time_masters_init"] = "{:0.2f}".format(self.time_masters_init)
         sol.solver_metadata["time_masters_solving"] = "{:0.2f}".format(self.time_masters_solving)
         sol.solver_metadata["time_sub_init"] = "{:0.2f}".format(self.time_sub_init)
         sol.solver_metadata["time_sub_solving"] = "{:0.2f}".format(self.time_sub_solving)
+        sol.solver_metadata["time_global"] = "{:0.2f}".format(self.time_global_solving)
+        sol.solver_metadata["time_get_pair"] = "{:0.2f}".format(self.time_get_pair)
+        sol.solver_metadata["time_recovery"] = "{:0.2f}".format(self.time_recovery)
         sol.solver_metadata["master_relaxation"] = "{:0.6f}".format(self.master_relaxation)
-        sol.solver_metadata["patterns_generated_avg"] = "{:0.2f}".format(sum(self.patterns_generated_num) / len(self.patterns_generated_num))                
+        if self.patterns_generated_num:
+            sol.solver_metadata["patterns_generated_avg"] = "{:0.2f}".format(sum(self.patterns_generated_num) / len(self.patterns_generated_num))                
+        else:
+            sol.solver_metadata["patterns_generated_avg"] = "0"
                     
         return sol, tasks
 
@@ -547,6 +560,8 @@ class BranchAndPriceSolver:
         while True:            
             # - solve restricted master problem
             mm = MasterModel(patterns, env.major_frame_length, tasks)
+            # TODO: experimental
+            mm.model.setParam("Presolve", 0)
             mm.solve()
             
             # - stats info (master)
@@ -577,7 +592,7 @@ class BranchAndPriceSolver:
                 break                                    
             else:
                 p = ss.get_pattern()
-                logging.info("  found pattern {:s}".format(str(p.to_dict())))
+                logging.info("  found pattern {:s}, {:s}".format(str(p.to_dict()), str(ss.model.ObjVal)))
                 patterns.append(p)      
                 n_patterns += 1                                        
         # END of pattern generation phase ----------------------------------------------------------------------------------
@@ -587,8 +602,8 @@ class BranchAndPriceSolver:
         # Solve master model to get the optimal solution of the relaxed problem
         # - solve restricted master problem
         mm = MasterModel(patterns, env.major_frame_length, [ac.task for ac in acs])
-        mm.solve()
-        
+        mm.solve()                       
+                
         # - stats info (master)
         self.time_masters_init += mm.init_time
         self.time_masters_solving += mm.solving_time
@@ -618,9 +633,20 @@ class BranchAndPriceSolver:
             return mm.get_solution_and_tasks(self.env, self.acs)
         else:
             logging.info("master model solution is not integer")
+            
+            # # :TODO : try master with binary vars
+            # mm_bin = MasterModel(patterns, env.major_frame_length, [ac.task for ac in acs], bin_vars=True)
+            # mm_bin.solve()
+    
+            # if mm_bin.feasible:
+            #     if mm_bin.get_objective() < self.best_objective:
+            #         self.best_objective = mm_bin.get_objective()
+            #         # TODO : save solution somehow  
 
             # Create two branches and return better solution
+            t_p = time.time()
             pair = get_pair(mm.get_selected_patterns(), on_same, on_diff)        
+            self.time_get_pair += time.time() - t_p
             
             if pair is None:  # There was no pair to generate                
                 logging.info("leaf solution was reached, but MP was not integer, use global model instead")
@@ -655,6 +681,7 @@ class BranchAndPriceSolver:
             # - on same
             rm = RecoveryModel(self.env, self.acs, on_same_new, on_diff)
             rm.solve()
+            self.time_recovery += rm.solving_time + rm.init_time
             if rm.feasible:
                 for p in rm.get_patterns():
                     if p.task_mapping not in [x.task_mapping for x in p_same]:
@@ -667,6 +694,7 @@ class BranchAndPriceSolver:
             # - on diff
             rm = RecoveryModel(self.env, self.acs, on_same, on_diff_new)
             rm.solve()
+            self.time_recovery += rm.solving_time + rm.init_time
             if rm.feasible:
                 for p in rm.get_patterns():
                     if p.task_mapping not in [x.task_mapping for x in p_diff]:
