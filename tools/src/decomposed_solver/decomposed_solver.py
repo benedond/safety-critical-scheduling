@@ -586,7 +586,7 @@ class BranchAndPriceSolver:
                 logging.warning("subproblem model is not feasible.")
                 return None
                         
-            EPS = 1e-4
+            EPS = 1e-3
             if ss.model.ObjVal >= -EPS:  # no more improving patterns exist
                 logging.info("subproblem objective was non-negative; ending the iteration.")
                 break                                    
