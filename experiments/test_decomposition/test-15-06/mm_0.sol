@@ -1,0 +1,29 @@
+# Solution for model Master Model
+# Objective value = 3.8423683430389690e+02
+alpha[0] 0
+alpha[1] 0
+alpha[2] 9.7826086956521741e-01
+alpha[3] 1
+alpha[4] 1
+alpha[5] 9.7826086956521741e-01
+alpha[6] 2.1739130434782594e-02
+alpha[7] 0
+alpha[8] 0
+alpha[9] 0
+alpha[10] 0
+alpha[11] 0
+alpha[12] 0
+alpha[13] 0
+alpha[14] 0
+alpha[15] 9.7826086956521741e-01
+alpha[16] 0
+alpha[17] 0
+alpha[18] 0
+alpha[19] 2.1739130434782594e-02
+alpha[20] 1
+alpha[21] 0
+alpha[22] 0
+alpha[23] 1
+alpha[24] 2.1739130434782594e-02
+alpha[25] 9.7826086956521741e-01
+alpha[26] 1
