@@ -44,6 +44,7 @@ class MasterModel(ILPSolver):
         self.tasks = tasks
         self.c0 = None
         self.ct = {}        
+        self.bin_vars = bin_vars
         
         t_s = time.time()
         self._init_model()
@@ -54,7 +55,11 @@ class MasterModel(ILPSolver):
         m = grb.Model("Master Model")
         
         # variables
+        if self.bin_vars:
+            alpha = m.addVars(len(self.patterns), vtype=grb.GRB.BINARY, lb=0, ub=1, name="alpha")
+        else:
         alpha = m.addVars(len(self.patterns), vtype=grb.GRB.CONTINUOUS, lb=0, ub=1, name="alpha")
+        
         
         # constraints
         # - major frame length        
