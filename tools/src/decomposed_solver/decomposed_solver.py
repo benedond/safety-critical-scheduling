@@ -194,9 +194,15 @@ def get_pair(selected_patterns: List[instance.Pattern], on_same: List[Tuple[str,
     for a,b in on_same:
         uf.union(task_to_idx[a], task_to_idx[b])        
             
+    used_by_on_diff = set()
+    for i,j in on_diff:
+        used_by_on_diff.add((uf._root(task_to_idx[i]), uf._root(task_to_idx[j])))  
+        used_by_on_diff.add((uf._root(task_to_idx[j]), uf._root(task_to_idx[i])))  
+            
     all_pairs = itertools.combinations(all_tasks, 2)  # combine the tasks
     all_pairs = [p for p in all_pairs if p not in on_same and p not in on_diff]  # filter already used tasks
     all_pairs = [p for p in all_pairs if not uf.find(task_to_idx[p[0]], task_to_idx[p[1]])]  # filter on same components
+    all_pairs = [p for p in all_pairs if (uf._root(task_to_idx[p[0]]), uf._root(task_to_idx[p[1]])) not in used_by_on_diff]  # filter on diff components
     
     if all_pairs:
         return pair_selection_heuristis(all_pairs)
