@@ -100,12 +100,14 @@ class Solver:
                 i1 = task_to_idx[t1]
                 i2 = task_to_idx[t2]
                 model.addConstrs(x_ijk.sum(i1, j, "*") == x_ijk.sum(i2, j, "*") for j in range(windows_ub)) 
+                # model.addConstrs(x_ijk[i1, j, k] == x_ijk[i2, j, k] for j in range(windows_ub) for k in range(len(self.acs[i].resource_assignmnets))) 
         
         if self.on_diff:   # in different windowsss
             for t1, t2 in self.on_diff:
                 i1 = task_to_idx[t1]
                 i2 = task_to_idx[t2]
                 model.addConstrs(x_ijk.sum(i1, j, "*") + x_ijk.sum(i2, j, "*") <= 1 for j in range(windows_ub))
+                #model.addConstrs(x_ijk[i1, j, k] + x_ijk[i2, j, k] <= 1 for j in range(windows_ub) for k in range(len(self.acs[i].resource_assignmnets)))
 
         # OBJECTIVE
         energy_consumption_sum=grb.quicksum(B_j[j] + grb.quicksum(x_ijk[i, j, k]
