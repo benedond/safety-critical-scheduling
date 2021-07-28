@@ -17,7 +17,8 @@ class ILPSolver:
         self.model = None
         self.solved = False
         self.feasible = False
-        self.solving_time = None        
+        self.solving_time = None
+        self.init_time = None  
         
     def _init_model(self):
         raise NotImplementedError
@@ -44,7 +45,10 @@ class MasterModel(ILPSolver):
         self.c0 = None
         self.ct = {}        
         
+        t_s = time.time()
         self._init_model()
+        t_e = time.time()
+        self.init_time = t_e - t_s
         
     def _init_model(self):
         m = grb.Model("Master Model")
@@ -207,7 +211,10 @@ class SubproblemModelILP(ILPSolver):
         self.x_ik = None       
         self.l = None        
         
+        t_s = time.time()
         self._init_model()        
+        t_e = time.time()
+        self.init_time = t_e - t_s
         
     def _init_model(self):
         m = grb.Model("Subproblem-ILP")
@@ -259,11 +266,13 @@ class SubproblemModelILP(ILPSolver):
             i1 = task_to_idx[t1]
             i2 = task_to_idx[t2]
             m.addConstr(x_ik.sum(i1, "*") == x_ik.sum(i2,"*"))  # in same window
+            #m.addConstr(x_ik[i1, k] == x_ik[i2, k] for k in range(len(self.acs[i].resource_assignmnets)))  # in same window
 
         for t1, t2 in self.on_diff:
             i1 = task_to_idx[t1]
             i2 = task_to_idx[t2]
-            m.addConstr(x_ik.sum(i1, "*") + x_ik.sum(i2,"*") <= 1)  # in different windows
+            m.addConstr(x_ik.sum(i1, "*") + x_ik.sum(i2,"*") <= 1 )  # in different windows
+            #m.addConstr(x_ik[i1, k] + x_ik[i2,k] <= 1 for k in range(len(self.acs[i].resource_assignmnets)))  # in different windows
         
         # objective
         obj = grb.quicksum(x_ik[i, k] * (self.acs[i].resource_assignmnets[k].length
@@ -346,7 +355,10 @@ class RecoveryModel(ILPSolver):
         self.x = None
         self.l = None
         
+        t_s = time.time()
         self._init_model()
+        t_e = time.time()
+        self.init_time = t_e - t_s
         
     def _init_model(self):
         task_to_idx = {}
@@ -393,11 +405,13 @@ class RecoveryModel(ILPSolver):
             i1 = task_to_idx[t1]
             i2 = task_to_idx[t2]
             m.addConstrs(x_ijk.sum(i1, j, "*") == x_ijk.sum(i2, j, "*") for j in range(num_tasks))  # in same window
+            # m.addConstrs(x_ijk[i1, j, k] == x_ijk[i2, j, k] for j in range(num_tasks) for k in range(len(self.acs[i].resource_assignmnets)))
 
         for t1, t2 in self.on_diff:
             i1 = task_to_idx[t1]
             i2 = task_to_idx[t2]
             m.addConstrs(x_ijk.sum(i1, j, "*") + x_ijk.sum(i2, j, "*") <= 1 for j in range(num_tasks))  # in different windows
+            # m.addConstrs(x_ijk[i1, j, k] + x_ijk[i2, j, k] <= 1 for j in range(num_tasks) for k in range(len(self.acs[i].resource_assignmnets)))
                         
         # objective
         # either none (just check feasibility) or minimize the total length
@@ -438,10 +452,20 @@ class BranchAndPriceSolver:
         self.task_to_ac = instance.get_task_to_acs_map(self.acs)
         self.init_data_path = init_data_path
         self.patterns = None
-        
-        self.number_of_nodes = 0
+                
         self.best_objective = float('inf')        
         self.solving_time = 0
+        
+        # statistics
+        self.number_of_nodes = 0
+        self.time_masters_init = 0
+        self.time_masters_solving = 0
+        self.time_sub_init = 0
+        self.time_sub_solving = 0
+        self.time_global_solving = 0
+        self.master_relaxation = None
+        self.patterns_generated_num = []  # number of generated patterns in each node 
+        
         
 
     def solve(self) -> Tuple[instance.Solution, List[instance.Task]]:        
@@ -483,6 +507,15 @@ class BranchAndPriceSolver:
             logging.info("no initial solution was provided/found")
             sol = instance.Solution(False, "BAP", self.solving_time, {}, [])
             tasks = []
+        
+        # add metadata
+        sol.solver_metadata["number_of_nodes"] = str(self.number_of_nodes)
+        sol.solver_metadata["time_masters_init"] = "{:0.2f}".format(self.time_masters_init)
+        sol.solver_metadata["time_masters_solving"] = "{:0.2f}".format(self.time_masters_solving)
+        sol.solver_metadata["time_sub_init"] = "{:0.2f}".format(self.time_sub_init)
+        sol.solver_metadata["time_sub_solving"] = "{:0.2f}".format(self.time_sub_solving)
+        sol.solver_metadata["master_relaxation"] = "{:0.6f}".format(self.master_relaxation)
+        sol.solver_metadata["patterns_generated_avg"] = "{:0.2f}".format(sum(self.patterns_generated_num) / len(self.patterns_generated_num))                
                     
         return sol, tasks
 
@@ -492,15 +525,22 @@ class BranchAndPriceSolver:
         tasks = [ac.task for ac in acs]
         logging.info("branching, on same = {:s}, on diff = {:s}".format(str(on_same), str(on_diff)))            
         
+        self.number_of_nodes += 1
+        
         logging.info("PATTERNS {:d}".format(len(patterns)))
         for p in patterns:
             logging.info("    {:s}".format(str(p.to_dict())))
 
         # Iterate - master -> subproblem
+        n_patterns = 0
         while True:            
             # - solve restricted master problem
             mm = MasterModel(patterns, env.major_frame_length, tasks)
             mm.solve()
+            
+            # - stats info (master)
+            self.time_masters_init += mm.init_time
+            self.time_masters_solving += mm.solving_time
             
             if not mm.feasible:
                 logging.warning("master model is not feasible.")
@@ -511,6 +551,10 @@ class BranchAndPriceSolver:
             # - solve subproblem
             ss = SubproblemModelILP(env, acs, (pi0, pit), on_same, on_diff)
             ss.solve()
+            
+            # - stats info (subproblem)
+            self.time_sub_init += ss.init_time
+            self.time_sub_solving += ss.solving_time 
             
             if not ss.feasible:
                 logging.warning("subproblem model is not feasible.")
@@ -523,13 +567,23 @@ class BranchAndPriceSolver:
             else:
                 p = ss.get_pattern()
                 logging.info("  found pattern {:s}".format(str(p.to_dict())))
-                patterns.append(p)                                              
+                patterns.append(p)      
+                n_patterns += 1                                        
         # END of pattern generation phase ----------------------------------------------------------------------------------
+        
+        self.patterns_generated_num.append(n_patterns)
 
         # Solve master model to get the optimal solution of the relaxed problem
         # - solve restricted master problem
         mm = MasterModel(patterns, env.major_frame_length, [ac.task for ac in acs])
         mm.solve()
+        
+        # - stats info (master)
+        self.time_masters_init += mm.init_time
+        self.time_masters_solving += mm.solving_time
+        
+        if self.number_of_nodes == 1:  # root node
+            self.master_relaxation = mm.get_objective()
         
 
         if not mm.solved:
@@ -559,9 +613,12 @@ class BranchAndPriceSolver:
             
             if pair is None:  # There was no pair to generate                
                 logging.info("leaf solution was reached, but MP was not integer, use global model instead")
+                t_s = time.time()
                 m_global = ilp_global_solver.Solver(self.arg_parser, self.env, self.acs, on_same, on_diff)
                 solution, tasks = m_global.solve()
+                t_e = time.time()
                 
+                self.time_global_solving += t_e - t_s
                 global_obj = float(solution.solver_metadata["objective"])
                 if global_obj and global_obj >= 0 and global_obj < self.best_objective:
                     self.best_objective = global_obj                
@@ -578,6 +635,10 @@ class BranchAndPriceSolver:
             p_same = [p for p in patterns if ((pair[0] in p.task_mapping and pair[1] in p.task_mapping)
                                             or (pair[0] not in p.task_mapping and pair[1] not in p.task_mapping))]
             p_diff = [p for p in patterns if not (pair[0] in p.task_mapping and pair[1] in p.task_mapping)]
+            
+            #p_same = [p for p in patterns if (((pair[0] in p.task_mapping and pair[1] in p.task_mapping) and p.task_mapping[pair[0]] == p.task_mapping[pair[1]])
+             #                               or (pair[0] not in p.task_mapping and pair[1] not in p.task_mapping))]
+            #p_diff = [p for p in patterns if not (pair[0] in p.task_mapping and pair[1] in p.task_mapping) or (p.task_mapping[pair[0]] != p.task_mapping[pair[1]])]
 
             # - two branches
             # - on same
@@ -588,7 +649,7 @@ class BranchAndPriceSolver:
                     if p.task_mapping not in [x.task_mapping for x in p_same]:
                         p_same.append(p)                
                 sol_same = self.branch_and_price(on_same_new, on_diff, p_same)
-            else:
+            else:                
                 logging.info("RecoveryModel was not feasible (on_same)")
                 sol_same = None
                 
