@@ -22,9 +22,7 @@ if __name__ == "__main__":
     #     instance.Pattern(18.152188598995025, 16, {'task-3': 1, 'task-4': 0}),
     #     instance.Pattern(252.35088519544485, 70, {'task-0': 0, 'task-1': 1, 'task-2': 0}),
     #     instance.Pattern(122.1437022103734, 88, {'task-0': 0, 'task-1': 0, 'task-2': 1}),
-    #     instance.Pattern(139.84092026697834, 75, {'task-0': 1, 'task-1': 0, 'task-2': 0})
-
-    # ], 95, ["task-0", "task-1", "task-2", "task-3", "task-4"])
+    #     instance.Pattern(139.84092026697834, 75, {'task-0': 1, 'task-1': 0, 'task-2': 0})], 95, ["task-0", "task-1", "task-2", "task-3", "task-4"])
 
     # mm.solve()
 
