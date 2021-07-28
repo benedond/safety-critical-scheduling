@@ -32,9 +32,7 @@ if __name__ == "__main__":
     # print("is int?", mm.is_solution_integer())
 
     # exit(0)
-    
-    # Set logging
-    logging.basicConfig(level=logging.INFO)
+        
 
     ap = arg_parser.ArgParser()
     input_filename = ap.get_arg_value("--input")
@@ -46,6 +44,11 @@ if __name__ == "__main__":
     
     env = instance.parse_environment(json_data)
     acs = instance.parse_assignment_characteristics(json_data)    
+
+    if ap.is_arg_present("--log"): # needs to apprea before calling any logging
+        logging.basicConfig(level=logging.INFO)        
+    else:
+        logging.basicConfig(level=logging.ERROR)
 
     if ap.is_arg_present("--init"):
         init_data_path = ap.get_arg_value("--init")
