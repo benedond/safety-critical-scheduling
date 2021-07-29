@@ -325,10 +325,10 @@ class SubproblemModelILP(ILPSolver):
 
         # recompute the cost manually to avoid potential numerical problems
         pattern = instance.Pattern(0, p_len, p_task_mapping)   
-        
-        logging.error("pattern - mapping " + str(p_task_mapping))
-                     
-        cost = pattern.compute_cost(self.acs)
+        if p_task_mapping:                             
+            cost = pattern.compute_cost(self.acs)
+        else:
+            cost = 0
         pattern.cost = cost
         
         return pattern
