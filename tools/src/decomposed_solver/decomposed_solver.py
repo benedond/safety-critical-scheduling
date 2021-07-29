@@ -35,9 +35,12 @@ class ILPSolver:
         self.feasible = s_feasible   
         self.solving_time = t_end - t_start
 
+    def time_limit_reached(self):
+        return self.model.Status == grb.GRB.TIME_LIMIT
+
 
 class MasterModel(ILPSolver):
-    def __init__(self, patterns: List[instance.Pattern], major_frame_length: int, tasks: List[str], bin_vars: bool=False):
+    def __init__(self, patterns: List[instance.Pattern], major_frame_length: int, tasks: List[str], bin_vars: bool=False, timelimit: float=float("inf")):
         self.alpha = None
         self.patterns = patterns
         self.major_frame_length = major_frame_length
@@ -45,6 +48,7 @@ class MasterModel(ILPSolver):
         self.c0 = None
         self.ct = {}        
         self.bin_vars = bin_vars
+        self.timelimit = timelimit
         
         t_s = time.time()
         self._init_model()
@@ -53,6 +57,7 @@ class MasterModel(ILPSolver):
         
     def _init_model(self):
         m = grb.Model("Master Model")
+        m.setParam("TimeLimit", self.timelimit)
         
         # variables
         if self.bin_vars:
@@ -213,7 +218,7 @@ def get_pair(selected_patterns: List[instance.Pattern], on_same: List[Tuple[str,
 class SubproblemModelILP(ILPSolver):
     
     def __init__(self, env: instance.Environment, acs: List[instance.AssignmentCharacteristic], dual_prices: Tuple[float, Mapping[str, float]],
-                 on_same: List[Tuple[str,str]], on_diff: List[Tuple[str,str]]):
+                 on_same: List[Tuple[str,str]], on_diff: List[Tuple[str,str]], timelimit: float=float("inf")):
         self.env = env
         self.acs = acs
         self.dual_prices = dual_prices 
@@ -221,6 +226,7 @@ class SubproblemModelILP(ILPSolver):
         self.on_diff = on_diff
         self.x_ik = None       
         self.l = None        
+        self.timelimit = timelimit
         
         t_s = time.time()
         self._init_model()        
@@ -229,6 +235,7 @@ class SubproblemModelILP(ILPSolver):
         
     def _init_model(self):
         m = grb.Model("Subproblem-ILP")
+        m.setParam("TimeLimit", self.timelimit)
         num_tasks = len(self.acs)
         
         task_to_idx = {}
@@ -358,13 +365,14 @@ class SubproblemModelILP(ILPSolver):
         
 class RecoveryModel(ILPSolver):
     def __init__(self, env: instance.Environment, acs: List[instance.AssignmentCharacteristic], 
-                 on_same: List[Tuple[str,str]], on_diff: List[Tuple[str,str]]):
+                 on_same: List[Tuple[str,str]], on_diff: List[Tuple[str,str]], timelimit: float=float("inf")):
         self.env = env
         self.acs = acs 
         self.on_same = on_same
         self.on_diff = on_diff
         self.x = None
         self.l = None
+        self.timelimit = timelimit
         
         t_s = time.time()
         self._init_model()
@@ -378,6 +386,7 @@ class RecoveryModel(ILPSolver):
         num_tasks = len(self.acs)
             
         m = grb.Model("RecoveryModel")                
+        m.setParam("TimeLimit", self.timelimit)            
         
         # variables
         x_ijk = m.addVars([(i, j, k)
@@ -456,13 +465,15 @@ class RecoveryModel(ILPSolver):
        
 class BranchAndPriceSolver:
 
-    def __init__(self, arg_parser: ap.ArgParser, env: instance.Environment, acs: List[instance.AssignmentCharacteristic], init_data_path: str):
+    def __init__(self, arg_parser: ap.ArgParser, env: instance.Environment, acs: List[instance.AssignmentCharacteristic], init_data_path: str, timelimit: float=float("inf")):
         self.arg_parser = arg_parser
         self.env = env
         self.acs = acs
         self.task_to_ac = instance.get_task_to_acs_map(self.acs)
         self.init_data_path = init_data_path
         self.patterns = None
+        self.timelimit = timelimit
+        self.time_start = None
                 
         self.best_objective = float('inf')        
         self.solving_time = 0
@@ -477,12 +488,15 @@ class BranchAndPriceSolver:
         self.time_get_pair = 0
         self.time_recovery = 0
         self.master_relaxation = -1
+        self.interrupted = False  # might be due to timelimit or same pattern generation, etc.
         self.patterns_generated_num = []  # number of generated patterns in each node 
         
-        
+    def _get_remaining_time(self):
+        return max(0, self.timelimit - (time.time() - self.time_start))
 
     def solve(self) -> Tuple[instance.Solution, List[instance.Task]]:        
         t_s = time.time()
+        self.time_start = t_s
         # INITIAL SOLUTION
         if self.init_data_path:  # initialize from data file
             json_data = instance.read_json_from_file(self.init_data_path)
@@ -492,7 +506,7 @@ class BranchAndPriceSolver:
             self.best_objective = instance.get_solution_objective(json_data)        
         else:  # use Recovery model for initialization            
             logging.info("no init data provided, trying the RecoveryModel")            
-            rm = RecoveryModel(self.env, self.acs, [], [])
+            rm = RecoveryModel(self.env, self.acs, [], [], timelimit=self._get_remaining_time())
             rm.solve()
             patterns = rm.get_patterns()
             self.best_objective = sum([p.cost for p in patterns]) / self.env.major_frame_length
@@ -540,10 +554,17 @@ class BranchAndPriceSolver:
             sol.solver_metadata["patterns_generated_avg"] = "{:0.2f}".format(sum(self.patterns_generated_num) / len(self.patterns_generated_num))                
         else:
             sol.solver_metadata["patterns_generated_avg"] = "0"
+        sol.solver_metadata["optimal"] = str(not self.interrupted)
                     
         return sol, tasks
 
     def branch_and_price(self, on_same: List[Tuple[str,str]], on_diff: List[Tuple[str,str]], patterns: List[instance.Pattern]):
+        logging.info("branching, on same = {:s}, on diff = {:s}".format(str(on_same), str(on_diff)))            
+        if not self._get_remaining_time():  # reamining time is 0
+            logging.warning("timelimit was reached; exiting the branch")
+            self.interrupted = True
+            return None
+        
         env = self.env 
         acs = self.acs      
         tasks = [ac.task for ac in acs]
@@ -559,14 +580,17 @@ class BranchAndPriceSolver:
         n_patterns = 0
         while True:            
             # - solve restricted master problem
-            mm = MasterModel(patterns, env.major_frame_length, tasks)
-            # TODO: experimental
-            mm.model.setParam("Presolve", 0)
+            mm = MasterModel(patterns, env.major_frame_length, tasks, timelimit=self._get_remaining_time())            
             mm.solve()
             
             # - stats info (master)
             self.time_masters_init += mm.init_time
             self.time_masters_solving += mm.solving_time
+            
+            if mm.time_limit_reached():
+                logging.warning("master model reached timelimit.")
+                self.interrupted = True
+                return None
             
             if not mm.feasible:
                 logging.warning("master model is not feasible.")
@@ -578,6 +602,9 @@ class BranchAndPriceSolver:
             ss = SubproblemModelILP(env, acs, (pi0, pit), on_same, on_diff)
             ss.solve()
             
+            if ss.time_limit_reached():
+                self.interrupted = True
+                return None
             # - stats info (subproblem)
             self.time_sub_init += ss.init_time
             self.time_sub_solving += ss.solving_time 
@@ -601,9 +628,13 @@ class BranchAndPriceSolver:
 
         # Solve master model to get the optimal solution of the relaxed problem
         # - solve restricted master problem
-        mm = MasterModel(patterns, env.major_frame_length, [ac.task for ac in acs])
+        mm = MasterModel(patterns, env.major_frame_length, [ac.task for ac in acs], timelimit=self._get_remaining_time())
         mm.solve()                       
                 
+        if mm.time_limit_reached():
+            logging.warning("master model reached timelimit.")
+            self.interrupted = True
+            return None
         # - stats info (master)
         self.time_masters_init += mm.init_time
         self.time_masters_solving += mm.solving_time
