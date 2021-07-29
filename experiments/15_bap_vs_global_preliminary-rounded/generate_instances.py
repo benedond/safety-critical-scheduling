@@ -23,15 +23,15 @@ def generate_instance(path: str, n_tasks: int):
                    "task": "task-{:d}".format(i),
                    "resourceAssignments": [
                        {
-                           "slope": rnd.random(),
-                           "intercept": rnd.random(),
+                           "slope": round(rnd.random(), 3),
+                           "intercept": round(rnd.random(), 3),
                            "length": proc_A53,
                            "processors": [{"processingUnits": 1,
                                            "processor": "A53"}],
                        },
                        {
-                           "slope": rnd.random(),
-                           "intercept": rnd.random(),
+                           "slope": round(rnd.random(), 3),
+                           "intercept": round(rnd.random(), 3),
                            "length": proc_A72,
                            "processors": [{"processingUnits": 1,
                                            "processor": "A72"}],
