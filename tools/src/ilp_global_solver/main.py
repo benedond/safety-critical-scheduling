@@ -7,6 +7,7 @@ from common import instance
 from common import arg_parser
 import ilp_global_solver
 import json
+import logging
 
 
 if __name__ == "__main__":
@@ -26,9 +27,15 @@ if __name__ == "__main__":
     #except:
     #    print("failed to parse input json", file=sys.stderr)
 
+    if ap.is_arg_present("--timelimit"):
+        timelimit = float(ap.get_arg_value("--timelimit"))
+        logging.info("timelimit was set to {:f}".format(timelimit))
+    else:    
+        timelimit = float("inf")     
+
     # solve the instance            
     # try:
-    solver = ilp_global_solver.Solver(ap, env, acs)
+    solver = ilp_global_solver.Solver(ap, env, acs, timelimit=timelimit)
     solution, tasks = solver.solve()        
 
     instance.write_solution(json_data, solution)

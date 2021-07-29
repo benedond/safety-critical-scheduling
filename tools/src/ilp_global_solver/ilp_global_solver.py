@@ -10,12 +10,13 @@ import time
 class Solver:
 
     def __init__(self, arg_parser: ap.ArgParser, env: instance.Environment, acs: List[instance.AssignmentCharacteristic], 
-                 on_same: List[Tuple[str,str]]=None, on_diff: List[Tuple[str,str]]=None):
+                 on_same: List[Tuple[str,str]]=None, on_diff: List[Tuple[str,str]]=None, timelimit:float=float("inf")):
         self.arg_parser = arg_parser
         self.env = env
         self.acs = acs
         self.on_same = on_same
         self.on_diff = on_diff
+        self.timelimit = timelimit
 
     def solve(self) -> Tuple[instance.Solution, List[instance.Task]]:
         num_tasks = len(self.acs)
@@ -23,6 +24,7 @@ class Solver:
         env = self.env
 
         model = grb.Model()
+        model.setParam("TimeLimit", self.timelimit)
 
         # VARIABLES
         # x_ijk variables        
