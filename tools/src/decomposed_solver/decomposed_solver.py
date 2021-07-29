@@ -34,7 +34,7 @@ class ILPSolver:
         self.solved = True
         self.feasible = s_feasible   
         self.solving_time = t_end - t_start
-
+        
     def time_limit_reached(self):
         return self.model.Status == grb.GRB.TIME_LIMIT
 
@@ -324,7 +324,10 @@ class SubproblemModelILP(ILPSolver):
                     break
 
         # recompute the cost manually to avoid potential numerical problems
-        pattern = instance.Pattern(0, p_len, p_task_mapping)                
+        pattern = instance.Pattern(0, p_len, p_task_mapping)   
+        
+        logging.error("pattern - mapping " + str(p_task_mapping))
+                     
         cost = pattern.compute_cost(self.acs)
         pattern.cost = cost
         
@@ -385,7 +388,7 @@ class RecoveryModel(ILPSolver):
             task_to_idx[a.task] = i
         num_tasks = len(self.acs)
             
-        m = grb.Model("RecoveryModel")                
+        m = grb.Model("RecoveryModel")    
         m.setParam("TimeLimit", self.timelimit)            
         
         # variables
@@ -539,7 +542,7 @@ class BranchAndPriceSolver:
             
         t_e = time.time()
         
-        sol.solution_time = int(round((t_e - t_s) * 1000))
+        sol.solution_time = int(round((t_e - t_s) * 1000))        
         # add metadata
         sol.solver_metadata["number_of_nodes"] = str(self.number_of_nodes)
         sol.solver_metadata["time_masters_init"] = "{:0.2f}".format(self.time_masters_init)
@@ -568,8 +571,7 @@ class BranchAndPriceSolver:
         env = self.env 
         acs = self.acs      
         tasks = [ac.task for ac in acs]
-        logging.info("branching, on same = {:s}, on diff = {:s}".format(str(on_same), str(on_diff)))            
-        
+                
         self.number_of_nodes += 1
         
         logging.info("PATTERNS {:d}".format(len(patterns)))
@@ -582,7 +584,8 @@ class BranchAndPriceSolver:
         while True:            
             # - solve restricted master problem
             mm = MasterModel(patterns, env.major_frame_length, tasks, timelimit=self._get_remaining_time())            
-            mm.solve()
+            mm.model.setParam("Presolve", 0)  # TODO: experimental (might help with some numerical issues)
+            mm.solve()            
             
             # - stats info (master)
             self.time_masters_init += mm.init_time
@@ -606,6 +609,7 @@ class BranchAndPriceSolver:
             if ss.time_limit_reached():
                 self.interrupted = True
                 return None
+            
             # - stats info (subproblem)
             self.time_sub_init += ss.init_time
             self.time_sub_solving += ss.solving_time 
@@ -614,7 +618,7 @@ class BranchAndPriceSolver:
                 logging.warning("subproblem model is not feasible.")
                 return None
                         
-            EPS = 1e-3
+            EPS = 1e-4
             if ss.model.ObjVal >= -EPS:  # no more improving patterns exist
                 logging.info("subproblem objective was non-negative; ending the iteration.")
                 break                                    
@@ -629,7 +633,7 @@ class BranchAndPriceSolver:
                     self.interrupted = True
                     break
                 
-                patterns.append(p)      
+                patterns.append(p)    
                 last_pattern_mapping = p.task_mapping  
                 n_patterns += 1                                        
         # END of pattern generation phase ----------------------------------------------------------------------------------
@@ -637,14 +641,15 @@ class BranchAndPriceSolver:
         self.patterns_generated_num.append(n_patterns)
 
         # Solve master model to get the optimal solution of the relaxed problem
-        # - solve restricted master problem
+        # - solve restricted master problem        
         mm = MasterModel(patterns, env.major_frame_length, [ac.task for ac in acs], timelimit=self._get_remaining_time())
         mm.solve()                       
-                
+               
         if mm.time_limit_reached():
             logging.warning("master model reached timelimit.")
             self.interrupted = True
             return None
+                
         # - stats info (master)
         self.time_masters_init += mm.init_time
         self.time_masters_solving += mm.solving_time
@@ -728,12 +733,12 @@ class BranchAndPriceSolver:
             else:
                 if patterns: # branch was not pruned, branch (on same)
                     for p in patterns:
-                    if p.task_mapping not in [x.task_mapping for x in p_same]:
-                        p_same.append(p)                
-                sol_same = self.branch_and_price(on_same_new, on_diff, p_same)
-            else:                
-                logging.info("RecoveryModel was not feasible (on_same)")
-                
+                        if p.task_mapping not in [x.task_mapping for x in p_same]:
+                            p_same.append(p)                
+                    sol_same = self.branch_and_price(on_same_new, on_diff, p_same)
+                else:                
+                    logging.info("RecoveryModel was not feasible (on_same)")                
+            
             # - on diff
             sol_diff = None
             sol, prune, patterns = self._branching_recovery(on_same, on_diff_new, master_obj)
@@ -742,11 +747,11 @@ class BranchAndPriceSolver:
             else:
                 if patterns: # branch was not pruned, branch (on diff)                                                    
                     for p in patterns:
-                    if p.task_mapping not in [x.task_mapping for x in p_diff]:
-                        p_diff.append(p)                                
-                sol_diff = self.branch_and_price(on_same, on_diff_new, p_diff)
-            else:
-                logging.info("RecoveryModel was not feasible (on_diff)")
+                        if p.task_mapping not in [x.task_mapping for x in p_diff]:
+                            p_diff.append(p)                                
+                    sol_diff = self.branch_and_price(on_same, on_diff_new, p_diff)
+                else:
+                    logging.info("RecoveryModel was not feasible (on_diff)")            
 
             return get_better_sol(sol_same, sol_diff)
 
