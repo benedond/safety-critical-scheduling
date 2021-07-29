@@ -600,7 +600,7 @@ class BranchAndPriceSolver:
             pi0, pit = mm.get_dual_prices()
                 
             # - solve subproblem
-            ss = SubproblemModelILP(env, acs, (pi0, pit), on_same, on_diff)
+            ss = SubproblemModelILP(env, acs, (pi0, pit), on_same, on_diff, timelimit=self._get_remaining_time())
             ss.solve()
             
             if ss.time_limit_reached():
