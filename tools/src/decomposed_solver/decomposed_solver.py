@@ -578,6 +578,7 @@ class BranchAndPriceSolver:
 
         # Iterate - master -> subproblem
         n_patterns = 0
+        last_pattern_mapping = None
         while True:            
             # - solve restricted master problem
             mm = MasterModel(patterns, env.major_frame_length, tasks, timelimit=self._get_remaining_time())            
@@ -620,7 +621,16 @@ class BranchAndPriceSolver:
             else:
                 p = ss.get_pattern()
                 logging.info("  found pattern {:s}, {:s}".format(str(p.to_dict()), str(ss.model.ObjVal)))
+                
+                if p.task_mapping == last_pattern_mapping:
+                    logging.info("  warning - task mapping of the last pattern is the same as the current one {:s}".format(str(p.task_mapping)))
+                    logging.info("          - breaking the iteration (assuming it is just about numerical issues")
+                    # TODO: optimal = false (possibly?)
+                    self.interrupted = True
+                    break
+                
                 patterns.append(p)      
+                last_pattern_mapping = p.task_mapping  
                 n_patterns += 1                                        
         # END of pattern generation phase ----------------------------------------------------------------------------------
         
