@@ -54,9 +54,15 @@ if __name__ == "__main__":
         init_data_path = ap.get_arg_value("--init")
     else:    
         init_data_path = None
-        logging.info("No path to initial data was provided.")        
+        logging.info("No path to initial data was provided.")    
         
-    bap = decomposed_solver.BranchAndPriceSolver(ap, env, acs, init_data_path)
+    if ap.is_arg_present("--timelimit"):
+        timelimit = float(ap.get_arg_value("--timelimit"))
+        logging.info("timelimit was set to {:f}".format(timelimit))
+    else:    
+        timelimit = float("inf")        
+        
+    bap = decomposed_solver.BranchAndPriceSolver(ap, env, acs, init_data_path, timelimit=timelimit)
     solution, tasks = bap.solve()
 
     instance.write_solution(json_data, solution)
