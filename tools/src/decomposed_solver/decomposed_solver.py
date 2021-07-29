@@ -709,33 +709,69 @@ class BranchAndPriceSolver:
             #p_diff = [p for p in patterns if not (pair[0] in p.task_mapping and pair[1] in p.task_mapping) or (p.task_mapping[pair[0]] != p.task_mapping[pair[1]])]
 
             # - two branches
+            master_obj = mm.get_objective()
             # - on same
-            rm = RecoveryModel(self.env, self.acs, on_same_new, on_diff)
-            rm.solve()
-            self.time_recovery += rm.solving_time + rm.init_time
-            if rm.feasible:
-                for p in rm.get_patterns():
+            sol_same = None
+            sol, prune, patterns = self._branching_recovery(on_same_new, on_diff, master_obj)
+            if prune:
+                return sol
+            else:
+                if patterns: # branch was not pruned, branch (on same)
+                    for p in patterns:
                     if p.task_mapping not in [x.task_mapping for x in p_same]:
                         p_same.append(p)                
                 sol_same = self.branch_and_price(on_same_new, on_diff, p_same)
             else:                
                 logging.info("RecoveryModel was not feasible (on_same)")
-                sol_same = None
                 
             # - on diff
-            rm = RecoveryModel(self.env, self.acs, on_same, on_diff_new)
-            rm.solve()
-            self.time_recovery += rm.solving_time + rm.init_time
-            if rm.feasible:
-                for p in rm.get_patterns():
+            sol_diff = None
+            sol, prune, patterns = self._branching_recovery(on_same, on_diff_new, master_obj)
+            if prune:
+                return sol
+            else:
+                if patterns: # branch was not pruned, branch (on diff)                                                    
+                    for p in patterns:
                     if p.task_mapping not in [x.task_mapping for x in p_diff]:
                         p_diff.append(p)                                
                 sol_diff = self.branch_and_price(on_same, on_diff_new, p_diff)
             else:
                 logging.info("RecoveryModel was not feasible (on_diff)")
-                sol_diff = None
 
             return get_better_sol(sol_same, sol_diff)
+
+    def _branching_recovery(self,  on_same: List[Tuple[str,str]], on_diff: List[Tuple[str,str]], lower_bound: float):
+        """Return (A,B,C), where
+        A = (solution, tasks) if the solution was better, otherwise None
+        B = True if master model solution is tight (branch can be pruned)
+        C = list of patterns of the recovery model of empty list is RM not feasible
+        """        
+        rm = RecoveryModel(self.env, self.acs, on_same, on_diff)    
+        rm.solve()
+        self.time_recovery += rm.solving_time + rm.init_time
+        
+        if not rm.feasible:
+            return None, False, []
+        else:        
+            rm_patterns = rm.get_patterns()
+            rm_obj = sum([p.cost for p in rm_patterns]) / self.env.major_frame_length
+            
+            if rm_obj < self.best_objective:  # Check if objective of reconstructed solution is better
+                self.best_objective = rm_obj
+                logging.info("best objective was updated to (by RM): {:f}".format(self.best_objective))                
+                
+                # Reconstruct the solution out of recovery model
+                sol = instance.Solution(True, "BAP", -1,
+                                        {"objective": str(self.best_objective)}, 
+                                        [p.to_window(self.env, self.task_to_ac) for p in rm_patterns])
+                tasks = instance.patterns_to_task(rm_patterns, self.task_to_ac)
+                
+                sol_rm = sol, tasks                                                    
+                
+                return sol_rm, (lower_bound == rm_obj), rm_patterns        
+            
+            return None, False, rm_patterns
+    
 
 def get_better_sol(sol1: Tuple[instance.Solution, List[instance.Task]], sol2: Tuple[instance.Solution, List[instance.Task]]) -> Tuple[instance.Solution, List[instance.Task]]:    
     if sol1 is None and sol2 is None:
