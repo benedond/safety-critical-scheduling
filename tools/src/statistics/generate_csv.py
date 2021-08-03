@@ -6,10 +6,11 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from common import arg_parser
 from common import instance
 import csv
+import json
 
 if __name__ == "__main__":
     ap = arg_parser.ArgParser()    
-    fieldnames = ['instance', 'solver', 'time', 'objective-reported', 'objective', 'length']    
+    fieldnames = ['instance', 'solver', 'time', 'objective-reported', 'objective', 'length', 'metadata']    
     
     # Prepare output file
     f_out = sys.stdout    
@@ -41,13 +42,16 @@ if __name__ == "__main__":
             
             if sol.solver_metadata and "objective" in sol.solver_metadata:
                 objective_rep = sol.solver_metadata["objective"]
+
+            out_data = {"instance": inst,
+                        "solver": solver,
+                        "time": time,
+                        "objective-reported": objective_rep,
+                        "objective": objective,
+                        "length": length,
+                        "metadata": json.dumps(sol.solver_metadata)}            
                 
-            writer_obj.writerow({"instance": inst,
-                                 "solver": solver,
-                                 "time": time,
-                                 "objective-reported": objective_rep,
-                                 "objective": objective,
-                                 "length": length})
+            writer_obj.writerow(out_data)
             
     f_out.close()
             
