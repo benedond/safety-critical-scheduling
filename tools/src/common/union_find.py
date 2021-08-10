@@ -20,6 +20,13 @@ class UnionFind:
         self._id = list(range(n))
         self._sz = [1] * n
         self.cc = n  # connected components
+        
+    def get_copy(self) -> 'UnionFind':
+        uf = UnionFind(len(self._sz))
+        uf._id = self._id.copy()
+        uf._sz = self._sz.copy()
+        uf.cc = self.cc
+        return uf
 
     def _root(self, i):
         j = i
