@@ -10,7 +10,258 @@ import itertools
 from numpy import random
 import logging
 from common.union_find import UnionFind
+from enum import Enum
 
+class BranchingType(Enum):
+    ON_PAIRS = 1  # pos_branch ~ pairs of tasks to be in the same window, neg_branch ~ pairs to be in different windows
+    ON_TASKS = 2  # pos_branch ~ fix task to acs idx assignment, neg_branch ~ task cannot be on given resource
+
+class OnPairsBranch(Enum):
+    IN_SAME = 1
+    IN_DIFF = 2
+
+class BranchingRule:
+    
+    def __init__(self):
+        pass
+        
+    def constrain_global_model(self, model: grb.Model, x_ijk: grb.tupledict, windows_ub: int):
+        """Add constraints to the global model according to this Branching Rule"""
+        raise NotImplementedError
+    
+    def constrain_recovery_model(self, model: grb.Model, x_ijk: grb.tupledict, windows_ub: int):
+        """Add constraints to the recovery model according to this Branching Rule"""
+        raise NotImplementedError
+    
+    def constrain_subproblem_model(self, model: grb.Model, x_ik: grb.tupledict):
+        """Add constraints to the subproblem model according to this Branching Rule"""
+        raise NotImplementedError
+    
+    def filter_patterns(self, patterns: List[instance.Pattern]) -> List[instance.Pattern]:
+        """Take old patterns and filter the ones that are not respecting this BranchingRule"""
+        raise NotImplementedError
+    
+    def get_branching_rules(self) -> List['BranchingRule']:
+        """Generate a list of new Branching Rules"""
+        raise NotImplementedError
+    
+    def get_string_representation(self) -> str:
+        raise NotImplementedError
+
+class OnTaskBranchingRule(BranchingRule):    
+    def __init__(self):
+        self.fixed_task_mapping = {}  # task -> acs idx
+        self.remaining_tasks = None
+        self.acs = None
+        self.task_to_idx = None
+        
+    def initialize(self, acs: List[instance.AssignmentCharacteristic], task_to_idx: Mapping[str, int]):
+        self.acs = acs
+        self.task_to_idx = task_to_idx
+        self.remaining_tasks = [x.task for x in acs]
+        procs = {x.task: x.resource_assignmnets[0].length for x in acs}        
+        self.remaining_tasks.sort(key=lambda x: procs[x], reverse=True)  # Sort the tasks by non-increasing proc time on res. 0
+        self.task_to_idx = task_to_idx
+        
+        return self
+        
+    def _initialize_all(self, fixed_task_mapping: Mapping[str,int], remaining_tasks: List[str], acs: List[instance.AssignmentCharacteristic], task_to_idx: Mapping[str,int]):
+        self.fixed_task_mapping = fixed_task_mapping
+        self.remaining_tasks = remaining_tasks
+        self.acs = acs
+        self.task_to_idx = task_to_idx
+        
+        return self
+                        
+    def constrain_global_model(self, model: grb.Model, x_ijk: grb.tupledict, windows_ub: int):
+        """Add constraints to the global model according to this Branching Rule"""
+        for t, k_fix in self.fixed_task_mapping.items():
+            i = self.task_to_idx[t]            
+            model.addConstr(x_ijk.sum(i, "*", k_fix) == 1)        
+    
+    def constrain_recovery_model(self, model: grb.Model, x_ijk: grb.tupledict, windows_ub: int):
+        """Add constraints to the recovery model according to this Branching Rule"""
+        for t, k_fix in self.fixed_task_mapping.items():
+            i = self.task_to_idx[t]            
+            model.addConstr(x_ijk.sum(i, "*", k_fix) == 1)
+    
+    def constrain_subproblem_model(self, model: grb.Model, x_ik: grb.tupledict):
+        """Add constraints to the subproblem model according to this Branching Rule"""
+        for t in self.fixed_task_mapping:
+            i = self.task_to_idx[t]            
+            k_fix = self.fixed_task_mapping[t]
+            model.addConstr(grb.quicksum(x_ik[i,k] for k in range(len(self.acs[i].resource_assignmnets)) if k != k_fix) == 0)
+    
+    def filter_patterns(self, patterns: List[instance.Pattern]) -> List[instance.Pattern]:
+        """Take old patterns and filter the ones that are not respecting this BranchingRule"""
+        filtered_patterns = []        
+        for p in patterns:
+            skip_pattern = False
+            for t in p.task_mapping:
+                if t in self.fixed_task_mapping and p.task_mapping[t] != self.fixed_task_mapping[t]:
+                    skip_pattern = True
+                    break
+            
+            if skip_pattern:
+                continue
+            else:
+                filtered_patterns.append(p)
+        return filtered_patterns
+    
+    def get_string_representation(self) -> str:
+        return "fixed_task_mapping={:s}".format(str(self.fixed_task_mapping))
+    
+    def get_branching_rules(self) -> List['BranchingRule']:
+        """Generate a list of new Branching Rules"""
+        if not self.remaining_tasks:
+            return []
+        else:
+            task = self.remaining_tasks[0]        
+            
+            all_assignments = list(range(len(self.acs[self.task_to_idx[task]].resource_assignmnets)))
+            lengths = {i: self.acs[self.task_to_idx[task]].resource_assignmnets[i].length for i in all_assignments}
+            all_assignments.sort(key=lambda x: lengths[x])  # sort the assignments from the shortest one
+
+            branches = []
+            for k in all_assignments:
+                new_mapping = self.fixed_task_mapping.copy()
+                new_mapping[task] = k
+                
+                branches.append(OnTaskBranchingRule()._initialize_all(                    
+                    new_mapping,
+                    self.remaining_tasks[1:],
+                    self.acs,
+                    self.task_to_idx)
+                )
+            return branches                            
+
+class OnPairsBranchingRule(BranchingRule):    
+    def __init__(self):
+        super().__init__()
+        self.in_same = []
+        self.in_diff = []
+        self.uf = None
+        self.used_by_diff = None
+        self.task_to_idx = None
+        self.branch_type = None
+        self.task_counter = None
+        self.remaining_pairs = None        
+    
+    def initialize(self, uf: UnionFind, task_to_idx: Mapping[str, int]):
+        self.uf = uf
+        self.task_to_idx = task_to_idx        
+        self.task_counter = {t: 0 for t in task_to_idx.keys()}
+        self.remaining_pairs = list(itertools.combinations(task_to_idx.keys(), 2))
+        self.used_by_diff = set()    
+        
+        return self    
+        
+    def _initialize_all(self, in_same: List[Tuple[str,str]], in_diff: List[Tuple[str,str]], 
+                       uf: UnionFind, used_by_diff: set, task_to_idx: Mapping[str,int], 
+                       branch_type: OnPairsBranch, task_counter: Mapping[str,int], remaining_pairs: List[Tuple[str,str]]):
+        self.in_same = in_same
+        self.in_diff = in_diff
+        self.uf = uf
+        self.used_by_diff = used_by_diff
+        self.task_to_idx = task_to_idx
+        self.branch_type = branch_type
+        self.task_counter = task_counter
+        self.remaining_pairs = remaining_pairs
+        
+        return self
+        
+    def constrain_global_model(self, model: grb.Model, x_ijk: grb.tupledict, windows_ub: int):
+        """Add constraints to the global model according to this Branching Rule"""                                        
+        for t1, t2 in self.in_same:                
+            model.addConstrs(x_ijk.sum(self.task_to_idx[t1], j, "*") == x_ijk.sum(self.task_to_idx[t2], j, "*")
+                                for j in range(windows_ub))                
+                    
+        for t1, t2 in self.in_diff:                
+            model.addConstrs(x_ijk.sum(self.task_to_idx[t1], j, "*") + x_ijk.sum(self.task_to_idx[t2], j, "*") <= 1
+                                for j in range(windows_ub))                
+    
+    def constrain_recovery_model(self, model: grb.Model, x_ijk: grb.tupledict, windows_ub):
+        """Add constraints to the recovery model according to this Branching Rule"""
+        for t1, t2 in self.in_same:
+            model.addConstrs(x_ijk.sum(self.task_to_idx[t1], j, "*") == x_ijk.sum(self.task_to_idx[t2], j, "*")
+                             for j in range(windows_ub))
+            
+        for t1, t2 in self.in_diff:
+            model.addConstrs(x_ijk.sum(self.task_to_idx[t1], j, "*") + x_ijk.sum(self.task_to_idx[t2], j, "*") <= 1
+                             for j in range(windows_ub))
+    
+    def constrain_subproblem_model(self, model: grb.Model, x_ik: grb.tupledict):
+        """Add constraints to the subproblem model according to this Branching Rule"""        
+        for t1, t2 in self.in_same:            
+            model.addConstr(x_ik.sum(self.task_to_idx[t1], "*") == x_ik.sum(self.task_to_idx[t2],"*"))
+
+        for t1, t2 in self.in_diff:            
+            model.addConstr(x_ik.sum(self.task_to_idx[t1], "*") + x_ik.sum(self.task_to_idx[t2],"*") <= 1 ) 
+    
+    def filter_patterns(self, patterns: List[instance.Pattern]) -> List[instance.Pattern]:
+        """Take old patterns and filter the ones that are not respecting this BranchingRule"""
+        if self.branch_type == OnPairsBranch.IN_SAME:
+            pair = self.in_same[-1]  # current branching pair to use for the filtering
+            filtered_patterns = [p for p in patterns if ((pair[0] in p.task_mapping and pair[1] in p.task_mapping)
+                                            or (pair[0] not in p.task_mapping and pair[1] not in p.task_mapping))]
+        elif self.branch_type == OnPairsBranch.IN_DIFF:
+            pair = self.in_diff[-1]  # current branching pair to use for the filtering
+            filtered_patterns = [p for p in patterns if not (pair[0] in p.task_mapping and pair[1] in p.task_mapping)]
+        else:
+            raise RuntimeError("Branching type {:s} is not supported".format(str(self.branch_type)))
+        
+        return filtered_patterns
+    
+    def get_string_representation(self) -> str:
+        return "in_same={:s} \nin_diff={:s}".format(str(self.in_same), str(self.in_diff))
+        
+    
+    def get_branching_rules(self) -> List[BranchingRule]:
+        """Generate a list of new Branching Rules"""        
+        if not self.remaining_pairs:  # There is no remaining pair to branch on
+            return []
+        else:
+            pair = self.remaining_pairs[0]  # currently selected branching pair
+                
+            # on same branch
+            b_same = OnPairsBranchingRule()._initialize_all(
+                self.in_same + [pair],
+                self.in_diff,
+                self.uf.get_copy(),
+                self.used_by_diff,
+                self.task_to_idx,
+                OnPairsBranch.IN_SAME,
+                self.task_counter.copy(),
+                self.remaining_pairs[1:]
+            )
+            
+            b_same.uf.union(self.task_to_idx[pair[0]], self.task_to_idx[pair[1]])   
+            b_same.task_counter[pair[0]] += 1
+            b_same.task_counter[pair[1]] += 1                     
+                        
+            b_same.remaining_pairs = [p for p in b_same.remaining_pairs if not b_same.uf.find(self.task_to_idx[p[0]], self.task_to_idx[p[1]])]                        
+            b_same.remaining_pairs.sort(key=lambda x: b_same.task_counter[x[0]] + b_same.task_counter[x[1]], reverse=False)                        
+            
+            # on diff branch 
+            b_diff = OnPairsBranchingRule()._initialize_all(
+                self.in_same,
+                self.in_diff + [pair],
+                self.uf.get_copy(),
+                self.used_by_diff | set([(self.uf._root(self.task_to_idx[pair[0]]), self.uf._root(self.task_to_idx[pair[1]])),
+                                         (self.uf._root(self.task_to_idx[pair[1]]), self.uf._root(self.task_to_idx[pair[0]]))]),
+                self.task_to_idx,
+                OnPairsBranch.IN_DIFF,
+                self.task_counter.copy(),
+                self.remaining_pairs[1:]
+            )
+            b_diff.task_counter[pair[0]] += 1
+            b_diff.task_counter[pair[1]] += 1                     
+            b_diff.remaining_pairs = [p for p in b_diff.remaining_pairs if (b_diff.uf._root(self.task_to_idx[p[0]]), 
+                                                                            b_diff.uf._root(self.task_to_idx[p[1]])) not in b_diff.used_by_diff]
+            b_diff.remaining_pairs.sort(key=lambda x: b_diff.task_counter[x[0]] + b_diff.task_counter[x[1]], reverse=False)
+            
+            return [b_same, b_diff]
+    
 
 class ILPSolver:    
     def __init__(self):
@@ -41,6 +292,7 @@ class ILPSolver:
 
 class MasterModel(ILPSolver):
     def __init__(self, patterns: List[instance.Pattern], major_frame_length: int, tasks: List[str], bin_vars: bool=False, timelimit: float=float("inf")):
+        super().__init__()
         self.alpha = None
         self.patterns = patterns
         self.major_frame_length = major_frame_length
@@ -64,7 +316,6 @@ class MasterModel(ILPSolver):
             alpha = m.addVars(len(self.patterns), vtype=grb.GRB.BINARY, lb=0, ub=1, name="alpha")
         else:
             alpha = m.addVars(len(self.patterns), vtype=grb.GRB.CONTINUOUS, lb=0, ub=1, name="alpha")
-        
         
         # constraints
         # - major frame length        
@@ -174,59 +425,58 @@ class MasterModel(ILPSolver):
         
 
 
-def get_pair(selected_patterns: List[instance.Pattern], on_same: List[Tuple[str,str]], on_diff: List[Tuple[str,str]]) -> Tuple[str,str]:
-    def pair_selection_heuristis(lst: List[Tuple[str,str]]) -> Tuple[str,str]:                
-        lst = sorted(lst, key=lambda x: task_counter[x[0]] + task_counter[x[1]], reverse=False)
+# def get_pair(selected_patterns: List[instance.Pattern], pos_branch: List[Tuple[str,str]], neg_branch: List[Tuple[str,str]]) -> Tuple[str,str]:
+#     def pair_selection_heuristis(lst: List[Tuple[str,str]]) -> Tuple[str,str]:                
+#         lst = sorted(lst, key=lambda x: task_counter[x[0]] + task_counter[x[1]], reverse=False)
         
-        return lst[0]  # TODO: implement some heuristic
-        #return lst[random.randint(0,len(lst))]
+#         return lst[0]  # TODO: implement some heuristic
+#         #return lst[random.randint(0,len(lst))]
     
-    all_tasks = set()
-    for p in selected_patterns:
-        all_tasks.update(p.task_mapping.keys())
+#     all_tasks = set()
+#     for p in selected_patterns:
+#         all_tasks.update(p.task_mapping.keys())
     
-    task_counter = {t: 0 for t in all_tasks}
-    for a,b in on_same:
-        task_counter[a] += 1
-        task_counter[b] += 1
-    for a,b in on_diff:
-        task_counter[a] += 1
-        task_counter[b] += 1
+#     task_counter = {t: 0 for t in all_tasks}
+#     for a,b in pos_branch:
+#         task_counter[a] += 1
+#         task_counter[b] += 1
+#     for a,b in neg_branch:
+#         task_counter[a] += 1
+#         task_counter[b] += 1
         
-    task_to_idx = {t: i for i, t in enumerate(all_tasks)}        
-    uf = UnionFind(len(all_tasks))
+#     task_to_idx = {t: i for i, t in enumerate(all_tasks)}        
+#     uf = UnionFind(len(all_tasks))
     
-    for a,b in on_same:
-        uf.union(task_to_idx[a], task_to_idx[b])      
+#     for a,b in pos_branch:
+#         uf.union(task_to_idx[a], task_to_idx[b])      
         
-    used_by_on_diff = set()
-    for i,j in on_diff:
-        used_by_on_diff.add((uf._root(task_to_idx[i]), uf._root(task_to_idx[j])))  
-        used_by_on_diff.add((uf._root(task_to_idx[j]), uf._root(task_to_idx[i])))  
+#     used_by_neg_branch = set()
+#     for i,j in neg_branch:
+#         used_by_neg_branch.add((uf._root(task_to_idx[i]), uf._root(task_to_idx[j])))  
+#         used_by_neg_branch.add((uf._root(task_to_idx[j]), uf._root(task_to_idx[i])))  
             
-    all_pairs = itertools.combinations(all_tasks, 2)  # combine the tasks
-    all_pairs = [p for p in all_pairs if p not in on_same and p not in on_diff]  # filter already used tasks
-    all_pairs = [p for p in all_pairs if not uf.find(task_to_idx[p[0]], task_to_idx[p[1]])]  # filter on same components
-    all_pairs = [p for p in all_pairs if (uf._root(task_to_idx[p[0]]), uf._root(task_to_idx[p[1]])) not in used_by_on_diff]  # filter on diff components
+#     all_pairs = itertools.combinations(all_tasks, 2)  # combine the tasks
+#     all_pairs = [p for p in all_pairs if p not in pos_branch and p not in neg_branch]  # filter already used tasks
+#     all_pairs = [p for p in all_pairs if not uf.find(task_to_idx[p[0]], task_to_idx[p[1]])]  # filter on same components
+#     all_pairs = [p for p in all_pairs if (uf._root(task_to_idx[p[0]]), uf._root(task_to_idx[p[1]])) not in used_by_neg_branch]  # filter on diff components
     
-    if all_pairs:
-        return pair_selection_heuristis(all_pairs)
-    else:
-        return None
+#     if all_pairs:
+#         return pair_selection_heuristis(all_pairs)
+#     else:
+#         return None
 
  
 class SubproblemModelILP(ILPSolver):
     
-    def __init__(self, env: instance.Environment, acs: List[instance.AssignmentCharacteristic], dual_prices: Tuple[float, Mapping[str, float]],
-                 on_same: List[Tuple[str,str]], on_diff: List[Tuple[str,str]], timelimit: float=float("inf")):
+    def __init__(self, env: instance.Environment, acs: List[instance.AssignmentCharacteristic], dual_prices: Tuple[float, Mapping[str, float]], timelimit: float=float("inf")):
+        super().__init__()
         self.env = env
         self.acs = acs
-        self.dual_prices = dual_prices 
-        self.on_same = on_same
-        self.on_diff = on_diff
+        self.dual_prices = dual_prices         
         self.x_ik = None       
         self.l = None        
         self.timelimit = timelimit
+        self.task_to_idx = None
         
         t_s = time.time()
         self._init_model()        
@@ -241,6 +491,7 @@ class SubproblemModelILP(ILPSolver):
         task_to_idx = {}
         for i, a in enumerate(self.acs):
             task_to_idx[a.task] = i
+        self.task_to_idx = task_to_idx
 
         # variables
         x_ik = m.addVars([(i, k)
@@ -279,18 +530,18 @@ class SubproblemModelILP(ILPSolver):
                      for k in range(len(self.acs[i].resource_assignmnets)))
         m.addConstr(l <= self.env.major_frame_length)
 
-        # - branching constraints
-        for t1, t2 in self.on_same:
-            i1 = task_to_idx[t1]
-            i2 = task_to_idx[t2]
-            m.addConstr(x_ik.sum(i1, "*") == x_ik.sum(i2,"*"))  # in same window
-            #m.addConstr(x_ik[i1, k] == x_ik[i2, k] for k in range(len(self.acs[i].resource_assignmnets)))  # in same window
+        # # - branching constraints
+        # for t1, t2 in self.pos_branch:
+        #     i1 = task_to_idx[t1]
+        #     i2 = task_to_idx[t2]
+        #     m.addConstr(x_ik.sum(i1, "*") == x_ik.sum(i2,"*"))  # in same window
+        #     #m.addConstr(x_ik[i1, k] == x_ik[i2, k] for k in range(len(self.acs[i].resource_assignmnets)))  # in same window
 
-        for t1, t2 in self.on_diff:
-            i1 = task_to_idx[t1]
-            i2 = task_to_idx[t2]
-            m.addConstr(x_ik.sum(i1, "*") + x_ik.sum(i2,"*") <= 1 )  # in different windows
-            #m.addConstr(x_ik[i1, k] + x_ik[i2,k] <= 1 for k in range(len(self.acs[i].resource_assignmnets)))  # in different windows
+        # for t1, t2 in self.neg_branch:
+        #     i1 = task_to_idx[t1]
+        #     i2 = task_to_idx[t2]
+        #     m.addConstr(x_ik.sum(i1, "*") + x_ik.sum(i2,"*") <= 1 )  # in different windows
+        #     #m.addConstr(x_ik[i1, k] + x_ik[i2,k] <= 1 for k in range(len(self.acs[i].resource_assignmnets)))  # in different windows
         
         # objective
         obj = grb.quicksum(x_ik[i, k] * (self.acs[i].resource_assignmnets[k].length
@@ -303,7 +554,21 @@ class SubproblemModelILP(ILPSolver):
         self.model = m
         self.x_ik = x_ik
         self.l = l
+    
+    def forbid_assignment(self, assignment: Mapping[str, int]):        
+        # if we have binary variables x, y, z
+        # and the assignment we want to forbid is x=0, y=1, z=0
+        # we construct formula (1-x) + y + (1-z) < 3
+        # -> 2 + (-x -y -z) + 2y < 3
+        # -> - sum (all variables) + 2*(positive vars) < number of positive vars
+        expr = -self.x_ik.sum("*", "*")        
         
+        for t in assignment:
+            t_idx = self.task_to_idx[t]
+            expr += 2 * self.x_ik[t_idx, assignment[t]]
+        
+        self.model.addConstr(expr <= len(assignment)-1)
+    
     def get_pattern(self) -> instance.Pattern:
         if not self.solved:
             logging.warning("model was not solved")
@@ -367,12 +632,10 @@ class SubproblemModelILP(ILPSolver):
         return patterns    
         
 class RecoveryModel(ILPSolver):
-    def __init__(self, env: instance.Environment, acs: List[instance.AssignmentCharacteristic], 
-                 on_same: List[Tuple[str,str]], on_diff: List[Tuple[str,str]], timelimit: float=float("inf")):
+    def __init__(self, env: instance.Environment, acs: List[instance.AssignmentCharacteristic], timelimit: float=float("inf")):
+        super().__init__()
         self.env = env
-        self.acs = acs 
-        self.on_same = on_same
-        self.on_diff = on_diff
+        self.acs = acs         
         self.x = None
         self.l = None
         self.timelimit = timelimit
@@ -423,18 +686,18 @@ class RecoveryModel(ILPSolver):
         # - major frame length
         m.addConstr(l_j.sum("*") <= self.env.major_frame_length)
         
-        # - branching constraints
-        for t1, t2 in self.on_same:
-            i1 = task_to_idx[t1]
-            i2 = task_to_idx[t2]
-            m.addConstrs(x_ijk.sum(i1, j, "*") == x_ijk.sum(i2, j, "*") for j in range(num_tasks))  # in same window
-            # m.addConstrs(x_ijk[i1, j, k] == x_ijk[i2, j, k] for j in range(num_tasks) for k in range(len(self.acs[i].resource_assignmnets)))
+        # # - branching constraints
+        # for t1, t2 in self.pos_branch:
+        #     i1 = task_to_idx[t1]
+        #     i2 = task_to_idx[t2]
+        #     m.addConstrs(x_ijk.sum(i1, j, "*") == x_ijk.sum(i2, j, "*") for j in range(num_tasks))  # in same window
+        #     # m.addConstrs(x_ijk[i1, j, k] == x_ijk[i2, j, k] for j in range(num_tasks) for k in range(len(self.acs[i].resource_assignmnets)))
 
-        for t1, t2 in self.on_diff:
-            i1 = task_to_idx[t1]
-            i2 = task_to_idx[t2]
-            m.addConstrs(x_ijk.sum(i1, j, "*") + x_ijk.sum(i2, j, "*") <= 1 for j in range(num_tasks))  # in different windows
-            # m.addConstrs(x_ijk[i1, j, k] + x_ijk[i2, j, k] <= 1 for j in range(num_tasks) for k in range(len(self.acs[i].resource_assignmnets)))
+        # for t1, t2 in self.neg_branch:
+        #     i1 = task_to_idx[t1]
+        #     i2 = task_to_idx[t2]
+        #     m.addConstrs(x_ijk.sum(i1, j, "*") + x_ijk.sum(i2, j, "*") <= 1 for j in range(num_tasks))  # in different windows
+        #     # m.addConstrs(x_ijk[i1, j, k] + x_ijk[i2, j, k] <= 1 for j in range(num_tasks) for k in range(len(self.acs[i].resource_assignmnets)))
                         
         # objective
         # either none (just check feasibility) or minimize the total length
@@ -468,7 +731,7 @@ class RecoveryModel(ILPSolver):
        
 class BranchAndPriceSolver:
 
-    def __init__(self, arg_parser: ap.ArgParser, env: instance.Environment, acs: List[instance.AssignmentCharacteristic], init_data_path: str, timelimit: float=float("inf")):
+    def __init__(self, arg_parser: ap.ArgParser, env: instance.Environment, acs: List[instance.AssignmentCharacteristic], init_data_path: str, timelimit: float=float("inf"), branching_type: BranchingType=BranchingType.ON_PAIRS):
         self.arg_parser = arg_parser
         self.env = env
         self.acs = acs
@@ -477,6 +740,7 @@ class BranchAndPriceSolver:
         self.patterns = None
         self.timelimit = timelimit
         self.time_start = None
+        self.branching_type = branching_type
                 
         self.best_objective = float('inf')        
         self.solving_time = 0
@@ -502,18 +766,16 @@ class BranchAndPriceSolver:
         self.time_start = t_s
         # INITIAL SOLUTION
         if self.init_data_path:  # initialize from data file
-            json_data = instance.read_json_from_file(self.init_data_path)
-            
-                        
+            json_data = instance.read_json_from_file(self.init_data_path)                                    
             patterns = instance.get_patterns(json_data)
             self.best_objective = instance.get_solution_objective(json_data)        
         else:  # use Recovery model for initialization            
             logging.info("no init data provided, trying the RecoveryModel")            
-            rm = RecoveryModel(self.env, self.acs, [], [], timelimit=self._get_remaining_time())
+            rm = RecoveryModel(self.env, self.acs, timelimit=self._get_remaining_time())
             rm.solve()
             patterns = rm.get_patterns()
             self.best_objective = sum([p.cost for p in patterns]) / self.env.major_frame_length
-            self.time_recovery += rm.solving_time + rm.init_time
+            self.time_recovery += rm.solving_time + rm.init_time            
                         
         # BRANCH AND PRICE
         if patterns:
@@ -522,10 +784,17 @@ class BranchAndPriceSolver:
                                          {"objective": str(self.best_objective)}, 
                                          [p.to_window(self.env, self.task_to_ac) for p in patterns])
             tasks = instance.patterns_to_task(patterns, self.task_to_ac)
+            init_obj = self.best_objective
             
             # Start beanch-and-price
-            t_start=time.time()    
-            bab_s = self.branch_and_price([], [], patterns)
+            t_start=time.time()            
+            if self.branching_type == BranchingType.ON_TASKS:
+                b_rule = OnTaskBranchingRule().initialize(self.acs, {a.task: i for i, a in enumerate(self.acs)})
+            elif self.branching_type == BranchingType.ON_PAIRS:                
+                b_rule = OnPairsBranchingRule().initialize(UnionFind(len(self.acs)), {a.task: i for i, a in enumerate(self.acs)})            
+            else:
+                raise RuntimeError("Branching type {:s} is not known".format(str(self.branching_type)))            
+            bab_s = self.branch_and_price(b_rule, patterns)
             t_end=time.time()
 
             self.solving_time = int((t_end - t_start) * 1000)  # to ms
@@ -533,7 +802,8 @@ class BranchAndPriceSolver:
             logging.info("search ended")
             logging.info("solution quality {:f}".format(self.best_objective))
             
-            if bab_s:  # use the initial solution if nothing better was found
+            EPS = 1e-4
+            if bab_s and abs(self.best_objective - init_obj) > EPS:  # use the initial solution if nothing better was found                
                 sol, tasks = bab_s
         else:        
             logging.info("no initial solution was provided/found")
@@ -542,7 +812,8 @@ class BranchAndPriceSolver:
             
         t_e = time.time()
         
-        sol.solution_time = int(round((t_e - t_s) * 1000))        
+        sol.solution_time = int(round((t_e - t_s) * 1000)) 
+        sol.solver_name = "BAP" + self.branching_type.name       
         # add metadata
         sol.solver_metadata["number_of_nodes"] = str(self.number_of_nodes)
         sol.solver_metadata["time_masters_init"] = "{:0.2f}".format(self.time_masters_init)
@@ -557,23 +828,22 @@ class BranchAndPriceSolver:
             sol.solver_metadata["patterns_generated_avg"] = "{:0.2f}".format(sum(self.patterns_generated_num) / len(self.patterns_generated_num))                
         else:
             sol.solver_metadata["patterns_generated_avg"] = "0"
-        sol.solver_metadata["optimal"] = str(not self.interrupted)
+        sol.solver_metadata["optimal"] = str(not self.interrupted)                            
                     
         return sol, tasks
 
-    def branch_and_price(self, on_same: List[Tuple[str,str]], on_diff: List[Tuple[str,str]], patterns: List[instance.Pattern]):
-        logging.info("branching, on same = {:s}, on diff = {:s}".format(str(on_same), str(on_diff)))            
+    def branch_and_price(self, b_rule: BranchingRule, patterns: List[instance.Pattern]):
+        logging.info("branching\n{:s}".format(b_rule.get_string_representation()))
         if not self._get_remaining_time():  # reamining time is 0
             logging.warning("timelimit was reached; exiting the branch")
             self.interrupted = True
             return None
         
+        self.number_of_nodes += 1
         env = self.env 
         acs = self.acs      
         tasks = [ac.task for ac in acs]
-                
-        self.number_of_nodes += 1
-        
+                                
         logging.info("PATTERNS {:d}".format(len(patterns)))
         for p in patterns:
             logging.info("    {:s}".format(str(p.to_dict())))
@@ -581,6 +851,7 @@ class BranchAndPriceSolver:
         # Iterate - master -> subproblem
         n_patterns = 0
         last_pattern_mapping = None
+        ss_forbidden = []
         while True:            
             # - solve restricted master problem
             mm = MasterModel(patterns, env.major_frame_length, tasks, timelimit=self._get_remaining_time())            
@@ -603,7 +874,13 @@ class BranchAndPriceSolver:
             pi0, pit = mm.get_dual_prices()
                 
             # - solve subproblem
-            ss = SubproblemModelILP(env, acs, (pi0, pit), on_same, on_diff, timelimit=self._get_remaining_time())
+            ss = SubproblemModelILP(env, acs, (pi0, pit), timelimit=self._get_remaining_time())
+            b_rule.constrain_subproblem_model(ss.model, ss.x_ik)
+            
+            # forbid assignments, which repeated (due to numeric problems?)
+            for f_a in ss_forbidden:
+                ss.forbid_assignment(f_a)
+            
             ss.solve()
             
             if ss.time_limit_reached():
@@ -628,10 +905,14 @@ class BranchAndPriceSolver:
                 
                 if p.task_mapping == last_pattern_mapping:
                     logging.info("  warning - task mapping of the last pattern is the same as the current one {:s}".format(str(p.task_mapping)))
-                    logging.info("          - breaking the iteration (assuming it is just about numerical issues")
-                    # TODO: optimal = false (possibly?)
-                    self.interrupted = True
-                    break
+                    # forbid the assignment in the future subproblems
+                    ss_forbidden.append(p.task_mapping)
+                    continue
+                    # previously used: just break and hope it will be ok
+                    #logging.info("          - breaking the iteration (assuming it is just about numerical issues")
+                    ## TODO: optimal = false (possibly?)
+                    #self.interrupted = True
+                    #break
                 
                 patterns.append(p)    
                 last_pattern_mapping = p.task_mapping  
@@ -643,7 +924,8 @@ class BranchAndPriceSolver:
         # Solve master model to get the optimal solution of the relaxed problem
         # - solve restricted master problem        
         mm = MasterModel(patterns, env.major_frame_length, [ac.task for ac in acs], timelimit=self._get_remaining_time())
-        mm.solve()                       
+        mm.solve()  
+        mm_obj = mm.get_objective()                     
                
         if mm.time_limit_reached():
             logging.warning("master model reached timelimit.")
@@ -655,9 +937,8 @@ class BranchAndPriceSolver:
         self.time_masters_solving += mm.solving_time
         
         if self.number_of_nodes == 1:  # root node
-            self.master_relaxation = mm.get_objective()
+            self.master_relaxation = mm_obj
         
-
         if not mm.solved:
             logging.warning("master model was not solved.")
             return None
@@ -667,37 +948,25 @@ class BranchAndPriceSolver:
             logging.warning("master model was not feasible.") 
             return None
                 
-        if mm.get_objective() >= self.best_objective:  # Check if master model is worse than best so far solution
-            logging.info("master model solution ({:f}) is worse than best-so-far solution ({:f}).".format(mm.get_objective(), self.best_objective))
+        if mm_obj >= self.best_objective:  # Check if master model is worse than best so far solution
+            logging.info("master model solution ({:f}) is pruned by best-so-far solution ({:f}).".format(mm.get_objective(), self.best_objective))
             return None
-        if mm.is_solution_integer():  # Check if solution is integer            
-                        
-            if mm.get_objective() < self.best_objective:
-                self.best_objective = mm.get_objective()
+        if mm.is_solution_integer():  # Check if solution is integer                                    
+            if mm_obj < self.best_objective:
+                self.best_objective = mm_obj
                 logging.info("best objective was updated to: {:f}".format(self.best_objective))                
             
             return mm.get_solution_and_tasks(self.env, self.acs)
         else:
             logging.info("master model solution is not integer")
             
-            # # :TODO : try master with binary vars
-            # mm_bin = MasterModel(patterns, env.major_frame_length, [ac.task for ac in acs], bin_vars=True)
-            # mm_bin.solve()
-    
-            # if mm_bin.feasible:
-            #     if mm_bin.get_objective() < self.best_objective:
-            #         self.best_objective = mm_bin.get_objective()
-            #         # TODO : save solution somehow  
-
-            # Create two branches and return better solution
-            t_p = time.time()
-            pair = get_pair(mm.get_selected_patterns(), on_same, on_diff)        
-            self.time_get_pair += time.time() - t_p
-            
-            if pair is None:  # There was no pair to generate                
+            new_rules = b_rule.get_branching_rules()                    
+                                    
+            if not new_rules:  # No new rules could be generated
                 logging.info("leaf solution was reached, but MP was not integer, use global model instead")
                 t_s = time.time()
-                m_global = ilp_global_solver.Solver(self.arg_parser, self.env, self.acs, on_same, on_diff)
+                m_global = ilp_global_solver.Solver(self.arg_parser, self.env, self.acs, timelimit=self._get_remaining_time())
+                b_rule.constrain_global_model(m_global.model, m_global.x_ijk, len(self.acs))
                 solution, tasks = m_global.solve()
                 t_e = time.time()
                 
@@ -706,97 +975,49 @@ class BranchAndPriceSolver:
                 if global_obj and global_obj >= 0 and global_obj < self.best_objective:
                     self.best_objective = global_obj                
                 return solution, tasks                                
-            else:
-                logging.info("branching on pair {:s}".format(str(pair)))
+            else:  # some rules exist; try branching                
+                best_branch_obj = float("inf")
+                best_branch_sol = None
 
-            # Generate new lists
-            on_same_new = on_same.copy()
-            on_diff_new = on_diff.copy()
-            on_diff_new.append(pair)
-            on_same_new.append(pair)                                                     
-            
-            p_same = [p for p in patterns if ((pair[0] in p.task_mapping and pair[1] in p.task_mapping)
-                                            or (pair[0] not in p.task_mapping and pair[1] not in p.task_mapping))]
-            p_diff = [p for p in patterns if not (pair[0] in p.task_mapping and pair[1] in p.task_mapping)]
-            
-            #p_same = [p for p in patterns if (((pair[0] in p.task_mapping and pair[1] in p.task_mapping) and p.task_mapping[pair[0]] == p.task_mapping[pair[1]])
-             #                               or (pair[0] not in p.task_mapping and pair[1] not in p.task_mapping))]
-            #p_diff = [p for p in patterns if not (pair[0] in p.task_mapping and pair[1] in p.task_mapping) or (p.task_mapping[pair[0]] != p.task_mapping[pair[1]])]
-
-            # - two branches
-            master_obj = mm.get_objective()
-            # - on same
-            sol_same = None
-            sol, prune, patterns = self._branching_recovery(on_same_new, on_diff, master_obj)
-            if prune:
-                return sol
-            else:
-                if patterns: # branch was not pruned, branch (on same)
-                    for p in patterns:
-                        if p.task_mapping not in [x.task_mapping for x in p_same]:
-                            p_same.append(p)                
-                    sol_same = self.branch_and_price(on_same_new, on_diff, p_same)
-                else:                
-                    logging.info("RecoveryModel was not feasible (on_same)")                
-            
-            # - on diff
-            sol_diff = None
-            sol, prune, patterns = self._branching_recovery(on_same, on_diff_new, master_obj)
-            if prune:
-                return sol
-            else:
-                if patterns: # branch was not pruned, branch (on diff)                                                    
-                    for p in patterns:
-                        if p.task_mapping not in [x.task_mapping for x in p_diff]:
-                            p_diff.append(p)                                
-                    sol_diff = self.branch_and_price(on_same, on_diff_new, p_diff)
-                else:
-                    logging.info("RecoveryModel was not feasible (on_diff)")            
-
-            return get_better_sol(sol_same, sol_diff)
-
-    def _branching_recovery(self,  on_same: List[Tuple[str,str]], on_diff: List[Tuple[str,str]], lower_bound: float):
-        """Return (A,B,C), where
-        A = (solution, tasks) if the solution was better, otherwise None
-        B = True if master model solution is tight (branch can be pruned)
-        C = list of patterns of the recovery model of empty list is RM not feasible
-        """        
-        rm = RecoveryModel(self.env, self.acs, on_same, on_diff)    
-        rm.solve()
-        self.time_recovery += rm.solving_time + rm.init_time
-        
-        if not rm.feasible:
-            return None, False, []
-        else:        
-            rm_patterns = rm.get_patterns()
-            rm_obj = sum([p.cost for p in rm_patterns]) / self.env.major_frame_length
-            
-            if rm_obj < self.best_objective:  # Check if objective of reconstructed solution is better
-                self.best_objective = rm_obj
-                logging.info("best objective was updated to (by RM): {:f}".format(self.best_objective))                
+                for rule in new_rules:
+                    rm = RecoveryModel(self.env, self.acs)
+                    rule.constrain_recovery_model(rm.model, rm.x, len(self.acs))
+                    rm.solve()
+                    self.time_recovery += rm.solving_time + rm.init_time
+                    
+                    if not rm.feasible:
+                        logging.info("RecoveryModel was not feasible for {:s}".format(rule.get_string_representation()))                
+                        continue
+                    else:        
+                        rm_patterns = rm.get_patterns()
+                        rm_obj = sum([p.cost for p in rm_patterns]) / self.env.major_frame_length
+                        
+                        rm_solution = instance.Solution(True, "BAP", time.time() - self.time_start,
+                                                {"objective": str(rm_obj)}, 
+                                                [p.to_window(self.env, self.task_to_ac) for p in rm_patterns])
+                        rm_tasks = instance.patterns_to_task(rm_patterns, self.task_to_ac)    
+                                                
+                        if rm_obj < self.best_objective:  # Check if objective of reconstructed solution is better
+                            self.best_objective = rm_obj
+                            logging.info("best objective was updated to (by RM): {:f}".format(self.best_objective))                                                                
+                        
+                        if rm_obj <= mm_obj:  # prune this node if integer solution equal to relaxed solution was found                                               
+                            return (rm_solution, rm_tasks)
+                        
+                        if rm_obj < best_branch_obj:
+                            best_branch_obj = rm_obj
+                            best_branch_sol = (rm_solution, rm_tasks)
+                        
+                        filtered_patterns = rule.filter_patterns(patterns)  # filter patterns by new rule
+                        for p in rm_patterns:
+                            # add recovery patterns if not already there
+                            if p.task_mapping not in [x.task_mapping for x in filtered_patterns]:
+                                filtered_patterns.append(p)                
+                        # branch
+                        sol = self.branch_and_price(rule, filtered_patterns)
+                        if sol and float(sol[0].solver_metadata["objective"]) < best_branch_obj:
+                            best_branch_obj = float(sol[0].solver_metadata["objective"])
+                            best_branch_sol = sol
                 
-                # Reconstruct the solution out of recovery model
-                sol = instance.Solution(True, "BAP", -1,
-                                        {"objective": str(self.best_objective)}, 
-                                        [p.to_window(self.env, self.task_to_ac) for p in rm_patterns])
-                tasks = instance.patterns_to_task(rm_patterns, self.task_to_ac)
-                
-                sol_rm = sol, tasks                                                    
-                
-                return sol_rm, (lower_bound == rm_obj), rm_patterns        
+                return best_branch_sol
             
-            return None, False, rm_patterns
-    
-
-def get_better_sol(sol1: Tuple[instance.Solution, List[instance.Task]], sol2: Tuple[instance.Solution, List[instance.Task]]) -> Tuple[instance.Solution, List[instance.Task]]:    
-    if sol1 is None and sol2 is None:
-        return None
-    elif sol1 is None and sol2 is not None:
-        return sol2
-    elif sol1 is not None and sol2 is None:
-        return sol1
-    else:
-        if float(sol1[0].solver_metadata["objective"]) < float(sol2[0].solver_metadata["objective"]):
-            return sol1
-        else:
-            return sol2
