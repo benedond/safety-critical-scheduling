@@ -9,16 +9,18 @@ import time
 
 class Solver:
 
-    def __init__(self, arg_parser: ap.ArgParser, env: instance.Environment, acs: List[instance.AssignmentCharacteristic], 
-                 on_same: List[Tuple[str,str]]=None, on_diff: List[Tuple[str,str]]=None, timelimit:float=float("inf")):
+    def __init__(self, arg_parser: ap.ArgParser, env: instance.Environment, acs: List[instance.AssignmentCharacteristic], timelimit:float=float("inf")):
         self.arg_parser = arg_parser
         self.env = env
-        self.acs = acs
-        self.on_same = on_same
-        self.on_diff = on_diff
+        self.acs = acs        
         self.timelimit = timelimit
-
-    def solve(self) -> Tuple[instance.Solution, List[instance.Task]]:
+        self.model = None
+        self.x_ijk = None
+        self.l_j = None
+        
+        self._init()
+        
+    def _init(self):
         num_tasks = len(self.acs)
         windows_ub = num_tasks
         env = self.env
@@ -92,24 +94,24 @@ class Solver:
                           for j in range(windows_ub)
                           for k in range(len(self.acs[i].resource_assignmnets))), name="B_j value link")
 
-        # BRANCHING CONSTRAINTS USED FOR RECOVERY:
-        task_to_idx = {}
-        for i, a in enumerate(self.acs):
-            task_to_idx[a.task] = i
+        # # BRANCHING CONSTRAINTS USED FOR RECOVERY:
+        # task_to_idx = {}
+        # for i, a in enumerate(self.acs):
+        #     task_to_idx[a.task] = i
             
-        if self.on_same:   # in same window      
-            for t1, t2 in self.on_same:
-                i1 = task_to_idx[t1]
-                i2 = task_to_idx[t2]
-                model.addConstrs(x_ijk.sum(i1, j, "*") == x_ijk.sum(i2, j, "*") for j in range(windows_ub)) 
-                # model.addConstrs(x_ijk[i1, j, k] == x_ijk[i2, j, k] for j in range(windows_ub) for k in range(len(self.acs[i].resource_assignmnets))) 
+        # if self.on_same:   # in same window      
+        #     for t1, t2 in self.on_same:
+        #         i1 = task_to_idx[t1]
+        #         i2 = task_to_idx[t2]
+        #         model.addConstrs(x_ijk.sum(i1, j, "*") == x_ijk.sum(i2, j, "*") for j in range(windows_ub)) 
+        #         # model.addConstrs(x_ijk[i1, j, k] == x_ijk[i2, j, k] for j in range(windows_ub) for k in range(len(self.acs[i].resource_assignmnets))) 
         
-        if self.on_diff:   # in different windowsss
-            for t1, t2 in self.on_diff:
-                i1 = task_to_idx[t1]
-                i2 = task_to_idx[t2]
-                model.addConstrs(x_ijk.sum(i1, j, "*") + x_ijk.sum(i2, j, "*") <= 1 for j in range(windows_ub))
-                #model.addConstrs(x_ijk[i1, j, k] + x_ijk[i2, j, k] <= 1 for j in range(windows_ub) for k in range(len(self.acs[i].resource_assignmnets)))
+        # if self.on_diff:   # in different windowsss
+        #     for t1, t2 in self.on_diff:
+        #         i1 = task_to_idx[t1]
+        #         i2 = task_to_idx[t2]
+        #         model.addConstrs(x_ijk.sum(i1, j, "*") + x_ijk.sum(i2, j, "*") <= 1 for j in range(windows_ub))
+        #         #model.addConstrs(x_ijk[i1, j, k] + x_ijk[i2, j, k] <= 1 for j in range(windows_ub) for k in range(len(self.acs[i].resource_assignmnets)))
 
         # OBJECTIVE
         energy_consumption_sum=grb.quicksum(B_j[j] + grb.quicksum(x_ijk[i, j, k]
@@ -125,7 +127,18 @@ class Solver:
             print("warning: --optimize-schedule active with predictor method", file=sys.stderr)
             model.setObjectiveN(l_j.sum("*"),
                                 index=1, priority=0, weight=1.0, name="min total schedule length")
+            
+        self.model = model
+        self.x_ijk = x_ijk
+        self.l_j = l_j
 
+    def solve(self) -> Tuple[instance.Solution, List[instance.Task]]:
+        num_tasks = len(self.acs)
+        windows_ub = num_tasks
+        env = self.env
+        model = self.model
+        x_ijk = self.x_ijk
+        l_j = self.l_j
 
         # OPTIMIZE THE MODEL
         t_start=time.time()
