@@ -62,7 +62,21 @@ if __name__ == "__main__":
     else:    
         timelimit = float("inf")        
         
-    bap = decomposed_solver.BranchAndPriceSolver(ap, env, acs, init_data_path, timelimit=timelimit)
+    if ap.is_arg_present("--branching"):
+        branching = ap.get_arg_value("--branching").lower()
+        if branching == "pairs":
+            logging.info("branching was set to: ON_PAIRS")
+            branching_type = decomposed_solver.BranchingType.ON_PAIRS
+        elif branching == "tasks":
+            logging.info("branching was set to: ON_TASKS")
+            branching_type = decomposed_solver.BranchingType.ON_TASKS
+        else:
+            raise RuntimeError("Branching {:s} is not supported. Try pairs/tasks instead.".format(branching))
+    else:    
+        logging.info("branching was set to: ON_PAIRS by default")
+        branching_type = decomposed_solver.BranchingType.ON_PAIRS   
+        
+    bap = decomposed_solver.BranchAndPriceSolver(ap, env, acs, init_data_path, timelimit=timelimit, branching_type=branching_type)
     solution, tasks = bap.solve()
 
     instance.write_solution(json_data, solution)
