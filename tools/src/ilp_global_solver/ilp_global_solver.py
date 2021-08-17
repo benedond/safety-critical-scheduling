@@ -58,25 +58,15 @@ class Solver:
         model.addConstrs((l_j[j] <= env.major_frame_length * x_ijk.sum("*", j, "*")
                           for j in range(windows_ub)), name="window is not empty")
 
-        # # - window ordering constraint (symmetry pruning)
-        model.addConstrs((l_j[j] <= l_j[j-1]
-                         for j in range(1, windows_ub)), name="window ordering")
+        # - window ordering constraint (symmetry pruning)
+        #model.addConstrs((l_j[j] <= l_j[j-1]
+        #                 for j in range(1, windows_ub)), name="window ordering")
 
         # - major length constraint
         model.addConstr(l_j.sum("*") <= env.major_frame_length,
                         name="major frame length")
 
         # - resource capacity constraint
-        # model.update()
-        # for j in range(windows_ub):
-        #     print("window", j)
-        #     for processor in env.processors_list:
-        #         print("processor", processor)
-        #         print(grb.quicksum(x_ijk[i, j, k] * acp.processing_units
-        #                                for i in range(num_tasks)
-        #                                for k in range(len(self.acs[i].resource_assignmnets))
-        #                                for acp in self.acs[i].resource_assignmnets[k].processors if acp.processor == processor))
-        
         model.addConstrs((grb.quicksum(x_ijk[i, j, k] * acp.processing_units
                                        for i in range(num_tasks)
                                        for k in range(len(self.acs[i].resource_assignmnets))
@@ -93,25 +83,6 @@ class Solver:
                           for i in range(num_tasks)
                           for j in range(windows_ub)
                           for k in range(len(self.acs[i].resource_assignmnets))), name="B_j value link")
-
-        # # BRANCHING CONSTRAINTS USED FOR RECOVERY:
-        # task_to_idx = {}
-        # for i, a in enumerate(self.acs):
-        #     task_to_idx[a.task] = i
-            
-        # if self.on_same:   # in same window      
-        #     for t1, t2 in self.on_same:
-        #         i1 = task_to_idx[t1]
-        #         i2 = task_to_idx[t2]
-        #         model.addConstrs(x_ijk.sum(i1, j, "*") == x_ijk.sum(i2, j, "*") for j in range(windows_ub)) 
-        #         # model.addConstrs(x_ijk[i1, j, k] == x_ijk[i2, j, k] for j in range(windows_ub) for k in range(len(self.acs[i].resource_assignmnets))) 
-        
-        # if self.on_diff:   # in different windowsss
-        #     for t1, t2 in self.on_diff:
-        #         i1 = task_to_idx[t1]
-        #         i2 = task_to_idx[t2]
-        #         model.addConstrs(x_ijk.sum(i1, j, "*") + x_ijk.sum(i2, j, "*") <= 1 for j in range(windows_ub))
-        #         #model.addConstrs(x_ijk[i1, j, k] + x_ijk[i2, j, k] <= 1 for j in range(windows_ub) for k in range(len(self.acs[i].resource_assignmnets)))
 
         # OBJECTIVE
         energy_consumption_sum=grb.quicksum(B_j[j] + grb.quicksum(x_ijk[i, j, k]
