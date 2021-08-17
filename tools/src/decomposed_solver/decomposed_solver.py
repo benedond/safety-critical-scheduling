@@ -3,6 +3,7 @@ from common import arg_parser as ap
 from common import instance
 from typing import List, Tuple, Mapping
 from ilp_global_solver import ilp_global_solver
+from ilp_fixed_solver import ilp_fixed_solver
 import gurobipy as grb
 import sys
 import time
@@ -123,7 +124,7 @@ class OnTaskBranchingRule(BranchingRule):
             #all_assignments.sort(key=lambda x: lengths[x])  # sort the assignments from the shortest one
             slopes = {i: self.acs[self.task_to_idx[task]].resource_assignmnets[i].slope for i in all_assignments}
             all_assignments.sort(key=lambda x: slopes[x])  # sort the assignments from the smallest slope            
-
+            
             branches = []
             for k in all_assignments:
                 new_mapping = self.fixed_task_mapping.copy()
@@ -424,50 +425,7 @@ class MasterModel(ILPSolver):
         
         return (solution, tasks)
 
-        
 
-
-# def get_pair(selected_patterns: List[instance.Pattern], pos_branch: List[Tuple[str,str]], neg_branch: List[Tuple[str,str]]) -> Tuple[str,str]:
-#     def pair_selection_heuristis(lst: List[Tuple[str,str]]) -> Tuple[str,str]:                
-#         lst = sorted(lst, key=lambda x: task_counter[x[0]] + task_counter[x[1]], reverse=False)
-        
-#         return lst[0]  # TODO: implement some heuristic
-#         #return lst[random.randint(0,len(lst))]
-    
-#     all_tasks = set()
-#     for p in selected_patterns:
-#         all_tasks.update(p.task_mapping.keys())
-    
-#     task_counter = {t: 0 for t in all_tasks}
-#     for a,b in pos_branch:
-#         task_counter[a] += 1
-#         task_counter[b] += 1
-#     for a,b in neg_branch:
-#         task_counter[a] += 1
-#         task_counter[b] += 1
-        
-#     task_to_idx = {t: i for i, t in enumerate(all_tasks)}        
-#     uf = UnionFind(len(all_tasks))
-    
-#     for a,b in pos_branch:
-#         uf.union(task_to_idx[a], task_to_idx[b])      
-        
-#     used_by_neg_branch = set()
-#     for i,j in neg_branch:
-#         used_by_neg_branch.add((uf._root(task_to_idx[i]), uf._root(task_to_idx[j])))  
-#         used_by_neg_branch.add((uf._root(task_to_idx[j]), uf._root(task_to_idx[i])))  
-            
-#     all_pairs = itertools.combinations(all_tasks, 2)  # combine the tasks
-#     all_pairs = [p for p in all_pairs if p not in pos_branch and p not in neg_branch]  # filter already used tasks
-#     all_pairs = [p for p in all_pairs if not uf.find(task_to_idx[p[0]], task_to_idx[p[1]])]  # filter on same components
-#     all_pairs = [p for p in all_pairs if (uf._root(task_to_idx[p[0]]), uf._root(task_to_idx[p[1]])) not in used_by_neg_branch]  # filter on diff components
-    
-#     if all_pairs:
-#         return pair_selection_heuristis(all_pairs)
-#     else:
-#         return None
-
- 
 class SubproblemModelILP(ILPSolver):
     
     def __init__(self, env: instance.Environment, acs: List[instance.AssignmentCharacteristic], dual_prices: Tuple[float, Mapping[str, float]], timelimit: float=float("inf")):
@@ -532,19 +490,6 @@ class SubproblemModelILP(ILPSolver):
                      for k in range(len(self.acs[i].resource_assignmnets)))
         m.addConstr(l <= self.env.major_frame_length)
 
-        # # - branching constraints
-        # for t1, t2 in self.pos_branch:
-        #     i1 = task_to_idx[t1]
-        #     i2 = task_to_idx[t2]
-        #     m.addConstr(x_ik.sum(i1, "*") == x_ik.sum(i2,"*"))  # in same window
-        #     #m.addConstr(x_ik[i1, k] == x_ik[i2, k] for k in range(len(self.acs[i].resource_assignmnets)))  # in same window
-
-        # for t1, t2 in self.neg_branch:
-        #     i1 = task_to_idx[t1]
-        #     i2 = task_to_idx[t2]
-        #     m.addConstr(x_ik.sum(i1, "*") + x_ik.sum(i2,"*") <= 1 )  # in different windows
-        #     #m.addConstr(x_ik[i1, k] + x_ik[i2,k] <= 1 for k in range(len(self.acs[i].resource_assignmnets)))  # in different windows
-        
         # objective
         obj = grb.quicksum(x_ik[i, k] * (self.acs[i].resource_assignmnets[k].length
                                          * self.acs[i].resource_assignmnets[k].slope 
@@ -687,20 +632,7 @@ class RecoveryModel(ILPSolver):
 
         # - major frame length
         m.addConstr(l_j.sum("*") <= self.env.major_frame_length)
-        
-        # # - branching constraints
-        # for t1, t2 in self.pos_branch:
-        #     i1 = task_to_idx[t1]
-        #     i2 = task_to_idx[t2]
-        #     m.addConstrs(x_ijk.sum(i1, j, "*") == x_ijk.sum(i2, j, "*") for j in range(num_tasks))  # in same window
-        #     # m.addConstrs(x_ijk[i1, j, k] == x_ijk[i2, j, k] for j in range(num_tasks) for k in range(len(self.acs[i].resource_assignmnets)))
-
-        # for t1, t2 in self.neg_branch:
-        #     i1 = task_to_idx[t1]
-        #     i2 = task_to_idx[t2]
-        #     m.addConstrs(x_ijk.sum(i1, j, "*") + x_ijk.sum(i2, j, "*") <= 1 for j in range(num_tasks))  # in different windows
-        #     # m.addConstrs(x_ijk[i1, j, k] + x_ijk[i2, j, k] <= 1 for j in range(num_tasks) for k in range(len(self.acs[i].resource_assignmnets)))
-                        
+                    
         # objective
         # either none (just check feasibility) or minimize the total length
         
@@ -815,7 +747,7 @@ class BranchAndPriceSolver:
         t_e = time.time()
         
         sol.solution_time = int(round((t_e - t_s) * 1000)) 
-        sol.solver_name = "BAP" + self.branching_type.name       
+        sol.solver_name = "BAP_" + self.branching_type.name       
         # add metadata
         sol.solver_metadata["number_of_nodes"] = str(self.number_of_nodes)
         sol.solver_metadata["time_masters_init"] = "{:0.2f}".format(self.time_masters_init)
@@ -967,15 +899,23 @@ class BranchAndPriceSolver:
             if not new_rules:  # No new rules could be generated
                 logging.info("leaf solution was reached, but MP was not integer, use global model instead")
                 t_s = time.time()
-                m_global = ilp_global_solver.Solver(self.arg_parser, self.env, self.acs, timelimit=self._get_remaining_time())
-                b_rule.constrain_global_model(m_global.model, m_global.x_ijk, len(self.acs))
-                solution, tasks = m_global.solve()
+                if self.branching_type == BranchingType.ON_TASKS:  # use dedicated model for fixed assignment
+                    m_global = ilp_fixed_solver.Solver(self.arg_parser, self.env, self.acs, b_rule.fixed_task_mapping, timelimit=self._get_remaining_time(), cutoff=self.best_objective if self.best_objective else None)
+                    solution, tasks = m_global.solve()
+                else:  # use generic form for other types of branching
+                    m_global = ilp_global_solver.Solver(self.arg_parser, self.env, self.acs, timelimit=self._get_remaining_time())
+                    b_rule.constrain_global_model(m_global.model, m_global.x_ijk, len(self.acs))
+                    solution, tasks = m_global.solve()
                 t_e = time.time()
                 
                 self.time_global_solving += t_e - t_s
                 global_obj = float(solution.solver_metadata["objective"])
                 if global_obj and global_obj >= 0 and global_obj < self.best_objective:
-                    self.best_objective = global_obj                
+                    self.best_objective = global_obj  
+                    
+                if m_global.model.Status == grb.GRB.TIME_LIMIT:                    
+                    self.interrupted = True
+                                  
                 return solution, tasks                                
             else:  # some rules exist; try branching                
                 best_branch_obj = float("inf")
