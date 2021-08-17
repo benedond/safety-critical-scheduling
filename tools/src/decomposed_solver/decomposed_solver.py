@@ -60,7 +60,7 @@ class OnTaskBranchingRule(BranchingRule):
         self.task_to_idx = task_to_idx
         self.remaining_tasks = [x.task for x in acs]
         procs = {x.task: x.resource_assignmnets[0].length for x in acs}        
-        self.remaining_tasks.sort(key=lambda x: procs[x], reverse=True)  # Sort the tasks by non-increasing proc time on res. 0
+        self.remaining_tasks.sort(key=lambda x: procs[x], reverse=False)  # Sort the tasks by non-decreasing proc time on res. 0
         self.task_to_idx = task_to_idx
         
         return self
@@ -119,8 +119,10 @@ class OnTaskBranchingRule(BranchingRule):
             task = self.remaining_tasks[0]        
             
             all_assignments = list(range(len(self.acs[self.task_to_idx[task]].resource_assignmnets)))
-            lengths = {i: self.acs[self.task_to_idx[task]].resource_assignmnets[i].length for i in all_assignments}
-            all_assignments.sort(key=lambda x: lengths[x])  # sort the assignments from the shortest one
+            #lengths = {i: self.acs[self.task_to_idx[task]].resource_assignmnets[i].length for i in all_assignments}
+            #all_assignments.sort(key=lambda x: lengths[x])  # sort the assignments from the shortest one
+            slopes = {i: self.acs[self.task_to_idx[task]].resource_assignmnets[i].slope for i in all_assignments}
+            all_assignments.sort(key=lambda x: slopes[x])  # sort the assignments from the smallest slope            
 
             branches = []
             for k in all_assignments:
