@@ -10,4 +10,9 @@ do
         ../../../tools/src/decomposed_solver/main.py --input $i --output $i-bap.out --log --timelimit 60 2> $i-bap.err 1> $i-bap.log
         ../../../tools/bin/visualizer.exe --input $i-bap.out --output $i-bap.png
     fi 
+
+    if [ ! -f $i-bap-task.out ]; then
+        ../../../tools/src/decomposed_solver/main.py --input $i --output $i-bap-task.out --log --timelimit 60 --branching tasks 2> $i-bap-task.err 1> $i-bap-task.log
+        ../../../tools/bin/visualizer.exe --input $i-bap-task.out --output $i-bap-task.png
+    fi 
 done
