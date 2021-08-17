@@ -92,7 +92,7 @@ class Solver:
                                                                   for k in range(len(self.acs[i].resource_assignmnets)))
                                             for j in range(windows_ub))
         model.setObjectiveN(energy_consumption_sum * 1/env.major_frame_length,
-                            index=0, priority=1, weight=1.0, name="min avg power consumption");
+                            index=0, priority=1, weight=1.0, name="min avg power consumption")
 
         if (self.arg_parser.is_arg_present("--optimize-schedule")):
             print("warning: --optimize-schedule active with predictor method", file=sys.stderr)
