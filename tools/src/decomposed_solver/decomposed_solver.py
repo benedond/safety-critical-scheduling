@@ -377,7 +377,7 @@ class MasterModel(ILPSolver):
         s_solver_name="BAP"
         s_solution_time=int(round(self.solving_time*1000))  # to ms
         s_windows=[]
-        s_metadata={"objective": "-1"}
+        s_metadata={"objective": str(float("inf"))}
 
         if s_feasible:
             s_metadata["objective"] = str(self.model.ObjVal / self.major_frame_length) 
@@ -719,6 +719,7 @@ class BranchAndPriceSolver:
                                          [p.to_window(self.env, self.task_to_ac) for p in patterns])
             tasks = instance.patterns_to_task(patterns, self.task_to_ac)
             init_obj = self.best_objective
+            logging.info("INIT OBJ" + str(init_obj))
             
             # Start beanch-and-price
             t_start=time.time()            
@@ -728,17 +729,18 @@ class BranchAndPriceSolver:
                 b_rule = OnPairsBranchingRule().initialize(UnionFind(len(self.acs)), {a.task: i for i, a in enumerate(self.acs)})            
             else:
                 raise RuntimeError("Branching type {:s} is not known".format(str(self.branching_type)))            
-            bab_s = self.branch_and_price(b_rule, patterns)
+            bap_s = self.branch_and_price(b_rule, patterns)
             t_end=time.time()
 
             self.solving_time = int((t_end - t_start) * 1000)  # to ms
                     
             logging.info("search ended")
-            logging.info("solution quality {:f}".format(self.best_objective))
+            logging.info("solution quality {:f}".format(self.best_objective))            
             
             EPS = 1e-4
-            if bab_s and abs(self.best_objective - init_obj) > EPS:  # use the initial solution if nothing better was found                
-                sol, tasks = bab_s
+            #if bab_s and abs(self.best_objective - init_obj) > EPS:  # use the initial solution if nothing better was found                
+            if bap_s and self.best_objective < init_obj - EPS:  # use the initial solution if nothing better was found                
+                sol, tasks = bap_s
         else:        
             logging.info("no initial solution was provided/found")
             sol = instance.Solution(False, "BAP", self.solving_time, {}, [])
@@ -912,6 +914,8 @@ class BranchAndPriceSolver:
                 global_obj = float(solution.solver_metadata["objective"])
                 if global_obj and global_obj >= 0 and global_obj < self.best_objective:
                     self.best_objective = global_obj  
+                    logging.info("best objective was updated to (by global): {:f}".format(self.best_objective))                
+
                     
                 if m_global.model.Status == grb.GRB.TIME_LIMIT:                    
                     self.interrupted = True
@@ -956,7 +960,7 @@ class BranchAndPriceSolver:
                             if p.task_mapping not in [x.task_mapping for x in filtered_patterns]:
                                 filtered_patterns.append(p)                
                         # branch
-                        sol = self.branch_and_price(rule, filtered_patterns)
+                        sol = self.branch_and_price(rule, filtered_patterns)                        
                         if sol and float(sol[0].solver_metadata["objective"]) < best_branch_obj:
                             best_branch_obj = float(sol[0].solver_metadata["objective"])
                             best_branch_sol = sol
