@@ -124,33 +124,27 @@ class Solver:
                 # processor-unit allocation (start with all processors empty)
                 pu_allocations={p.name: 0 for p in env.processors_list}
 
-                for i in range(num_tasks):
-                    push_task=False
-                    task_characteristic=self.acs[i]
-                    task_processors=[]
-                    task_length=-1
-
-                    k = self.idx_to_ass[i]
-                    ac = task_characteristic.resource_assignmnets[k]
-                    
-                    if x_ij[i, j].X > 0.5:                        
-                        push_task=True   
+                for i in range(num_tasks):                    
+                    if x_ij[i, j].X > 0.5:
+                        task_characteristic=self.acs[i]
+                        k = self.idx_to_ass[i]                    
+                        ac = task_characteristic.resource_assignmnets[k]
+                        task_processors=[]
+                        task_length=ac.length
+                                            
                         for p in ac.processors:
                             window_tasks_assignments.append(instance.TaskAssignment(task=task_characteristic.task,
                                                                                     processor=p.processor,
                                                                                     processing_unit=pu_allocations[p.processor],
                                                                                     start=0,
-                                                                                    length=ac.length))
+                                                                                    length=task_length))
 
                             # increment the processor units
                             pu_allocations[p.processor] += p.processing_units
-
-                            task_processors.append(instance.ProcessorAssignment(
-                                p.processor, p.processing_units))
-                            task_length=ac.length
+                            task_processors.append(instance.ProcessorAssignment(p.processor, p.processing_units))                            
 
 
-                    if push_task:
+                    
                         tasks.append(instance.Task(name=task_characteristic.task,
                                                    command=task_characteristic.command,
                                                    length=task_length,
