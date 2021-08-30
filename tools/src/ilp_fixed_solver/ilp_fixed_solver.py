@@ -57,6 +57,9 @@ class Solver:
         model.addConstrs((l_j[j] <= env.major_frame_length * x_ij.sum("*", j)
                           for j in range(windows_ub)), name="window is not empty")
 
+        # pruning constraint
+        model.addConstrs(l_j[j] >= l_j[j+1] for j in range(num_tasks-1))
+
         # - major length constraint
         model.addConstr(l_j.sum("*") <= env.major_frame_length,
                         name="major frame length")
