@@ -614,6 +614,12 @@ class RecoveryModel(ILPSolver):
         # - each task is in some window
         m.addConstrs(x_ijk.sum(i, "*", "*") == 1 for i in range(num_tasks))
         
+        # - symmetry breaker
+        m.addConstrs(l_j[j] >= l_j[j+1] for j in range(num_tasks-1))
+        #m.addConstrs(grb.quicksum(x_ijk[i,j,k]*j for j in range(num_tasks) for k in range(len(self.acs[i].resource_assignmnets)))
+        #             <= grb.quicksum(x_ijk[i+1,j,k]*j for j in range(num_tasks) for k in range(len(self.acs[i+1].resource_assignmnets)))
+        #             for i in range(num_tasks-1))        
+        
         # - resource capacities are held                        
         m.addConstrs((grb.quicksum(x_ijk[i,j, k] * acp.processing_units
                                    for i in range(num_tasks)
@@ -822,6 +828,10 @@ class BranchAndPriceSolver:
             if ss.time_limit_reached():
                 self.interrupted = True
                 return None
+            else:
+                relaxation = mm.get_objective() + ss.model.ObjVal
+                if relaxation > self.best_objective:
+                    logging.info("Relaxation {:s} is worse than best obj {:s}".format(str(relaxation), str(self.best_objective)))
             
             # - stats info (subproblem)
             self.time_sub_init += ss.init_time
@@ -926,10 +936,15 @@ class BranchAndPriceSolver:
                 best_branch_sol = None
 
                 for rule in new_rules:
-                    rm = RecoveryModel(self.env, self.acs)
+                    rm = RecoveryModel(self.env, self.acs, timelimit=self._get_remaining_time())
                     rule.constrain_recovery_model(rm.model, rm.x, len(self.acs))
                     rm.solve()
                     self.time_recovery += rm.solving_time + rm.init_time
+                    
+                    if rm.model.Status == grb.GRB.TIME_LIMIT:
+                        logging.info("Timelimit reached for recovery model.")
+                        self.interrupted = True
+                        break
                     
                     if not rm.feasible:
                         logging.info("RecoveryModel was not feasible for {:s}".format(rule.get_string_representation()))                
