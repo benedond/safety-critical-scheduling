@@ -59,8 +59,8 @@ class Solver:
                           for j in range(windows_ub)), name="window is not empty")
 
         # - window ordering constraint (symmetry pruning)
-        #model.addConstrs((l_j[j] <= l_j[j-1]
-        #                 for j in range(1, windows_ub)), name="window ordering")
+        model.addConstrs((l_j[j] >= l_j[j+1]
+                         for j in range(windows_ub-1)), name="window ordering")
 
         # - major length constraint
         model.addConstr(l_j.sum("*") <= env.major_frame_length,
