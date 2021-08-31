@@ -296,6 +296,34 @@ class ILPSolver:
     def time_limit_reached(self):
         return self.model.Status == grb.GRB.TIME_LIMIT
 
+    
+class CPSolver:    
+    def __init__(self):
+        self.model = None
+        self.solved = False
+        self.feasible = False
+        self.solving_time = None
+        self.init_time = None  
+        self.cp_sol = None
+        self.timelimit = float("inf")
+        
+    def _init_model(self):
+        raise NotImplementedError
+    
+    def solve(self):            
+        t_start=time.time()
+        self.cp_sol = self.model.solve()
+        t_end=time.time()
+        
+        self.solved = True
+        self.feasible = True if (self.cp_sol and self.cp_sol.get_solve_status() in ["Optimal", "Feasible"]) else False                
+        self.solving_time = t_end - t_start
+        
+    def time_limit_reached(self):
+        if not self.cp_sol:
+            return False
+        return self.cp_sol.get_solve_time() > self.timelimit
+
 
 class MasterModel(ILPSolver):
     def __init__(self, patterns: List[instance.Pattern], major_frame_length: int, tasks: List[str], bin_vars: bool=False, timelimit: float=float("inf")):
@@ -672,7 +700,7 @@ class RecoveryModel(ILPSolver):
                             
         return patterns
     
-class RecoveryModelCP(ILPSolver):
+class RecoveryModelCP(CPSolver):
     def __init__(self, env: instance.Environment, acs: List[instance.AssignmentCharacteristic], timelimit: float=float("inf")):
         super().__init__()
         self.env = env
@@ -692,6 +720,7 @@ class RecoveryModelCP(ILPSolver):
             task_to_idx[a.task] = i
         num_tasks = len(self.acs)
         
+        # model
         m = CpoModel()
         
         # variables
@@ -710,90 +739,68 @@ class RecoveryModelCP(ILPSolver):
         tasks = {t: m.interval_var(name="task[%s]" % (t), optional=False) for t in task_to_idx.keys()}
         
         # Constraints
-        task_alternatives = {t: [] for t in tasks.keys()}
+        task_alternatives = {t: [] for t in tasks.keys()}        
+        resource_demands = {processor: [] for processor in self.env.processors_list}
+        task_to_win_to_res = {t: {j: {k: for k in range(len(self.acs[task_to_idx[t]].resource_assignmnets))}for j in range(num_tasks)}for t in tasks.keys()}
+        
         for j in range(num_tasks):
-            tasks_in_window = []
-            for task, t_idx in tasks.items():
-                ra = self.acs[i].resource_assignmnets
+            tasks_in_window = []            
+            for t_idx, task in enumerate(tasks.keys()):
+                ra = self.acs[t_idx].resource_assignmnets
                 for k in range(len(ra)):
+                    # task alternative for each resource assignment in each window
                     cur_task = model.interval_var(size=ra[k].length, name="task[%s,%d,%d]" % (task, j, k), optional=True)
                     task_alternatices[task].append(cur_task)
                     tasks_in_window.append(cur_task)
                     # - start at the beginning of window
                     m.add(cpmod.start_at_start(cur_task, window_intervals[j]))
                     
+                    # - add resource demands
+                    for proc in ra[k].processors:
+                        resource_demands[proc.processor].append(cpmod.pulse(cur_task, proc.processing_units))                                                
+            
+            # - window spans across all tasks        
             m.add(cpmod.span(window_intervals[j], tasks_in_window))
-                
-                
             
-        
-        # Initialize tasks ----------------------------------------------------------------------------
-        tasks_at_mach = [[] for _ in range(inst.m)]
-        tasks = [None for _ in range(inst.n)]
-        
-        for j in range(inst.n):
-            alternatives = []
-            # Alternative for each machine -------------------------------------------------------------
-            for m in range(inst.m):
-                t = model.interval_var(size=inst.p[j], name="task[%d,%d]" % (m, j))
-                t.set_start_min(inst.r[j])
-                t.set_end_max(inst.d[j])
-                t.set_optional()
-
-                tasks_at_mach[m].append(t)
-                alternatives.append(t)
-            
-            # Present task (one of the alternatives) ---------------------------------------------------
-            t = model.interval_var(size=inst.p[j], name="task[%d]" % j)
-            t.set_present()
-            model.add(cpmod.alternative(t, alternatives))
-
-            tasks[j] = t
-
-        
-        
-        window_intervals
-        task
-        task_assignment        
-        x_ijk = m.addVars([(i, j, k)
-                           for i in range(num_tasks)
-                           for j in range(num_tasks)
-                           for k in range(len(self.acs[i].resource_assignmnets))],
-                          vtype=grb.GRB.BINARY,
-                          name="x")               
-        l_j = m.addVars(num_tasks, vtype=grb.GRB.INTEGER, lb=0, name="l")
-        
-        # constraints
-        # - each task is in some window
-        m.addConstrs(x_ijk.sum(i, "*", "*") == 1 for i in range(num_tasks))
+        # - resource demands constraint
+        for proc in self.env.processors_list:
+            lst = resource_demands[proc.name]
+            if lst:
+                m.add(cpmod.cumul_range(sum(lst), 0, proc.processing_units))
+                
+        # - task alternatives constraints
+        for task_name in tasks.keys():            
+            m.add(cpmod.alternative(tasks[task_name], task_alternatives[task_name]))                      
         
         # - symmetry breaker
-        m.addConstrs(l_j[j] >= l_j[j+1] for j in range(num_tasks-1))        
+        for j in range(len(window_intervals)-1):
+            m.add(cpmod.length_of(window_intervals[j]) >= cpmod.length_of(window_intervals[j+1]))        
         
-        # - resource capacities are held                        
-        m.addConstrs((grb.quicksum(x_ijk[i,j, k] * acp.processing_units
-                                   for i in range(num_tasks)
-                                   for k in range(len(self.acs[i].resource_assignmnets))
-                                   for acp in self.acs[i].resource_assignmnets[k].processors if acp.processor == processor.name)
-                      <= processor.processing_units
-                      for processor in self.env.processors_list
-                      for j in range(num_tasks)),
-                      name="resource capacity")
-        
-        # - constrain window length
-        m.addConstrs(l_j[j] >= x_ijk[i, j, k] * self.acs[i].resource_assignmnets[k].length
-                     for i in range(num_tasks)
-                     for j in range(num_tasks)
-                     for k in range(len(self.acs[i].resource_assignmnets)))
-
-        # - major frame length
-        m.addConstr(l_j.sum("*") <= self.env.major_frame_length)
-                    
         # objective
         # either none (just check feasibility) or minimize the total length
         
     def get_patterns(self) -> List[instance.Pattern]:
-        pass
+        num_tasks = len(self.acs)
+        patterns = []
+        
+        if self.solved and self.feasible:            
+            for j in range(num_tasks):
+                task_mapping = {}
+                length = 0
+                
+                for i in range(num_tasks):
+                    for k in range(len(self.acs[i].resource_assignmnets)):
+                        if self.x[i,j,k].X > 0.5:
+                            task_mapping[self.acs[i].task] = k
+                            length = max(length, self.acs[i].resource_assignmnets[k].length)
+                
+                if task_mapping:
+                    pattern = instance.Pattern(-1, length, task_mapping) 
+                    pattern.cost = pattern.compute_cost(self.acs)
+                    patterns.append(pattern)
+                            
+        return patterns
+    
          
        
 class BranchAndPriceSolver:
