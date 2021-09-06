@@ -700,6 +700,114 @@ class RecoveryModel(ILPSolver):
         return patterns
          
        
+class RecoveryModelILPFixed(ILPSolver):
+    def __init__(self, env: instance.Environment, acs: List[instance.AssignmentCharacteristic], timelimit: float=float("inf")):
+        super().__init__()
+        self.env = env
+        self.acs = acs                 
+        self.timelimit = timelimit
+        self.a_ikl = None
+        self.x_l = None
+
+        self.task_lengths = None
+        self.length_to_task_idx_and_conf = None
+        self.task_idx_to_possible_lengths = None                
+        
+        t_s = time.time()
+        self._init_model()
+        t_e = time.time()
+        self.init_time = t_e - t_s
+        
+    def _init_model(self):
+        task_to_idx = {}
+        for i, a in enumerate(self.acs):
+            task_to_idx[a.task] = i
+        num_tasks = len(self.acs)
+            
+        m = grb.Model("RecoveryModelIlpFixed")    
+        m.setParam("TimeLimit", self.timelimit)            
+        
+        # prepare some structures:
+        task_lengths = set()
+        length_to_task_idx_and_conf = dict()        
+        
+        for i in range(num_tasks):
+            for k, ra in enumerate(self.acs[i].resource_assignmnets):
+                task_lengths.add(ra.length)
+                
+                if ra.length not in length_to_task_idx_and_conf:
+                    length_to_task_idx_and_conf[ra.length] = [(i,k)]
+                else:
+                    length_to_task_idx_and_conf[ra.length].append((i,k))
+                    
+        task_lengths = sorted(task_lengths)
+        task_idx_to_possible_lengths = {(i,k): [l for l in task_lengths if l >= ra.length] for i in range(num_tasks) for k,ra in enumerate(self.acs[i].resource_assignmnets)}
+        
+        # for i, ass in task_idx_to_possible_lengths.items():
+        #     print("    ", i,ass)
+        
+        # VARIABLES
+        a_ikl = m.addVars([(i, k, l)
+                           for i in range(num_tasks)                         
+                           for k in range(len(self.acs[i].resource_assignmnets))
+                           for l in task_idx_to_possible_lengths[(i,k)]],
+                          vtype=grb.GRB.BINARY,
+                          name="a")  
+        x_l = m.addVars(task_lengths, vtype=grb.GRB.BINARY, name="x")
+        
+        # CONSTRAINTS
+        # - link x and a (if assigned then x := 1)
+        M = sum([p.processing_units for p in self.env.processors_list])
+        m.addConstrs(M*x_l[l] >= a_ikl.sum("*", "*", l) for l in task_lengths)
+        # - if window is selected, task with appropriate length is assigned there
+        m.addConstrs(x_l[l] <= grb.quicksum(a_ikl[ti, tk, l] for ti, tk in length_to_task_idx_and_conf[l]) for l in task_lengths)
+        # - windows need to fit the MF
+        m.addConstr(grb.quicksum(x_l[l] * l for l in task_lengths) <= self.env.major_frame_length)
+        # - every task is scheduled
+        m.addConstrs(a_ikl.sum(i,"*", "*") == 1 for i in range(num_tasks))
+        # - resource capacities
+        m.addConstrs((grb.quicksum(a_ikl[i,k,l] * acp.processing_units
+                                   for i in range(num_tasks)
+                                   for k in range(len(self.acs[i].resource_assignmnets))
+                                   for acp in self.acs[i].resource_assignmnets[k].processors if acp.processor == processor.name
+                                   if l in task_idx_to_possible_lengths[(i,k)])
+                      <= processor.processing_units
+                      for processor in self.env.processors_list
+                      for l in task_lengths))
+        
+        # objective
+        # either none (just check feasibility) or minimize the total length
+        
+        self.model = m
+        self.a_ikl = a_ikl
+        self.x_l = x_l
+        self.task_lengths = task_lengths
+        self.length_to_task_idx_and_conf = length_to_task_idx_and_conf
+        self.task_idx_to_possible_lengths = task_idx_to_possible_lengths
+        
+        
+    def get_patterns(self) -> List[instance.Pattern]:
+        num_tasks = len(self.acs)
+        patterns = []
+        
+        if self.solved and self.feasible:  
+            for l in self.task_lengths:
+                if self.x_l[l].X > 0.5:
+                    task_mapping = {}
+                    for i in range(num_tasks):
+                        for k in range(len(self.acs[i].resource_assignmnets)):
+                            if l not in self.task_idx_to_possible_lengths[(i,k)]:
+                                continue
+                            if self.a_ikl[i,k,l].X > 0.5:
+                                task_mapping[self.acs[i].task] = k
+                                                                               
+                    if task_mapping:
+                        pattern = instance.Pattern(-1, l, task_mapping) 
+                        pattern.cost = pattern.compute_cost(self.acs)
+                        patterns.append(pattern)
+                            
+        return patterns
+    
 class RecoveryModelCP(CPSolver):
     def __init__(self, env: instance.Environment, acs: List[instance.AssignmentCharacteristic], timelimit: float=float("inf")):
         super().__init__()
