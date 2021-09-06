@@ -1089,8 +1089,27 @@ class BranchAndPriceSolver:
                                   
                 return solution, tasks                                
             else:  # some rules exist; try branching                
+                # Try to reconstruct the solution              
+                mm_int = MasterModel(patterns, env.major_frame_length, [ac.task for ac in acs], timelimit=self._get_remaining_time(), bin_vars=True)
+                mm_int.solve()  
+                               
+                if mm.feasible:
+                    best_branch_obj = mm_int.get_objective()   
+                    best_branch_sol = mm_int.get_solution_and_tasks(self.env, self.acs)
+                    
+                    logging.warning("Master model reconstruction {:f} vs MM relaxation {:f}".format(best_branch_obj, mm.get_objective()))
+                    
+                    if best_branch_obj < self.best_objective:
+                        logging.info("Solution reconstructed from patterns ({:f}) better that best so far {:f}".format(best_branch_obj, self.best_objective))
+                        self.best_objective = best_branch_obj                        
+                        EPS = 1e-4
+                        if abs(best_branch_obj - mm.get_objective()) < EPS:
+                            logging.info("Reconstructed solution is approximately the same as master relaxation, terminating the iteration.")
+                            return best_branch_sol                            
+                else:                                                
                 best_branch_obj = float("inf")
                 best_branch_sol = None
+                # End of reconstruction
 
                 for rule in new_rules:
                     rm = RecoveryModel(self.env, self.acs, timelimit=self._get_remaining_time())
