@@ -1,5 +1,5 @@
 from enum import IntEnum
-from typing import Mapping, List, Dict
+from typing import Mapping, List, Dict, Tuple
 import json
 import sys
 import logging
@@ -487,6 +487,29 @@ def write_tasks(s: dict, tasks: List[Task]):
     
 def write_solution(s: dict, sol: Solution):
     s["solution"] = sol.to_dict()
+    
+    
+def get_tasks_lengths_and_nums(acs: List[AssignmentCharacteristic]) -> Tuple[List[int],Mapping[int,int]]:
+    """Get a list of unit tasks lengths (across all confugurations) and mapping capturing their numbers"""
+    task_lengths = set()
+    task_lengths_num = {}                
+    
+    for i in range(len(acs)):
+        for k, ra in enumerate(acs[i].resource_assignmnets):
+            task_lengths.add(ra.length)
+            if ra.length not in task_lengths_num:
+                task_lengths_num[ra.length] = 1
+            else:
+                task_lengths_num[ra.length] += 1                                                     
+    task_lengths = sorted(task_lengths)
+    
+    return task_lengths, task_lengths_num
 
+def get_task_conf_to_possible_lengths(acs: List[AssignmentCharacteristic], lengths: List[int]) -> Mapping[Tuple[int,int], int]:
+    """Given task configuration (task idx, resource assignment idx) return a list of possible lengths of windows to which the configuration would fit"""
+    return {(i,k): [l for l in lengths if l >= ra.length] for i in range(len(acs)) for k,ra in enumerate(acs[i].resource_assignmnets)}
+    
+def get_length_to_task_conf(acs: List[AssignmentCharacteristic], lengths: List[int]) -> Mapping[int, Tuple[int, int]]:
+    """Given a length of window, return a list of possible tasks configurations that could support this length (have the same length)"""
+    return {l: [(i,k) for i in range(len(acs)) for k, ra in enumerate(acs[i].resource_assignmnets) if ra.length == l] for l in lengths}    
 
-# def write_assignment_characteristics(data: dict, ac: List[AssignmentCharacteristic]):
