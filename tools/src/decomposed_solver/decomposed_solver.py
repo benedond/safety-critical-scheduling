@@ -19,6 +19,7 @@ from docplex.cp.model import CpoParameters
 class BranchingType(Enum):
     ON_PAIRS = 1  # pos_branch ~ pairs of tasks to be in the same window, neg_branch ~ pairs to be in different windows
     ON_TASKS = 2  # pos_branch ~ fix task to acs idx assignment, neg_branch ~ task cannot be on given resource
+    ON_SUPPORTS = 3  # fix configuration of the task and say it will be a support of its window, or say it will not be a support of any window.
 
 class OnPairsBranch(Enum):
     IN_SAME = 1
@@ -39,6 +40,14 @@ class BranchingRule:
     
     def constrain_subproblem_model(self, model: grb.Model, x_ik: grb.tupledict):
         """Add constraints to the subproblem model according to this Branching Rule"""
+        raise NotImplementedError
+    
+    def constrain_recovery_model_ILPFixed(self, model: grb.Model, a_ikl: grb.tupledict):
+        """Add constraints to the recovery model according to this Branching Rule"""
+        raise NotImplementedError
+        
+    def constrain_recovery_model_CP(self, model: CpoModel, a_ikl: grb.tupledict, task_to_win_to_res):
+        """Add constraints to the recovery model according to this Branching Rule"""
         raise NotImplementedError
     
     def filter_patterns(self, patterns: List[instance.Pattern]) -> List[instance.Pattern]:
@@ -88,6 +97,19 @@ class OnTaskBranchingRule(BranchingRule):
         for t, k_fix in self.fixed_task_mapping.items():
             i = self.task_to_idx[t]            
             model.addConstr(x_ijk.sum(i, "*", k_fix) == 1)
+    
+    def constrain_recovery_model_ILPFixed(self, model: grb.Model, a_ikln: grb.tupledict):
+        """Add constraints to the recovery model according to this Branching Rule"""
+        for t, k_fix in self.fixed_task_mapping.items():        
+            i = self.task_to_idx[t]    
+            model.addConstr(a_ikln.sum(i, k_fix, "*", "*") == 1)
+        
+    def constrain_recovery_model_CP(self, model: CpoModel, a_ikl: grb.tupledict, task_to_win_to_res):
+        """Add constraints to the recovery model according to this Branching Rule"""
+        for t, k_fix in self.fixed_task_mapping.items():        
+            i = self.task_to_idx[t]  
+            win_res = task_to_win_to_res
+            model.add(sum([cpmod.presence_of(win_res[j][k_fix]) for j in win_res.keys()]) == 1)            
     
     def constrain_subproblem_model(self, model: grb.Model, x_ik: grb.tupledict):
         """Add constraints to the subproblem model according to this Branching Rule"""
@@ -140,6 +162,161 @@ class OnTaskBranchingRule(BranchingRule):
                     self.task_to_idx)
                 )
             return branches                            
+
+class OnSupportBranchingRule(BranchingRule):    
+    """
+    Branch on supports, i.e., tasks that define length of their window (the longest task in some window).
+    """
+    def __init__(self):
+        self.supports_mapping = {}  # task -> acs idx
+        self.non_supports = []  # list of non supports        
+        self.remaining_tasks = None
+        self.acs = None
+        self.task_to_idx = None
+        
+    def initialize(self, acs: List[instance.AssignmentCharacteristic], task_to_idx: Mapping[str, int]):
+        self.acs = acs
+        self.task_to_idx = task_to_idx
+        self.remaining_tasks = [x.task for x in acs]
+        procs = {x.task: x.resource_assignmnets[0].length for x in acs}        
+        self.remaining_tasks.sort(key=lambda x: procs[x], reverse=False)  # Sort the tasks by non-decreasing proc time on res. 0        
+        
+        return self
+        
+    def _initialize_all(self, supports_mapping: Mapping[str,int], non_supports: List[str], remaining_tasks: List[str], acs: List[instance.AssignmentCharacteristic], task_to_idx: Mapping[str,int]):
+        self.supports_mapping = supports_mapping
+        self.non_supports = non_supports
+        self.remaining_tasks = remaining_tasks
+        self.acs = acs
+        self.task_to_idx = task_to_idx
+        
+        return self
+                        
+    def constrain_recovery_model_ILPFixed(self, model: grb.Model, a_ikln: grb.tupledict):
+        """Add constraints to the recovery model according to this Branching Rule"""
+        # supports
+        first_empty = {}       
+        for t in self.supports_mapping:
+            i = self.task_to_idx[t]
+            k = self.supports_mapping[t]
+            l = self.acs[i].resource_assignmnets[k].length            
+            
+            if l not in first_empty:
+                n = 0
+                first_empty[l] = 1
+            else:
+                n = first_empty[l]
+                first_empty[l] += 1
+                        
+            model.addConstr(a_ikln[i,k,l,n] == 1)
+            
+        # non supports
+        lengths, lengths_num = instance.get_tasks_lengths_and_nums(self.acs)
+        task_conf_to_lengths = instance.get_task_conf_to_possible_lengths(self.acs, lengths)
+        for t in self.non_supports:
+            i = self.task_to_idx[t]  
+            for k_fix in range(len(self.acs[i].resource_assignmnets)):  
+                for l in task_conf_to_lengths[(i,k_fix)]:
+                    for n in range(lengths_num[l]):
+                        # if picked, some other support with same or different length should be present       
+                        model.addConstrs(a_ikln[i,k_fix,l,n] <= grb.quicksum(a_ikln[i_,k,l,n] 
+                                                            for i_ in range(len(self.acs)) 
+                                                            for k in range(len(self.acs[i_].resource_assignmnets)) 
+                                                            if i != i_ 
+                                                            and self.acs[i_].resource_assignmnets[k].length >= self.acs[i].resource_assignmnets[k_fix].length 
+                                                            and self.acs[i_].task not in self.non_supports))                                 
+    
+    def constrain_subproblem_model(self, model: grb.Model, x_ik: grb.tupledict):
+        """Add constraints to the subproblem model according to this Branching Rule"""
+        # supports
+        for t in self.supports_mapping:
+            i = self.task_to_idx[t]
+            k_fix = self.supports_mapping[t]
+            # - cannot be picked in different configuration
+            model.addConstr(grb.quicksum(x_ik[i,k] for k in range(len(self.acs[i].resource_assignmnets)) if k != k_fix) == 0)
+            # - if picked, no longer task can be picked as well
+            model.addConstrs(x_ik[i,k_fix] + x_ik[i_,k] <= 1 for i_ in range(len(self.acs)) for k in range(len(self.acs[i_].resource_assignmnets)) if i != i_ and self.acs[i_].resource_assignmnets[k].length > self.acs[i].resource_assignmnets[k_fix].length)
+            
+        # non supports
+        for t in self.non_supports:
+            i = self.task_to_idx[t]
+            for k_fix in range(len(self.acs[i].resource_assignmnets)):                        
+                # if picked, some other support with same or different length should be present       
+                model.addConstr(x_ik[i,k_fix] <= grb.quicksum(x_ik[i_,k] 
+                                                            for i_ in range(len(self.acs)) 
+                                                            for k in range(len(self.acs[i_].resource_assignmnets)) 
+                                                            if i != i_ 
+                                                            and self.acs[i_].resource_assignmnets[k].length >= self.acs[i].resource_assignmnets[k_fix].length 
+                                                            and self.acs[i_].task not in self.non_supports)) 
+    
+    def filter_patterns(self, patterns: List[instance.Pattern]) -> List[instance.Pattern]:
+        """Take old patterns and filter the ones that are not respecting this BranchingRule"""
+        filtered_patterns = []        
+        for p in patterns:
+            skip_pattern = False
+            
+            # handle supports
+            for t in p.task_mapping:
+                if t in self.supports_mapping:
+                    if p.task_mapping[t] != self.supports_mapping[t]:  # mapping of the support does not agree
+                        skip_pattern = True
+                        break
+                    
+                    if p.length != self.acs[self.task_to_idx[t]].resource_assignmnets[self.supports_mapping[t]].length:  # task is not supporting this pattern 
+                        skip_pattern = True
+                        break                                    
+            
+            # handle non supports
+            # - get supports of the pattern
+            supports = [t for t in p.task_mapping if self.acs[self.task_to_idx[t]].resource_assignmnets[p.task_mapping[t]].length == p.length and t not in self.non_supports]
+            if not supports:
+                skip_pattern = True
+                                    
+            if skip_pattern:
+                continue
+            else:
+                filtered_patterns.append(p)
+        return filtered_patterns
+    
+    def get_string_representation(self) -> str:
+        return "supports={:s}, non supports".format(str(self.supports_mapping), str(self.non_supports))
+    
+    def get_branching_rules(self) -> List['BranchingRule']:
+        """Generate a list of new Branching Rules"""
+        if not self.remaining_tasks:
+            return []
+        else:
+            task = self.remaining_tasks[0]        
+            
+            all_assignments = list(range(len(self.acs[self.task_to_idx[task]].resource_assignmnets)))
+            lengths = {i: self.acs[self.task_to_idx[task]].resource_assignmnets[i].length for i in all_assignments}
+            all_assignments.sort(key=lambda x: lengths[x], reverse=True)  # sort the assignments from the longest one            
+            
+            branches = []
+            # task is a support
+            for k in all_assignments:
+                new_supports = self.supports_mapping.copy()
+                new_supports[task] = k                
+                
+                branches.append(OnSupportBranchingRule()._initialize_all(                    
+                    new_supports,
+                    self.non_supports,
+                    self.remaining_tasks[1:],
+                    self.acs,
+                    self.task_to_idx)
+                )
+            # task is not a support
+            new_non_supports = self.non_supports.copy()
+            self.non_supports.append(task)
+            branches.append(OnSupportBranchingRule()._initialize_all(                    
+                    self.supports_mapping,
+                    new_non_supports,
+                    self.remaining_tasks[1:],
+                    self.acs,
+                    self.task_to_idx)
+                )
+            
+            return branches    
 
 class OnPairsBranchingRule(BranchingRule):    
     def __init__(self):
@@ -404,7 +581,7 @@ class MasterModel(ILPSolver):
         tasks=[]        
 
         s_feasible=True if self.model.Status == grb.GRB.OPTIMAL or (
-            model.Status == grb.GRB.TIME_LIMIT and model.SolCount > 0) else False
+            self.model.Status == grb.GRB.TIME_LIMIT and self.model.SolCount > 0) else False
         s_solver_name="BAP"
         s_solution_time=int(round(self.solving_time*1000))  # to ms
         s_windows=[]
@@ -698,18 +875,19 @@ class RecoveryModel(ILPSolver):
                     patterns.append(pattern)
                             
         return patterns
-         
-       
+
+
 class RecoveryModelILPFixed(ILPSolver):
     def __init__(self, env: instance.Environment, acs: List[instance.AssignmentCharacteristic], timelimit: float=float("inf")):
         super().__init__()
         self.env = env
         self.acs = acs                 
         self.timelimit = timelimit
-        self.a_ikl = None
+        self.a_ikln = None
         self.x_l = None
 
         self.task_lengths = None
+        self.task_lengths_num = None
         self.length_to_task_idx_and_conf = None
         self.task_idx_to_possible_lengths = None                
         
@@ -729,11 +907,16 @@ class RecoveryModelILPFixed(ILPSolver):
         
         # prepare some structures:
         task_lengths = set()
+        task_lengths_num = {}
         length_to_task_idx_and_conf = dict()        
         
         for i in range(num_tasks):
             for k, ra in enumerate(self.acs[i].resource_assignmnets):
                 task_lengths.add(ra.length)
+                if ra.length not in task_lengths_num:
+                    task_lengths_num[ra.length] = 1
+                else:
+                    task_lengths_num[ra.length] += 1                
                 
                 if ra.length not in length_to_task_idx_and_conf:
                     length_to_task_idx_and_conf[ra.length] = [(i,k)]
@@ -741,47 +924,52 @@ class RecoveryModelILPFixed(ILPSolver):
                     length_to_task_idx_and_conf[ra.length].append((i,k))
                     
         task_lengths = sorted(task_lengths)
-        task_idx_to_possible_lengths = {(i,k): [l for l in task_lengths if l >= ra.length] for i in range(num_tasks) for k,ra in enumerate(self.acs[i].resource_assignmnets)}
-        
-        # for i, ass in task_idx_to_possible_lengths.items():
-        #     print("    ", i,ass)
+        task_idx_to_possible_lengths = {(i,k): [l for l in task_lengths if l >= ra.length] for i in range(num_tasks) for k,ra in enumerate(self.acs[i].resource_assignmnets)}                
         
         # VARIABLES
-        a_ikl = m.addVars([(i, k, l)
+        a_ikln = m.addVars([(i, k, l, n)
                            for i in range(num_tasks)                         
                            for k in range(len(self.acs[i].resource_assignmnets))
-                           for l in task_idx_to_possible_lengths[(i,k)]],
+                           for l in task_idx_to_possible_lengths[(i,k)]
+                           for n in range(task_lengths_num[l])],
                           vtype=grb.GRB.BINARY,
                           name="a")  
-        x_l = m.addVars(task_lengths, vtype=grb.GRB.BINARY, name="x")
+        x_ln = m.addVars([(l,n) for l in task_lengths for n in range(task_lengths_num[l])], vtype=grb.GRB.BINARY, name="x")
         
         # CONSTRAINTS
         # - link x and a (if assigned then x := 1)
         M = sum([p.processing_units for p in self.env.processors_list])
-        m.addConstrs(M*x_l[l] >= a_ikl.sum("*", "*", l) for l in task_lengths)
+        m.addConstrs(M*x_ln[l,n] >= a_ikln.sum("*", "*", l, n) for l in task_lengths for n in range(task_lengths_num[l]))
         # - if window is selected, task with appropriate length is assigned there
-        m.addConstrs(x_l[l] <= grb.quicksum(a_ikl[ti, tk, l] for ti, tk in length_to_task_idx_and_conf[l]) for l in task_lengths)
+        m.addConstrs(x_ln[l,n] <= grb.quicksum(a_ikln[ti, tk, l, n] for ti, tk in length_to_task_idx_and_conf[l]) for l in task_lengths for n in range(task_lengths_num[l]))
         # - windows need to fit the MF
-        m.addConstr(grb.quicksum(x_l[l] * l for l in task_lengths) <= self.env.major_frame_length)
+        m.addConstr(grb.quicksum(x_ln[l,n] * l for l in task_lengths for n in range(task_lengths_num[l])) <= self.env.major_frame_length)
         # - every task is scheduled
-        m.addConstrs(a_ikl.sum(i,"*", "*") == 1 for i in range(num_tasks))
+        m.addConstrs(a_ikln.sum(i,"*", "*", "*") == 1 for i in range(num_tasks))
         # - resource capacities
-        m.addConstrs((grb.quicksum(a_ikl[i,k,l] * acp.processing_units
+        m.addConstrs((grb.quicksum(a_ikln[i,k,l,n] * acp.processing_units
                                    for i in range(num_tasks)
                                    for k in range(len(self.acs[i].resource_assignmnets))
                                    for acp in self.acs[i].resource_assignmnets[k].processors if acp.processor == processor.name
-                                   if l in task_idx_to_possible_lengths[(i,k)])
+                                   if l in task_idx_to_possible_lengths[(i,k)]))
                       <= processor.processing_units
                       for processor in self.env.processors_list
-                      for l in task_lengths))
+                      for l in task_lengths 
+                      for n in range(task_lengths_num[l]))
+        
+        # sym breaker:
+        for l in task_lengths:
+            for n in range(task_lengths_num[l]-1):
+                m.addConstr(x_ln[l,n] >= x_ln[l,n+1])
         
         # objective
-        # either none (just check feasibility) or minimize the total length
+        # either none (just check feasibility) or minimize the total length                
         
         self.model = m
-        self.a_ikl = a_ikl
-        self.x_l = x_l
+        self.a_ikln = a_ikln
+        self.x_ln = x_ln
         self.task_lengths = task_lengths
+        self.task_lengths_num = task_lengths_num
         self.length_to_task_idx_and_conf = length_to_task_idx_and_conf
         self.task_idx_to_possible_lengths = task_idx_to_possible_lengths
         
@@ -792,19 +980,20 @@ class RecoveryModelILPFixed(ILPSolver):
         
         if self.solved and self.feasible:  
             for l in self.task_lengths:
-                if self.x_l[l].X > 0.5:
-                    task_mapping = {}
-                    for i in range(num_tasks):
-                        for k in range(len(self.acs[i].resource_assignmnets)):
-                            if l not in self.task_idx_to_possible_lengths[(i,k)]:
-                                continue
-                            if self.a_ikl[i,k,l].X > 0.5:
-                                task_mapping[self.acs[i].task] = k
-                                                                               
-                    if task_mapping:
-                        pattern = instance.Pattern(-1, l, task_mapping) 
-                        pattern.cost = pattern.compute_cost(self.acs)
-                        patterns.append(pattern)
+                for n in range(self.task_lengths_num[l]):
+                    if self.x_ln[l,n].X > 0.5:
+                        task_mapping = {}
+                        for i in range(num_tasks):
+                            for k in range(len(self.acs[i].resource_assignmnets)):
+                                if l not in self.task_idx_to_possible_lengths[(i,k)]:
+                                    continue
+                                if self.a_ikln[i,k,l,n].X > 0.5:
+                                    task_mapping[self.acs[i].task] = k
+                                                                                
+                        if task_mapping:
+                            pattern = instance.Pattern(-1, l, task_mapping) 
+                            pattern.cost = pattern.compute_cost(self.acs)
+                            patterns.append(pattern)
                             
         return patterns
     
@@ -996,6 +1185,8 @@ class BranchAndPriceSolver:
             t_start=time.time()            
             if self.branching_type == BranchingType.ON_TASKS:
                 b_rule = OnTaskBranchingRule().initialize(self.acs, {a.task: i for i, a in enumerate(self.acs)})
+            elif self.branching_type == BranchingType.ON_SUPPORTS:
+                b_rule = OnSupportBranchingRule().initialize(self.acs, {a.task: i for i, a in enumerate(self.acs)})
             elif self.branching_type == BranchingType.ON_PAIRS:                
                 b_rule = OnPairsBranchingRule().initialize(UnionFind(len(self.acs)), {a.task: i for i, a in enumerate(self.acs)})            
             else:
@@ -1177,7 +1368,12 @@ class BranchAndPriceSolver:
                 logging.info("leaf solution was reached, but MP was not integer, use global model instead")
                 t_s = time.time()
                 if self.branching_type == BranchingType.ON_TASKS:  # use dedicated model for fixed assignment
-                    m_global = ilp_fixed_solver.Solver(self.arg_parser, self.env, self.acs, b_rule.fixed_task_mapping, timelimit=self._get_remaining_time(), cutoff=self.best_objective if self.best_objective else None)
+                    # m_global = ilp_fixed_solver.Solver(self.arg_parser, self.env, self.acs, b_rule.fixed_task_mapping, timelimit=self._get_remaining_time(), cutoff=self.best_objective if self.best_objective else None)
+                    # solution, tasks = m_global.solve()
+                    m_global = ilp_fixed_solver.SolverFixed(self.arg_parser, self.env, self.acs, b_rule.fixed_task_mapping, timelimit=self._get_remaining_time(), cutoff=self.best_objective if self.best_objective else None)
+                    solution, tasks = m_global.solve()
+                if self.branching_type == BranchingType.ON_SUPPORTS:                    
+                    m_global = ilp_fixed_solver.SolverSupport(self.arg_parser, self.env, self.acs, b_rule.support_assignment, timelimit=self._get_remaining_time(), cutoff=self.best_objective if self.best_objective else None)
                     solution, tasks = m_global.solve()
                 else:  # use generic form for other types of branching
                     m_global = ilp_global_solver.Solver(self.arg_parser, self.env, self.acs, timelimit=self._get_remaining_time())
@@ -1215,14 +1411,19 @@ class BranchAndPriceSolver:
                             logging.info("Reconstructed solution is approximately the same as master relaxation, terminating the iteration.")
                             return best_branch_sol                            
                 else:                                                
-                best_branch_obj = float("inf")
-                best_branch_sol = None
+                    best_branch_obj = float("inf")
+                    best_branch_sol = None
                 # End of reconstruction
 
                 for rule in new_rules:
-                    rm = RecoveryModel(self.env, self.acs, timelimit=self._get_remaining_time())
-                    rule.constrain_recovery_model(rm.model, rm.x, len(self.acs))
-                    rm.solve()
+                    #rm = RecoveryModel(self.env, self.acs, timelimit=self._get_remaining_time())
+                    #rule.constrain_recovery_model(rm.model, rm.x, len(self.acs))
+                    #rm.solve()
+                    
+                    rm = RecoveryModelILPFixed(env, acs, timelimit=self._get_remaining_time())
+                    rule.constrain_recovery_model_ILPFixed(rm.model, rm.a_ikln)
+                    rm.solve()                    
+                    
                     self.time_recovery += rm.solving_time + rm.init_time
                     
                     if rm.model.Status == grb.GRB.TIME_LIMIT:
