@@ -68,8 +68,11 @@ if __name__ == "__main__":
             logging.info("branching was set to: ON_PAIRS")
             branching_type = decomposed_solver.BranchingType.ON_PAIRS
         elif branching == "tasks":
-            logging.info("branching was set to: ON_TASKS")
+            logging.info("branching was set to: ON_TASKS")        
             branching_type = decomposed_solver.BranchingType.ON_TASKS
+        elif branching == "supports":
+            logging.info("branching was set to: ON_SUPPORTS")        
+            branching_type = decomposed_solver.BranchingType.ON_SUPPORTS
         else:
             raise RuntimeError("Branching {:s} is not supported. Try pairs/tasks instead.".format(branching))
     else:    
