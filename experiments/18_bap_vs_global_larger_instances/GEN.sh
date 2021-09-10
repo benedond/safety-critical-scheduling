@@ -17,3 +17,15 @@ chmod +x ./instances-25-rd/RUN.sh
 
 python generate_instances.py instances-28-rd 28 25 True
 chmod +x ./instances-28-rd/RUN.sh
+
+python generate_instances.py instances-35-rd 35 10 True
+chmod +x ./instances-35-rd/RUN.sh
+
+python generate_instances.py instances-45-rd 45 10 True
+chmod +x ./instances-45-rd/RUN.sh
+
+python generate_instances.py instances-55-rd 55 10 True
+chmod +x ./instances-55-rd/RUN.sh
+
+python generate_instances.py instances-100-rd 100 10 True
+chmod +x ./instances-100-rd/RUN.sh
