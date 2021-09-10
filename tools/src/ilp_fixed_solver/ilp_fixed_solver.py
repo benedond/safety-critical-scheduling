@@ -344,3 +344,162 @@ class SolverFixed:
         
         return (solution, tasks)        
 
+class SolverSupport:
+    def __init__(self, arg_parser: ap.ArgParser, env: instance.Environment, acs: List[instance.AssignmentCharacteristic], support_assignment: Mapping[str, int], timelimit:float=float("inf"), cutoff=None):
+        self.arg_parser = arg_parser
+        self.env = env
+        self.acs = acs        
+        self.support_assignment = support_assignment  # Assignment of supports
+        self.timelimit = timelimit
+        self.cutoff=cutoff
+        
+        self.model = None
+        self.x_iks = None
+        self.B_s = None        
+                
+        idx_to_task = {i: x.task for i,x in enumerate(self.acs)}
+        self.idx_to_ass = {idx: self.support_assignment[idx_to_task[idx]] for idx in range(len(self.acs))}                    
+        self.len_s = None
+        self.supports_idx = None
+        
+        self._init()
+    
+        
+    def _init(self):
+        task_to_idx = {}
+        for i, a in enumerate(self.acs):
+            task_to_idx[a.task] = i
+        num_tasks = len(self.acs)
+            
+        m = grb.Model("LeafIlpSupport")    
+        m.setParam("TimeLimit", self.timelimit)            
+        
+        len_s = {s: self.acs[task_to_idx[s]].resource_assignmnets[self.support_assignment[s]].length for s in self.support_assignment}
+        supports_idx = {s: task_to_idx[s] for s in self.support_assignment}
+        processor_demand = {s: {p.name: 0 for processor in self.env.processors_list} for s in self.support_assignment}
+        for i, s in supports_idx.items():
+            for p in self.acs[i].resource_assignmnets[self.support_assignment[s]].processors:
+                supports_idx[s][p.processor] = p.processing_units                
+
+                  
+        # VARIABLES
+        x_iks = m.addVars([(i, k, s)
+                           for i in range(num_tasks)                                    
+                           for k, ra in enumerate(self.acs[i].resource_assignmnets)
+                           for s in self.support_assignment
+                           if i not in supports_idx.values()
+                           and ra.length <= len_s[s]],
+                          vtype=grb.GRB.BINARY,
+                          name="x")          
+        B_s = m.addVars([(s) for s in self.support_assignment], vtype=grb.GRB.CONTINUOUS, name="B")        
+        
+        # CONSTRAINTS
+                        
+        # - every task is scheduled
+        m.addConstrs(x_iks.sum(i,"*", "*") == 1 for i in range(num_tasks) if i not in supports_idx.values())
+        # - resource capacities
+        m.addConstrs((grb.quicksum(x_iks[i,k,s] * acp.processing_units
+                                   for i in range(num_tasks)
+                                   for k, ra in enumerate(self.acs[i].resource_assignmnets)
+                                   for acp in self.acs[i].resource_assignmnets[k].processors if acp.processor == processor.name
+                                   if len_s[s] >= ra.length)
+                      <= processor.processing_units - processor_demand[s][processor.name])
+                      for processor in self.env.processors_list
+                      for s in self.support_assignment)
+        
+        # offset coefficient
+        m.addConstrs(B_s[s] >= x_iks[i,k,s]*self.acs[i].resource_assignmnets[k].intercept 
+                     for i in range(num_tasks) 
+                     for k in range(len(self.acs[i].resource_assignmnets))
+                     for s in self.support_assignment 
+                     if (i,k,s) in x_iks)                       
+        
+        # objective
+        cost_supports = sum([self.acs[i].resource_assignmnets[self.support_assignment[s]].slope*self.acs[i].resource_assignmnets[self.support_assignment[s]].length for s,i in supports_idx.items()])
+        cost_non_supports = grb.quicksum(x_iks[i,k,s] * self.acs[i].resource_assignmnets[k].slope * self.acs[i].resource_assignmnets[k].length
+                                         for i in range(num_tasks) for k in range(len(self.acs[i].resource_assignmnets))  for s in self.support_assignment if (i,k,s) in x_iks)
+        m.setObjective((grb.quicksum(B_s[s]*len_s[s] for s in self.support_assignment) + cost_supports + cost_non_supports)*(1/self.env.major_frame_length))
+        
+        
+        self.model = m
+        self.x_iks = x_iks        
+        self.B_s = B_s       
+        self.supports_idx = supports_idx
+        self.len_s = len_s 
+
+    def solve(self) -> Tuple[instance.Solution, List[instance.Task]]:
+        num_tasks = len(self.acs)        
+        env = self.env
+        model = self.model
+        x_iks = self.x_iks
+        
+
+        # OPTIMIZE THE MODEL
+        t_start=time.time()
+        model.optimize()
+        t_end=time.time()
+
+        solution=None
+        tasks=[]
+
+        s_feasible=True if model.Status == grb.GRB.OPTIMAL or (
+            model.Status == grb.GRB.TIME_LIMIT and model.SolCount > 0) else False
+        s_solver_name="LeafILPFixed"
+        s_solution_time=int(round((t_end - t_start)*1000))  # to ms
+        s_windows=[]
+        s_metadata={"objective": str(float("inf"))}
+
+        if s_feasible:
+            s_metadata["objective"] = str(model.ObjVal)
+            
+            for idx, s in enumerate(self.support_assignment):            
+                    window_length = self.len_s[s]
+                    window_tasks_assignments=[]
+                    
+                    # processor-unit allocation (start with all processors empty)
+                    pu_allocations={p.name: 0 for p in env.processors_list}
+                    
+                    for i in range(num_tasks):
+                        k = None
+                        if i not in self.supports_idx.values(): # non supports                            
+                            for k_fix in range(len(self.acs[i].resource_assignmnets)):
+                                if x_iks[i,k,s].X > 0.5:
+                                    k = k_fix
+                                    break
+                        else:
+                            k = self.support_assignment[self.acs[i].task]
+                    
+                        task_characteristic=self.acs[i]                                
+                        ac = task_characteristic.resource_assignmnets[k]
+                        task_processors=[]
+                        task_length=ac.length
+                                            
+                        for p in ac.processors:
+                            window_tasks_assignments.append(instance.TaskAssignment(task=task_characteristic.task,
+                                                                                    processor=p.processor,
+                                                                                    processing_unit=pu_allocations[p.processor],
+                                                                                    start=0,
+                                                                                    length=task_length))
+
+                            # increment the processor units
+                            pu_allocations[p.processor] += p.processing_units
+                            task_processors.append(instance.ProcessorAssignment(p.processor, p.processing_units))                            
+
+
+                    
+                        tasks.append(instance.Task(name=task_characteristic.task,
+                                                            command=task_characteristic.command,
+                                                            length=task_length,
+                                                            assignment_index=k,
+                                                            processors=task_processors))
+                    
+                    s_windows.append(instance.Window(window_length, window_tasks_assignments))
+                                                           
+        else:  # infeasible solution            
+            s_feasible=False
+            if self.arg_parser.is_arg_present("--iis-output"):
+                model.computeIIS()
+                model.write(self.arg_parser.get_arg_value("--iis-output") + ".ilp")        
+        solution = instance.Solution(s_feasible, s_solver_name, s_solution_time, s_metadata, s_windows)
+        
+        return (solution, tasks)        
