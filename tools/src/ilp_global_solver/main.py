@@ -34,14 +34,19 @@ if __name__ == "__main__":
         timelimit = float("inf")     
 
     # solve the instance            
-    # try:
-    solver = ilp_global_solver.Solver(ap, env, acs, timelimit=timelimit)
-    solution, tasks = solver.solve()        
+    if ap.is_arg_present("--fixed"):
+        solver = ilp_global_solver.SolverFixed(ap, env, acs, timelimit=timelimit)
+        solution, tasks = solver.solve()        
 
-    instance.write_solution(json_data, solution)
-    instance.write_tasks(json_data, tasks)
-    # except:
-    #     print("failed to solve the instance", file=sys.stderr)
+        instance.write_solution(json_data, solution)
+        instance.write_tasks(json_data, tasks)
+    else:
+        solver = ilp_global_solver.Solver(ap, env, acs, timelimit=timelimit)
+        solution, tasks = solver.solve()        
+
+        instance.write_solution(json_data, solution)
+        instance.write_tasks(json_data, tasks)
+    
 
     output_filename = ap.get_arg_value("--output")
     if output_filename:
