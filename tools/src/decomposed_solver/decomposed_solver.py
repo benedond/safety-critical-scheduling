@@ -218,11 +218,13 @@ class OnSupportBranchingRule(BranchingRule):
             for k_fix in range(len(self.acs[i].resource_assignmnets)):  
                 for l in task_conf_to_lengths[(i,k_fix)]:
                     for n in range(lengths_num[l]):
+                                                
                         # if picked, some other support with same or different length should be present       
-                        model.addConstrs(a_ikln[i,k_fix,l,n] <= grb.quicksum(a_ikln[i_,k,l,n] 
+                        model.addConstr(a_ikln[i,k_fix,l,n] <= grb.quicksum(a_ikln[i_,k,l,n] 
                                                             for i_ in range(len(self.acs)) 
                                                             for k in range(len(self.acs[i_].resource_assignmnets)) 
                                                             if i != i_ 
+                                                            and l in task_conf_to_lengths[(i_,k)]
                                                             and self.acs[i_].resource_assignmnets[k].length >= self.acs[i].resource_assignmnets[k_fix].length 
                                                             and self.acs[i_].task not in self.non_supports))                                 
     
@@ -1373,7 +1375,7 @@ class BranchAndPriceSolver:
                     m_global = ilp_fixed_solver.SolverFixed(self.arg_parser, self.env, self.acs, b_rule.fixed_task_mapping, timelimit=self._get_remaining_time(), cutoff=self.best_objective if self.best_objective else None)
                     solution, tasks = m_global.solve()
                 if self.branching_type == BranchingType.ON_SUPPORTS:                    
-                    m_global = ilp_fixed_solver.SolverSupport(self.arg_parser, self.env, self.acs, b_rule.support_assignment, timelimit=self._get_remaining_time(), cutoff=self.best_objective if self.best_objective else None)
+                    m_global = ilp_fixed_solver.SolverSupport(self.arg_parser, self.env, self.acs, b_rule.supports_mapping, timelimit=self._get_remaining_time(), cutoff=self.best_objective if self.best_objective else None)
                     solution, tasks = m_global.solve()
                 else:  # use generic form for other types of branching
                     m_global = ilp_global_solver.Solver(self.arg_parser, self.env, self.acs, timelimit=self._get_remaining_time())
