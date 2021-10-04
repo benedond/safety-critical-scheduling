@@ -209,10 +209,10 @@ class SolverFixed:
         m.setParam("TimeLimit", self.timelimit)            
         
         # prepare some structures:
-        task_lengths, task_lenghts_num = instance.get_tasks_lengths_and_nums(self.acs)
+        task_lengths, task_lengths_num = instance.get_tasks_lengths_and_nums(self.acs)
         length_to_task_idx_and_conf = instance.get_length_to_task_conf(self.acs, task_lengths)        
         task_idx_to_possible_lengths = instance.get_task_conf_to_possible_lengths(self.acs, task_lengths)
-                
+        
         # VARIABLES
         a_ikln = m.addVars([(i, k, l,n)
                            for i in range(num_tasks)                         
