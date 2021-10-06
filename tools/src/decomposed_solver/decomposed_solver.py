@@ -239,6 +239,9 @@ class OnSupportBranchingRule(BranchingRule):
             # - if picked, no longer task can be picked as well
             model.addConstrs(x_ik[i,k_fix] + x_ik[i_,k] <= 1 for i_ in range(len(self.acs)) for k in range(len(self.acs[i_].resource_assignmnets)) if i != i_ and self.acs[i_].resource_assignmnets[k].length > self.acs[i].resource_assignmnets[k_fix].length)
             
+        # Cannot pick two supports at once
+        model.addConstr(grb.quicksum(x_ik[self.task_to_idx[t], self.supports_mapping[t]] for t in self.supports_mapping) <= 1)
+            
         # non supports
         for t in self.non_supports:
             i = self.task_to_idx[t]
@@ -256,6 +259,7 @@ class OnSupportBranchingRule(BranchingRule):
         filtered_patterns = []        
         for p in patterns:
             skip_pattern = False
+            num_supports = 0
             
             # handle supports
             for t in p.task_mapping:
@@ -267,6 +271,12 @@ class OnSupportBranchingRule(BranchingRule):
                     if p.length != self.acs[self.task_to_idx[t]].resource_assignmnets[self.supports_mapping[t]].length:  # task is not supporting this pattern 
                         skip_pattern = True
                         break                                    
+                    
+                    num_supports += 1
+            
+            # only a single support can be present within a pattern
+            if num_supports > 1:
+                skip_pattern = True                                 
             
             # handle non supports
             # - get supports of the pattern
@@ -281,7 +291,7 @@ class OnSupportBranchingRule(BranchingRule):
         return filtered_patterns
     
     def get_string_representation(self) -> str:
-        return "supports={:s}, non supports".format(str(self.supports_mapping), str(self.non_supports))
+        return "supports={:s}, non supports={:s}".format(str(self.supports_mapping), str(self.non_supports))
     
     def get_branching_rules(self) -> List['BranchingRule']:
         """Generate a list of new Branching Rules"""
@@ -309,7 +319,7 @@ class OnSupportBranchingRule(BranchingRule):
                 )
             # task is not a support
             new_non_supports = self.non_supports.copy()
-            self.non_supports.append(task)
+            new_non_supports.append(task)
             branches.append(OnSupportBranchingRule()._initialize_all(                    
                     self.supports_mapping,
                     new_non_supports,
