@@ -328,6 +328,11 @@ class OnSupportBranchingRule(BranchingRule):
                     self.task_to_idx)
                 )
             
+            print("NEW BRANCHES")
+            for b in branches:
+                print(b.get_string_representation())
+            print()
+            
             return branches    
 
 class OnPairsBranchingRule(BranchingRule):    
