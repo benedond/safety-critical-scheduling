@@ -1181,7 +1181,7 @@ class BranchAndPriceSolver:
                                          [p.to_window(self.env, self.task_to_ac) for p in patterns])
             tasks = instance.patterns_to_task(patterns, self.task_to_ac)
             init_obj = self.best_objective
-            logging.info("INIT OBJ" + str(init_obj))
+            logging.info("INIT OBJ " + str(init_obj))
             
             # Start beanch-and-price
             t_start=time.time()            
