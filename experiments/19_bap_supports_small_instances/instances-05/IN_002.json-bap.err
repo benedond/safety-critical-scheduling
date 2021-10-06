@@ -1,0 +1,125 @@
+INFO:root:No path to initial data was provided.
+INFO:root:timelimit was set to 600.000000
+INFO:root:branching was set to: ON_SUPPORTS
+INFO:root:no init data provided, trying the RecoveryModel
+INFO:root:initial objective 1.401919
+INFO:root:INIT OBJ 1.4019192132007205
+INFO:root:branching
+supports={}, non supports=[]
+INFO:root:PATTERNS 2
+INFO:root:    {'cost': 98.23498193104925, 'length': 64, 'task_mapping': {'task-1': 0, 'task-3': 0}}
+INFO:root:    {'cost': 65.78956601343508, 'length': 51, 'task_mapping': {'task-0': 1, 'task-2': 0, 'task-4': 0}}
+INFO:root:  found pattern {'cost': 47.205871046980235, 'length': 62, 'task_mapping': {'task-0': 1, 'task-1': 0}}, -116.81867689750419
+INFO:root:  found pattern {'cost': 71.84334239155291, 'length': 75, 'task_mapping': {'task-0': 1, 'task-3': 1}}, -73.59751058647657
+INFO:root:  found pattern {'cost': 60.85747157110045, 'length': 75, 'task_mapping': {'task-2': 1, 'task-3': 1}}, -55.96120532640373
+INFO:root:  found pattern {'cost': 100.60055112949532, 'length': 75, 'task_mapping': {'task-0': 1, 'task-1': 0, 'task-3': 1, 'task-4': 0}}, -63.42399681498907
+INFO:root:  found pattern {'cost': 109.67543699089441, 'length': 75, 'task_mapping': {'task-1': 0, 'task-2': 1, 'task-3': 1, 'task-4': 0}}, -119.31351838141728
+INFO:root:  found pattern {'cost': 69.76004486850653, 'length': 67, 'task_mapping': {'task-0': 1, 'task-1': 0, 'task-2': 1, 'task-4': 0}}, -24.867863598834695
+INFO:root:  found pattern {'cost': 10.642118940597504, 'length': 21, 'task_mapping': {'task-0': 1}}, -15.352234534910798
+INFO:root:  found pattern {'cost': 43.66480558516052, 'length': 75, 'task_mapping': {'task-3': 1}}, -2.1841833308841476
+INFO:root:  found pattern {'cost': 90.92211552401778, 'length': 75, 'task_mapping': {'task-0': 1, 'task-1': 0, 'task-3': 1}}, -3.990930257818995
+INFO:root:subproblem objective was non-negative; ending the iteration.
+INFO:root:master model solution is not integer
+WARNING:root:Master model reconstruction 1.028355 vs MM relaxation 0.983375
+INFO:root:Solution reconstructed from patterns (1.028355) better that best so far 1.401919
+INFO:root:branching
+supports={'task-0': 0}, non supports=[]
+INFO:root:PATTERNS 5
+INFO:root:    {'cost': 98.23498193104925, 'length': 64, 'task_mapping': {'task-1': 0, 'task-3': 0}}
+INFO:root:    {'cost': 60.85747157110045, 'length': 75, 'task_mapping': {'task-2': 1, 'task-3': 1}}
+INFO:root:    {'cost': 109.67543699089441, 'length': 75, 'task_mapping': {'task-1': 0, 'task-2': 1, 'task-3': 1, 'task-4': 0}}
+INFO:root:    {'cost': 43.66480558516052, 'length': 75, 'task_mapping': {'task-3': 1}}
+INFO:root:    {'cost': 31.477146117440288, 'length': 36, 'task_mapping': {'task-0': 0}}
+INFO:root:  found pattern {'cost': 34.65191590358543, 'length': 67, 'task_mapping': {'task-2': 1, 'task-4': 0}}, -75.02352108730898
+INFO:root:  found pattern {'cost': 60.02048555655916, 'length': 67, 'task_mapping': {'task-1': 0, 'task-2': 1}}, -49.654951434335274
+INFO:root:  found pattern {'cost': 70.53590717657798, 'length': 75, 'task_mapping': {'task-2': 1, 'task-3': 1, 'task-4': 0}}, -2.0462622779326303
+INFO:root:Relaxation 1.206432334259271 is worse than best obj 1.0283551789016403
+INFO:root:subproblem objective was non-negative; ending the iteration.
+INFO:root:master model solution (1.206432) is pruned by best-so-far solution (1.028355).
+INFO:root:branching
+supports={'task-0': 1}, non supports=[]
+INFO:root:PATTERNS 6
+INFO:root:    {'cost': 98.23498193104925, 'length': 64, 'task_mapping': {'task-1': 0, 'task-3': 0}}
+INFO:root:    {'cost': 60.85747157110045, 'length': 75, 'task_mapping': {'task-2': 1, 'task-3': 1}}
+INFO:root:    {'cost': 109.67543699089441, 'length': 75, 'task_mapping': {'task-1': 0, 'task-2': 1, 'task-3': 1, 'task-4': 0}}
+INFO:root:    {'cost': 10.642118940597504, 'length': 21, 'task_mapping': {'task-0': 1}}
+INFO:root:    {'cost': 43.66480558516052, 'length': 75, 'task_mapping': {'task-3': 1}}
+INFO:root:    {'cost': 147.15638419143175, 'length': 77, 'task_mapping': {'task-1': 0, 'task-2': 0, 'task-3': 1, 'task-4': 1}}
+INFO:root:  found pattern {'cost': 34.65191590358543, 'length': 67, 'task_mapping': {'task-2': 1, 'task-4': 0}}, -75.02352108730898
+INFO:root:  found pattern {'cost': 60.02048555655916, 'length': 67, 'task_mapping': {'task-1': 0, 'task-2': 1}}, -49.654951434335274
+INFO:root:  found pattern {'cost': 70.53590717657798, 'length': 75, 'task_mapping': {'task-2': 1, 'task-3': 1, 'task-4': 0}}, -2.0462622779326303
+INFO:root:subproblem objective was non-negative; ending the iteration.
+INFO:root:master model solution (1.028355) is pruned by best-so-far solution (1.028355).
+INFO:root:branching
+supports={}, non supports=['task-0']
+INFO:root:PATTERNS 12
+INFO:root:    {'cost': 98.23498193104925, 'length': 64, 'task_mapping': {'task-1': 0, 'task-3': 0}}
+INFO:root:    {'cost': 65.78956601343508, 'length': 51, 'task_mapping': {'task-0': 1, 'task-2': 0, 'task-4': 0}}
+INFO:root:    {'cost': 47.205871046980235, 'length': 62, 'task_mapping': {'task-0': 1, 'task-1': 0}}
+INFO:root:    {'cost': 71.84334239155291, 'length': 75, 'task_mapping': {'task-0': 1, 'task-3': 1}}
+INFO:root:    {'cost': 60.85747157110045, 'length': 75, 'task_mapping': {'task-2': 1, 'task-3': 1}}
+INFO:root:    {'cost': 100.60055112949532, 'length': 75, 'task_mapping': {'task-0': 1, 'task-1': 0, 'task-3': 1, 'task-4': 0}}
+INFO:root:    {'cost': 109.67543699089441, 'length': 75, 'task_mapping': {'task-1': 0, 'task-2': 1, 'task-3': 1, 'task-4': 0}}
+INFO:root:    {'cost': 69.76004486850653, 'length': 67, 'task_mapping': {'task-0': 1, 'task-1': 0, 'task-2': 1, 'task-4': 0}}
+INFO:root:    {'cost': 43.66480558516052, 'length': 75, 'task_mapping': {'task-3': 1}}
+INFO:root:    {'cost': 90.92211552401778, 'length': 75, 'task_mapping': {'task-0': 1, 'task-1': 0, 'task-3': 1}}
+INFO:root:    {'cost': 18.11346903971025, 'length': 48, 'task_mapping': {'task-4': 0}}
+INFO:root:    {'cost': 110.30891940133793, 'length': 67, 'task_mapping': {'task-0': 1, 'task-1': 0, 'task-2': 1, 'task-3': 0}}
+INFO:root:  found pattern {'cost': 33.92469127566774, 'length': 48, 'task_mapping': {'task-0': 1, 'task-4': 0}}, -0.8027050203085402
+INFO:root:subproblem objective was non-negative; ending the iteration.
+INFO:root:master model solution is not integer
+WARNING:root:Master model reconstruction 1.097627 vs MM relaxation 0.983375
+INFO:root:RecoveryModel was not feasible for supports={'task-4': 1}, non supports=['task-0']
+INFO:root:branching
+supports={'task-4': 0}, non supports=['task-0']
+INFO:root:PATTERNS 10
+INFO:root:    {'cost': 98.23498193104925, 'length': 64, 'task_mapping': {'task-1': 0, 'task-3': 0}}
+INFO:root:    {'cost': 47.205871046980235, 'length': 62, 'task_mapping': {'task-0': 1, 'task-1': 0}}
+INFO:root:    {'cost': 71.84334239155291, 'length': 75, 'task_mapping': {'task-0': 1, 'task-3': 1}}
+INFO:root:    {'cost': 60.85747157110045, 'length': 75, 'task_mapping': {'task-2': 1, 'task-3': 1}}
+INFO:root:    {'cost': 43.66480558516052, 'length': 75, 'task_mapping': {'task-3': 1}}
+INFO:root:    {'cost': 90.92211552401778, 'length': 75, 'task_mapping': {'task-0': 1, 'task-1': 0, 'task-3': 1}}
+INFO:root:    {'cost': 18.11346903971025, 'length': 48, 'task_mapping': {'task-4': 0}}
+INFO:root:    {'cost': 110.30891940133793, 'length': 67, 'task_mapping': {'task-0': 1, 'task-1': 0, 'task-2': 1, 'task-3': 0}}
+INFO:root:    {'cost': 33.92469127566774, 'length': 48, 'task_mapping': {'task-0': 1, 'task-4': 0}}
+INFO:root:    {'cost': 110.24779569486809, 'length': 67, 'task_mapping': {'task-1': 0, 'task-2': 1, 'task-3': 0}}
+INFO:root:  found pattern {'cost': 60.02048555655916, 'length': 67, 'task_mapping': {'task-1': 0, 'task-2': 1}}, -50.227310138308994
+INFO:root:  found pattern {'cost': 60.081609263029, 'length': 67, 'task_mapping': {'task-0': 1, 'task-1': 0, 'task-2': 1}}, -15.750098529487637
+INFO:root:Relaxation 1.0958238034927343 is worse than best obj 1.0283551789016403
+INFO:root:subproblem objective was non-negative; ending the iteration.
+INFO:root:master model solution (1.095824) is pruned by best-so-far solution (1.028355).
+INFO:root:branching
+supports={}, non supports=['task-0', 'task-4']
+INFO:root:PATTERNS 11
+INFO:root:    {'cost': 98.23498193104925, 'length': 64, 'task_mapping': {'task-1': 0, 'task-3': 0}}
+INFO:root:    {'cost': 65.78956601343508, 'length': 51, 'task_mapping': {'task-0': 1, 'task-2': 0, 'task-4': 0}}
+INFO:root:    {'cost': 47.205871046980235, 'length': 62, 'task_mapping': {'task-0': 1, 'task-1': 0}}
+INFO:root:    {'cost': 71.84334239155291, 'length': 75, 'task_mapping': {'task-0': 1, 'task-3': 1}}
+INFO:root:    {'cost': 60.85747157110045, 'length': 75, 'task_mapping': {'task-2': 1, 'task-3': 1}}
+INFO:root:    {'cost': 100.60055112949532, 'length': 75, 'task_mapping': {'task-0': 1, 'task-1': 0, 'task-3': 1, 'task-4': 0}}
+INFO:root:    {'cost': 109.67543699089441, 'length': 75, 'task_mapping': {'task-1': 0, 'task-2': 1, 'task-3': 1, 'task-4': 0}}
+INFO:root:    {'cost': 69.76004486850653, 'length': 67, 'task_mapping': {'task-0': 1, 'task-1': 0, 'task-2': 1, 'task-4': 0}}
+INFO:root:    {'cost': 43.66480558516052, 'length': 75, 'task_mapping': {'task-3': 1}}
+INFO:root:    {'cost': 90.92211552401778, 'length': 75, 'task_mapping': {'task-0': 1, 'task-1': 0, 'task-3': 1}}
+INFO:root:    {'cost': 110.30891940133793, 'length': 67, 'task_mapping': {'task-0': 1, 'task-1': 0, 'task-2': 1, 'task-3': 0}}
+INFO:root:subproblem objective was non-negative; ending the iteration.
+INFO:root:master model solution is not integer
+WARNING:root:Master model reconstruction 1.401919 vs MM relaxation 0.983375
+INFO:root:RecoveryModel was not feasible for supports={'task-2': 1}, non supports=['task-0', 'task-4']
+INFO:root:branching
+supports={'task-2': 0}, non supports=['task-0', 'task-4']
+INFO:root:PATTERNS 7
+INFO:root:    {'cost': 98.23498193104925, 'length': 64, 'task_mapping': {'task-1': 0, 'task-3': 0}}
+INFO:root:    {'cost': 65.78956601343508, 'length': 51, 'task_mapping': {'task-0': 1, 'task-2': 0, 'task-4': 0}}
+INFO:root:    {'cost': 47.205871046980235, 'length': 62, 'task_mapping': {'task-0': 1, 'task-1': 0}}
+INFO:root:    {'cost': 71.84334239155291, 'length': 75, 'task_mapping': {'task-0': 1, 'task-3': 1}}
+INFO:root:    {'cost': 100.60055112949532, 'length': 75, 'task_mapping': {'task-0': 1, 'task-1': 0, 'task-3': 1, 'task-4': 0}}
+INFO:root:    {'cost': 43.66480558516052, 'length': 75, 'task_mapping': {'task-3': 1}}
+INFO:root:    {'cost': 90.92211552401778, 'length': 75, 'task_mapping': {'task-0': 1, 'task-1': 0, 'task-3': 1}}
+INFO:root:  found pattern {'cost': 56.0500067014877, 'length': 51, 'task_mapping': {'task-2': 0}}, -9.739559311947438
+INFO:root:Relaxation 1.3904600211051477 is worse than best obj 1.0283551789016403
+INFO:root:subproblem objective was non-negative; ending the iteration.
+INFO:root:master model solution (1.390460) is pruned by best-so-far solution (1.028355).
+INFO:root:RecoveryModel was not feasible for supports={}, non supports=['task-0', 'task-4', 'task-2']
+INFO:root:search ended
+INFO:root:solution quality 1.028355

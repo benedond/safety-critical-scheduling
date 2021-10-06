@@ -1,0 +1,35 @@
+NEW BRANCHES
+supports={'task-0': 1}, non supports=[]
+supports={'task-0': 0}, non supports=[]
+supports={}, non supports=['task-0']
+
+NEW BRANCHES
+supports={'task-0': 0, 'task-2': 1}, non supports=[]
+supports={'task-0': 0, 'task-2': 0}, non supports=[]
+supports={'task-0': 0}, non supports=['task-2']
+
+NEW BRANCHES
+supports={'task-0': 0, 'task-3': 0}, non supports=['task-2']
+supports={'task-0': 0, 'task-3': 1}, non supports=['task-2']
+supports={'task-0': 0}, non supports=['task-2', 'task-3']
+
+NEW BRANCHES
+supports={'task-2': 1}, non supports=['task-0']
+supports={'task-2': 0}, non supports=['task-0']
+supports={}, non supports=['task-0', 'task-2']
+
+NEW BRANCHES
+supports={'task-3': 0}, non supports=['task-0', 'task-2']
+supports={'task-3': 1}, non supports=['task-0', 'task-2']
+supports={}, non supports=['task-0', 'task-2', 'task-3']
+
+NEW BRANCHES
+supports={'task-1': 1}, non supports=['task-0', 'task-2', 'task-3']
+supports={'task-1': 0}, non supports=['task-0', 'task-2', 'task-3']
+supports={}, non supports=['task-0', 'task-2', 'task-3', 'task-1']
+
+NEW BRANCHES
+supports={'task-1': 1, 'task-4': 0}, non supports=['task-0', 'task-2', 'task-3']
+supports={'task-1': 1, 'task-4': 1}, non supports=['task-0', 'task-2', 'task-3']
+supports={'task-1': 1}, non supports=['task-0', 'task-2', 'task-3', 'task-4']
+
