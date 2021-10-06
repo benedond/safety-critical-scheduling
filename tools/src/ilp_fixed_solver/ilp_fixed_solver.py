@@ -356,9 +356,7 @@ class SolverSupport:
         self.model = None
         self.x_iks = None
         self.B_s = None        
-                
-        idx_to_task = {i: x.task for i,x in enumerate(self.acs)}
-        self.idx_to_ass = {idx: self.support_assignment[idx_to_task[idx]] for idx in range(len(self.acs))}                    
+                                
         self.len_s = None
         self.supports_idx = None
         
@@ -376,10 +374,10 @@ class SolverSupport:
         
         len_s = {s: self.acs[task_to_idx[s]].resource_assignmnets[self.support_assignment[s]].length for s in self.support_assignment}
         supports_idx = {s: task_to_idx[s] for s in self.support_assignment}
-        processor_demand = {s: {p.name: 0 for processor in self.env.processors_list} for s in self.support_assignment}
-        for i, s in supports_idx.items():
+        processor_demand = {s: {p.name: 0 for p in self.env.processors_list} for s in self.support_assignment}
+        for s, i in supports_idx.items():
             for p in self.acs[i].resource_assignmnets[self.support_assignment[s]].processors:
-                supports_idx[s][p.processor] = p.processing_units                
+                processor_demand[s][p.processor] = p.processing_units            
 
                   
         # VARIABLES
@@ -402,7 +400,8 @@ class SolverSupport:
                                    for i in range(num_tasks)
                                    for k, ra in enumerate(self.acs[i].resource_assignmnets)
                                    for acp in self.acs[i].resource_assignmnets[k].processors if acp.processor == processor.name
-                                   if len_s[s] >= ra.length)
+                                   if len_s[s] >= ra.length 
+                                   and i not in supports_idx.values())
                       <= processor.processing_units - processor_demand[s][processor.name])
                       for processor in self.env.processors_list
                       for s in self.support_assignment)
@@ -412,7 +411,11 @@ class SolverSupport:
                      for i in range(num_tasks) 
                      for k in range(len(self.acs[i].resource_assignmnets))
                      for s in self.support_assignment 
-                     if (i,k,s) in x_iks)                       
+                     if (i,k,s) in x_iks)   
+        
+        # offset by supports coeffs
+        m.addConstrs(B_s[s] >= self.acs[supports_idx[s]].resource_assignmnets[self.support_assignment[s]].intercept
+                     for s in self.support_assignment)                    
         
         # objective
         cost_supports = sum([self.acs[i].resource_assignmnets[self.support_assignment[s]].slope*self.acs[i].resource_assignmnets[self.support_assignment[s]].length for s,i in supports_idx.items()])
@@ -452,6 +455,8 @@ class SolverSupport:
         if s_feasible:
             s_metadata["objective"] = str(model.ObjVal)
             
+            print(x_iks)
+            
             for idx, s in enumerate(self.support_assignment):            
                     window_length = self.len_s[s]
                     window_tasks_assignments=[]
@@ -461,19 +466,23 @@ class SolverSupport:
                     
                     for i in range(num_tasks):
                         k = None
-                        if i not in self.supports_idx.values(): # non supports                            
+                        if i not in self.supports_idx.values(): # non supports 
                             for k_fix in range(len(self.acs[i].resource_assignmnets)):
-                                if x_iks[i,k,s].X > 0.5:
+                                if (i,k_fix,s) in x_iks and x_iks[i,k_fix,s].X > 0.5:
                                     k = k_fix
                                     break
-                        else:
+                            if k is None:  # task i was not assigned to this window
+                                continue
+                        elif i == self.supports_idx[s]:  # assign the support to window
                             k = self.support_assignment[self.acs[i].task]
-                    
+                        else:  # the task is another support, it will be in a different window
+                            continue
+                        
                         task_characteristic=self.acs[i]                                
                         ac = task_characteristic.resource_assignmnets[k]
                         task_processors=[]
                         task_length=ac.length
-                                            
+                        
                         for p in ac.processors:
                             window_tasks_assignments.append(instance.TaskAssignment(task=task_characteristic.task,
                                                                                     processor=p.processor,
