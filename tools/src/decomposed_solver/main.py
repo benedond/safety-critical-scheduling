@@ -79,7 +79,12 @@ if __name__ == "__main__":
         logging.info("branching was set to: ON_PAIRS by default")
         branching_type = decomposed_solver.BranchingType.ON_PAIRS   
         
-    bap = decomposed_solver.BranchAndPriceSolver(ap, env, acs, init_data_path, timelimit=timelimit, branching_type=branching_type)
+    if ap.is_arg_present("--depth"):
+        allowed_depth = int(ap.get_arg_value("--depth").lower())
+    else:    
+        allowed_depth = None
+        
+    bap = decomposed_solver.BranchAndPriceSolver(ap, env, acs, init_data_path, timelimit=timelimit, branching_type=branching_type, allowed_depth=allowed_depth)
     solution, tasks = bap.solve()
 
     instance.write_solution(json_data, solution)

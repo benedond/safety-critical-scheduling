@@ -179,7 +179,7 @@ class OnSupportBranchingRule(BranchingRule):
         self.task_to_idx = task_to_idx
         self.remaining_tasks = [x.task for x in acs]
         procs = {x.task: x.resource_assignmnets[0].length for x in acs}        
-        self.remaining_tasks.sort(key=lambda x: procs[x], reverse=False)  # Sort the tasks by non-decreasing proc time on res. 0        
+        self.remaining_tasks.sort(key=lambda x: procs[x], reverse=True)  # Sort the tasks by non-increasing proc time on res. 0        
         
         return self
         
@@ -191,7 +191,7 @@ class OnSupportBranchingRule(BranchingRule):
         self.task_to_idx = task_to_idx
         
         return self
-                        
+                                                
     def constrain_recovery_model_ILPFixed(self, model: grb.Model, a_ikln: grb.tupledict):
         """Add constraints to the recovery model according to this Branching Rule"""
         # supports
@@ -238,7 +238,7 @@ class OnSupportBranchingRule(BranchingRule):
             model.addConstr(grb.quicksum(x_ik[i,k] for k in range(len(self.acs[i].resource_assignmnets)) if k != k_fix) == 0)
             # - if picked, no longer task can be picked as well
             model.addConstrs(x_ik[i,k_fix] + x_ik[i_,k] <= 1 for i_ in range(len(self.acs)) for k in range(len(self.acs[i_].resource_assignmnets)) if i != i_ and self.acs[i_].resource_assignmnets[k].length > self.acs[i].resource_assignmnets[k_fix].length)
-            
+        
         # Cannot pick two supports at once
         model.addConstr(grb.quicksum(x_ik[self.task_to_idx[t], self.supports_mapping[t]] for t in self.supports_mapping) <= 1)
             
@@ -262,7 +262,7 @@ class OnSupportBranchingRule(BranchingRule):
             num_supports = 0
             
             # handle supports
-            for t in p.task_mapping:
+            for t in p.task_mapping:                
                 if t in self.supports_mapping:
                     if p.task_mapping[t] != self.supports_mapping[t]:  # mapping of the support does not agree
                         skip_pattern = True
@@ -270,7 +270,7 @@ class OnSupportBranchingRule(BranchingRule):
                     
                     if p.length != self.acs[self.task_to_idx[t]].resource_assignmnets[self.supports_mapping[t]].length:  # task is not supporting this pattern 
                         skip_pattern = True
-                        break                                    
+                        break   
                     
                     num_supports += 1
             
@@ -1142,7 +1142,7 @@ class RecoveryModelCP(CPSolver):
        
 class BranchAndPriceSolver:
 
-    def __init__(self, arg_parser: ap.ArgParser, env: instance.Environment, acs: List[instance.AssignmentCharacteristic], init_data_path: str, timelimit: float=float("inf"), branching_type: BranchingType=BranchingType.ON_PAIRS):
+    def __init__(self, arg_parser: ap.ArgParser, env: instance.Environment, acs: List[instance.AssignmentCharacteristic], init_data_path: str, timelimit: float=float("inf"), branching_type: BranchingType=BranchingType.ON_PAIRS, allowed_depth=None):
         self.arg_parser = arg_parser
         self.env = env
         self.acs = acs
@@ -1152,6 +1152,7 @@ class BranchAndPriceSolver:
         self.timelimit = timelimit
         self.time_start = None
         self.branching_type = branching_type
+        self.allowed_depth = allowed_depth
                 
         self.best_objective = float('inf')        
         self.solving_time = 0
@@ -1254,6 +1255,28 @@ class BranchAndPriceSolver:
             self.interrupted = True
             return None
         
+        # If depth is too high, solve the rest by ILP -----------------------------------------------
+        if self.branching_type == BranchingType.ON_SUPPORTS:
+            cur_depth = len(self.task_to_ac) - len(b_rule.remaining_tasks)            
+            if cur_depth >= self.allowed_depth:                
+                logging.info("Maximal allowed depth was reached; resolving the problem by global model.")
+                m_global = ilp_global_solver.SolverFixed(self.arg_parser, self.env, self.acs, timelimit=self._get_remaining_time())
+                b_rule.constrain_recovery_model_ILPFixed(m_global.model, m_global.a_ikln)
+                solution, tasks = m_global.solve()
+                
+                global_obj = float(solution.solver_metadata["objective"])
+                if global_obj and global_obj >= 0 and global_obj < self.best_objective:
+                    self.best_objective = global_obj  
+                    logging.info("best objective was updated to (by global): {:f}".format(self.best_objective))                
+
+                    
+                if m_global.model.Status == grb.GRB.TIME_LIMIT:                    
+                    self.interrupted = True
+                                  
+                return solution, tasks    
+        # ---------------------------------------------------------------------------------------------
+        
+        
         self.number_of_nodes += 1
         env = self.env 
         acs = self.acs      
@@ -1337,6 +1360,18 @@ class BranchAndPriceSolver:
                 last_pattern_mapping = p.task_mapping  
                 n_patterns += 1                                        
         # END of pattern generation phase ----------------------------------------------------------------------------------
+        
+        
+        # # TODO: test if all patterns adhere to rools:
+        # import itertools as it
+        # for comb in it.combinations(b_rule.supports_mapping.keys(), 2):
+        #     task1, task2 = comb
+        #     for p in patterns:
+        #         if task1 in p.task_mapping and task2 in p.task_mapping:
+        #             print("Problem occured!")
+        #             print(comb)
+        #             print(p.task_mapping)
+        #             exit(11)
         
         self.patterns_generated_num.append(n_patterns)
 
