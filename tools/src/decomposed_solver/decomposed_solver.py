@@ -1256,24 +1256,25 @@ class BranchAndPriceSolver:
             return None
         
         # If depth is too high, solve the rest by ILP -----------------------------------------------
-        if self.branching_type == BranchingType.ON_SUPPORTS:
-            cur_depth = len(self.task_to_ac) - len(b_rule.remaining_tasks)            
-            if cur_depth >= self.allowed_depth:                
-                logging.info("Maximal allowed depth was reached; resolving the problem by global model.")
-                m_global = ilp_global_solver.SolverFixed(self.arg_parser, self.env, self.acs, timelimit=self._get_remaining_time())
-                b_rule.constrain_recovery_model_ILPFixed(m_global.model, m_global.a_ikln)
-                solution, tasks = m_global.solve()
-                
-                global_obj = float(solution.solver_metadata["objective"])
-                if global_obj and global_obj >= 0 and global_obj < self.best_objective:
-                    self.best_objective = global_obj  
-                    logging.info("best objective was updated to (by global): {:f}".format(self.best_objective))                
-
+        if self.allowed_depth:
+            if self.branching_type == BranchingType.ON_SUPPORTS:
+                cur_depth = len(self.task_to_ac) - len(b_rule.remaining_tasks)            
+                if cur_depth >= self.allowed_depth:                
+                    logging.info("Maximal allowed depth was reached; resolving the problem by global model.")
+                    m_global = ilp_global_solver.SolverFixed(self.arg_parser, self.env, self.acs, timelimit=self._get_remaining_time())
+                    b_rule.constrain_recovery_model_ILPFixed(m_global.model, m_global.a_ikln)
+                    solution, tasks = m_global.solve()
                     
-                if m_global.model.Status == grb.GRB.TIME_LIMIT:                    
-                    self.interrupted = True
-                                  
-                return solution, tasks    
+                    global_obj = float(solution.solver_metadata["objective"])
+                    if global_obj and global_obj >= 0 and global_obj < self.best_objective:
+                        self.best_objective = global_obj  
+                        logging.info("best objective was updated to (by global): {:f}".format(self.best_objective))                
+
+                        
+                    if m_global.model.Status == grb.GRB.TIME_LIMIT:                    
+                        self.interrupted = True
+                                    
+                    return solution, tasks    
         # ---------------------------------------------------------------------------------------------
         
         
