@@ -19,21 +19,11 @@ class Solver:
         self.optimizer = None
         self.recommendation = None
         
-        self.slots_per_window = sum([p.processing_units for p in env.processors_list])
-        
-        self.slot_to_proc = {}
-        offset = 0
-        for idx, p in enumerate(self.env.processors_list):
-            for u in range(p.processing_units):
-                self.slot_to_proc[u+offset] = idx
-                
-            offset += p.processing_units
-        
         self._init()
         
     def _init(self):
         n_tasks = len(self.acs)
-        windows_ub = n_tasks        
+        windows_ub = n_tasks
         env = self.env
         
         number_of_allowed_ra = 2
@@ -42,91 +32,93 @@ class Solver:
         for ac in self.acs:
             assert len(ac.resource_assignmnets) == number_of_allowed_ra, "Nevergrad solver assumes that each task has two assignments -> to little and big cluster, respectively."
 
-        # Compute the number of all slots -> first n correspond to the tasks, rest are just idle (empty) slots
-        number_of_slots = windows_ub  * self.slots_per_window
-        
-        #init = np.concatenate((np.random.rand(n_tasks), np.ones(number_of_slots - n_tasks)))
-        
+        # Prepare all possible allocations
+        allocations = [(w,a) for w in range(windows_ub) for a in range(number_of_allowed_ra)]
+
         parametrization = ng.p.Instrumentation(
-            order = ng.p.Array(shape=(number_of_slots,), lower=0.0, upper=1.0)
+            allocation = ng.p.Choice(allocations, repetitions=n_tasks)
         )
                 
-        #optimizer = ng.optimizers.PSO(parametrization=parametrization, budget=self.budget)
-        optimizer = ng.optimizers.NGOpt(parametrization=parametrization, budget=self.budget)
+        # optimizer = ng.optimizers.NGOpt(parametrization=parametrization, budget=self.budget)
+        optimizer = ng.optimizers.PortfolioDiscreteOnePlusOne(parametrization=parametrization, budget=self.budget)
+        
                         
         # Set time limit
-        optimizer.register_callback("ask", ng.callbacks.EarlyStopping.timer(self.timelimit))                
+        optimizer.register_callback("ask", ng.callbacks.EarlyStopping.timer(self.timelimit))
+        
+        # Add constraint: check if the assignment is feasible
+        optimizer.parametrization.register_cheap_constraint(lambda x: self.is_feasible(x[1]["allocation"]))                          
         
         self.parametrization = parametrization
         self.optimizer = optimizer        
         
     
-    def get_window_lengths(self, order):
-        n_tasks = len(self.acs)
-        n_win = n_tasks        
+    def get_window_lengths(self, allocation):
+        n_tasks = len(allocation)
+        n_win = n_tasks
                         
         w_len = np.zeros(n_win)
-        
-        indexes = np.argsort(order)        
-        
-        for w in range(n_win):
-            for s in range(self.slots_per_window):
-                cur_idx = w*self.slots_per_window + s
-                cur_task = indexes[cur_idx]
-                
-                if cur_task >= n_tasks:  # dummy idle
-                    continue
-                
-                ra = self.acs[cur_task].resource_assignmnets[self.slot_to_proc[s]]
-                
-                w_len[w] = max(w_len[w], ra.length)
-        
-        return w_len                                         
+                    
+        for idx, a in enumerate(allocation):
+            a_window = a[0]
+            a_conf_id = a[1]
+            
+            ra = self.acs[idx].resource_assignmnets[a_conf_id]
+            w_len[a_window] = max(w_len[a_window], ra.length)            
 
-    def fitness(self, order):  
-        #print(order)       
-        n_tasks = len(self.acs)
-        n_win = n_tasks        
-                        
-        w_len = self.get_window_lengths(order)
+        return w_len    
+            
+    def is_feasible(self, allocation):
+        n_tasks = len(allocation)
+        n_win = n_tasks
+                
+        n_tasks_on_proc = {p.name: np.zeros(n_win) for p in self.env.processors_list}
+        w_len = np.zeros(n_win)
+                    
+        for idx, a in enumerate(allocation):
+            a_window = a[0]
+            a_conf_id = a[1]
+            
+            ra = self.acs[idx].resource_assignmnets[a_conf_id]
+            w_len[a_window] = max(w_len[a_window], ra.length)
+            for proc_assignment in ra.processors:
+                n_tasks_on_proc[proc_assignment.processor][a_window] += proc_assignment.processing_units
+
+        # Check the major frame length
+        if np.sum(w_len) > self.env.major_frame_length:
+            return False
+
+        # Check that allocation does not overuse processors capacity                
+        for p_name, n_tasks in n_tasks_on_proc.items():
+            if not np.all(n_tasks <= self.env.processors[p_name].processing_units):
+                return False
+        
+        return True
+
+
+    def fitness(self, allocation):         
+        n_tasks = len(allocation)
+        n_win = n_tasks
+        
+        if not self.is_feasible(allocation):
+            return float("inf")
+        
         sum_dynamic = np.zeros(n_win)
         max_static = np.zeros(n_win)
-        
-        indexes = np.argsort(order)
-                
-        
-        for w in range(n_win):
-            for s in range(self.slots_per_window):
-                cur_idx = w*self.slots_per_window + s
-                cur_task = indexes[cur_idx]
-                
-                if cur_task >= n_tasks:  # dummy idle
-                    continue
-                
-                ra = self.acs[cur_task].resource_assignmnets[self.slot_to_proc[s]]
-                sum_dynamic[w] += ra.slope * ra.length
-                max_static[w] = max(max_static[w], ra.intercept)                
-        
-        return np.sum(sum_dynamic + (max_static * w_len)) / self.env.major_frame_length                   
+        w_len = self.get_window_lengths(allocation)
+                    
+        for idx, a in enumerate(allocation):
+            a_window = a[0]
+            a_conf_id = a[1]
+            
+            ra = self.acs[idx].resource_assignmnets[a_conf_id]
+            sum_dynamic[a_window] += ra.slope * ra.length
+            max_static[a_window] = max(max_static[a_window], ra.intercept)
 
-    def get_task_allocations(self, order):
-        n_win = n_tasks = len(self.acs)
-        indexes = np.argsort(order)
-        allocations = [0 for _ in range(n_tasks)]
-        
-        for w in range(n_win):
-            for s in range(self.slots_per_window):
-                cur_idx = w*self.slots_per_window + s
-                cur_task = indexes[cur_idx]
-                
-                if cur_task >= n_tasks:  # dummy idle
-                    continue
-                
-                allocations[cur_task] = (w, self.slot_to_proc[s])
-                
-        return allocations
+        return np.sum(sum_dynamic + (max_static * w_len)) / self.env.major_frame_length
+            
 
-    def solve(self) -> Tuple[instance.Solution, List[instance.Task]]:                
+    def solve(self) -> Tuple[instance.Solution, List[instance.Task]]:
         num_tasks = len(self.acs)
         windows_ub = num_tasks
         env = self.env
@@ -138,9 +130,8 @@ class Solver:
         recommendation = optimizer.minimize(self.fitness, verbosity=1)        
         t_end=time.time()
 
-        order = recommendation.kwargs["order"]
-        allocation = self.get_task_allocations(order)
-        
+        allocation = recommendation.kwargs["allocation"]
+
         # Get the solution
         solution=None
         tasks=[]
@@ -152,8 +143,8 @@ class Solver:
         s_metadata={"objective": str(float("inf"))}
 
         if s_feasible:
-            s_metadata["objective"] = self.fitness(order)
-            w_lengths = self.get_window_lengths(order)
+            s_metadata["objective"] = self.fitness(allocation)
+            w_lengths = self.get_window_lengths(allocation)
             
             for j in range(windows_ub):                
                 window_length=w_lengths[j]
