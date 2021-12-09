@@ -28,6 +28,9 @@ class Solver:
                 self.slot_to_proc[u+offset] = idx
                 
             offset += p.processing_units
+                    
+        self.obj_ub = (env.major_frame_length * (1+sum(p.processing_units for p in env.processors_list))
+        * max([ max(r.slope, r.intercept) for a in acs for r in a.resource_assignmnets]))
         
         self._init()
         
@@ -91,7 +94,7 @@ class Solver:
         w_len = self.get_window_lengths(order)
         sum_dynamic = np.zeros(n_win)
         max_static = np.zeros(n_win)
-        
+                       
         indexes = np.argsort(order)
                 
         
@@ -107,7 +110,12 @@ class Solver:
                 sum_dynamic[w] += ra.slope * ra.length
                 max_static[w] = max(max_static[w], ra.intercept)                
         
-        return np.sum(sum_dynamic + (max_static * w_len)) / self.env.major_frame_length                   
+        obj = np.sum(sum_dynamic + (max_static * w_len)) / self.env.major_frame_length                   
+        
+        if np.sum(w_len) > self.env.major_frame_length:
+            return self.obj_ub + obj
+        else:
+            return obj
 
     def get_task_allocations(self, order):
         n_win = n_tasks = len(self.acs)
@@ -152,7 +160,7 @@ class Solver:
         s_metadata={"objective": str(float("inf"))}
 
         if s_feasible:
-            s_metadata["objective"] = self.fitness(order)
+            s_metadata["objective"] = str(self.fitness(order))
             w_lengths = self.get_window_lengths(order)
             
             for j in range(windows_ub):                
