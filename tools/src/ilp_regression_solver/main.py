@@ -24,7 +24,7 @@ if __name__ == "__main__":
     acs = instance.parse_assignment_characteristics(json_data)
     
     # solve the instance            
-    solver = ilp_regression_solver.Solver(ap, env, acs)
+    solver = ilp_regression_solver.SolverUpperBound(ap, env, acs)
     solution, tasks = solver.solve()        
 
     instance.write_solution(json_data, solution)
