@@ -1,0 +1,52 @@
+Using license file /home/benedond/gurobi.lic
+Using gurobi.env file
+Set parameter Threads to value 1
+Academic license - for non-commercial use only
+Changed value of parameter TimeLimit to 300.0
+   Prev: inf  Min: 0.0  Max: inf  Default: inf
+Gurobi Optimizer version 9.0.1 build v9.0.1rc0 (linux64)
+Optimize a model with 240 rows, 210 columns and 828 nonzeros
+Model fingerprint: 0x88db63a5
+Variable types: 10 continuous, 200 integer (200 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 5e+02]
+  Objective range  [5e+01, 5e+02]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 5e+02]
+Presolve removed 178 rows and 152 columns
+Presolve time: 0.01s
+Presolved: 62 rows, 58 columns, 294 nonzeros
+Variable types: 5 continuous, 53 integer (53 binary)
+Found heuristic solution: objective 1491.0000000
+Found heuristic solution: objective 1204.0000000
+
+Root relaxation: objective 7.870826e+02, 97 iterations, 0.00 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0  787.08259    0   12 1204.00000  787.08259  34.6%     -    0s
+H    0     0                    1093.0000000  787.08259  28.0%     -    0s
+     0     0  985.83900    0   19 1093.00000  985.83900  9.80%     -    0s
+     0     0 1002.80000    0   10 1093.00000 1002.80000  8.25%     -    0s
+     0     0 1039.04861    0   15 1093.00000 1039.04861  4.94%     -    0s
+H    0     0                    1077.0000000 1039.04861  3.52%     -    0s
+     0     0 1047.60194    0   16 1077.00000 1047.60194  2.73%     -    0s
+     0     0 1049.45038    0   19 1077.00000 1049.45038  2.56%     -    0s
+     0     0 1050.72412    0   23 1077.00000 1050.72412  2.44%     -    0s
+     0     0 1050.73589    0   24 1077.00000 1050.73589  2.44%     -    0s
+     0     0 1055.51132    0   26 1077.00000 1055.51132  2.00%     -    0s
+     0     0 1055.60556    0   27 1077.00000 1055.60556  1.99%     -    0s
+     0     0 1056.08616    0   28 1077.00000 1056.08616  1.94%     -    0s
+     0     0 1056.17479    0   28 1077.00000 1056.17479  1.93%     -    0s
+     0     0 1056.48148    0   28 1077.00000 1056.48148  1.91%     -    0s
+     0     0 1056.48148    0   23 1077.00000 1056.48148  1.91%     -    0s
+     0     0 infeasible    0      1077.00000 1077.00000  0.00%     -    0s
+
+Explored 1 nodes (262 simplex iterations) in 0.04 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 5: 1077 1093 1164 ... 1491
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.077000000000e+03, best bound 1.077000000000e+03, gap 0.0000%

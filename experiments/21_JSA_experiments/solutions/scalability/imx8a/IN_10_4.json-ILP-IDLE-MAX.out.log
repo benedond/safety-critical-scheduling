@@ -1,0 +1,53 @@
+Using license file /home/benedond/gurobi.lic
+Using gurobi.env file
+Set parameter Threads to value 1
+Academic license - for non-commercial use only
+Changed value of parameter TimeLimit to 300.0
+   Prev: inf  Min: 0.0  Max: inf  Default: inf
+Gurobi Optimizer version 9.0.1 build v9.0.1rc0 (linux64)
+Optimize a model with 240 rows, 210 columns and 828 nonzeros
+Model fingerprint: 0x7d077b7a
+Variable types: 10 continuous, 200 integer (200 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 4e+02]
+  Objective range  [4e+01, 4e+02]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 5e+02]
+Presolve removed 150 rows and 137 columns
+Presolve time: 0.01s
+Presolved: 90 rows, 73 columns, 543 nonzeros
+Variable types: 8 continuous, 65 integer (65 binary)
+Found heuristic solution: objective 1554.0000000
+
+Root relaxation: objective 1.789000e+03, 48 iterations, 0.00 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 1789.00000    0   14 1554.00000 1789.00000  15.1%     -    0s
+H    0     0                    1634.0000000 1789.00000  9.49%     -    0s
+     0     0 1789.00000    0   20 1634.00000 1789.00000  9.49%     -    0s
+     0     0 1789.00000    0   20 1634.00000 1789.00000  9.49%     -    0s
+     0     0 1789.00000    0   16 1634.00000 1789.00000  9.49%     -    0s
+     0     0 1789.00000    0   18 1634.00000 1789.00000  9.49%     -    0s
+     0     0 1789.00000    0   17 1634.00000 1789.00000  9.49%     -    0s
+     0     0 1789.00000    0   17 1634.00000 1789.00000  9.49%     -    0s
+     0     2 1789.00000    0   17 1634.00000 1789.00000  9.49%     -    0s
+H   18     6                    1752.0000000 1783.16679  1.78%   6.3    0s
+
+Cutting planes:
+  Gomory: 4
+  Cover: 1
+  Clique: 2
+  MIR: 10
+  GUB cover: 1
+  RLT: 1
+  Relax-and-lift: 4
+
+Explored 27 nodes (367 simplex iterations) in 0.04 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 3: 1752 1634 1554 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.752000000000e+03, best bound 1.752000000000e+03, gap 0.0000%

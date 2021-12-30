@@ -1,0 +1,48 @@
+Using license file /home/benedond/gurobi.lic
+Using gurobi.env file
+Set parameter Threads to value 1
+Academic license - for non-commercial use only
+Changed value of parameter TimeLimit to 300.0
+   Prev: inf  Min: 0.0  Max: inf  Default: inf
+Gurobi Optimizer version 9.0.1 build v9.0.1rc0 (linux64)
+Optimize a model with 2590 rows, 2485 columns and 9903 nonzeros
+Model fingerprint: 0x1ca046bd
+Variable types: 35 continuous, 2450 integer (2450 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 5e+02]
+  Objective range  [4e+01, 5e+02]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 2e+03]
+Presolve removed 205 rows and 205 columns
+Presolve time: 0.36s
+Presolved: 2385 rows, 2280 columns, 9083 nonzeros
+Variable types: 35 continuous, 2245 integer (2245 binary)
+
+Root relaxation: objective 6.018000e+03, 427 iterations, 0.01 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 6018.00000    0   36          - 6018.00000      -     -    0s
+     0     0 6018.00000    0   32          - 6018.00000      -     -    0s
+     0     0 6018.00000    0   15          - 6018.00000      -     -    2s
+H    0     0                    5142.0000000 6018.00000  17.0%     -    2s
+     0     0 6018.00000    0   43 5142.00000 6018.00000  17.0%     -    2s
+H    0     0                    5828.0000000 6018.00000  3.26%     -    3s
+H    0     0                    5957.0000000 6018.00000  1.02%     -    3s
+     0     0 6018.00000    0   15 5957.00000 6018.00000  1.02%     -    3s
+     0     0 6018.00000    0   11 5957.00000 6018.00000  1.02%     -    3s
+H    0     0                    6018.0000000 6018.00000  0.00%     -    3s
+     0     0 6018.00000    0   11 6018.00000 6018.00000  0.00%     -    3s
+
+Cutting planes:
+  MIR: 5
+  Relax-and-lift: 12
+
+Explored 1 nodes (5107 simplex iterations) in 3.09 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 4: 6018 5957 5828 5142 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 6.018000000000e+03, best bound 6.018000000000e+03, gap 0.0000%

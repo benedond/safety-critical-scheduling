@@ -1,0 +1,51 @@
+Using license file /home/benedond/gurobi.lic
+Using gurobi.env file
+Set parameter Threads to value 1
+Academic license - for non-commercial use only
+Changed value of parameter TimeLimit to 300.0
+   Prev: inf  Min: 0.0  Max: inf  Default: inf
+Gurobi Optimizer version 9.0.1 build v9.0.1rc0 (linux64)
+Optimize a model with 4230 rows, 4095 columns and 16333 nonzeros
+Model fingerprint: 0xbb2878cf
+Variable types: 45 continuous, 4050 integer (4050 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 4e+02]
+  Objective range  [4e+01, 4e+02]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 2e+03]
+Presolve removed 85 rows and 85 columns
+Presolve time: 0.39s
+Presolved: 4145 rows, 4010 columns, 15993 nonzeros
+Variable types: 45 continuous, 3965 integer (3965 binary)
+
+Root relaxation: objective 6.860000e+03, 636 iterations, 0.03 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 6860.00000    0   34          - 6860.00000      -     -    0s
+H    0     0                    6364.0000000 6860.00000  7.79%     -    0s
+H    0     0                    6711.0000000 6860.00000  2.22%     -    1s
+     0     0 6860.00000    0   24 6711.00000 6860.00000  2.22%     -    1s
+     0     0 6860.00000    0   24 6711.00000 6860.00000  2.22%     -    5s
+H    0     0                    6782.0000000 6860.00000  1.15%     -    5s
+     0     0 6860.00000    0   28 6782.00000 6860.00000  1.15%     -    6s
+     0     0 6860.00000    0   25 6782.00000 6860.00000  1.15%     -    6s
+     0     0 6860.00000    0   41 6782.00000 6860.00000  1.15%     -    6s
+     0     0 6860.00000    0   69 6782.00000 6860.00000  1.15%     -    6s
+H    0     0                    6860.0000000 6860.00000  0.00%     -    6s
+     0     0 6860.00000    0   43 6860.00000 6860.00000  0.00%     -    6s
+
+Cutting planes:
+  Cover: 1
+  Implied bound: 1
+  MIR: 50
+  Relax-and-lift: 32
+
+Explored 1 nodes (14628 simplex iterations) in 6.71 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 4: 6860 6782 6711 6364 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 6.860000000000e+03, best bound 6.860000000000e+03, gap 0.0000%
