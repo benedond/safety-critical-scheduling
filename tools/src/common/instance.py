@@ -430,7 +430,9 @@ def get_solution_length(sol: Solution):
     return sum([w.length for w in sol.windows]) if sol.windows else 0
 
 
-def get_objective_window(w: Window, task_to_ra: Mapping[str, ResourceAssignment]) -> float:     
+def get_objective_window(w: Window, task_to_ra: Mapping[str, ResourceAssignment]) -> float:
+        if len(w.task_assignments) == 0:
+            return 0
         A_j = sum([task_to_ra[t.task].slope * task_to_ra[t.task].length for t in w.task_assignments])
         B_j = max([task_to_ra[t.task].intercept * w.length for t in w.task_assignments])
         return A_j + B_j
@@ -446,7 +448,7 @@ def get_task_to_ra(tasks: Mapping[str, Task], ascs: List[AssignmentCharacteristi
 def get_task_to_acs_map(acs: List[AssignmentCharacteristic]) -> Mapping[str, AssignmentCharacteristic]:
     return {a.task: a for a in acs}
 
-def  get_solution_objective(data: dict):
+def get_solution_objective(data: dict):
     sol = parse_solution(data)
     tasks = parse_tasks(data)
     ascs = parse_assignment_characteristics(data)
@@ -461,6 +463,111 @@ def  get_solution_objective(data: dict):
     
     obj /= env.major_frame_length    
     return obj
+
+
+def get_objective_lr_window(w_len: float, ras: List[ResourceAssignment], lr_coeffs: Mapping[str,Mapping[str,float]]):
+    slopes = dict()
+    intercepts = dict()
+
+    for ra in ras:
+        for proc in ra.processors:
+            if proc.processor not in slopes:
+                slopes[proc.processor] = 0.0
+            if proc.processor not in intercepts:
+                intercepts[proc.processor] = 0.0
+
+            slopes[proc.processor] += ra.slope
+            intercepts[proc.processor] += ra.intercept
+
+    obj = 0.0
+    for k, val in slopes.items():
+        obj += val * lr_coeffs[k]["slope"]
+    for k, val in intercepts.items():
+        obj += val * lr_coeffs[k]["intercept"]
+
+    return w_len * obj
+
+def get_solution_objective_lr_ub(data: dict, lr_coeffs: Mapping[str,Mapping[str,float]]):
+    sol = parse_solution(data)
+    tasks = parse_tasks(data)
+    ascs = parse_assignment_characteristics(data)
+    env = parse_environment(data)        
+    
+    # Prepare resource assignments for the individual tasks
+    task_to_ra = get_task_to_ra(tasks, ascs)
+    
+    obj = 0
+    for w in sol.windows:
+        ra_in_w = [task_to_ra[t.task] for t in w.task_assignments]
+        obj += get_objective_lr_window(w.length, ra_in_w, lr_coeffs)
+    
+    obj /= env.major_frame_length    
+    return obj
+
+def window_to_pi_intervals(w: Window, task_to_ra: Mapping[str,AssignmentCharacteristic]) -> List[Tuple[float, List[ResourceAssignment]]]:
+    pi_intervals = []
+
+    cur_time = 0
+    all_ra = [task_to_ra[t.task] for t in w.task_assignments]
+    proc_times = sorted([ra.length for ra in all_ra])
+
+    for p in proc_times:
+        new_time = p
+        pi_length = new_time - cur_time
+        if pi_length > 0:
+            pi_ras = [ra for ra in all_ra if ra.length > cur_time]
+            pi_intervals.append((pi_length, pi_ras))
+
+        cur_time = new_time
+
+    return pi_intervals
+
+def get_solution_objective_lr(data: dict, lr_coeffs: Mapping[str,Mapping[str,float]]):
+    sol = parse_solution(data)
+    tasks = parse_tasks(data)
+    ascs = parse_assignment_characteristics(data)
+    env = parse_environment(data)        
+    
+    # Prepare resource assignments for the individual tasks
+    task_to_ra = get_task_to_ra(tasks, ascs)
+    obj = 0
+    for w in sol.windows:
+        win_to_pi = window_to_pi_intervals(w, task_to_ra)
+
+        for l, ras in win_to_pi:
+            obj += get_objective_lr_window(l, ras, lr_coeffs)
+    
+    obj /= env.major_frame_length    
+    return obj
+
+def analyze_solution(data: dict, lr_coeffs):
+    sol = parse_solution(data)
+    tasks = parse_tasks(data)
+    ascs = parse_assignment_characteristics(data)
+    env = parse_environment(data)        
+    
+    # Prepare resource assignments for the individual tasks
+    task_to_ra = get_task_to_ra(tasks, ascs)
+    
+    # Print windows
+    print("                                        slope   intercept   length")
+    for w in sol.windows:
+        print("Window of length", w.length)
+        for ta in w.task_assignments:
+            print("  - task {:20s} -> {:5s}  {:.3f}       {:.3f}    {:5d}".format(ta.task, task_to_ra[ta.task].processors[0].processor, task_to_ra[ta.task].slope, task_to_ra[ta.task].intercept, task_to_ra[ta.task].length))
+
+    print("UB LR", get_solution_objective_lr_ub(data, lr_coeffs))
+
+    # print intervals
+    print("PI intervals")
+    for w in sol.windows:
+        print("window")
+        win_to_pi = window_to_pi_intervals(w, task_to_ra)
+        for l, ras in win_to_pi:
+            print("  - ", l, " -> ", "obj", get_objective_lr_window(l, ras, lr_coeffs))
+            for ra in ras:
+                print("        ", ra.to_dict())
+
 
 def read_json_from_file(path: str) -> dict:
     data = {}
