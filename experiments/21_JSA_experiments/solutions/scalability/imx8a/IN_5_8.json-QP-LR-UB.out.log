@@ -1,0 +1,47 @@
+Tasks lengths
+[40, 47, 47, 48, 61, 91, 97, 112, 281, 333]
+3
+Using license file /home/benedond/gurobi.lic
+Using gurobi.env file
+Set parameter Threads to value 1
+Academic license - for non-commercial use only
+Changed value of parameter TimeLimit to 300.0
+   Prev: inf  Min: 0.0  Max: inf  Default: inf
+Gurobi Optimizer version 9.0.1 build v9.0.1rc0 (linux64)
+Optimize a model with 44 rows, 33 columns and 127 nonzeros
+Model fingerprint: 0x1bf86a91
+Model has 30 quadratic objective terms
+Variable types: 3 continuous, 30 integer (30 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 3e+02]
+  Objective range  [0e+00, 0e+00]
+  QObjective range [3e-03, 3e-02]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 2e+02]
+Presolve removed 38 rows and 27 columns
+Presolve time: 0.00s
+Presolved: 10 rows, 10 columns, 30 nonzeros
+Variable types: 5 continuous, 5 integer (5 binary)
+
+Root relaxation: objective 3.026541e+00, 6 iterations, 0.00 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0    3.02654    0    5          -    3.02654      -     -    0s
+H    0     0                       3.6196283    3.02654  16.4%     -    0s
+H    0     0                       3.4493440    3.02654  12.3%     -    0s
+     0     0     cutoff    0         3.44934    3.44934  0.00%     -    0s
+
+Cutting planes:
+  Implied bound: 2
+  MIR: 4
+  RLT: 3
+
+Explored 1 nodes (16 simplex iterations) in 0.00 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 2: 3.44934 3.61963 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 3.449344027260e+00, best bound 3.449344027260e+00, gap 0.0000%

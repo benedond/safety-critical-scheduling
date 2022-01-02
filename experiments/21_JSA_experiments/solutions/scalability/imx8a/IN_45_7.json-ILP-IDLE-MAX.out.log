@@ -1,0 +1,60 @@
+Using license file /home/benedond/gurobi.lic
+Using gurobi.env file
+Set parameter Threads to value 1
+Academic license - for non-commercial use only
+Changed value of parameter TimeLimit to 300.0
+   Prev: inf  Min: 0.0  Max: inf  Default: inf
+Gurobi Optimizer version 9.0.1 build v9.0.1rc0 (linux64)
+Optimize a model with 4230 rows, 4095 columns and 16333 nonzeros
+Model fingerprint: 0x17a608fe
+Variable types: 45 continuous, 4050 integer (4050 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 4e+02]
+  Objective range  [3e+01, 4e+02]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 2e+03]
+Presolve removed 69 rows and 69 columns
+Presolve time: 0.31s
+Presolved: 4161 rows, 4026 columns, 16057 nonzeros
+Variable types: 45 continuous, 3981 integer (3981 binary)
+
+Root relaxation: objective 7.747000e+03, 740 iterations, 0.03 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 7747.00000    0   61          - 7747.00000      -     -    0s
+H    0     0                    6392.0000000 7747.00000  21.2%     -    0s
+     0     0 7747.00000    0   28 6392.00000 7747.00000  21.2%     -    1s
+     0     0 7747.00000    0   51 6392.00000 7747.00000  21.2%     -    5s
+H    0     0                    7091.0000000 7747.00000  9.25%     -    5s
+H    0     0                    7462.0000000 7747.00000  3.82%     -    5s
+     0     0 7747.00000    0   60 7462.00000 7747.00000  3.82%     -    5s
+     0     0 7747.00000    0   74 7462.00000 7747.00000  3.82%     -    5s
+     0     0 7747.00000    0   68 7462.00000 7747.00000  3.82%     -    6s
+     0     0 7747.00000    0   59 7462.00000 7747.00000  3.82%     -    6s
+     0     0 7747.00000    0   81 7462.00000 7747.00000  3.82%     -    6s
+     0     0 7747.00000    0   77 7462.00000 7747.00000  3.82%     -    6s
+     0     0 7747.00000    0   57 7462.00000 7747.00000  3.82%     -    6s
+     0     0 7747.00000    0   22 7462.00000 7747.00000  3.82%     -    6s
+     0     2 7747.00000    0   22 7462.00000 7747.00000  3.82%     -    6s
+H   27    19                    7575.0000000 7747.00000  2.27%   173    8s
+H   54    38                    7649.0000000 7747.00000  1.28%   143    9s
+   106    82 7682.00000   89  106 7649.00000 7747.00000  1.28%  79.9   10s
+   511   340 7747.00000   12   28 7649.00000 7747.00000  1.28%  93.3   15s
+H  529   334                    7747.0000000 7747.00000  0.00%  90.2   17s
+
+Cutting planes:
+  Gomory: 1
+  Projected implied bound: 1
+  MIR: 2
+  Flow cover: 8
+  Relax-and-lift: 2
+
+Explored 529 nodes (75828 simplex iterations) in 17.76 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 6: 7747 7649 7575 ... 6392
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 7.747000000000e+03, best bound 7.747000000000e+03, gap 0.0000%

@@ -1,0 +1,49 @@
+Using license file /home/benedond/gurobi.lic
+Using gurobi.env file
+Set parameter Threads to value 1
+Academic license - for non-commercial use only
+Changed value of parameter TimeLimit to 300.0
+   Prev: inf  Min: 0.0  Max: inf  Default: inf
+Gurobi Optimizer version 9.0.1 build v9.0.1rc0 (linux64)
+Optimize a model with 5200 rows, 5050 columns and 20148 nonzeros
+Model fingerprint: 0xd931fc76
+Variable types: 50 continuous, 5000 integer (5000 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 5e+02]
+  Objective range  [4e+01, 5e+02]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 2e+03]
+Presolve removed 58 rows and 58 columns
+Presolve time: 0.32s
+Presolved: 5142 rows, 4992 columns, 19916 nonzeros
+Variable types: 50 continuous, 4942 integer (4942 binary)
+
+Root relaxation: objective 7.928000e+03, 684 iterations, 0.03 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 7928.00000    0   80          - 7928.00000      -     -    0s
+H    0     0                    7359.0000000 7928.00000  7.73%     -    0s
+H    0     0                    7868.0000000 7928.00000  0.76%     -    1s
+     0     0 7928.00000    0   36 7868.00000 7928.00000  0.76%     -    1s
+     0     0 7928.00000    0   44 7868.00000 7928.00000  0.76%     -    6s
+     0     0 7928.00000    0   39 7868.00000 7928.00000  0.76%     -    6s
+     0     0 7928.00000    0   39 7868.00000 7928.00000  0.76%     -    6s
+     0     0 7928.00000    0   32 7868.00000 7928.00000  0.76%     -    6s
+     0     0 7928.00000    0   41 7868.00000 7928.00000  0.76%     -    6s
+     0     0 7928.00000    0    9 7868.00000 7928.00000  0.76%     -    6s
+H    0     0                    7928.0000000 7928.00000  0.00%     -    6s
+     0     0 7928.00000    0    9 7928.00000 7928.00000  0.00%     -    6s
+
+Cutting planes:
+  MIR: 3
+  Relax-and-lift: 8
+
+Explored 1 nodes (11861 simplex iterations) in 6.43 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 3: 7928 7868 7359 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 7.928000000000e+03, best bound 7.928000000000e+03, gap 0.0000%
