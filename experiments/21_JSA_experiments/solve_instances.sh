@@ -29,11 +29,28 @@ solve () {
 }
 # ==============================================================================================
 
-solvers=( "HEUR" "ILP-IDLE-MIN" "ILP-IDLE-MAX" "ILP-SM-I" "ILP-SM-II" "QP-LR-UB")
-EXP_PATHs=( "HEUR" "ILP-IDLE" "ILP-IDLE" "ILP-SM-I" "ILP-SM-II" "QP-LR-UB")
-cmds=( "" "" "--maximize" "" "" "")
-timelimit=300
+# Scalability and imx8 instances.
+# solvers=( "HEUR" "ILP-IDLE-MIN" "ILP-IDLE-MAX" "ILP-SM-I" "ILP-SM-II" "QP-LR-UB")
+# EXP_PATHs=( "HEUR" "ILP-IDLE" "ILP-IDLE" "ILP-SM-I" "ILP-SM-II" "QP-LR-UB")
+# cmds=( "" "" "--maximize" "" "" "")
+# timelimit=300
 
-solve "scalability/imx8a"
-solve "imx8a/all"
-solve "imx8a/cpu"
+# solve "scalability/imx8a"
+# solve "imx8a/all"
+# solve "imx8a/cpu"
+
+# ILP olny test
+# solvers=( "ILP-SM-I" "ILP-SM-II" )
+# EXP_PATHs=( "ILP-SM-I" "ILP-SM-II" )
+# cmds=( "" "" )
+# timelimit=1200
+
+# solve "scalability_ilp/imx8a"
+
+# ILP olny test
+solvers=( "ILP-SM-I" "ILP-SM-II" )
+EXP_PATHs=( "ILP-SM-I" "ILP-SM-II" )
+cmds=( "" "" )
+timelimit=1200
+
+solve "scalability_ilp_20-36/imx8a"
