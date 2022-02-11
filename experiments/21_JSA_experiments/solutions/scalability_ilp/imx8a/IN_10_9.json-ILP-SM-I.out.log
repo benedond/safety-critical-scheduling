@@ -1,0 +1,86 @@
+Academic license - for non-commercial use only - expires 2022-11-10
+Using license file /home/benedond/Apps/gurobi/gurobi950/gurobi.lic
+Using gurobi.env file
+Set parameter Threads to value 1
+Changed value of parameter TimeLimit to 1200.0
+   Prev: inf  Min: 0.0  Max: inf  Default: inf
+Gurobi Optimizer version 9.1.2 build v9.1.2rc0 (linux64)
+Thread count: 2 physical cores, 4 logical processors, using up to 1 threads
+Optimize a model with 450 rows, 220 columns and 1638 nonzeros
+Model fingerprint: 0x6ade7fac
+Variable types: 10 continuous, 210 integer (200 binary)
+Coefficient statistics:
+  Matrix range     [2e-01, 2e+03]
+  Objective range  [2e-03, 6e-01]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 2e+03]
+
+---------------------------------------------------------------------------
+Multi-objectives: starting optimization with 1 objectives ... 
+---------------------------------------------------------------------------
+---------------------------------------------------------------------------
+
+Multi-objectives: optimize objective 1 (min avg power cons) ...
+---------------------------------------------------------------------------
+
+Optimize a model with 450 rows, 220 columns and 1638 nonzeros
+Model fingerprint: 0xde5bfb82
+Variable types: 10 continuous, 210 integer (200 binary)
+Coefficient statistics:
+  Matrix range     [2e-01, 2e+03]
+  Objective range  [2e-03, 6e-01]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 2e+03]
+Presolve removed 340 rows and 158 columns
+Presolve time: 0.01s
+Presolved: 110 rows, 62 columns, 587 nonzeros
+Variable types: 4 continuous, 58 integer (54 binary)
+Found heuristic solution: objective 5.1953488
+
+Root relaxation: objective 2.863594e+00, 64 iterations, 0.00 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0    2.86359    0   25    5.19535    2.86359  44.9%     -    0s
+H    0     0                       4.5064419    2.86359  36.5%     -    0s
+H    0     0                       4.3945814    2.86359  34.8%     -    0s
+H    0     0                       4.1089535    2.86359  30.3%     -    0s
+     0     0    3.11836    0   27    4.10895    3.11836  24.1%     -    0s
+     0     0    3.13340    0   29    4.10895    3.13340  23.7%     -    0s
+     0     0    3.21669    0   29    4.10895    3.21669  21.7%     -    0s
+     0     0    3.21942    0   33    4.10895    3.21942  21.6%     -    0s
+     0     0    3.24114    0   26    4.10895    3.24114  21.1%     -    0s
+     0     0    3.25601    0   31    4.10895    3.25601  20.8%     -    0s
+     0     0    3.27791    0   32    4.10895    3.27791  20.2%     -    0s
+     0     0    3.28447    0   30    4.10895    3.28447  20.1%     -    0s
+     0     0    3.28447    0   31    4.10895    3.28447  20.1%     -    0s
+     0     0    3.28816    0   30    4.10895    3.28816  20.0%     -    0s
+     0     0    3.28897    0   29    4.10895    3.28897  20.0%     -    0s
+     0     0    3.29402    0   29    4.10895    3.29402  19.8%     -    0s
+     0     0    3.29409    0   30    4.10895    3.29409  19.8%     -    0s
+     0     0    3.29499    0   30    4.10895    3.29499  19.8%     -    0s
+     0     0    3.29499    0   30    4.10895    3.29499  19.8%     -    0s
+     0     0    3.29499    0   29    4.10895    3.29499  19.8%     -    0s
+     0     2    3.30993    0   29    4.10895    3.30993  19.4%     -    0s
+
+Cutting planes:
+  Gomory: 1
+  Cover: 4
+  Implied bound: 5
+  Clique: 1
+  MIR: 7
+  GUB cover: 6
+  Relax-and-lift: 1
+
+Explored 13 nodes (477 simplex iterations) in 0.06 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 4: 4.10895 4.39458 4.50644 5.19535 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 4.108953487908e+00, best bound 4.108953487908e+00, gap 0.0000%
+
+---------------------------------------------------------------------------
+Multi-objectives: solved in 0.06 seconds, solution count 4
+

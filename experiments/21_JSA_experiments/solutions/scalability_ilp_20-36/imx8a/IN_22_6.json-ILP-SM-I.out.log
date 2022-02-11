@@ -1,0 +1,116 @@
+Academic license - for non-commercial use only - expires 2022-11-10
+Using license file /home/benedond/Apps/gurobi/gurobi950/gurobi.lic
+Using gurobi.env file
+Set parameter Threads to value 1
+Changed value of parameter TimeLimit to 1200.0
+   Prev: inf  Min: 0.0  Max: inf  Default: inf
+Gurobi Optimizer version 9.1.2 build v9.1.2rc0 (linux64)
+Thread count: 2 physical cores, 4 logical processors, using up to 1 threads
+Optimize a model with 2046 rows, 1012 columns and 7830 nonzeros
+Model fingerprint: 0x4fc27144
+Variable types: 22 continuous, 990 integer (968 binary)
+Coefficient statistics:
+  Matrix range     [2e-01, 3e+03]
+  Objective range  [1e-03, 2e-01]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 3e+03]
+
+---------------------------------------------------------------------------
+Multi-objectives: starting optimization with 1 objectives ... 
+---------------------------------------------------------------------------
+---------------------------------------------------------------------------
+
+Multi-objectives: optimize objective 1 (min avg power cons) ...
+---------------------------------------------------------------------------
+
+Optimize a model with 2046 rows, 1012 columns and 7830 nonzeros
+Model fingerprint: 0x028e6fa1
+Variable types: 22 continuous, 990 integer (968 binary)
+Coefficient statistics:
+  Matrix range     [2e-01, 3e+03]
+  Objective range  [1e-03, 2e-01]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 3e+03]
+Presolve removed 1275 rows and 623 columns
+Presolve time: 0.05s
+Presolved: 771 rows, 389 columns, 2862 nonzeros
+Variable types: 17 continuous, 372 integer (356 binary)
+
+Root relaxation: objective 1.390185e+00, 164 iterations, 0.00 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0    1.39018    0   47          -    1.39018      -     -    0s
+H    0     0                       4.2942283    1.39018  67.6%     -    0s
+H    0     0                       4.2661087    1.39018  67.4%     -    0s
+     0     0    1.43766    0   69    4.26611    1.43766  66.3%     -    0s
+H    0     0                       3.6388044    1.43766  60.5%     -    0s
+     0     0    1.45427    0   58    3.63880    1.45427  60.0%     -    0s
+     0     0    1.56860    0   73    3.63880    1.56860  56.9%     -    0s
+H    0     0                       3.4021630    1.56860  53.9%     -    0s
+     0     0    1.57451    0   76    3.40216    1.57451  53.7%     -    0s
+     0     0    1.76051    0   77    3.40216    1.76051  48.3%     -    0s
+H    0     0                       3.3149783    1.76051  46.9%     -    0s
+     0     0    1.79021    0   64    3.31498    1.79021  46.0%     -    0s
+     0     0    1.94339    0   85    3.31498    1.94339  41.4%     -    0s
+H    0     0                       3.1790652    1.94339  38.9%     -    0s
+     0     0    1.95137    0   87    3.17907    1.95137  38.6%     -    0s
+     0     0    1.95194    0   88    3.17907    1.95194  38.6%     -    0s
+     0     0    1.95585    0   78    3.17907    1.95585  38.5%     -    0s
+     0     0    1.95794    0   88    3.17907    1.95794  38.4%     -    0s
+     0     0    1.95857    0   90    3.17907    1.95857  38.4%     -    0s
+     0     0    1.95883    0   90    3.17907    1.95883  38.4%     -    0s
+     0     0    1.95913    0   91    3.17907    1.95913  38.4%     -    0s
+     0     0    1.95928    0   91    3.17907    1.95928  38.4%     -    0s
+     0     0    1.95937    0   91    3.17907    1.95937  38.4%     -    0s
+     0     0    1.97710    0   71    3.17907    1.97710  37.8%     -    0s
+     0     0    1.98658    0   78    3.17907    1.98658  37.5%     -    0s
+     0     0    1.98962    0   70    3.17907    1.98962  37.4%     -    0s
+     0     0    1.99036    0  100    3.17907    1.99036  37.4%     -    0s
+     0     0    1.99104    0  102    3.17907    1.99104  37.4%     -    0s
+     0     0    1.99247    0  105    3.17907    1.99247  37.3%     -    0s
+     0     0    1.99250    0  102    3.17907    1.99250  37.3%     -    0s
+     0     0    1.99654    0   79    3.17907    1.99654  37.2%     -    0s
+     0     0    1.99838    0   81    3.17907    1.99838  37.1%     -    0s
+     0     0    1.99860    0   84    3.17907    1.99860  37.1%     -    0s
+     0     0    2.00026    0   80    3.17907    2.00026  37.1%     -    0s
+H    0     0                       3.1367391    2.00026  36.2%     -    0s
+     0     0    2.00138    0   79    3.13674    2.00138  36.2%     -    0s
+     0     0    2.00217    0   79    3.13674    2.00217  36.2%     -    0s
+     0     0    2.00225    0   80    3.13674    2.00225  36.2%     -    0s
+     0     0    2.00346    0   80    3.13674    2.00346  36.1%     -    0s
+     0     0    2.00378    0   81    3.13674    2.00378  36.1%     -    0s
+     0     0    2.00398    0   82    3.13674    2.00398  36.1%     -    0s
+     0     0    2.00596    0   82    3.13674    2.00596  36.0%     -    0s
+     0     0    2.00604    0   90    3.13674    2.00604  36.0%     -    0s
+     0     0    2.00709    0  100    3.13674    2.00709  36.0%     -    0s
+     0     0    2.00711    0  101    3.13674    2.00711  36.0%     -    0s
+H    0     0                       3.0370978    2.00711  33.9%     -    0s
+     0     2    2.00784    0  101    3.03710    2.00784  33.9%     -    0s
+H   55    23                       2.9907609    2.06096  31.1%  49.8    0s
+
+Cutting planes:
+  Gomory: 4
+  Cover: 53
+  Implied bound: 78
+  Clique: 4
+  MIR: 148
+  StrongCG: 12
+  GUB cover: 1
+  Inf proof: 5
+  Zero half: 3
+  RLT: 26
+  Relax-and-lift: 145
+
+Explored 1137 nodes (54982 simplex iterations) in 2.09 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 9: 2.99076 3.0371 3.13674 ... 4.29423
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 2.990760866860e+00, best bound 2.990760866860e+00, gap 0.0000%
+
+---------------------------------------------------------------------------
+Multi-objectives: solved in 2.09 seconds, solution count 9
+

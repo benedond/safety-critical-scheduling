@@ -1,0 +1,88 @@
+Academic license - for non-commercial use only - expires 2022-11-10
+Using license file /home/benedond/Apps/gurobi/gurobi950/gurobi.lic
+Using gurobi.env file
+Set parameter Threads to value 1
+Changed value of parameter TimeLimit to 1200.0
+   Prev: inf  Min: 0.0  Max: inf  Default: inf
+Gurobi Optimizer version 9.1.2 build v9.1.2rc0 (linux64)
+Thread count: 2 physical cores, 4 logical processors, using up to 1 threads
+Optimize a model with 450 rows, 220 columns and 1638 nonzeros
+Model fingerprint: 0x6328b38c
+Variable types: 10 continuous, 210 integer (200 binary)
+Coefficient statistics:
+  Matrix range     [2e-01, 1e+03]
+  Objective range  [2e-03, 6e-01]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 1e+03]
+
+---------------------------------------------------------------------------
+Multi-objectives: starting optimization with 1 objectives ... 
+---------------------------------------------------------------------------
+---------------------------------------------------------------------------
+
+Multi-objectives: optimize objective 1 (min avg power cons) ...
+---------------------------------------------------------------------------
+
+Optimize a model with 450 rows, 220 columns and 1638 nonzeros
+Model fingerprint: 0x0b10e6b8
+Variable types: 10 continuous, 210 integer (200 binary)
+Coefficient statistics:
+  Matrix range     [2e-01, 1e+03]
+  Objective range  [2e-03, 6e-01]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 1e+03]
+Presolve removed 339 rows and 158 columns
+Presolve time: 0.01s
+Presolved: 111 rows, 62 columns, 564 nonzeros
+Variable types: 5 continuous, 57 integer (52 binary)
+Found heuristic solution: objective 4.4305652
+
+Root relaxation: objective 3.047588e+00, 56 iterations, 0.00 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0    3.04759    0   23    4.43057    3.04759  31.2%     -    0s
+     0     0    3.25554    0   22    4.43057    3.25554  26.5%     -    0s
+     0     0    3.25554    0   22    4.43057    3.25554  26.5%     -    0s
+     0     0    3.30443    0   18    4.43057    3.30443  25.4%     -    0s
+     0     0    3.34611    0   20    4.43057    3.34611  24.5%     -    0s
+     0     0    3.38106    0   15    4.43057    3.38106  23.7%     -    0s
+H    0     0                       4.4260652    3.38106  23.6%     -    0s
+     0     0    3.38808    0   18    4.42607    3.38808  23.5%     -    0s
+     0     0    3.38893    0   16    4.42607    3.38893  23.4%     -    0s
+H    0     0                       4.3785870    3.38893  22.6%     -    0s
+     0     0    3.39823    0   17    4.37859    3.39823  22.4%     -    0s
+     0     0    3.46491    0   24    4.37859    3.46491  20.9%     -    0s
+H    0     0                       4.3607826    3.46491  20.5%     -    0s
+     0     0    3.49340    0   22    4.36078    3.49340  19.9%     -    0s
+     0     0    3.49517    0   24    4.36078    3.49517  19.8%     -    0s
+     0     0    3.50036    0   24    4.36078    3.50036  19.7%     -    0s
+     0     0    3.51417    0   24    4.36078    3.51417  19.4%     -    0s
+     0     0    3.51417    0   24    4.36078    3.51417  19.4%     -    0s
+     0     0    3.54788    0   24    4.36078    3.54788  18.6%     -    0s
+     0     0    3.54788    0   24    4.36078    3.54788  18.6%     -    0s
+     0     0    3.55075    0   24    4.36078    3.55075  18.6%     -    0s
+H    0     0                       4.3251739    3.55075  17.9%     -    0s
+     0     0    3.55075    0   24    4.32517    3.55075  17.9%     -    0s
+     0     0    3.55075    0   22    4.32517    3.55075  17.9%     -    0s
+     0     0    3.55075    0   15    4.32517    3.55075  17.9%     -    0s
+     0     2    3.55224    0   15    4.32517    3.55224  17.9%     -    0s
+H    3     3                       4.2307826    3.59305  15.1%  14.3    0s
+
+Cutting planes:
+  Implied bound: 2
+  MIR: 6
+  Relax-and-lift: 4
+
+Explored 23 nodes (559 simplex iterations) in 0.05 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 6: 4.23078 4.32517 4.36078 ... 4.43057
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 4.230782624788e+00, best bound 4.230782624788e+00, gap 0.0000%
+
+---------------------------------------------------------------------------
+Multi-objectives: solved in 0.05 seconds, solution count 6
+

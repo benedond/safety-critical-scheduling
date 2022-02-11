@@ -1,0 +1,88 @@
+Academic license - for non-commercial use only - expires 2022-11-10
+Using license file /home/benedond/Apps/gurobi/gurobi950/gurobi.lic
+Using gurobi.env file
+Set parameter Threads to value 1
+Changed value of parameter TimeLimit to 1200.0
+   Prev: inf  Min: 0.0  Max: inf  Default: inf
+Gurobi Optimizer version 9.1.2 build v9.1.2rc0 (linux64)
+Thread count: 2 physical cores, 4 logical processors, using up to 1 threads
+Optimize a model with 450 rows, 220 columns and 1638 nonzeros
+Model fingerprint: 0x24dca3f0
+Variable types: 10 continuous, 210 integer (200 binary)
+Coefficient statistics:
+  Matrix range     [2e-01, 2e+03]
+  Objective range  [2e-03, 8e-01]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 2e+03]
+
+---------------------------------------------------------------------------
+Multi-objectives: starting optimization with 1 objectives ... 
+---------------------------------------------------------------------------
+---------------------------------------------------------------------------
+
+Multi-objectives: optimize objective 1 (min avg power cons) ...
+---------------------------------------------------------------------------
+
+Optimize a model with 450 rows, 220 columns and 1638 nonzeros
+Model fingerprint: 0x2a49c786
+Variable types: 10 continuous, 210 integer (200 binary)
+Coefficient statistics:
+  Matrix range     [2e-01, 2e+03]
+  Objective range  [2e-03, 8e-01]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 2e+03]
+Presolve removed 352 rows and 163 columns
+Presolve time: 0.01s
+Presolved: 98 rows, 57 columns, 517 nonzeros
+Variable types: 4 continuous, 53 integer (49 binary)
+Found heuristic solution: objective 5.1065854
+
+Root relaxation: objective 3.293916e+00, 53 iterations, 0.00 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0    3.29392    0   24    5.10659    3.29392  35.5%     -    0s
+H    0     0                       4.6664878    3.29392  29.4%     -    0s
+H    0     0                       4.5974146    3.29392  28.4%     -    0s
+     0     0    3.45408    0   26    4.59741    3.45408  24.9%     -    0s
+H    0     0                       4.3261463    3.45408  20.2%     -    0s
+H    0     0                       4.2552439    3.45408  18.8%     -    0s
+     0     0    3.45989    0   25    4.25524    3.45989  18.7%     -    0s
+     0     0    3.47731    0   29    4.25524    3.47731  18.3%     -    0s
+     0     0    3.50288    0   27    4.25524    3.50288  17.7%     -    0s
+     0     0    3.51752    0   28    4.25524    3.51752  17.3%     -    0s
+     0     0    3.52237    0   30    4.25524    3.52237  17.2%     -    0s
+     0     0    3.53957    0   30    4.25524    3.53957  16.8%     -    0s
+     0     0    3.55467    0   33    4.25524    3.55467  16.5%     -    0s
+     0     0    3.55916    0   26    4.25524    3.55916  16.4%     -    0s
+     0     0    3.56601    0   30    4.25524    3.56601  16.2%     -    0s
+     0     0    3.56814    0   26    4.25524    3.56814  16.1%     -    0s
+     0     0    3.58120    0   26    4.25524    3.58120  15.8%     -    0s
+     0     0    3.58370    0   30    4.25524    3.58370  15.8%     -    0s
+     0     0    3.58725    0   34    4.25524    3.58725  15.7%     -    0s
+     0     0    3.58732    0   34    4.25524    3.58732  15.7%     -    0s
+     0     0    3.58863    0   18    4.25524    3.58863  15.7%     -    0s
+     0     0    3.58863    0   18    4.25524    3.58863  15.7%     -    0s
+     0     0    3.58863    0   18    4.25524    3.58863  15.7%     -    0s
+     0     2    3.58879    0   18    4.25524    3.58879  15.7%     -    0s
+
+Cutting planes:
+  Cover: 1
+  Implied bound: 2
+  Clique: 1
+  MIR: 13
+  RLT: 1
+  Relax-and-lift: 9
+
+Explored 11 nodes (533 simplex iterations) in 0.07 seconds
+Thread count was 1 (of 4 available processors)
+
+Solution count 5: 4.25524 4.32615 4.59741 ... 5.10659
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 4.255243862947e+00, best bound 4.255243862947e+00, gap 0.0000%
+
+---------------------------------------------------------------------------
+Multi-objectives: solved in 0.07 seconds, solution count 5
+
