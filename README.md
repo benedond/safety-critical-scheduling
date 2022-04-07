@@ -1,14 +1,15 @@
 # Contents
 
-1.  [Available tools](#available-tools)
-    1.  [instance\_generator](#instance_generator)
-    2.  [ilp\_global\_solver](#ilp_global_solver)
-    3.  [assignment\_solver](#ilp_assignment_solver)
-    4.  [schedule\_solver](#schedule_solver)
-    5.  [visualizer](#visualizer)
-    6.  [demos\_config\_export](#demos_config_export)
-2.  [Compiling](#compiling)
-3.  [Data format](#data-format)
+- [Contents](#contents)
+  - [Available tools](#available-tools)
+      - [instance\_generator](#instance_generator)
+      - [ilp\_global\_solver](#ilp_global_solver)
+      - [assignment\_solver](#assignment_solver)
+      - [schedule\_solver](#schedule_solver)
+      - [visualizer](#visualizer)
+      - [demos\_config\_export](#demos_config_export)
+  - [Compiling](#compiling)
+  - [Data format](#data-format)
 
 ## Available tools
 
@@ -40,7 +41,7 @@ content:
 To better understand how the tools work, the following diagram
 illustrates how they fit together to form a data pipeline:
 
-![data\_pipeline](doc/data_pipeline.png "Data pipeline")
+![data\_pipeline](data_pipeline.png "Data pipeline")
 
 Please note that some of the provided tools may contain features that
 are left over from the development phase of the project and are not
