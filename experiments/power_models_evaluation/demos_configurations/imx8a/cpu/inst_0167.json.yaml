@@ -1,0 +1,23 @@
+partitions:
+  - name: 2_tblook-4M
+    processes:
+      - cmd: ./tblook-4M -v0 -c1 -i100
+        budget: 455
+  - name: 1_bitmnp-4M
+    processes:
+      - cmd: ./bitmnp-4M -v0 -c1 -i100
+        budget: 912
+  - name: 0_canrdr-4M
+    processes:
+      - cmd: ./canrdr-4M -v0 -c1 -i100
+        budget: 165
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 3
+        sc_partition: 2_tblook-4M
+      - cpu: 2
+        sc_partition: 1_bitmnp-4M
+      - cpu: 0
+        sc_partition: 0_canrdr-4M

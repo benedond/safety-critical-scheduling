@@ -1,0 +1,17 @@
+partitions:
+  - name: 1_idctrn-4M
+    processes:
+      - cmd: ./idctrn-4M -v0 -c1 -i100
+        budget: 274
+  - name: 0_rspeed-4M
+    processes:
+      - cmd: ./rspeed-4M -v0 -c1 -i100
+        budget: 413
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 2
+        sc_partition: 1_idctrn-4M
+      - cpu: 1
+        sc_partition: 0_rspeed-4M

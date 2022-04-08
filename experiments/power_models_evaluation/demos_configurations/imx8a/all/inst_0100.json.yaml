@@ -1,0 +1,23 @@
+partitions:
+  - name: 2_tblook-4M
+    processes:
+      - cmd: ./tblook-4M -v0 -c1 -i100
+        budget: 589
+  - name: 1_bitmnp-4M
+    processes:
+      - cmd: ./bitmnp-4M -v0 -c1 -i100
+        budget: 368
+  - name: 0_membench-4M-RO-R
+    processes:
+      - cmd: /root/thermobench/build/benchmarks/mem/membench -t1 -f -r -s 4000000
+        budget: 869
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 4
+        sc_partition: 2_tblook-4M
+      - cpu: 2
+        sc_partition: 1_bitmnp-4M
+      - cpu: 0
+        sc_partition: 0_membench-4M-RO-R

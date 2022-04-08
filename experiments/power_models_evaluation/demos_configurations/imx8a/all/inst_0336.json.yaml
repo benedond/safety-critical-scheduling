@@ -1,0 +1,23 @@
+partitions:
+  - name: 2_pntrch-4K
+    processes:
+      - cmd: ./pntrch-4K -v0 -c1 -i100
+        budget: 910
+  - name: 1_tblook-4K
+    processes:
+      - cmd: ./tblook-4K -v0 -c1 -i100
+        budget: 774
+  - name: 0_pntrch-4M
+    processes:
+      - cmd: ./pntrch-4M -v0 -c1 -i1
+        budget: 344
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 4
+        sc_partition: 2_pntrch-4K
+      - cpu: 2
+        sc_partition: 1_tblook-4K
+      - cpu: 0
+        sc_partition: 0_pntrch-4M

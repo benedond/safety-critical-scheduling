@@ -1,0 +1,29 @@
+partitions:
+  - name: 3_bitmnp-4K
+    processes:
+      - cmd: ./bitmnp-4K -v0 -c1 -i100
+        budget: 105
+  - name: 2_membench-1K-RO-R
+    processes:
+      - cmd: /root/thermobench/build/benchmarks/mem/membench -t1 -f -r -s 1000
+        budget: 127
+  - name: 1_membench-1M-RW-S
+    processes:
+      - cmd: /root/thermobench/build/benchmarks/mem/membench -t1 -f -w -s 1000000
+        budget: 11
+  - name: 0_membench-1K-RW-S
+    processes:
+      - cmd: /root/thermobench/build/benchmarks/mem/membench -t1 -f -w -s 1000
+        budget: 537
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 4
+        sc_partition: 3_bitmnp-4K
+      - cpu: 3
+        sc_partition: 2_membench-1K-RO-R
+      - cpu: 1
+        sc_partition: 1_membench-1M-RW-S
+      - cpu: 0
+        sc_partition: 0_membench-1K-RW-S

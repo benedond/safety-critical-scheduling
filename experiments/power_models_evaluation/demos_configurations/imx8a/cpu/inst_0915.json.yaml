@@ -1,0 +1,23 @@
+partitions:
+  - name: 2_matrix-4M
+    processes:
+      - cmd: ./matrix-4M -v0 -c1 -i100
+        budget: 742
+  - name: 1_tinyrenderer-boggie
+    processes:
+      - cmd: /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer -f /root/thermobench/benchmarks/tinyrenderer/obj/boggie/*.obj
+        budget: 154
+  - name: 0_iirflt-4M
+    processes:
+      - cmd: ./iirflt-4M -v0 -c1 -i100
+        budget: 3
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 4
+        sc_partition: 2_matrix-4M
+      - cpu: 2
+        sc_partition: 1_tinyrenderer-boggie
+      - cpu: 0
+        sc_partition: 0_iirflt-4M

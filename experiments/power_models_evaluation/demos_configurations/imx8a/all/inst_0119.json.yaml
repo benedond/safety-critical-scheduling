@@ -1,0 +1,17 @@
+partitions:
+  - name: 1_membench-4M-RO-R
+    processes:
+      - cmd: /root/thermobench/build/benchmarks/mem/membench -t1 -f -r -s 4000000
+        budget: 335
+  - name: 0_iirflt-4M
+    processes:
+      - cmd: ./iirflt-4M -v0 -c1 -i100
+        budget: 770
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 3
+        sc_partition: 1_membench-4M-RO-R
+      - cpu: 1
+        sc_partition: 0_iirflt-4M

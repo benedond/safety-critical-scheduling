@@ -1,0 +1,23 @@
+partitions:
+  - name: 2_aifirf-4K
+    processes:
+      - cmd: ./aifirf-4K -v0 -c1 -i100
+        budget: 346
+  - name: 1_aifirf-4K
+    processes:
+      - cmd: ./aifirf-4K -v0 -c1 -i100
+        budget: 579
+  - name: 0_ttsprk-4K
+    processes:
+      - cmd: ./ttsprk-4K -v0 -c1 -i100
+        budget: 754
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 4
+        sc_partition: 2_aifirf-4K
+      - cpu: 3
+        sc_partition: 1_aifirf-4K
+      - cpu: 2
+        sc_partition: 0_ttsprk-4K

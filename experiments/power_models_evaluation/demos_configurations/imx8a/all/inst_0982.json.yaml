@@ -1,0 +1,17 @@
+partitions:
+  - name: 1_pntrch-4K
+    processes:
+      - cmd: ./pntrch-4K -v0 -c1 -i100
+        budget: 495
+  - name: 0_pntrch-4M
+    processes:
+      - cmd: ./pntrch-4M -v0 -c1 -i1
+        budget: 76
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 3
+        sc_partition: 1_pntrch-4K
+      - cpu: 1
+        sc_partition: 0_pntrch-4M

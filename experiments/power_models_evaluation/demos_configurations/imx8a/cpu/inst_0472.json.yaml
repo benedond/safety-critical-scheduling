@@ -1,0 +1,23 @@
+partitions:
+  - name: 2_tblook-4K
+    processes:
+      - cmd: ./tblook-4K -v0 -c1 -i100
+        budget: 35
+  - name: 1_bitmnp-4K
+    processes:
+      - cmd: ./bitmnp-4K -v0 -c1 -i100
+        budget: 509
+  - name: 0_puwmod-4K
+    processes:
+      - cmd: ./puwmod-4K -v0 -c1 -i100
+        budget: 445
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 4
+        sc_partition: 2_tblook-4K
+      - cpu: 2
+        sc_partition: 1_bitmnp-4K
+      - cpu: 1
+        sc_partition: 0_puwmod-4K

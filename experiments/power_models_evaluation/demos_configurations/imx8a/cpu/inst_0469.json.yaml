@@ -1,0 +1,35 @@
+partitions:
+  - name: 4_iirflt-4M
+    processes:
+      - cmd: ./iirflt-4M -v0 -c1 -i100
+        budget: 157
+  - name: 3_tblook-4M
+    processes:
+      - cmd: ./tblook-4M -v0 -c1 -i100
+        budget: 507
+  - name: 2_bitmnp-4M
+    processes:
+      - cmd: ./bitmnp-4M -v0 -c1 -i100
+        budget: 395
+  - name: 1_rspeed-4M
+    processes:
+      - cmd: ./rspeed-4M -v0 -c1 -i100
+        budget: 959
+  - name: 0_rspeed-4M
+    processes:
+      - cmd: ./rspeed-4M -v0 -c1 -i100
+        budget: 891
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 4
+        sc_partition: 4_iirflt-4M
+      - cpu: 3
+        sc_partition: 3_tblook-4M
+      - cpu: 2
+        sc_partition: 2_bitmnp-4M
+      - cpu: 1
+        sc_partition: 1_rspeed-4M
+      - cpu: 0
+        sc_partition: 0_rspeed-4M

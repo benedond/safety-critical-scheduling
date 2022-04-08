@@ -1,0 +1,11 @@
+partitions:
+  - name: 0_idctrn-4M
+    processes:
+      - cmd: ./idctrn-4M -v0 -c1 -i100
+        budget: 736
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 5
+        sc_partition: 0_idctrn-4M

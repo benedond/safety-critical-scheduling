@@ -1,0 +1,23 @@
+partitions:
+  - name: 2_bitmnp-4K
+    processes:
+      - cmd: ./bitmnp-4K -v0 -c1 -i100
+        budget: 119
+  - name: 1_aifirf-4K
+    processes:
+      - cmd: ./aifirf-4K -v0 -c1 -i100
+        budget: 595
+  - name: 0_iirflt-4M
+    processes:
+      - cmd: ./iirflt-4M -v0 -c1 -i100
+        budget: 79
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 5
+        sc_partition: 2_bitmnp-4K
+      - cpu: 4
+        sc_partition: 1_aifirf-4K
+      - cpu: 1
+        sc_partition: 0_iirflt-4M

@@ -1,0 +1,17 @@
+partitions:
+  - name: 1_a2time-4K
+    processes:
+      - cmd: ./a2time-4K -v0 -c1 -i100
+        budget: 945
+  - name: 0_membench-4M-RW-R
+    processes:
+      - cmd: /root/thermobench/build/benchmarks/mem/membench -t1 -f -r -w -s 4000000
+        budget: 630
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 5
+        sc_partition: 1_a2time-4K
+      - cpu: 3
+        sc_partition: 0_membench-4M-RW-R

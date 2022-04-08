@@ -1,0 +1,17 @@
+partitions:
+  - name: 1_rspeed-4M
+    processes:
+      - cmd: ./rspeed-4M -v0 -c1 -i100
+        budget: 793
+  - name: 0_pntrch-4K
+    processes:
+      - cmd: ./pntrch-4K -v0 -c1 -i100
+        budget: 618
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 5
+        sc_partition: 1_rspeed-4M
+      - cpu: 2
+        sc_partition: 0_pntrch-4K

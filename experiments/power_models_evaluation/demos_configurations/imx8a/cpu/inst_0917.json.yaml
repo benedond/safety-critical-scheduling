@@ -1,0 +1,23 @@
+partitions:
+  - name: 2_idctrn-4M
+    processes:
+      - cmd: ./idctrn-4M -v0 -c1 -i100
+        budget: 915
+  - name: 1_bitmnp-4M
+    processes:
+      - cmd: ./bitmnp-4M -v0 -c1 -i100
+        budget: 436
+  - name: 0_matrix-4M
+    processes:
+      - cmd: ./matrix-4M -v0 -c1 -i100
+        budget: 60
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 4
+        sc_partition: 2_idctrn-4M
+      - cpu: 3
+        sc_partition: 1_bitmnp-4M
+      - cpu: 0
+        sc_partition: 0_matrix-4M

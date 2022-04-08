@@ -1,0 +1,17 @@
+partitions:
+  - name: 1_tblook-4K
+    processes:
+      - cmd: ./tblook-4K -v0 -c1 -i100
+        budget: 287
+  - name: 0_rspeed-4M
+    processes:
+      - cmd: ./rspeed-4M -v0 -c1 -i100
+        budget: 831
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 4
+        sc_partition: 1_tblook-4K
+      - cpu: 3
+        sc_partition: 0_rspeed-4M

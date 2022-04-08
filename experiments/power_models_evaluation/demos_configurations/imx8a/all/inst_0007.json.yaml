@@ -1,0 +1,17 @@
+partitions:
+  - name: 1_tinyrenderer-boggie
+    processes:
+      - cmd: /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer -f /root/thermobench/benchmarks/tinyrenderer/obj/boggie/*.obj
+        budget: 695
+  - name: 0_canrdr-4M
+    processes:
+      - cmd: ./canrdr-4M -v0 -c1 -i100
+        budget: 901
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 5
+        sc_partition: 1_tinyrenderer-boggie
+      - cpu: 2
+        sc_partition: 0_canrdr-4M

@@ -1,0 +1,35 @@
+partitions:
+  - name: 4_idctrn-4K
+    processes:
+      - cmd: ./idctrn-4K -v0 -c1 -i100
+        budget: 749
+  - name: 3_puwmod-4K
+    processes:
+      - cmd: ./puwmod-4K -v0 -c1 -i100
+        budget: 827
+  - name: 2_rspeed-4M
+    processes:
+      - cmd: ./rspeed-4M -v0 -c1 -i100
+        budget: 188
+  - name: 1_canrdr-4M
+    processes:
+      - cmd: ./canrdr-4M -v0 -c1 -i100
+        budget: 950
+  - name: 0_aifirf-4K
+    processes:
+      - cmd: ./aifirf-4K -v0 -c1 -i100
+        budget: 523
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 4
+        sc_partition: 4_idctrn-4K
+      - cpu: 3
+        sc_partition: 3_puwmod-4K
+      - cpu: 2
+        sc_partition: 2_rspeed-4M
+      - cpu: 1
+        sc_partition: 1_canrdr-4M
+      - cpu: 0
+        sc_partition: 0_aifirf-4K

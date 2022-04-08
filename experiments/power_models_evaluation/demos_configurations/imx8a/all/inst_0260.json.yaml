@@ -1,0 +1,17 @@
+partitions:
+  - name: 1_membench-1K-RW-S
+    processes:
+      - cmd: /root/thermobench/build/benchmarks/mem/membench -t1 -f -w -s 1000
+        budget: 511
+  - name: 0_tinyrenderer-diablo
+    processes:
+      - cmd: /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer -f /root/thermobench/benchmarks/tinyrenderer/obj/diablo3_pose/*.obj
+        budget: 663
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 5
+        sc_partition: 1_membench-1K-RW-S
+      - cpu: 3
+        sc_partition: 0_tinyrenderer-diablo

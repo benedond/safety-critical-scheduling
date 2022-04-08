@@ -1,0 +1,29 @@
+partitions:
+  - name: 3_tblook-4K
+    processes:
+      - cmd: ./tblook-4K -v0 -c1 -i100
+        budget: 973
+  - name: 2_ttsprk-4M
+    processes:
+      - cmd: ./ttsprk-4M -v0 -c1 -i100
+        budget: 887
+  - name: 1_tblook-4K
+    processes:
+      - cmd: ./tblook-4K -v0 -c1 -i100
+        budget: 64
+  - name: 0_tblook-4M
+    processes:
+      - cmd: ./tblook-4M -v0 -c1 -i100
+        budget: 606
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 5
+        sc_partition: 3_tblook-4K
+      - cpu: 4
+        sc_partition: 2_ttsprk-4M
+      - cpu: 1
+        sc_partition: 1_tblook-4K
+      - cpu: 0
+        sc_partition: 0_tblook-4M

@@ -1,0 +1,17 @@
+partitions:
+  - name: 1_tinyrenderer-diablo
+    processes:
+      - cmd: /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer -f /root/thermobench/benchmarks/tinyrenderer/obj/diablo3_pose/*.obj
+        budget: 900
+  - name: 0_a2time-4M
+    processes:
+      - cmd: ./a2time-4M -v0 -c1 -i100
+        budget: 323
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 4
+        sc_partition: 1_tinyrenderer-diablo
+      - cpu: 3
+        sc_partition: 0_a2time-4M

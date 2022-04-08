@@ -1,0 +1,17 @@
+partitions:
+  - name: 1_matrix-4K
+    processes:
+      - cmd: ./matrix-4K -v0 -c1 -i100
+        budget: 244
+  - name: 0_puwmod-4M
+    processes:
+      - cmd: ./puwmod-4M -v0 -c1 -i100
+        budget: 514
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 5
+        sc_partition: 1_matrix-4K
+      - cpu: 3
+        sc_partition: 0_puwmod-4M

@@ -1,0 +1,17 @@
+partitions:
+  - name: 1_bitmnp-4M
+    processes:
+      - cmd: ./bitmnp-4M -v0 -c1 -i100
+        budget: 199
+  - name: 0_pntrch-4M
+    processes:
+      - cmd: ./pntrch-4M -v0 -c1 -i1
+        budget: 324
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 4
+        sc_partition: 1_bitmnp-4M
+      - cpu: 3
+        sc_partition: 0_pntrch-4M

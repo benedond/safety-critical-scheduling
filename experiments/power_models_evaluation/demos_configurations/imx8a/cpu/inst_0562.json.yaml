@@ -1,0 +1,35 @@
+partitions:
+  - name: 4_aifirf-4K
+    processes:
+      - cmd: ./aifirf-4K -v0 -c1 -i100
+        budget: 58
+  - name: 3_rspeed-4M
+    processes:
+      - cmd: ./rspeed-4M -v0 -c1 -i100
+        budget: 632
+  - name: 2_tblook-4K
+    processes:
+      - cmd: ./tblook-4K -v0 -c1 -i100
+        budget: 883
+  - name: 1_a2time-4M
+    processes:
+      - cmd: ./a2time-4M -v0 -c1 -i100
+        budget: 550
+  - name: 0_puwmod-4K
+    processes:
+      - cmd: ./puwmod-4K -v0 -c1 -i100
+        budget: 816
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 4
+        sc_partition: 4_aifirf-4K
+      - cpu: 3
+        sc_partition: 3_rspeed-4M
+      - cpu: 2
+        sc_partition: 2_tblook-4K
+      - cpu: 1
+        sc_partition: 1_a2time-4M
+      - cpu: 0
+        sc_partition: 0_puwmod-4K

@@ -1,0 +1,17 @@
+partitions:
+  - name: 1_idctrn-4M
+    processes:
+      - cmd: ./idctrn-4M -v0 -c1 -i100
+        budget: 969
+  - name: 0_ttsprk-4K
+    processes:
+      - cmd: ./ttsprk-4K -v0 -c1 -i100
+        budget: 43
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 5
+        sc_partition: 1_idctrn-4M
+      - cpu: 2
+        sc_partition: 0_ttsprk-4K

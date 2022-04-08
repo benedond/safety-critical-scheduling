@@ -1,0 +1,29 @@
+partitions:
+  - name: 3_bitmnp-4M
+    processes:
+      - cmd: ./bitmnp-4M -v0 -c1 -i100
+        budget: 464
+  - name: 2_tblook-4M
+    processes:
+      - cmd: ./tblook-4M -v0 -c1 -i100
+        budget: 821
+  - name: 1_tblook-4K
+    processes:
+      - cmd: ./tblook-4K -v0 -c1 -i100
+        budget: 867
+  - name: 0_tblook-4K
+    processes:
+      - cmd: ./tblook-4K -v0 -c1 -i100
+        budget: 949
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 5
+        sc_partition: 3_bitmnp-4M
+      - cpu: 4
+        sc_partition: 2_tblook-4M
+      - cpu: 3
+        sc_partition: 1_tblook-4K
+      - cpu: 0
+        sc_partition: 0_tblook-4K

@@ -1,0 +1,23 @@
+partitions:
+  - name: 2_matrix-4K
+    processes:
+      - cmd: ./matrix-4K -v0 -c1 -i100
+        budget: 212
+  - name: 1_membench-1K-RO-S
+    processes:
+      - cmd: /root/thermobench/build/benchmarks/mem/membench -t1 -f -s 1000
+        budget: 278
+  - name: 0_bitmnp-4M
+    processes:
+      - cmd: ./bitmnp-4M -v0 -c1 -i100
+        budget: 696
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 5
+        sc_partition: 2_matrix-4K
+      - cpu: 4
+        sc_partition: 1_membench-1K-RO-S
+      - cpu: 2
+        sc_partition: 0_bitmnp-4M

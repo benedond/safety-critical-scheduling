@@ -1,0 +1,29 @@
+partitions:
+  - name: 3_a2time-4M
+    processes:
+      - cmd: ./a2time-4M -v0 -c1 -i100
+        budget: 552
+  - name: 2_bitmnp-4K
+    processes:
+      - cmd: ./bitmnp-4K -v0 -c1 -i100
+        budget: 701
+  - name: 1_puwmod-4M
+    processes:
+      - cmd: ./puwmod-4M -v0 -c1 -i100
+        budget: 337
+  - name: 0_a2time-4M
+    processes:
+      - cmd: ./a2time-4M -v0 -c1 -i100
+        budget: 115
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 4
+        sc_partition: 3_a2time-4M
+      - cpu: 3
+        sc_partition: 2_bitmnp-4K
+      - cpu: 2
+        sc_partition: 1_puwmod-4M
+      - cpu: 1
+        sc_partition: 0_a2time-4M

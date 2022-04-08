@@ -1,0 +1,29 @@
+partitions:
+  - name: 2_iirflt-4K
+    processes:
+      - cmd: ./iirflt-4K -v0 -c1 -i100
+        budget: 330
+  - name: 1_matrix-4K
+    processes:
+      - cmd: ./matrix-4K -v0 -c1 -i100
+        budget: 432
+  - name: 3_idctrn-4K
+    processes:
+      - cmd: ./idctrn-4K -v0 -c1 -i100
+        budget: 757
+  - name: 0_matrix-4M
+    processes:
+      - cmd: ./matrix-4M -v0 -c1 -i100
+        budget: 313
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 2
+        sc_partition: 2_iirflt-4K
+      - cpu: 1
+        sc_partition: 1_matrix-4K
+      - cpu: 4
+        sc_partition: 3_idctrn-4K
+      - cpu: 0
+        sc_partition: 0_matrix-4M

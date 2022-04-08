@@ -1,0 +1,29 @@
+partitions:
+  - name: 3_pntrch-4M
+    processes:
+      - cmd: ./pntrch-4M -v0 -c1 -i1
+        budget: 646
+  - name: 2_pntrch-4M
+    processes:
+      - cmd: ./pntrch-4M -v0 -c1 -i1
+        budget: 822
+  - name: 1_matrix-4K
+    processes:
+      - cmd: ./matrix-4K -v0 -c1 -i100
+        budget: 897
+  - name: 0_idctrn-4K
+    processes:
+      - cmd: ./idctrn-4K -v0 -c1 -i100
+        budget: 569
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 5
+        sc_partition: 3_pntrch-4M
+      - cpu: 3
+        sc_partition: 2_pntrch-4M
+      - cpu: 2
+        sc_partition: 1_matrix-4K
+      - cpu: 1
+        sc_partition: 0_idctrn-4K

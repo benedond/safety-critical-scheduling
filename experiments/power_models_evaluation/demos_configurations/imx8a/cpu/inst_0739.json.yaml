@@ -1,0 +1,17 @@
+partitions:
+  - name: 1_iirflt-4M
+    processes:
+      - cmd: ./iirflt-4M -v0 -c1 -i100
+        budget: 279
+  - name: 0_tinyrenderer-boggie
+    processes:
+      - cmd: /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer -f /root/thermobench/benchmarks/tinyrenderer/obj/boggie/*.obj
+        budget: 192
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 4
+        sc_partition: 1_iirflt-4M
+      - cpu: 2
+        sc_partition: 0_tinyrenderer-boggie

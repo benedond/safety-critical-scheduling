@@ -1,0 +1,17 @@
+partitions:
+  - name: 1_ttsprk-4M
+    processes:
+      - cmd: ./ttsprk-4M -v0 -c1 -i100
+        budget: 715
+  - name: 0_bitmnp-4M
+    processes:
+      - cmd: ./bitmnp-4M -v0 -c1 -i100
+        budget: 942
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 1
+        sc_partition: 1_ttsprk-4M
+      - cpu: 0
+        sc_partition: 0_bitmnp-4M

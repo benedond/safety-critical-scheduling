@@ -1,0 +1,17 @@
+partitions:
+  - name: 1_idctrn-4M
+    processes:
+      - cmd: ./idctrn-4M -v0 -c1 -i100
+        budget: 405
+  - name: 0_tblook-4M
+    processes:
+      - cmd: ./tblook-4M -v0 -c1 -i100
+        budget: 891
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 3
+        sc_partition: 1_idctrn-4M
+      - cpu: 0
+        sc_partition: 0_tblook-4M

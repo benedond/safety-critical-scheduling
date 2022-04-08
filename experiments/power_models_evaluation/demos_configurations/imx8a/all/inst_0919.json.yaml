@@ -1,0 +1,23 @@
+partitions:
+  - name: 2_membench-1K-RO-S
+    processes:
+      - cmd: /root/thermobench/build/benchmarks/mem/membench -t1 -f -s 1000
+        budget: 881
+  - name: 1_idctrn-4K
+    processes:
+      - cmd: ./idctrn-4K -v0 -c1 -i100
+        budget: 199
+  - name: 0_bitmnp-4K
+    processes:
+      - cmd: ./bitmnp-4K -v0 -c1 -i100
+        budget: 47
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 4
+        sc_partition: 2_membench-1K-RO-S
+      - cpu: 3
+        sc_partition: 1_idctrn-4K
+      - cpu: 0
+        sc_partition: 0_bitmnp-4K

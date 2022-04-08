@@ -1,0 +1,23 @@
+partitions:
+  - name: 1_canrdr-4M
+    processes:
+      - cmd: ./canrdr-4M -v0 -c1 -i100
+        budget: 553
+  - name: 2_matrix-4K
+    processes:
+      - cmd: ./matrix-4K -v0 -c1 -i100
+        budget: 818
+  - name: 0_tblook-4K
+    processes:
+      - cmd: ./tblook-4K -v0 -c1 -i100
+        budget: 353
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 3
+        sc_partition: 1_canrdr-4M
+      - cpu: 5
+        sc_partition: 2_matrix-4K
+      - cpu: 2
+        sc_partition: 0_tblook-4K

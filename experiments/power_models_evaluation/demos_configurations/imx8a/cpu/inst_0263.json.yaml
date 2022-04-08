@@ -1,0 +1,17 @@
+partitions:
+  - name: 1_tblook-4M
+    processes:
+      - cmd: ./tblook-4M -v0 -c1 -i100
+        budget: 702
+  - name: 0_puwmod-4K
+    processes:
+      - cmd: ./puwmod-4K -v0 -c1 -i100
+        budget: 234
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 5
+        sc_partition: 1_tblook-4M
+      - cpu: 2
+        sc_partition: 0_puwmod-4K

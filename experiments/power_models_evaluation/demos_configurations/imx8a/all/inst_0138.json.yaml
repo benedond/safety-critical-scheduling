@@ -1,0 +1,17 @@
+partitions:
+  - name: 1_ttsprk-4M
+    processes:
+      - cmd: ./ttsprk-4M -v0 -c1 -i100
+        budget: 682
+  - name: 0_matrix-4K
+    processes:
+      - cmd: ./matrix-4K -v0 -c1 -i100
+        budget: 437
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 3
+        sc_partition: 1_ttsprk-4M
+      - cpu: 1
+        sc_partition: 0_matrix-4K

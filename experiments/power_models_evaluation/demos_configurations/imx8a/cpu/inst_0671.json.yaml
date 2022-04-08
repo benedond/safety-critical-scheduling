@@ -1,0 +1,23 @@
+partitions:
+  - name: 2_tblook-4M
+    processes:
+      - cmd: ./tblook-4M -v0 -c1 -i100
+        budget: 459
+  - name: 1_tinyrenderer-boggie
+    processes:
+      - cmd: /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer -f /root/thermobench/benchmarks/tinyrenderer/obj/boggie/*.obj
+        budget: 536
+  - name: 0_matrix-4K
+    processes:
+      - cmd: ./matrix-4K -v0 -c1 -i100
+        budget: 499
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 5
+        sc_partition: 2_tblook-4M
+      - cpu: 3
+        sc_partition: 1_tinyrenderer-boggie
+      - cpu: 1
+        sc_partition: 0_matrix-4K

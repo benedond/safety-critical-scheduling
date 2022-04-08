@@ -1,0 +1,23 @@
+partitions:
+  - name: 2_pntrch-4K
+    processes:
+      - cmd: ./pntrch-4K -v0 -c1 -i100
+        budget: 642
+  - name: 1_tinyrenderer-boggie
+    processes:
+      - cmd: /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer -f /root/thermobench/benchmarks/tinyrenderer/obj/boggie/*.obj
+        budget: 860
+  - name: 0_ttsprk-4K
+    processes:
+      - cmd: ./ttsprk-4K -v0 -c1 -i100
+        budget: 545
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 4
+        sc_partition: 2_pntrch-4K
+      - cpu: 1
+        sc_partition: 1_tinyrenderer-boggie
+      - cpu: 0
+        sc_partition: 0_ttsprk-4K

@@ -1,0 +1,23 @@
+partitions:
+  - name: 2_idctrn-4K
+    processes:
+      - cmd: ./idctrn-4K -v0 -c1 -i100
+        budget: 205
+  - name: 1_aifirf-4K
+    processes:
+      - cmd: ./aifirf-4K -v0 -c1 -i100
+        budget: 895
+  - name: 0_matrix-4K
+    processes:
+      - cmd: ./matrix-4K -v0 -c1 -i100
+        budget: 831
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 4
+        sc_partition: 2_idctrn-4K
+      - cpu: 3
+        sc_partition: 1_aifirf-4K
+      - cpu: 1
+        sc_partition: 0_matrix-4K

@@ -1,0 +1,35 @@
+partitions:
+  - name: 4_idctrn-4M
+    processes:
+      - cmd: ./idctrn-4M -v0 -c1 -i100
+        budget: 254
+  - name: 3_tinyrenderer-boggie
+    processes:
+      - cmd: /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer -f /root/thermobench/benchmarks/tinyrenderer/obj/boggie/*.obj
+        budget: 457
+  - name: 2_iirflt-4K
+    processes:
+      - cmd: ./iirflt-4K -v0 -c1 -i100
+        budget: 17
+  - name: 1_pntrch-4K
+    processes:
+      - cmd: ./pntrch-4K -v0 -c1 -i100
+        budget: 500
+  - name: 0_matrix-4K
+    processes:
+      - cmd: ./matrix-4K -v0 -c1 -i100
+        budget: 16
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 5
+        sc_partition: 4_idctrn-4M
+      - cpu: 4
+        sc_partition: 3_tinyrenderer-boggie
+      - cpu: 3
+        sc_partition: 2_iirflt-4K
+      - cpu: 2
+        sc_partition: 1_pntrch-4K
+      - cpu: 0
+        sc_partition: 0_matrix-4K

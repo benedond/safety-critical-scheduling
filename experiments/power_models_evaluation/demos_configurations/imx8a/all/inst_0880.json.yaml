@@ -1,0 +1,23 @@
+partitions:
+  - name: 2_membench-4M-RW-R
+    processes:
+      - cmd: /root/thermobench/build/benchmarks/mem/membench -t1 -f -r -w -s 4000000
+        budget: 172
+  - name: 1_tinyrenderer-diablo
+    processes:
+      - cmd: /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer -f /root/thermobench/benchmarks/tinyrenderer/obj/diablo3_pose/*.obj
+        budget: 987
+  - name: 0_tinyrenderer-boggie
+    processes:
+      - cmd: /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer -f /root/thermobench/benchmarks/tinyrenderer/obj/boggie/*.obj
+        budget: 850
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 3
+        sc_partition: 2_membench-4M-RW-R
+      - cpu: 2
+        sc_partition: 1_tinyrenderer-diablo
+      - cpu: 1
+        sc_partition: 0_tinyrenderer-boggie

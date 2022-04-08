@@ -1,0 +1,23 @@
+partitions:
+  - name: 2_puwmod-4K
+    processes:
+      - cmd: ./puwmod-4K -v0 -c1 -i100
+        budget: 219
+  - name: 1_canrdr-4M
+    processes:
+      - cmd: ./canrdr-4M -v0 -c1 -i100
+        budget: 217
+  - name: 0_membench-1K-RW-S
+    processes:
+      - cmd: /root/thermobench/build/benchmarks/mem/membench -t1 -f -w -s 1000
+        budget: 816
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 4
+        sc_partition: 2_puwmod-4K
+      - cpu: 3
+        sc_partition: 1_canrdr-4M
+      - cpu: 2
+        sc_partition: 0_membench-1K-RW-S

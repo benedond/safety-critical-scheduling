@@ -1,0 +1,17 @@
+partitions:
+  - name: 1_matrix-4K
+    processes:
+      - cmd: ./matrix-4K -v0 -c1 -i100
+        budget: 0
+  - name: 0_a2time-4K
+    processes:
+      - cmd: ./a2time-4K -v0 -c1 -i100
+        budget: 780
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 5
+        sc_partition: 1_matrix-4K
+      - cpu: 2
+        sc_partition: 0_a2time-4K

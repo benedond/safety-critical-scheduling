@@ -1,0 +1,17 @@
+partitions:
+  - name: 1_aifirf-4K
+    processes:
+      - cmd: ./aifirf-4K -v0 -c1 -i100
+        budget: 671
+  - name: 0_aifirf-4K
+    processes:
+      - cmd: ./aifirf-4K -v0 -c1 -i100
+        budget: 190
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 4
+        sc_partition: 1_aifirf-4K
+      - cpu: 2
+        sc_partition: 0_aifirf-4K

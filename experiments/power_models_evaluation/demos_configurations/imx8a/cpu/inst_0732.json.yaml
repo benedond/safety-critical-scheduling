@@ -1,0 +1,41 @@
+partitions:
+  - name: 3_ttsprk-4K
+    processes:
+      - cmd: ./ttsprk-4K -v0 -c1 -i100
+        budget: 167
+  - name: 1_tinyrenderer-boggie
+    processes:
+      - cmd: /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer -f /root/thermobench/benchmarks/tinyrenderer/obj/boggie/*.obj
+        budget: 323
+  - name: 5_canrdr-4M
+    processes:
+      - cmd: ./canrdr-4M -v0 -c1 -i100
+        budget: 823
+  - name: 4_iirflt-4M
+    processes:
+      - cmd: ./iirflt-4M -v0 -c1 -i100
+        budget: 946
+  - name: 2_tblook-4K
+    processes:
+      - cmd: ./tblook-4K -v0 -c1 -i100
+        budget: 159
+  - name: 0_tinyrenderer-boggie
+    processes:
+      - cmd: /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer -f /root/thermobench/benchmarks/tinyrenderer/obj/boggie/*.obj
+        budget: 146
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 3
+        sc_partition: 3_ttsprk-4K
+      - cpu: 1
+        sc_partition: 1_tinyrenderer-boggie
+      - cpu: 5
+        sc_partition: 5_canrdr-4M
+      - cpu: 4
+        sc_partition: 4_iirflt-4M
+      - cpu: 2
+        sc_partition: 2_tblook-4K
+      - cpu: 0
+        sc_partition: 0_tinyrenderer-boggie

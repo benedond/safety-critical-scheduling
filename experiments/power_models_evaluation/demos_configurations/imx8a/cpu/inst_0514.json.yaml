@@ -1,0 +1,23 @@
+partitions:
+  - name: 2_iirflt-4M
+    processes:
+      - cmd: ./iirflt-4M -v0 -c1 -i100
+        budget: 2
+  - name: 1_rspeed-4M
+    processes:
+      - cmd: ./rspeed-4M -v0 -c1 -i100
+        budget: 368
+  - name: 0_iirflt-4M
+    processes:
+      - cmd: ./iirflt-4M -v0 -c1 -i100
+        budget: 614
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 4
+        sc_partition: 2_iirflt-4M
+      - cpu: 3
+        sc_partition: 1_rspeed-4M
+      - cpu: 0
+        sc_partition: 0_iirflt-4M

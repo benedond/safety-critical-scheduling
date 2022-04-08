@@ -1,0 +1,17 @@
+partitions:
+  - name: 1_idctrn-4M
+    processes:
+      - cmd: ./idctrn-4M -v0 -c1 -i100
+        budget: 193
+  - name: 0_canrdr-4K
+    processes:
+      - cmd: ./canrdr-4K -v0 -c1 -i100
+        budget: 488
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 4
+        sc_partition: 1_idctrn-4M
+      - cpu: 1
+        sc_partition: 0_canrdr-4K

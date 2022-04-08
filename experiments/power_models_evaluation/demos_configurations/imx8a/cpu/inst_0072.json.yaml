@@ -1,0 +1,29 @@
+partitions:
+  - name: 3_a2time-4K
+    processes:
+      - cmd: ./a2time-4K -v0 -c1 -i100
+        budget: 128
+  - name: 2_tblook-4M
+    processes:
+      - cmd: ./tblook-4M -v0 -c1 -i100
+        budget: 209
+  - name: 1_idctrn-4M
+    processes:
+      - cmd: ./idctrn-4M -v0 -c1 -i100
+        budget: 736
+  - name: 0_idctrn-4M
+    processes:
+      - cmd: ./idctrn-4M -v0 -c1 -i100
+        budget: 76
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 4
+        sc_partition: 3_a2time-4K
+      - cpu: 3
+        sc_partition: 2_tblook-4M
+      - cpu: 2
+        sc_partition: 1_idctrn-4M
+      - cpu: 0
+        sc_partition: 0_idctrn-4M

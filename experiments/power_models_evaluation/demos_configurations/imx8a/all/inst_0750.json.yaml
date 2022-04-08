@@ -1,0 +1,29 @@
+partitions:
+  - name: 3_rspeed-4K
+    processes:
+      - cmd: ./rspeed-4K -v0 -c1 -i100
+        budget: 812
+  - name: 2_membench-1K-RO-S
+    processes:
+      - cmd: /root/thermobench/build/benchmarks/mem/membench -t1 -f -s 1000
+        budget: 581
+  - name: 1_membench-1K-RW-R
+    processes:
+      - cmd: /root/thermobench/build/benchmarks/mem/membench -t1 -f -r -w -s 1000
+        budget: 67
+  - name: 0_aifirf-4K
+    processes:
+      - cmd: ./aifirf-4K -v0 -c1 -i100
+        budget: 618
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 5
+        sc_partition: 3_rspeed-4K
+      - cpu: 4
+        sc_partition: 2_membench-1K-RO-S
+      - cpu: 2
+        sc_partition: 1_membench-1K-RW-R
+      - cpu: 0
+        sc_partition: 0_aifirf-4K

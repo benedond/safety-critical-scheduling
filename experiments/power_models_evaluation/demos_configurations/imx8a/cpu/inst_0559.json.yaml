@@ -1,0 +1,11 @@
+partitions:
+  - name: 0_a2time-4M
+    processes:
+      - cmd: ./a2time-4M -v0 -c1 -i100
+        budget: 931
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 1
+        sc_partition: 0_a2time-4M

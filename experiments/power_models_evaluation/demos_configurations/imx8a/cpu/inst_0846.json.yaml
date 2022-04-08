@@ -1,0 +1,23 @@
+partitions:
+  - name: 2_tinyrenderer-diablo
+    processes:
+      - cmd: /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer -f /root/thermobench/benchmarks/tinyrenderer/obj/diablo3_pose/*.obj
+        budget: 811
+  - name: 1_ttsprk-4M
+    processes:
+      - cmd: ./ttsprk-4M -v0 -c1 -i100
+        budget: 777
+  - name: 0_ttsprk-4M
+    processes:
+      - cmd: ./ttsprk-4M -v0 -c1 -i100
+        budget: 269
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 3
+        sc_partition: 2_tinyrenderer-diablo
+      - cpu: 1
+        sc_partition: 1_ttsprk-4M
+      - cpu: 0
+        sc_partition: 0_ttsprk-4M

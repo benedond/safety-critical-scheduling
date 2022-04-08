@@ -1,0 +1,17 @@
+partitions:
+  - name: 1_membench-4M-RW-R
+    processes:
+      - cmd: /root/thermobench/build/benchmarks/mem/membench -t1 -f -r -w -s 4000000
+        budget: 707
+  - name: 0_tinyrenderer-boggie
+    processes:
+      - cmd: /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer -f /root/thermobench/benchmarks/tinyrenderer/obj/boggie/*.obj
+        budget: 823
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 5
+        sc_partition: 1_membench-4M-RW-R
+      - cpu: 1
+        sc_partition: 0_tinyrenderer-boggie

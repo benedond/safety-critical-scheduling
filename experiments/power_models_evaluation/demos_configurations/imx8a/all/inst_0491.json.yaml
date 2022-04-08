@@ -1,0 +1,17 @@
+partitions:
+  - name: 1_matrix-4M
+    processes:
+      - cmd: ./matrix-4M -v0 -c1 -i100
+        budget: 327
+  - name: 0_aifirf-4K
+    processes:
+      - cmd: ./aifirf-4K -v0 -c1 -i100
+        budget: 47
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 5
+        sc_partition: 1_matrix-4M
+      - cpu: 3
+        sc_partition: 0_aifirf-4K

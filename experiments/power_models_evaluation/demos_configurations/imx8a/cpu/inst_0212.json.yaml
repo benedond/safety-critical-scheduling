@@ -1,0 +1,23 @@
+partitions:
+  - name: 2_a2time-4K
+    processes:
+      - cmd: ./a2time-4K -v0 -c1 -i100
+        budget: 505
+  - name: 1_idctrn-4M
+    processes:
+      - cmd: ./idctrn-4M -v0 -c1 -i100
+        budget: 16
+  - name: 0_pntrch-4K
+    processes:
+      - cmd: ./pntrch-4K -v0 -c1 -i100
+        budget: 899
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 4
+        sc_partition: 2_a2time-4K
+      - cpu: 2
+        sc_partition: 1_idctrn-4M
+      - cpu: 1
+        sc_partition: 0_pntrch-4K

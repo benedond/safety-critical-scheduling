@@ -1,0 +1,17 @@
+partitions:
+  - name: 1_a2time-4K
+    processes:
+      - cmd: ./a2time-4K -v0 -c1 -i100
+        budget: 351
+  - name: 0_ttsprk-4K
+    processes:
+      - cmd: ./ttsprk-4K -v0 -c1 -i100
+        budget: 620
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 5
+        sc_partition: 1_a2time-4K
+      - cpu: 2
+        sc_partition: 0_ttsprk-4K

@@ -1,0 +1,17 @@
+partitions:
+  - name: 1_iirflt-4M
+    processes:
+      - cmd: ./iirflt-4M -v0 -c1 -i100
+        budget: 133
+  - name: 0_bitmnp-4M
+    processes:
+      - cmd: ./bitmnp-4M -v0 -c1 -i100
+        budget: 106
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 5
+        sc_partition: 1_iirflt-4M
+      - cpu: 1
+        sc_partition: 0_bitmnp-4M

@@ -1,0 +1,23 @@
+partitions:
+  - name: 2_a2time-4M
+    processes:
+      - cmd: ./a2time-4M -v0 -c1 -i100
+        budget: 340
+  - name: 1_iirflt-4M
+    processes:
+      - cmd: ./iirflt-4M -v0 -c1 -i100
+        budget: 731
+  - name: 0_membench-1M-RO-R
+    processes:
+      - cmd: /root/thermobench/build/benchmarks/mem/membench -t1 -f -r -s 1000000
+        budget: 587
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 5
+        sc_partition: 2_a2time-4M
+      - cpu: 3
+        sc_partition: 1_iirflt-4M
+      - cpu: 2
+        sc_partition: 0_membench-1M-RO-R

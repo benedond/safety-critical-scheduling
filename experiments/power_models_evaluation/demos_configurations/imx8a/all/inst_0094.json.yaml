@@ -1,0 +1,29 @@
+partitions:
+  - name: 3_tblook-4M
+    processes:
+      - cmd: ./tblook-4M -v0 -c1 -i100
+        budget: 227
+  - name: 2_puwmod-4M
+    processes:
+      - cmd: ./puwmod-4M -v0 -c1 -i100
+        budget: 523
+  - name: 1_membench-1M-RW-S
+    processes:
+      - cmd: /root/thermobench/build/benchmarks/mem/membench -t1 -f -w -s 1000000
+        budget: 831
+  - name: 0_aifirf-4K
+    processes:
+      - cmd: ./aifirf-4K -v0 -c1 -i100
+        budget: 683
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 5
+        sc_partition: 3_tblook-4M
+      - cpu: 4
+        sc_partition: 2_puwmod-4M
+      - cpu: 3
+        sc_partition: 1_membench-1M-RW-S
+      - cpu: 1
+        sc_partition: 0_aifirf-4K

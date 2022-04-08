@@ -1,0 +1,23 @@
+partitions:
+  - name: 2_iirflt-4M
+    processes:
+      - cmd: ./iirflt-4M -v0 -c1 -i100
+        budget: 822
+  - name: 1_pntrch-4K
+    processes:
+      - cmd: ./pntrch-4K -v0 -c1 -i100
+        budget: 447
+  - name: 0_pntrch-4K
+    processes:
+      - cmd: ./pntrch-4K -v0 -c1 -i100
+        budget: 395
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 4
+        sc_partition: 2_iirflt-4M
+      - cpu: 3
+        sc_partition: 1_pntrch-4K
+      - cpu: 1
+        sc_partition: 0_pntrch-4K

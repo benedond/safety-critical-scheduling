@@ -1,0 +1,23 @@
+partitions:
+  - name: 2_tinyrenderer-diablo
+    processes:
+      - cmd: /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer -f /root/thermobench/benchmarks/tinyrenderer/obj/diablo3_pose/*.obj
+        budget: 863
+  - name: 1_tinyrenderer-boggie
+    processes:
+      - cmd: /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer -f /root/thermobench/benchmarks/tinyrenderer/obj/boggie/*.obj
+        budget: 413
+  - name: 0_canrdr-4M
+    processes:
+      - cmd: ./canrdr-4M -v0 -c1 -i100
+        budget: 305
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 4
+        sc_partition: 2_tinyrenderer-diablo
+      - cpu: 2
+        sc_partition: 1_tinyrenderer-boggie
+      - cpu: 0
+        sc_partition: 0_canrdr-4M

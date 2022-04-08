@@ -1,0 +1,29 @@
+partitions:
+  - name: 3_tblook-4M
+    processes:
+      - cmd: ./tblook-4M -v0 -c1 -i100
+        budget: 938
+  - name: 2_canrdr-4K
+    processes:
+      - cmd: ./canrdr-4K -v0 -c1 -i100
+        budget: 585
+  - name: 1_aifirf-4M
+    processes:
+      - cmd: ./aifirf-4M -v0 -c1 -i10
+        budget: 975
+  - name: 0_idctrn-4K
+    processes:
+      - cmd: ./idctrn-4K -v0 -c1 -i100
+        budget: 543
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 4
+        sc_partition: 3_tblook-4M
+      - cpu: 3
+        sc_partition: 2_canrdr-4K
+      - cpu: 2
+        sc_partition: 1_aifirf-4M
+      - cpu: 1
+        sc_partition: 0_idctrn-4K

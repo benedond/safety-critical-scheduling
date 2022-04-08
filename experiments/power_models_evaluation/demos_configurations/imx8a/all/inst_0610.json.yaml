@@ -1,0 +1,17 @@
+partitions:
+  - name: 1_membench-4M-RW-S
+    processes:
+      - cmd: /root/thermobench/build/benchmarks/mem/membench -t1 -f -w -s 4000000
+        budget: 292
+  - name: 0_puwmod-4M
+    processes:
+      - cmd: ./puwmod-4M -v0 -c1 -i100
+        budget: 226
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 4
+        sc_partition: 1_membench-4M-RW-S
+      - cpu: 0
+        sc_partition: 0_puwmod-4M

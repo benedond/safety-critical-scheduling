@@ -1,0 +1,23 @@
+partitions:
+  - name: 2_tblook-4K
+    processes:
+      - cmd: ./tblook-4K -v0 -c1 -i100
+        budget: 19
+  - name: 1_canrdr-4K
+    processes:
+      - cmd: ./canrdr-4K -v0 -c1 -i100
+        budget: 513
+  - name: 0_a2time-4K
+    processes:
+      - cmd: ./a2time-4K -v0 -c1 -i100
+        budget: 420
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 5
+        sc_partition: 2_tblook-4K
+      - cpu: 3
+        sc_partition: 1_canrdr-4K
+      - cpu: 1
+        sc_partition: 0_a2time-4K

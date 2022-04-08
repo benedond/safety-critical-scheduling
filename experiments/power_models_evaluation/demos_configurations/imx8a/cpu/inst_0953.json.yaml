@@ -1,0 +1,17 @@
+partitions:
+  - name: 1_tblook-4K
+    processes:
+      - cmd: ./tblook-4K -v0 -c1 -i100
+        budget: 453
+  - name: 0_a2time-4K
+    processes:
+      - cmd: ./a2time-4K -v0 -c1 -i100
+        budget: 881
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 5
+        sc_partition: 1_tblook-4K
+      - cpu: 2
+        sc_partition: 0_a2time-4K

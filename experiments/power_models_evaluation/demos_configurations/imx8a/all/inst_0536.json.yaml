@@ -1,0 +1,29 @@
+partitions:
+  - name: 3_matrix-4M
+    processes:
+      - cmd: ./matrix-4M -v0 -c1 -i100
+        budget: 989
+  - name: 2_ttsprk-4M
+    processes:
+      - cmd: ./ttsprk-4M -v0 -c1 -i100
+        budget: 44
+  - name: 1_membench-4M-RW-S
+    processes:
+      - cmd: /root/thermobench/build/benchmarks/mem/membench -t1 -f -w -s 4000000
+        budget: 542
+  - name: 0_puwmod-4M
+    processes:
+      - cmd: ./puwmod-4M -v0 -c1 -i100
+        budget: 383
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 5
+        sc_partition: 3_matrix-4M
+      - cpu: 3
+        sc_partition: 2_ttsprk-4M
+      - cpu: 2
+        sc_partition: 1_membench-4M-RW-S
+      - cpu: 1
+        sc_partition: 0_puwmod-4M

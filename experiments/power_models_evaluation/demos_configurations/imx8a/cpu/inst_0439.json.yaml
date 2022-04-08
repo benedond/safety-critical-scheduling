@@ -1,0 +1,23 @@
+partitions:
+  - name: 2_a2time-4K
+    processes:
+      - cmd: ./a2time-4K -v0 -c1 -i100
+        budget: 214
+  - name: 1_canrdr-4K
+    processes:
+      - cmd: ./canrdr-4K -v0 -c1 -i100
+        budget: 917
+  - name: 0_idctrn-4M
+    processes:
+      - cmd: ./idctrn-4M -v0 -c1 -i100
+        budget: 206
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 4
+        sc_partition: 2_a2time-4K
+      - cpu: 3
+        sc_partition: 1_canrdr-4K
+      - cpu: 1
+        sc_partition: 0_idctrn-4M

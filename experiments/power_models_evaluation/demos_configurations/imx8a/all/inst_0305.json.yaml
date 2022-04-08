@@ -1,0 +1,29 @@
+partitions:
+  - name: 3_membench-4M-RW-R
+    processes:
+      - cmd: /root/thermobench/build/benchmarks/mem/membench -t1 -f -r -w -s 4000000
+        budget: 998
+  - name: 2_membench-4M-RO-R
+    processes:
+      - cmd: /root/thermobench/build/benchmarks/mem/membench -t1 -f -r -s 4000000
+        budget: 353
+  - name: 1_membench-1K-RO-R
+    processes:
+      - cmd: /root/thermobench/build/benchmarks/mem/membench -t1 -f -r -s 1000
+        budget: 766
+  - name: 0_membench-1M-RW-R
+    processes:
+      - cmd: /root/thermobench/build/benchmarks/mem/membench -t1 -f -r -w -s 1000000
+        budget: 438
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 5
+        sc_partition: 3_membench-4M-RW-R
+      - cpu: 4
+        sc_partition: 2_membench-4M-RO-R
+      - cpu: 3
+        sc_partition: 1_membench-1K-RO-R
+      - cpu: 2
+        sc_partition: 0_membench-1M-RW-R

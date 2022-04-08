@@ -1,0 +1,11 @@
+partitions:
+  - name: 0_matrix-4K
+    processes:
+      - cmd: ./matrix-4K -v0 -c1 -i100
+        budget: 790
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 1
+        sc_partition: 0_matrix-4K

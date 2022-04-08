@@ -1,0 +1,23 @@
+partitions:
+  - name: 2_canrdr-4M
+    processes:
+      - cmd: ./canrdr-4M -v0 -c1 -i100
+        budget: 572
+  - name: 1_canrdr-4M
+    processes:
+      - cmd: ./canrdr-4M -v0 -c1 -i100
+        budget: 632
+  - name: 0_ttsprk-4M
+    processes:
+      - cmd: ./ttsprk-4M -v0 -c1 -i100
+        budget: 232
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 4
+        sc_partition: 2_canrdr-4M
+      - cpu: 3
+        sc_partition: 1_canrdr-4M
+      - cpu: 2
+        sc_partition: 0_ttsprk-4M

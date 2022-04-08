@@ -1,0 +1,11 @@
+partitions:
+  - name: 0_iirflt-4K
+    processes:
+      - cmd: ./iirflt-4K -v0 -c1 -i100
+        budget: 674
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 2
+        sc_partition: 0_iirflt-4K

@@ -1,0 +1,23 @@
+partitions:
+  - name: 2_rspeed-4K
+    processes:
+      - cmd: ./rspeed-4K -v0 -c1 -i100
+        budget: 324
+  - name: 1_puwmod-4K
+    processes:
+      - cmd: ./puwmod-4K -v0 -c1 -i100
+        budget: 54
+  - name: 0_pntrch-4K
+    processes:
+      - cmd: ./pntrch-4K -v0 -c1 -i100
+        budget: 414
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 4
+        sc_partition: 2_rspeed-4K
+      - cpu: 2
+        sc_partition: 1_puwmod-4K
+      - cpu: 1
+        sc_partition: 0_pntrch-4K

@@ -1,0 +1,23 @@
+partitions:
+  - name: 2_membench-4M-RO-R
+    processes:
+      - cmd: /root/thermobench/build/benchmarks/mem/membench -t1 -f -r -s 4000000
+        budget: 536
+  - name: 1_tblook-4K
+    processes:
+      - cmd: ./tblook-4K -v0 -c1 -i100
+        budget: 801
+  - name: 0_rspeed-4K
+    processes:
+      - cmd: ./rspeed-4K -v0 -c1 -i100
+        budget: 954
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 5
+        sc_partition: 2_membench-4M-RO-R
+      - cpu: 4
+        sc_partition: 1_tblook-4K
+      - cpu: 2
+        sc_partition: 0_rspeed-4K

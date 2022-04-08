@@ -1,0 +1,23 @@
+partitions:
+  - name: 2_membench-1K-RO-S
+    processes:
+      - cmd: /root/thermobench/build/benchmarks/mem/membench -t1 -f -s 1000
+        budget: 165
+  - name: 1_bitmnp-4M
+    processes:
+      - cmd: ./bitmnp-4M -v0 -c1 -i100
+        budget: 476
+  - name: 0_puwmod-4K
+    processes:
+      - cmd: ./puwmod-4K -v0 -c1 -i100
+        budget: 801
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 5
+        sc_partition: 2_membench-1K-RO-S
+      - cpu: 3
+        sc_partition: 1_bitmnp-4M
+      - cpu: 1
+        sc_partition: 0_puwmod-4K

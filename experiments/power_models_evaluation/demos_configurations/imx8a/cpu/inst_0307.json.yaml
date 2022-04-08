@@ -1,0 +1,23 @@
+partitions:
+  - name: 1_matrix-4M
+    processes:
+      - cmd: ./matrix-4M -v0 -c1 -i100
+        budget: 515
+  - name: 2_rspeed-4M
+    processes:
+      - cmd: ./rspeed-4M -v0 -c1 -i100
+        budget: 98
+  - name: 0_rspeed-4K
+    processes:
+      - cmd: ./rspeed-4K -v0 -c1 -i100
+        budget: 257
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 2
+        sc_partition: 1_matrix-4M
+      - cpu: 5
+        sc_partition: 2_rspeed-4M
+      - cpu: 0
+        sc_partition: 0_rspeed-4K

@@ -1,0 +1,41 @@
+partitions:
+  - name: 5_membench-1M-RO-R
+    processes:
+      - cmd: /root/thermobench/build/benchmarks/mem/membench -t1 -f -r -s 1000000
+        budget: 421
+  - name: 3_bitmnp-4M
+    processes:
+      - cmd: ./bitmnp-4M -v0 -c1 -i100
+        budget: 257
+  - name: 2_pntrch-4M
+    processes:
+      - cmd: ./pntrch-4M -v0 -c1 -i1
+        budget: 136
+  - name: 4_aifirf-4K
+    processes:
+      - cmd: ./aifirf-4K -v0 -c1 -i100
+        budget: 38
+  - name: 1_rspeed-4K
+    processes:
+      - cmd: ./rspeed-4K -v0 -c1 -i100
+        budget: 1
+  - name: 0_idctrn-4M
+    processes:
+      - cmd: ./idctrn-4M -v0 -c1 -i100
+        budget: 452
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 5
+        sc_partition: 5_membench-1M-RO-R
+      - cpu: 3
+        sc_partition: 3_bitmnp-4M
+      - cpu: 2
+        sc_partition: 2_pntrch-4M
+      - cpu: 4
+        sc_partition: 4_aifirf-4K
+      - cpu: 1
+        sc_partition: 1_rspeed-4K
+      - cpu: 0
+        sc_partition: 0_idctrn-4M

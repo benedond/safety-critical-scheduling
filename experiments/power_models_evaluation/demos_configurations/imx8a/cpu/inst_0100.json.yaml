@@ -1,0 +1,23 @@
+partitions:
+  - name: 2_bitmnp-4M
+    processes:
+      - cmd: ./bitmnp-4M -v0 -c1 -i100
+        budget: 811
+  - name: 1_canrdr-4K
+    processes:
+      - cmd: ./canrdr-4K -v0 -c1 -i100
+        budget: 390
+  - name: 0_rspeed-4M
+    processes:
+      - cmd: ./rspeed-4M -v0 -c1 -i100
+        budget: 536
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 4
+        sc_partition: 2_bitmnp-4M
+      - cpu: 2
+        sc_partition: 1_canrdr-4K
+      - cpu: 0
+        sc_partition: 0_rspeed-4M

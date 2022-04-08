@@ -1,0 +1,23 @@
+partitions:
+  - name: 2_bitmnp-4M
+    processes:
+      - cmd: ./bitmnp-4M -v0 -c1 -i100
+        budget: 675
+  - name: 1_rspeed-4K
+    processes:
+      - cmd: ./rspeed-4K -v0 -c1 -i100
+        budget: 583
+  - name: 0_tblook-4K
+    processes:
+      - cmd: ./tblook-4K -v0 -c1 -i100
+        budget: 764
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 4
+        sc_partition: 2_bitmnp-4M
+      - cpu: 2
+        sc_partition: 1_rspeed-4K
+      - cpu: 0
+        sc_partition: 0_tblook-4K

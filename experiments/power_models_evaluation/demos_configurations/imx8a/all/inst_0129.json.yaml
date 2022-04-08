@@ -1,0 +1,23 @@
+partitions:
+  - name: 2_canrdr-4K
+    processes:
+      - cmd: ./canrdr-4K -v0 -c1 -i100
+        budget: 185
+  - name: 1_puwmod-4K
+    processes:
+      - cmd: ./puwmod-4K -v0 -c1 -i100
+        budget: 259
+  - name: 0_pntrch-4K
+    processes:
+      - cmd: ./pntrch-4K -v0 -c1 -i100
+        budget: 164
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 4
+        sc_partition: 2_canrdr-4K
+      - cpu: 2
+        sc_partition: 1_puwmod-4K
+      - cpu: 1
+        sc_partition: 0_pntrch-4K

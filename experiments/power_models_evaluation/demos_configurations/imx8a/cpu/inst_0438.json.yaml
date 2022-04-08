@@ -1,0 +1,17 @@
+partitions:
+  - name: 1_a2time-4M
+    processes:
+      - cmd: ./a2time-4M -v0 -c1 -i100
+        budget: 183
+  - name: 0_aifirf-4K
+    processes:
+      - cmd: ./aifirf-4K -v0 -c1 -i100
+        budget: 436
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 5
+        sc_partition: 1_a2time-4M
+      - cpu: 0
+        sc_partition: 0_aifirf-4K

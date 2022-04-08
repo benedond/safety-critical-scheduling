@@ -1,0 +1,35 @@
+partitions:
+  - name: 4_aifirf-4K
+    processes:
+      - cmd: ./aifirf-4K -v0 -c1 -i100
+        budget: 480
+  - name: 3_tinyrenderer-boggie
+    processes:
+      - cmd: /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer -f /root/thermobench/benchmarks/tinyrenderer/obj/boggie/*.obj
+        budget: 623
+  - name: 2_canrdr-4M
+    processes:
+      - cmd: ./canrdr-4M -v0 -c1 -i100
+        budget: 878
+  - name: 1_a2time-4M
+    processes:
+      - cmd: ./a2time-4M -v0 -c1 -i100
+        budget: 129
+  - name: 0_membench-4M-RW-S
+    processes:
+      - cmd: /root/thermobench/build/benchmarks/mem/membench -t1 -f -w -s 4000000
+        budget: 162
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 5
+        sc_partition: 4_aifirf-4K
+      - cpu: 4
+        sc_partition: 3_tinyrenderer-boggie
+      - cpu: 2
+        sc_partition: 2_canrdr-4M
+      - cpu: 1
+        sc_partition: 1_a2time-4M
+      - cpu: 0
+        sc_partition: 0_membench-4M-RW-S

@@ -1,0 +1,23 @@
+partitions:
+  - name: 1_tinyrenderer-diablo
+    processes:
+      - cmd: /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer -f /root/thermobench/benchmarks/tinyrenderer/obj/diablo3_pose/*.obj
+        budget: 188
+  - name: 2_idctrn-4M
+    processes:
+      - cmd: ./idctrn-4M -v0 -c1 -i100
+        budget: 117
+  - name: 0_puwmod-4K
+    processes:
+      - cmd: ./puwmod-4K -v0 -c1 -i100
+        budget: 921
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 4
+        sc_partition: 1_tinyrenderer-diablo
+      - cpu: 5
+        sc_partition: 2_idctrn-4M
+      - cpu: 0
+        sc_partition: 0_puwmod-4K

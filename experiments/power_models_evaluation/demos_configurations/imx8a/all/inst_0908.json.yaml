@@ -1,0 +1,23 @@
+partitions:
+  - name: 2_aifirf-4M
+    processes:
+      - cmd: ./aifirf-4M -v0 -c1 -i10
+        budget: 870
+  - name: 1_tinyrenderer-diablo
+    processes:
+      - cmd: /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer -f /root/thermobench/benchmarks/tinyrenderer/obj/diablo3_pose/*.obj
+        budget: 961
+  - name: 0_tinyrenderer-boggie
+    processes:
+      - cmd: /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer -f /root/thermobench/benchmarks/tinyrenderer/obj/boggie/*.obj
+        budget: 584
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 5
+        sc_partition: 2_aifirf-4M
+      - cpu: 2
+        sc_partition: 1_tinyrenderer-diablo
+      - cpu: 1
+        sc_partition: 0_tinyrenderer-boggie

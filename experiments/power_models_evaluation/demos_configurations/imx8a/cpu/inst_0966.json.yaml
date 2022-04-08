@@ -1,0 +1,29 @@
+partitions:
+  - name: 3_a2time-4M
+    processes:
+      - cmd: ./a2time-4M -v0 -c1 -i100
+        budget: 132
+  - name: 2_iirflt-4M
+    processes:
+      - cmd: ./iirflt-4M -v0 -c1 -i100
+        budget: 447
+  - name: 1_rspeed-4M
+    processes:
+      - cmd: ./rspeed-4M -v0 -c1 -i100
+        budget: 417
+  - name: 0_bitmnp-4M
+    processes:
+      - cmd: ./bitmnp-4M -v0 -c1 -i100
+        budget: 223
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 5
+        sc_partition: 3_a2time-4M
+      - cpu: 4
+        sc_partition: 2_iirflt-4M
+      - cpu: 1
+        sc_partition: 1_rspeed-4M
+      - cpu: 0
+        sc_partition: 0_bitmnp-4M

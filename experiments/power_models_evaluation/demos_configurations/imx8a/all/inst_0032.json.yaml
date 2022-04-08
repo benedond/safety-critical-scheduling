@@ -1,0 +1,23 @@
+partitions:
+  - name: 2_membench-1K-RW-S
+    processes:
+      - cmd: /root/thermobench/build/benchmarks/mem/membench -t1 -f -w -s 1000
+        budget: 448
+  - name: 1_bitmnp-4M
+    processes:
+      - cmd: ./bitmnp-4M -v0 -c1 -i100
+        budget: 696
+  - name: 0_canrdr-4M
+    processes:
+      - cmd: ./canrdr-4M -v0 -c1 -i100
+        budget: 2
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 2
+        sc_partition: 2_membench-1K-RW-S
+      - cpu: 1
+        sc_partition: 1_bitmnp-4M
+      - cpu: 0
+        sc_partition: 0_canrdr-4M

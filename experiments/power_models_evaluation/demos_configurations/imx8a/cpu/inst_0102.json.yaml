@@ -1,0 +1,35 @@
+partitions:
+  - name: 4_aifirf-4K
+    processes:
+      - cmd: ./aifirf-4K -v0 -c1 -i100
+        budget: 918
+  - name: 3_idctrn-4M
+    processes:
+      - cmd: ./idctrn-4M -v0 -c1 -i100
+        budget: 283
+  - name: 2_ttsprk-4K
+    processes:
+      - cmd: ./ttsprk-4K -v0 -c1 -i100
+        budget: 141
+  - name: 1_tinyrenderer-diablo
+    processes:
+      - cmd: /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer -f /root/thermobench/benchmarks/tinyrenderer/obj/diablo3_pose/*.obj
+        budget: 528
+  - name: 0_pntrch-4K
+    processes:
+      - cmd: ./pntrch-4K -v0 -c1 -i100
+        budget: 523
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 5
+        sc_partition: 4_aifirf-4K
+      - cpu: 4
+        sc_partition: 3_idctrn-4M
+      - cpu: 3
+        sc_partition: 2_ttsprk-4K
+      - cpu: 1
+        sc_partition: 1_tinyrenderer-diablo
+      - cpu: 0
+        sc_partition: 0_pntrch-4K

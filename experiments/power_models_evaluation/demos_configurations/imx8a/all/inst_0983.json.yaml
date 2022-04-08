@@ -1,0 +1,17 @@
+partitions:
+  - name: 1_bitmnp-4K
+    processes:
+      - cmd: ./bitmnp-4K -v0 -c1 -i100
+        budget: 809
+  - name: 0_tinyrenderer-boggie
+    processes:
+      - cmd: /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer -f /root/thermobench/benchmarks/tinyrenderer/obj/boggie/*.obj
+        budget: 827
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 4
+        sc_partition: 1_bitmnp-4K
+      - cpu: 2
+        sc_partition: 0_tinyrenderer-boggie

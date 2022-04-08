@@ -1,0 +1,17 @@
+partitions:
+  - name: 1_puwmod-4K
+    processes:
+      - cmd: ./puwmod-4K -v0 -c1 -i100
+        budget: 997
+  - name: 0_pntrch-4M
+    processes:
+      - cmd: ./pntrch-4M -v0 -c1 -i1
+        budget: 70
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 4
+        sc_partition: 1_puwmod-4K
+      - cpu: 3
+        sc_partition: 0_pntrch-4M

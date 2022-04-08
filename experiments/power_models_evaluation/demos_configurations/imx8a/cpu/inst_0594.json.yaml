@@ -1,0 +1,23 @@
+partitions:
+  - name: 2_rspeed-4M
+    processes:
+      - cmd: ./rspeed-4M -v0 -c1 -i100
+        budget: 518
+  - name: 1_a2time-4M
+    processes:
+      - cmd: ./a2time-4M -v0 -c1 -i100
+        budget: 442
+  - name: 0_ttsprk-4K
+    processes:
+      - cmd: ./ttsprk-4K -v0 -c1 -i100
+        budget: 599
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 5
+        sc_partition: 2_rspeed-4M
+      - cpu: 2
+        sc_partition: 1_a2time-4M
+      - cpu: 1
+        sc_partition: 0_ttsprk-4K

@@ -1,0 +1,23 @@
+partitions:
+  - name: 2_idctrn-4M
+    processes:
+      - cmd: ./idctrn-4M -v0 -c1 -i100
+        budget: 232
+  - name: 1_puwmod-4M
+    processes:
+      - cmd: ./puwmod-4M -v0 -c1 -i100
+        budget: 226
+  - name: 0_a2time-4K
+    processes:
+      - cmd: ./a2time-4K -v0 -c1 -i100
+        budget: 472
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 5
+        sc_partition: 2_idctrn-4M
+      - cpu: 2
+        sc_partition: 1_puwmod-4M
+      - cpu: 1
+        sc_partition: 0_a2time-4K

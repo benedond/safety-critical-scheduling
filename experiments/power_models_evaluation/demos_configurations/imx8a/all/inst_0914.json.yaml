@@ -1,0 +1,17 @@
+partitions:
+  - name: 1_puwmod-4M
+    processes:
+      - cmd: ./puwmod-4M -v0 -c1 -i100
+        budget: 129
+  - name: 0_puwmod-4M
+    processes:
+      - cmd: ./puwmod-4M -v0 -c1 -i100
+        budget: 958
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 1
+        sc_partition: 1_puwmod-4M
+      - cpu: 0
+        sc_partition: 0_puwmod-4M

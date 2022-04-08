@@ -1,0 +1,17 @@
+partitions:
+  - name: 1_tblook-4M
+    processes:
+      - cmd: ./tblook-4M -v0 -c1 -i100
+        budget: 499
+  - name: 0_iirflt-4M
+    processes:
+      - cmd: ./iirflt-4M -v0 -c1 -i100
+        budget: 253
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 1
+        sc_partition: 1_tblook-4M
+      - cpu: 0
+        sc_partition: 0_iirflt-4M

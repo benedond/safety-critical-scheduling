@@ -1,0 +1,17 @@
+partitions:
+  - name: 1_canrdr-4K
+    processes:
+      - cmd: ./canrdr-4K -v0 -c1 -i100
+        budget: 100
+  - name: 0_canrdr-4M
+    processes:
+      - cmd: ./canrdr-4M -v0 -c1 -i100
+        budget: 586
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 4
+        sc_partition: 1_canrdr-4K
+      - cpu: 1
+        sc_partition: 0_canrdr-4M

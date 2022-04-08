@@ -1,0 +1,23 @@
+partitions:
+  - name: 2_tinyrenderer-boggie
+    processes:
+      - cmd: /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer -f /root/thermobench/benchmarks/tinyrenderer/obj/boggie/*.obj
+        budget: 574
+  - name: 1_pntrch-4M
+    processes:
+      - cmd: ./pntrch-4M -v0 -c1 -i1
+        budget: 226
+  - name: 0_tinyrenderer-diablo
+    processes:
+      - cmd: /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer -f /root/thermobench/benchmarks/tinyrenderer/obj/diablo3_pose/*.obj
+        budget: 863
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 5
+        sc_partition: 2_tinyrenderer-boggie
+      - cpu: 2
+        sc_partition: 1_pntrch-4M
+      - cpu: 1
+        sc_partition: 0_tinyrenderer-diablo

@@ -1,0 +1,17 @@
+partitions:
+  - name: 1_puwmod-4K
+    processes:
+      - cmd: ./puwmod-4K -v0 -c1 -i100
+        budget: 715
+  - name: 0_bitmnp-4M
+    processes:
+      - cmd: ./bitmnp-4M -v0 -c1 -i100
+        budget: 322
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 5
+        sc_partition: 1_puwmod-4K
+      - cpu: 1
+        sc_partition: 0_bitmnp-4M

@@ -1,0 +1,17 @@
+partitions:
+  - name: 1_pntrch-4M
+    processes:
+      - cmd: ./pntrch-4M -v0 -c1 -i1
+        budget: 799
+  - name: 0_tinyrenderer-boggie
+    processes:
+      - cmd: /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer -f /root/thermobench/benchmarks/tinyrenderer/obj/boggie/*.obj
+        budget: 940
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 4
+        sc_partition: 1_pntrch-4M
+      - cpu: 1
+        sc_partition: 0_tinyrenderer-boggie

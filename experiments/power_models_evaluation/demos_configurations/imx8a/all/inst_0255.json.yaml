@@ -1,0 +1,23 @@
+partitions:
+  - name: 2_membench-4M-RW-S
+    processes:
+      - cmd: /root/thermobench/build/benchmarks/mem/membench -t1 -f -w -s 4000000
+        budget: 551
+  - name: 1_pntrch-4K
+    processes:
+      - cmd: ./pntrch-4K -v0 -c1 -i100
+        budget: 127
+  - name: 0_rspeed-4K
+    processes:
+      - cmd: ./rspeed-4K -v0 -c1 -i100
+        budget: 539
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 2
+        sc_partition: 2_membench-4M-RW-S
+      - cpu: 1
+        sc_partition: 1_pntrch-4K
+      - cpu: 0
+        sc_partition: 0_rspeed-4K

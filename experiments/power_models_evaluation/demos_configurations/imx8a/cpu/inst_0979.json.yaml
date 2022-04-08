@@ -1,0 +1,23 @@
+partitions:
+  - name: 2_idctrn-4K
+    processes:
+      - cmd: ./idctrn-4K -v0 -c1 -i100
+        budget: 325
+  - name: 1_canrdr-4M
+    processes:
+      - cmd: ./canrdr-4M -v0 -c1 -i100
+        budget: 129
+  - name: 0_aifirf-4M
+    processes:
+      - cmd: ./aifirf-4M -v0 -c1 -i10
+        budget: 412
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 3
+        sc_partition: 2_idctrn-4K
+      - cpu: 1
+        sc_partition: 1_canrdr-4M
+      - cpu: 0
+        sc_partition: 0_aifirf-4M

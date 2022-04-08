@@ -1,0 +1,23 @@
+partitions:
+  - name: 2_iirflt-4K
+    processes:
+      - cmd: ./iirflt-4K -v0 -c1 -i100
+        budget: 578
+  - name: 1_membench-4M-RW-S
+    processes:
+      - cmd: /root/thermobench/build/benchmarks/mem/membench -t1 -f -w -s 4000000
+        budget: 397
+  - name: 0_aifirf-4M
+    processes:
+      - cmd: ./aifirf-4M -v0 -c1 -i10
+        budget: 133
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 5
+        sc_partition: 2_iirflt-4K
+      - cpu: 1
+        sc_partition: 1_membench-4M-RW-S
+      - cpu: 0
+        sc_partition: 0_aifirf-4M

@@ -1,0 +1,23 @@
+partitions:
+  - name: 2_iirflt-4K
+    processes:
+      - cmd: ./iirflt-4K -v0 -c1 -i100
+        budget: 61
+  - name: 1_idctrn-4M
+    processes:
+      - cmd: ./idctrn-4M -v0 -c1 -i100
+        budget: 190
+  - name: 0_rspeed-4M
+    processes:
+      - cmd: ./rspeed-4M -v0 -c1 -i100
+        budget: 921
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 5
+        sc_partition: 2_iirflt-4K
+      - cpu: 3
+        sc_partition: 1_idctrn-4M
+      - cpu: 2
+        sc_partition: 0_rspeed-4M

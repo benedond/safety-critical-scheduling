@@ -1,0 +1,23 @@
+partitions:
+  - name: 1_pntrch-4K
+    processes:
+      - cmd: ./pntrch-4K -v0 -c1 -i100
+        budget: 959
+  - name: 2_pntrch-4K
+    processes:
+      - cmd: ./pntrch-4K -v0 -c1 -i100
+        budget: 215
+  - name: 0_membench-4M-RW-S
+    processes:
+      - cmd: /root/thermobench/build/benchmarks/mem/membench -t1 -f -w -s 4000000
+        budget: 776
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 3
+        sc_partition: 1_pntrch-4K
+      - cpu: 5
+        sc_partition: 2_pntrch-4K
+      - cpu: 1
+        sc_partition: 0_membench-4M-RW-S

@@ -1,0 +1,17 @@
+partitions:
+  - name: 1_idctrn-4M
+    processes:
+      - cmd: ./idctrn-4M -v0 -c1 -i100
+        budget: 808
+  - name: 0_iirflt-4K
+    processes:
+      - cmd: ./iirflt-4K -v0 -c1 -i100
+        budget: 47
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 2
+        sc_partition: 1_idctrn-4M
+      - cpu: 0
+        sc_partition: 0_iirflt-4K

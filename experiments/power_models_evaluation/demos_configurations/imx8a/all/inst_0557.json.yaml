@@ -1,0 +1,17 @@
+partitions:
+  - name: 1_bitmnp-4K
+    processes:
+      - cmd: ./bitmnp-4K -v0 -c1 -i100
+        budget: 761
+  - name: 0_a2time-4K
+    processes:
+      - cmd: ./a2time-4K -v0 -c1 -i100
+        budget: 299
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 2
+        sc_partition: 1_bitmnp-4K
+      - cpu: 1
+        sc_partition: 0_a2time-4K

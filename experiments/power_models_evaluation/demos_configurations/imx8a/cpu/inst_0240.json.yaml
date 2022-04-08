@@ -1,0 +1,17 @@
+partitions:
+  - name: 1_a2time-4M
+    processes:
+      - cmd: ./a2time-4M -v0 -c1 -i100
+        budget: 94
+  - name: 0_tinyrenderer-boggie
+    processes:
+      - cmd: /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer -f /root/thermobench/benchmarks/tinyrenderer/obj/boggie/*.obj
+        budget: 43
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 4
+        sc_partition: 1_a2time-4M
+      - cpu: 1
+        sc_partition: 0_tinyrenderer-boggie

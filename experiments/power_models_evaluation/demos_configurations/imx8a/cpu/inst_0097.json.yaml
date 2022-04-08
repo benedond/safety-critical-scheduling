@@ -1,0 +1,35 @@
+partitions:
+  - name: 2_canrdr-4M
+    processes:
+      - cmd: ./canrdr-4M -v0 -c1 -i100
+        budget: 971
+  - name: 1_iirflt-4M
+    processes:
+      - cmd: ./iirflt-4M -v0 -c1 -i100
+        budget: 994
+  - name: 4_canrdr-4K
+    processes:
+      - cmd: ./canrdr-4K -v0 -c1 -i100
+        budget: 126
+  - name: 3_ttsprk-4M
+    processes:
+      - cmd: ./ttsprk-4M -v0 -c1 -i100
+        budget: 18
+  - name: 0_a2time-4M
+    processes:
+      - cmd: ./a2time-4M -v0 -c1 -i100
+        budget: 283
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 3
+        sc_partition: 2_canrdr-4M
+      - cpu: 2
+        sc_partition: 1_iirflt-4M
+      - cpu: 5
+        sc_partition: 4_canrdr-4K
+      - cpu: 4
+        sc_partition: 3_ttsprk-4M
+      - cpu: 0
+        sc_partition: 0_a2time-4M

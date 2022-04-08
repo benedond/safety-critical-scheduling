@@ -1,0 +1,11 @@
+partitions:
+  - name: 0_ttsprk-4M
+    processes:
+      - cmd: ./ttsprk-4M -v0 -c1 -i100
+        budget: 488
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 2
+        sc_partition: 0_ttsprk-4M

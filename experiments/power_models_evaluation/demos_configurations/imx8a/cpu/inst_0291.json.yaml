@@ -1,0 +1,23 @@
+partitions:
+  - name: 2_rspeed-4K
+    processes:
+      - cmd: ./rspeed-4K -v0 -c1 -i100
+        budget: 896
+  - name: 1_a2time-4K
+    processes:
+      - cmd: ./a2time-4K -v0 -c1 -i100
+        budget: 197
+  - name: 0_a2time-4M
+    processes:
+      - cmd: ./a2time-4M -v0 -c1 -i100
+        budget: 470
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 5
+        sc_partition: 2_rspeed-4K
+      - cpu: 4
+        sc_partition: 1_a2time-4K
+      - cpu: 3
+        sc_partition: 0_a2time-4M
