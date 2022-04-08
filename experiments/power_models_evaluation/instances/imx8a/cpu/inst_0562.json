@@ -1,7 +1,7 @@
 {
     "assignmentCharacteristics": [
         {
-            "command": "./puwmod-4K -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU0_work_done\" ./puwmod-4K -v0 -c1 -i100",
             "resourceAssignnents": [
                 {
                     "intercept": 0.32,
@@ -18,7 +18,7 @@
             "task": "0_puwmod-4K"
         },
         {
-            "command": "./a2time-4M -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done\" ./a2time-4M -v0 -c1 -i100",
             "resourceAssignnents": [
                 {
                     "intercept": 1.39,
@@ -35,7 +35,7 @@
             "task": "1_a2time-4M"
         },
         {
-            "command": "./tblook-4K -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU2_work_done\" ./tblook-4K -v0 -c1 -i100",
             "resourceAssignnents": [
                 {
                     "intercept": 0.27,
@@ -52,7 +52,7 @@
             "task": "2_tblook-4K"
         },
         {
-            "command": "./rspeed-4M -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU3_work_done\" ./rspeed-4M -v0 -c1 -i100",
             "resourceAssignnents": [
                 {
                     "intercept": 1.68,
@@ -69,7 +69,7 @@
             "task": "3_rspeed-4M"
         },
         {
-            "command": "./aifirf-4K -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU4_work_done\" ./aifirf-4K -v0 -c1 -i100",
             "resourceAssignnents": [
                 {
                     "intercept": 1.4,
@@ -154,7 +154,7 @@
     "tasks": [
         {
             "assignmentIndex": 0,
-            "command": "./puwmod-4K -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU0_work_done\" ./puwmod-4K -v0 -c1 -i100",
             "length": 816,
             "name": "0_puwmod-4K",
             "processors": [
@@ -166,7 +166,7 @@
         },
         {
             "assignmentIndex": 0,
-            "command": "./a2time-4M -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done\" ./a2time-4M -v0 -c1 -i100",
             "length": 550,
             "name": "1_a2time-4M",
             "processors": [
@@ -178,7 +178,7 @@
         },
         {
             "assignmentIndex": 0,
-            "command": "./tblook-4K -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU2_work_done\" ./tblook-4K -v0 -c1 -i100",
             "length": 883,
             "name": "2_tblook-4K",
             "processors": [
@@ -190,7 +190,7 @@
         },
         {
             "assignmentIndex": 0,
-            "command": "./rspeed-4M -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU3_work_done\" ./rspeed-4M -v0 -c1 -i100",
             "length": 632,
             "name": "3_rspeed-4M",
             "processors": [
@@ -202,7 +202,7 @@
         },
         {
             "assignmentIndex": 0,
-            "command": "./aifirf-4K -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU4_work_done\" ./aifirf-4K -v0 -c1 -i100",
             "length": 58,
             "name": "4_aifirf-4K",
             "processors": [

@@ -1,7 +1,7 @@
 {
     "assignmentCharacteristics": [
         {
-            "command": "./iirflt-4M -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU0_work_done\" ./iirflt-4M -v0 -c1 -i100",
             "resourceAssignnents": [
                 {
                     "intercept": 1.23,
@@ -18,7 +18,7 @@
             "task": "0_iirflt-4M"
         },
         {
-            "command": "./bitmnp-4M -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done\" ./bitmnp-4M -v0 -c1 -i100",
             "resourceAssignnents": [
                 {
                     "intercept": 1.22,
@@ -35,7 +35,7 @@
             "task": "1_bitmnp-4M"
         },
         {
-            "command": "./idctrn-4M -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU2_work_done\" ./idctrn-4M -v0 -c1 -i100",
             "resourceAssignnents": [
                 {
                     "intercept": 1.22,
@@ -52,7 +52,7 @@
             "task": "2_idctrn-4M"
         },
         {
-            "command": "./iirflt-4M -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done\" ./iirflt-4M -v0 -c1 -i100",
             "resourceAssignnents": [
                 {
                     "intercept": 2.64,
@@ -130,7 +130,7 @@
     "tasks": [
         {
             "assignmentIndex": 0,
-            "command": "./iirflt-4M -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU0_work_done\" ./iirflt-4M -v0 -c1 -i100",
             "length": 659,
             "name": "0_iirflt-4M",
             "processors": [
@@ -142,7 +142,7 @@
         },
         {
             "assignmentIndex": 0,
-            "command": "./bitmnp-4M -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done\" ./bitmnp-4M -v0 -c1 -i100",
             "length": 797,
             "name": "1_bitmnp-4M",
             "processors": [
@@ -154,7 +154,7 @@
         },
         {
             "assignmentIndex": 0,
-            "command": "./idctrn-4M -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU2_work_done\" ./idctrn-4M -v0 -c1 -i100",
             "length": 111,
             "name": "2_idctrn-4M",
             "processors": [
@@ -166,7 +166,7 @@
         },
         {
             "assignmentIndex": 0,
-            "command": "./iirflt-4M -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done\" ./iirflt-4M -v0 -c1 -i100",
             "length": 92,
             "name": "3_iirflt-4M",
             "processors": [

@@ -1,7 +1,7 @@
 {
     "assignmentCharacteristics": [
         {
-            "command": "./matrix-4K -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done\" ./matrix-4K -v0 -c1 -i100",
             "resourceAssignnents": [
                 {
                     "intercept": 0.37,
@@ -18,7 +18,7 @@
             "task": "0_matrix-4K"
         },
         {
-            "command": "./aifirf-4K -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU3_work_done\" ./aifirf-4K -v0 -c1 -i100",
             "resourceAssignnents": [
                 {
                     "intercept": 0.23,
@@ -35,7 +35,7 @@
             "task": "1_aifirf-4K"
         },
         {
-            "command": "./idctrn-4K -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU4_work_done\" ./idctrn-4K -v0 -c1 -i100",
             "resourceAssignnents": [
                 {
                     "intercept": 1.51,
@@ -106,7 +106,7 @@
     "tasks": [
         {
             "assignmentIndex": 0,
-            "command": "./matrix-4K -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done\" ./matrix-4K -v0 -c1 -i100",
             "length": 831,
             "name": "0_matrix-4K",
             "processors": [
@@ -118,7 +118,7 @@
         },
         {
             "assignmentIndex": 0,
-            "command": "./aifirf-4K -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU3_work_done\" ./aifirf-4K -v0 -c1 -i100",
             "length": 895,
             "name": "1_aifirf-4K",
             "processors": [
@@ -130,7 +130,7 @@
         },
         {
             "assignmentIndex": 0,
-            "command": "./idctrn-4K -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU4_work_done\" ./idctrn-4K -v0 -c1 -i100",
             "length": 205,
             "name": "2_idctrn-4K",
             "processors": [

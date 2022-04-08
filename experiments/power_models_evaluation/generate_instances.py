@@ -14,10 +14,10 @@ parser.add_argument("--seed", default=13, type=int, help="Random seed.")
 parser.add_argument("--n_instances", default=1000, type=int, help="Number of instances to be generated.")
 
 
-# cores = {"A53": [0, 1, 2, 3],
-#          "A72": [4, 5],
-#          "A57": [0, 3, 4, 5],
-#          "Denver": [1, 2]}
+cores_offset = {"A53": [0, 1, 2, 3],
+                "A72": [4, 5],
+                "A57": [0, 3, 4, 5],
+                "Denver": [1, 2]}
 
 cores = {"A53": [0, 1, 2, 3],
           "A72": [0, 1],
@@ -86,6 +86,8 @@ def generate_instance(args):
                 benchmark, length = w
                 task_name = "{}_{}".format(task_idx, benchmark)
                 cmd, slope, intercept = get_cmd_slope_intercept(benchmark, processor, benchmarks_char)
+                
+                cmd = 'TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU{}_work_done" '.format(cores_offset[processor][core]) + cmd
                 
                 # Prepare assignment characteristics
                 ass_char.append({"command": cmd,

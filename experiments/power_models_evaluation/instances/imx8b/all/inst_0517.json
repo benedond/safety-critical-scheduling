@@ -1,0 +1,180 @@
+{
+    "assignmentCharacteristics": [
+        {
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU0_work_done\" /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer -f /root/thermobench/benchmarks/tinyrenderer/obj/diablo3_pose/*.obj",
+            "resourceAssignnents": [
+                {
+                    "intercept": 0.87,
+                    "length": 226,
+                    "processors": [
+                        {
+                            "processingUnits": 1,
+                            "processor": "A53"
+                        }
+                    ],
+                    "slope": 0.24
+                }
+            ],
+            "task": "0_tinyrenderer-diablo"
+        },
+        {
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU3_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -s 1000000",
+            "resourceAssignnents": [
+                {
+                    "intercept": 0.86,
+                    "length": 232,
+                    "processors": [
+                        {
+                            "processingUnits": 1,
+                            "processor": "A53"
+                        }
+                    ],
+                    "slope": 0.57
+                }
+            ],
+            "task": "1_membench-1M-RO-S"
+        },
+        {
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU4_work_done\" ./canrdr-4K -v0 -c1 -i100",
+            "resourceAssignnents": [
+                {
+                    "intercept": 1.2,
+                    "length": 809,
+                    "processors": [
+                        {
+                            "processingUnits": 1,
+                            "processor": "A72"
+                        }
+                    ],
+                    "slope": 1.1
+                }
+            ],
+            "task": "2_canrdr-4K"
+        },
+        {
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done\" ./iirflt-4M -v0 -c1 -i100",
+            "resourceAssignnents": [
+                {
+                    "intercept": 2.33,
+                    "length": 316,
+                    "processors": [
+                        {
+                            "processingUnits": 1,
+                            "processor": "A72"
+                        }
+                    ],
+                    "slope": 1.55
+                }
+            ],
+            "task": "3_iirflt-4M"
+        }
+    ],
+    "environment": {
+        "majorFrameLength": 1000,
+        "problemVersion": 1,
+        "processors": [
+            {
+                "name": "A53",
+                "processingUnits": 4,
+                "type": "main_processor"
+            },
+            {
+                "name": "A72",
+                "processingUnits": 2,
+                "type": "main_processor"
+            }
+        ],
+        "scPart": 1.0
+    },
+    "solution": {
+        "feasible": true,
+        "solutionTime": 0,
+        "solverMetadata": null,
+        "solverName": "RandomGenerator",
+        "windows": [
+            {
+                "length": 1000,
+                "tasks": [
+                    {
+                        "length": 226,
+                        "processingUnit": 0,
+                        "processor": "A53",
+                        "start": 0,
+                        "task": "0_tinyrenderer-diablo"
+                    },
+                    {
+                        "length": 232,
+                        "processingUnit": 3,
+                        "processor": "A53",
+                        "start": 0,
+                        "task": "1_membench-1M-RO-S"
+                    },
+                    {
+                        "length": 809,
+                        "processingUnit": 0,
+                        "processor": "A72",
+                        "start": 0,
+                        "task": "2_canrdr-4K"
+                    },
+                    {
+                        "length": 316,
+                        "processingUnit": 1,
+                        "processor": "A72",
+                        "start": 0,
+                        "task": "3_iirflt-4M"
+                    }
+                ]
+            }
+        ]
+    },
+    "tasks": [
+        {
+            "assignmentIndex": 0,
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU0_work_done\" /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer -f /root/thermobench/benchmarks/tinyrenderer/obj/diablo3_pose/*.obj",
+            "length": 226,
+            "name": "0_tinyrenderer-diablo",
+            "processors": [
+                {
+                    "processingUnits": 1,
+                    "processor": "A53"
+                }
+            ]
+        },
+        {
+            "assignmentIndex": 0,
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU3_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -s 1000000",
+            "length": 232,
+            "name": "1_membench-1M-RO-S",
+            "processors": [
+                {
+                    "processingUnits": 1,
+                    "processor": "A53"
+                }
+            ]
+        },
+        {
+            "assignmentIndex": 0,
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU4_work_done\" ./canrdr-4K -v0 -c1 -i100",
+            "length": 809,
+            "name": "2_canrdr-4K",
+            "processors": [
+                {
+                    "processingUnits": 1,
+                    "processor": "A72"
+                }
+            ]
+        },
+        {
+            "assignmentIndex": 0,
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done\" ./iirflt-4M -v0 -c1 -i100",
+            "length": 316,
+            "name": "3_iirflt-4M",
+            "processors": [
+                {
+                    "processingUnits": 1,
+                    "processor": "A72"
+                }
+            ]
+        }
+    ]
+}

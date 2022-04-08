@@ -1,0 +1,180 @@
+{
+    "assignmentCharacteristics": [
+        {
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU0_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -s 4000000",
+            "resourceAssignnents": [
+                {
+                    "intercept": 1.47,
+                    "length": 857,
+                    "processors": [
+                        {
+                            "processingUnits": 1,
+                            "processor": "A53"
+                        }
+                    ],
+                    "slope": 0.37
+                }
+            ],
+            "task": "0_membench-4M-RO-S"
+        },
+        {
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done\" ./ttsprk-4M -v0 -c1 -i100",
+            "resourceAssignnents": [
+                {
+                    "intercept": 0.28,
+                    "length": 954,
+                    "processors": [
+                        {
+                            "processingUnits": 1,
+                            "processor": "A53"
+                        }
+                    ],
+                    "slope": 0.57
+                }
+            ],
+            "task": "1_ttsprk-4M"
+        },
+        {
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU2_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -w -s 1000000",
+            "resourceAssignnents": [
+                {
+                    "intercept": 0.88,
+                    "length": 823,
+                    "processors": [
+                        {
+                            "processingUnits": 1,
+                            "processor": "A53"
+                        }
+                    ],
+                    "slope": 0.57
+                }
+            ],
+            "task": "2_membench-1M-RW-S"
+        },
+        {
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU4_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -r -w -s 4000000",
+            "resourceAssignnents": [
+                {
+                    "intercept": 1.82,
+                    "length": 220,
+                    "processors": [
+                        {
+                            "processingUnits": 1,
+                            "processor": "A72"
+                        }
+                    ],
+                    "slope": 0.46
+                }
+            ],
+            "task": "3_membench-4M-RW-R"
+        }
+    ],
+    "environment": {
+        "majorFrameLength": 1000,
+        "problemVersion": 1,
+        "processors": [
+            {
+                "name": "A53",
+                "processingUnits": 4,
+                "type": "main_processor"
+            },
+            {
+                "name": "A72",
+                "processingUnits": 2,
+                "type": "main_processor"
+            }
+        ],
+        "scPart": 1.0
+    },
+    "solution": {
+        "feasible": true,
+        "solutionTime": 0,
+        "solverMetadata": null,
+        "solverName": "RandomGenerator",
+        "windows": [
+            {
+                "length": 1000,
+                "tasks": [
+                    {
+                        "length": 857,
+                        "processingUnit": 0,
+                        "processor": "A53",
+                        "start": 0,
+                        "task": "0_membench-4M-RO-S"
+                    },
+                    {
+                        "length": 954,
+                        "processingUnit": 1,
+                        "processor": "A53",
+                        "start": 0,
+                        "task": "1_ttsprk-4M"
+                    },
+                    {
+                        "length": 823,
+                        "processingUnit": 2,
+                        "processor": "A53",
+                        "start": 0,
+                        "task": "2_membench-1M-RW-S"
+                    },
+                    {
+                        "length": 220,
+                        "processingUnit": 0,
+                        "processor": "A72",
+                        "start": 0,
+                        "task": "3_membench-4M-RW-R"
+                    }
+                ]
+            }
+        ]
+    },
+    "tasks": [
+        {
+            "assignmentIndex": 0,
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU0_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -s 4000000",
+            "length": 857,
+            "name": "0_membench-4M-RO-S",
+            "processors": [
+                {
+                    "processingUnits": 1,
+                    "processor": "A53"
+                }
+            ]
+        },
+        {
+            "assignmentIndex": 0,
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done\" ./ttsprk-4M -v0 -c1 -i100",
+            "length": 954,
+            "name": "1_ttsprk-4M",
+            "processors": [
+                {
+                    "processingUnits": 1,
+                    "processor": "A53"
+                }
+            ]
+        },
+        {
+            "assignmentIndex": 0,
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU2_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -w -s 1000000",
+            "length": 823,
+            "name": "2_membench-1M-RW-S",
+            "processors": [
+                {
+                    "processingUnits": 1,
+                    "processor": "A53"
+                }
+            ]
+        },
+        {
+            "assignmentIndex": 0,
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU4_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -r -w -s 4000000",
+            "length": 220,
+            "name": "3_membench-4M-RW-R",
+            "processors": [
+                {
+                    "processingUnits": 1,
+                    "processor": "A72"
+                }
+            ]
+        }
+    ]
+}

@@ -1,7 +1,7 @@
 {
     "assignmentCharacteristics": [
         {
-            "command": "./iirflt-4K -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done\" ./iirflt-4K -v0 -c1 -i100",
             "resourceAssignnents": [
                 {
                     "intercept": 0.3,
@@ -18,7 +18,7 @@
             "task": "0_iirflt-4K"
         },
         {
-            "command": "./aifirf-4M -v0 -c1 -i10",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU4_work_done\" ./aifirf-4M -v0 -c1 -i10",
             "resourceAssignnents": [
                 {
                     "intercept": 2.57,
@@ -35,7 +35,7 @@
             "task": "1_aifirf-4M"
         },
         {
-            "command": "./tblook-4K -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done\" ./tblook-4K -v0 -c1 -i100",
             "resourceAssignnents": [
                 {
                     "intercept": 1.51,
@@ -106,7 +106,7 @@
     "tasks": [
         {
             "assignmentIndex": 0,
-            "command": "./iirflt-4K -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done\" ./iirflt-4K -v0 -c1 -i100",
             "length": 696,
             "name": "0_iirflt-4K",
             "processors": [
@@ -118,7 +118,7 @@
         },
         {
             "assignmentIndex": 0,
-            "command": "./aifirf-4M -v0 -c1 -i10",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU4_work_done\" ./aifirf-4M -v0 -c1 -i10",
             "length": 915,
             "name": "1_aifirf-4M",
             "processors": [
@@ -130,7 +130,7 @@
         },
         {
             "assignmentIndex": 0,
-            "command": "./tblook-4K -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done\" ./tblook-4K -v0 -c1 -i100",
             "length": 423,
             "name": "2_tblook-4K",
             "processors": [

@@ -1,7 +1,7 @@
 {
     "assignmentCharacteristics": [
         {
-            "command": "./puwmod-4K -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU0_work_done\" ./puwmod-4K -v0 -c1 -i100",
             "resourceAssignnents": [
                 {
                     "intercept": 0.32,
@@ -18,7 +18,7 @@
             "task": "0_puwmod-4K"
         },
         {
-            "command": "./iirflt-4K -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done\" ./iirflt-4K -v0 -c1 -i100",
             "resourceAssignnents": [
                 {
                     "intercept": 0.3,
@@ -35,7 +35,7 @@
             "task": "1_iirflt-4K"
         },
         {
-            "command": "./canrdr-4K -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU2_work_done\" ./canrdr-4K -v0 -c1 -i100",
             "resourceAssignnents": [
                 {
                     "intercept": 0.33,
@@ -52,7 +52,7 @@
             "task": "2_canrdr-4K"
         },
         {
-            "command": "./puwmod-4K -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU3_work_done\" ./puwmod-4K -v0 -c1 -i100",
             "resourceAssignnents": [
                 {
                     "intercept": 0.32,
@@ -69,7 +69,7 @@
             "task": "3_puwmod-4K"
         },
         {
-            "command": "./pntrch-4K -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU4_work_done\" ./pntrch-4K -v0 -c1 -i100",
             "resourceAssignnents": [
                 {
                     "intercept": 1.33,
@@ -154,7 +154,7 @@
     "tasks": [
         {
             "assignmentIndex": 0,
-            "command": "./puwmod-4K -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU0_work_done\" ./puwmod-4K -v0 -c1 -i100",
             "length": 753,
             "name": "0_puwmod-4K",
             "processors": [
@@ -166,7 +166,7 @@
         },
         {
             "assignmentIndex": 0,
-            "command": "./iirflt-4K -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done\" ./iirflt-4K -v0 -c1 -i100",
             "length": 978,
             "name": "1_iirflt-4K",
             "processors": [
@@ -178,7 +178,7 @@
         },
         {
             "assignmentIndex": 0,
-            "command": "./canrdr-4K -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU2_work_done\" ./canrdr-4K -v0 -c1 -i100",
             "length": 248,
             "name": "2_canrdr-4K",
             "processors": [
@@ -190,7 +190,7 @@
         },
         {
             "assignmentIndex": 0,
-            "command": "./puwmod-4K -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU3_work_done\" ./puwmod-4K -v0 -c1 -i100",
             "length": 451,
             "name": "3_puwmod-4K",
             "processors": [
@@ -202,7 +202,7 @@
         },
         {
             "assignmentIndex": 0,
-            "command": "./pntrch-4K -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU4_work_done\" ./pntrch-4K -v0 -c1 -i100",
             "length": 304,
             "name": "4_pntrch-4K",
             "processors": [

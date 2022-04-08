@@ -1,0 +1,108 @@
+{
+    "assignmentCharacteristics": [
+        {
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU3_work_done\" ./a2time-4M -v0 -c1 -i100",
+            "resourceAssignnents": [
+                {
+                    "intercept": 1.15,
+                    "length": 323,
+                    "processors": [
+                        {
+                            "processingUnits": 1,
+                            "processor": "A53"
+                        }
+                    ],
+                    "slope": 0.31
+                }
+            ],
+            "task": "0_a2time-4M"
+        },
+        {
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU4_work_done\" /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer -f /root/thermobench/benchmarks/tinyrenderer/obj/diablo3_pose/*.obj",
+            "resourceAssignnents": [
+                {
+                    "intercept": 1.79,
+                    "length": 900,
+                    "processors": [
+                        {
+                            "processingUnits": 1,
+                            "processor": "A72"
+                        }
+                    ],
+                    "slope": 0.99
+                }
+            ],
+            "task": "1_tinyrenderer-diablo"
+        }
+    ],
+    "environment": {
+        "majorFrameLength": 1000,
+        "problemVersion": 1,
+        "processors": [
+            {
+                "name": "A53",
+                "processingUnits": 4,
+                "type": "main_processor"
+            },
+            {
+                "name": "A72",
+                "processingUnits": 2,
+                "type": "main_processor"
+            }
+        ],
+        "scPart": 1.0
+    },
+    "solution": {
+        "feasible": true,
+        "solutionTime": 0,
+        "solverMetadata": null,
+        "solverName": "RandomGenerator",
+        "windows": [
+            {
+                "length": 1000,
+                "tasks": [
+                    {
+                        "length": 323,
+                        "processingUnit": 3,
+                        "processor": "A53",
+                        "start": 0,
+                        "task": "0_a2time-4M"
+                    },
+                    {
+                        "length": 900,
+                        "processingUnit": 0,
+                        "processor": "A72",
+                        "start": 0,
+                        "task": "1_tinyrenderer-diablo"
+                    }
+                ]
+            }
+        ]
+    },
+    "tasks": [
+        {
+            "assignmentIndex": 0,
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU3_work_done\" ./a2time-4M -v0 -c1 -i100",
+            "length": 323,
+            "name": "0_a2time-4M",
+            "processors": [
+                {
+                    "processingUnits": 1,
+                    "processor": "A53"
+                }
+            ]
+        },
+        {
+            "assignmentIndex": 0,
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU4_work_done\" /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer -f /root/thermobench/benchmarks/tinyrenderer/obj/diablo3_pose/*.obj",
+            "length": 900,
+            "name": "1_tinyrenderer-diablo",
+            "processors": [
+                {
+                    "processingUnits": 1,
+                    "processor": "A72"
+                }
+            ]
+        }
+    ]
+}

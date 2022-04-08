@@ -1,0 +1,144 @@
+{
+    "assignmentCharacteristics": [
+        {
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU2_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -s 1000",
+            "resourceAssignnents": [
+                {
+                    "intercept": 0.18,
+                    "length": 610,
+                    "processors": [
+                        {
+                            "processingUnits": 1,
+                            "processor": "A53"
+                        }
+                    ],
+                    "slope": 0.15
+                }
+            ],
+            "task": "0_membench-1K-RO-S"
+        },
+        {
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU3_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -s 1000",
+            "resourceAssignnents": [
+                {
+                    "intercept": 0.18,
+                    "length": 89,
+                    "processors": [
+                        {
+                            "processingUnits": 1,
+                            "processor": "A53"
+                        }
+                    ],
+                    "slope": 0.15
+                }
+            ],
+            "task": "1_membench-1K-RO-S"
+        },
+        {
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU4_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -s 1000",
+            "resourceAssignnents": [
+                {
+                    "intercept": 0.51,
+                    "length": 57,
+                    "processors": [
+                        {
+                            "processingUnits": 1,
+                            "processor": "A72"
+                        }
+                    ],
+                    "slope": 0.44
+                }
+            ],
+            "task": "2_membench-1K-RO-S"
+        }
+    ],
+    "environment": {
+        "majorFrameLength": 1000,
+        "problemVersion": 1,
+        "processors": [
+            {
+                "name": "A53",
+                "processingUnits": 4,
+                "type": "main_processor"
+            },
+            {
+                "name": "A72",
+                "processingUnits": 2,
+                "type": "main_processor"
+            }
+        ],
+        "scPart": 1.0
+    },
+    "solution": {
+        "feasible": true,
+        "solutionTime": 0,
+        "solverMetadata": null,
+        "solverName": "RandomGenerator",
+        "windows": [
+            {
+                "length": 1000,
+                "tasks": [
+                    {
+                        "length": 610,
+                        "processingUnit": 2,
+                        "processor": "A53",
+                        "start": 0,
+                        "task": "0_membench-1K-RO-S"
+                    },
+                    {
+                        "length": 89,
+                        "processingUnit": 3,
+                        "processor": "A53",
+                        "start": 0,
+                        "task": "1_membench-1K-RO-S"
+                    },
+                    {
+                        "length": 57,
+                        "processingUnit": 0,
+                        "processor": "A72",
+                        "start": 0,
+                        "task": "2_membench-1K-RO-S"
+                    }
+                ]
+            }
+        ]
+    },
+    "tasks": [
+        {
+            "assignmentIndex": 0,
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU2_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -s 1000",
+            "length": 610,
+            "name": "0_membench-1K-RO-S",
+            "processors": [
+                {
+                    "processingUnits": 1,
+                    "processor": "A53"
+                }
+            ]
+        },
+        {
+            "assignmentIndex": 0,
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU3_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -s 1000",
+            "length": 89,
+            "name": "1_membench-1K-RO-S",
+            "processors": [
+                {
+                    "processingUnits": 1,
+                    "processor": "A53"
+                }
+            ]
+        },
+        {
+            "assignmentIndex": 0,
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU4_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -s 1000",
+            "length": 57,
+            "name": "2_membench-1K-RO-S",
+            "processors": [
+                {
+                    "processingUnits": 1,
+                    "processor": "A72"
+                }
+            ]
+        }
+    ]
+}

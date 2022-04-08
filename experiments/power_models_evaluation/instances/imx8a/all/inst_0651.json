@@ -1,7 +1,7 @@
 {
     "assignmentCharacteristics": [
         {
-            "command": "/root/thermobench/build/benchmarks/mem/membench -t1 -f -r -w -s 1000",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU0_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -r -w -s 1000",
             "resourceAssignnents": [
                 {
                     "intercept": 0.23,
@@ -18,7 +18,7 @@
             "task": "0_membench-1K-RW-R"
         },
         {
-            "command": "./idctrn-4M -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done\" ./idctrn-4M -v0 -c1 -i100",
             "resourceAssignnents": [
                 {
                     "intercept": 1.22,
@@ -35,7 +35,7 @@
             "task": "1_idctrn-4M"
         },
         {
-            "command": "./iirflt-4K -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU4_work_done\" ./iirflt-4K -v0 -c1 -i100",
             "resourceAssignnents": [
                 {
                     "intercept": 1.35,
@@ -52,7 +52,7 @@
             "task": "2_iirflt-4K"
         },
         {
-            "command": "./puwmod-4K -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done\" ./puwmod-4K -v0 -c1 -i100",
             "resourceAssignnents": [
                 {
                     "intercept": 1.2,
@@ -130,7 +130,7 @@
     "tasks": [
         {
             "assignmentIndex": 0,
-            "command": "/root/thermobench/build/benchmarks/mem/membench -t1 -f -r -w -s 1000",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU0_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -r -w -s 1000",
             "length": 785,
             "name": "0_membench-1K-RW-R",
             "processors": [
@@ -142,7 +142,7 @@
         },
         {
             "assignmentIndex": 0,
-            "command": "./idctrn-4M -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done\" ./idctrn-4M -v0 -c1 -i100",
             "length": 131,
             "name": "1_idctrn-4M",
             "processors": [
@@ -154,7 +154,7 @@
         },
         {
             "assignmentIndex": 0,
-            "command": "./iirflt-4K -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU4_work_done\" ./iirflt-4K -v0 -c1 -i100",
             "length": 172,
             "name": "2_iirflt-4K",
             "processors": [
@@ -166,7 +166,7 @@
         },
         {
             "assignmentIndex": 0,
-            "command": "./puwmod-4K -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done\" ./puwmod-4K -v0 -c1 -i100",
             "length": 883,
             "name": "3_puwmod-4K",
             "processors": [

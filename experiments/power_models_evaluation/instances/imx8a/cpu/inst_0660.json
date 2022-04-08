@@ -1,7 +1,7 @@
 {
     "assignmentCharacteristics": [
         {
-            "command": "./a2time-4M -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU0_work_done\" ./a2time-4M -v0 -c1 -i100",
             "resourceAssignnents": [
                 {
                     "intercept": 1.39,
@@ -18,7 +18,7 @@
             "task": "0_a2time-4M"
         },
         {
-            "command": "./pntrch-4M -v0 -c1 -i1",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU3_work_done\" ./pntrch-4M -v0 -c1 -i1",
             "resourceAssignnents": [
                 {
                     "intercept": 0.54,
@@ -35,7 +35,7 @@
             "task": "1_pntrch-4M"
         },
         {
-            "command": "./matrix-4K -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU4_work_done\" ./matrix-4K -v0 -c1 -i100",
             "resourceAssignnents": [
                 {
                     "intercept": 1.78,
@@ -52,7 +52,7 @@
             "task": "2_matrix-4K"
         },
         {
-            "command": "./tblook-4M -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done\" ./tblook-4M -v0 -c1 -i100",
             "resourceAssignnents": [
                 {
                     "intercept": 2.73,
@@ -130,7 +130,7 @@
     "tasks": [
         {
             "assignmentIndex": 0,
-            "command": "./a2time-4M -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU0_work_done\" ./a2time-4M -v0 -c1 -i100",
             "length": 845,
             "name": "0_a2time-4M",
             "processors": [
@@ -142,7 +142,7 @@
         },
         {
             "assignmentIndex": 0,
-            "command": "./pntrch-4M -v0 -c1 -i1",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU3_work_done\" ./pntrch-4M -v0 -c1 -i1",
             "length": 678,
             "name": "1_pntrch-4M",
             "processors": [
@@ -154,7 +154,7 @@
         },
         {
             "assignmentIndex": 0,
-            "command": "./matrix-4K -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU4_work_done\" ./matrix-4K -v0 -c1 -i100",
             "length": 136,
             "name": "2_matrix-4K",
             "processors": [
@@ -166,7 +166,7 @@
         },
         {
             "assignmentIndex": 0,
-            "command": "./tblook-4M -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done\" ./tblook-4M -v0 -c1 -i100",
             "length": 919,
             "name": "3_tblook-4M",
             "processors": [

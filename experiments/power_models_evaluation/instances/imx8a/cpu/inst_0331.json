@@ -1,7 +1,7 @@
 {
     "assignmentCharacteristics": [
         {
-            "command": "./bitmnp-4M -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done\" ./bitmnp-4M -v0 -c1 -i100",
             "resourceAssignnents": [
                 {
                     "intercept": 1.22,
@@ -18,7 +18,7 @@
             "task": "0_bitmnp-4M"
         },
         {
-            "command": "./tblook-4M -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU2_work_done\" ./tblook-4M -v0 -c1 -i100",
             "resourceAssignnents": [
                 {
                     "intercept": 1.33,
@@ -35,7 +35,7 @@
             "task": "1_tblook-4M"
         },
         {
-            "command": "./a2time-4M -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU3_work_done\" ./a2time-4M -v0 -c1 -i100",
             "resourceAssignnents": [
                 {
                     "intercept": 1.39,
@@ -52,7 +52,7 @@
             "task": "2_a2time-4M"
         },
         {
-            "command": "./bitmnp-4M -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done\" ./bitmnp-4M -v0 -c1 -i100",
             "resourceAssignnents": [
                 {
                     "intercept": 1.97,
@@ -130,7 +130,7 @@
     "tasks": [
         {
             "assignmentIndex": 0,
-            "command": "./bitmnp-4M -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done\" ./bitmnp-4M -v0 -c1 -i100",
             "length": 374,
             "name": "0_bitmnp-4M",
             "processors": [
@@ -142,7 +142,7 @@
         },
         {
             "assignmentIndex": 0,
-            "command": "./tblook-4M -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU2_work_done\" ./tblook-4M -v0 -c1 -i100",
             "length": 338,
             "name": "1_tblook-4M",
             "processors": [
@@ -154,7 +154,7 @@
         },
         {
             "assignmentIndex": 0,
-            "command": "./a2time-4M -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU3_work_done\" ./a2time-4M -v0 -c1 -i100",
             "length": 242,
             "name": "2_a2time-4M",
             "processors": [
@@ -166,7 +166,7 @@
         },
         {
             "assignmentIndex": 0,
-            "command": "./bitmnp-4M -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done\" ./bitmnp-4M -v0 -c1 -i100",
             "length": 737,
             "name": "3_bitmnp-4M",
             "processors": [

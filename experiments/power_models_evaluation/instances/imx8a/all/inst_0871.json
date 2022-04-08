@@ -1,7 +1,7 @@
 {
     "assignmentCharacteristics": [
         {
-            "command": "./iirflt-4K -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU0_work_done\" ./iirflt-4K -v0 -c1 -i100",
             "resourceAssignnents": [
                 {
                     "intercept": 0.3,
@@ -18,7 +18,7 @@
             "task": "0_iirflt-4K"
         },
         {
-            "command": "/root/thermobench/build/benchmarks/mem/membench -t1 -f -w -s 1000000",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -w -s 1000000",
             "resourceAssignnents": [
                 {
                     "intercept": 0.95,
@@ -35,7 +35,7 @@
             "task": "1_membench-1M-RW-S"
         },
         {
-            "command": "./rspeed-4M -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done\" ./rspeed-4M -v0 -c1 -i100",
             "resourceAssignnents": [
                 {
                     "intercept": 3.69,
@@ -106,7 +106,7 @@
     "tasks": [
         {
             "assignmentIndex": 0,
-            "command": "./iirflt-4K -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU0_work_done\" ./iirflt-4K -v0 -c1 -i100",
             "length": 604,
             "name": "0_iirflt-4K",
             "processors": [
@@ -118,7 +118,7 @@
         },
         {
             "assignmentIndex": 0,
-            "command": "/root/thermobench/build/benchmarks/mem/membench -t1 -f -w -s 1000000",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -w -s 1000000",
             "length": 912,
             "name": "1_membench-1M-RW-S",
             "processors": [
@@ -130,7 +130,7 @@
         },
         {
             "assignmentIndex": 0,
-            "command": "./rspeed-4M -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done\" ./rspeed-4M -v0 -c1 -i100",
             "length": 939,
             "name": "2_rspeed-4M",
             "processors": [

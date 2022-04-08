@@ -1,7 +1,7 @@
 {
     "assignmentCharacteristics": [
         {
-            "command": "./rspeed-4M -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU0_work_done\" ./rspeed-4M -v0 -c1 -i100",
             "resourceAssignnents": [
                 {
                     "intercept": 1.68,
@@ -18,7 +18,7 @@
             "task": "0_rspeed-4M"
         },
         {
-            "command": "/root/thermobench/build/benchmarks/mem/membench -t1 -f -r -w -s 4000000",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -r -w -s 4000000",
             "resourceAssignnents": [
                 {
                     "intercept": 1.61,
@@ -35,7 +35,7 @@
             "task": "1_membench-4M-RW-R"
         },
         {
-            "command": "/root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer -f /root/thermobench/benchmarks/tinyrenderer/obj/boggie/*.obj",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU3_work_done\" /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer -f /root/thermobench/benchmarks/tinyrenderer/obj/boggie/*.obj",
             "resourceAssignnents": [
                 {
                     "intercept": 1.28,
@@ -52,7 +52,7 @@
             "task": "2_tinyrenderer-boggie"
         },
         {
-            "command": "/root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer -f /root/thermobench/benchmarks/tinyrenderer/obj/boggie/*.obj",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done\" /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer -f /root/thermobench/benchmarks/tinyrenderer/obj/boggie/*.obj",
             "resourceAssignnents": [
                 {
                     "intercept": 2.28,
@@ -130,7 +130,7 @@
     "tasks": [
         {
             "assignmentIndex": 0,
-            "command": "./rspeed-4M -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU0_work_done\" ./rspeed-4M -v0 -c1 -i100",
             "length": 226,
             "name": "0_rspeed-4M",
             "processors": [
@@ -142,7 +142,7 @@
         },
         {
             "assignmentIndex": 0,
-            "command": "/root/thermobench/build/benchmarks/mem/membench -t1 -f -r -w -s 4000000",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -r -w -s 4000000",
             "length": 988,
             "name": "1_membench-4M-RW-R",
             "processors": [
@@ -154,7 +154,7 @@
         },
         {
             "assignmentIndex": 0,
-            "command": "/root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer -f /root/thermobench/benchmarks/tinyrenderer/obj/boggie/*.obj",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU3_work_done\" /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer -f /root/thermobench/benchmarks/tinyrenderer/obj/boggie/*.obj",
             "length": 966,
             "name": "2_tinyrenderer-boggie",
             "processors": [
@@ -166,7 +166,7 @@
         },
         {
             "assignmentIndex": 0,
-            "command": "/root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer -f /root/thermobench/benchmarks/tinyrenderer/obj/boggie/*.obj",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done\" /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer -f /root/thermobench/benchmarks/tinyrenderer/obj/boggie/*.obj",
             "length": 763,
             "name": "3_tinyrenderer-boggie",
             "processors": [

@@ -1,0 +1,108 @@
+{
+    "assignmentCharacteristics": [
+        {
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU4_work_done\" ./idctrn-4M -v0 -c1 -i100",
+            "resourceAssignnents": [
+                {
+                    "intercept": 2.4,
+                    "length": 469,
+                    "processors": [
+                        {
+                            "processingUnits": 1,
+                            "processor": "A72"
+                        }
+                    ],
+                    "slope": 1.74
+                }
+            ],
+            "task": "0_idctrn-4M"
+        },
+        {
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -s 4000000",
+            "resourceAssignnents": [
+                {
+                    "intercept": 2.63,
+                    "length": 668,
+                    "processors": [
+                        {
+                            "processingUnits": 1,
+                            "processor": "A72"
+                        }
+                    ],
+                    "slope": 0.28
+                }
+            ],
+            "task": "1_membench-4M-RO-S"
+        }
+    ],
+    "environment": {
+        "majorFrameLength": 1000,
+        "problemVersion": 1,
+        "processors": [
+            {
+                "name": "A53",
+                "processingUnits": 4,
+                "type": "main_processor"
+            },
+            {
+                "name": "A72",
+                "processingUnits": 2,
+                "type": "main_processor"
+            }
+        ],
+        "scPart": 1.0
+    },
+    "solution": {
+        "feasible": true,
+        "solutionTime": 0,
+        "solverMetadata": null,
+        "solverName": "RandomGenerator",
+        "windows": [
+            {
+                "length": 1000,
+                "tasks": [
+                    {
+                        "length": 469,
+                        "processingUnit": 0,
+                        "processor": "A72",
+                        "start": 0,
+                        "task": "0_idctrn-4M"
+                    },
+                    {
+                        "length": 668,
+                        "processingUnit": 1,
+                        "processor": "A72",
+                        "start": 0,
+                        "task": "1_membench-4M-RO-S"
+                    }
+                ]
+            }
+        ]
+    },
+    "tasks": [
+        {
+            "assignmentIndex": 0,
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU4_work_done\" ./idctrn-4M -v0 -c1 -i100",
+            "length": 469,
+            "name": "0_idctrn-4M",
+            "processors": [
+                {
+                    "processingUnits": 1,
+                    "processor": "A72"
+                }
+            ]
+        },
+        {
+            "assignmentIndex": 0,
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -s 4000000",
+            "length": 668,
+            "name": "1_membench-4M-RO-S",
+            "processors": [
+                {
+                    "processingUnits": 1,
+                    "processor": "A72"
+                }
+            ]
+        }
+    ]
+}

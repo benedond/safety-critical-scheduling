@@ -1,0 +1,180 @@
+{
+    "assignmentCharacteristics": [
+        {
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU0_work_done\" ./pntrch-4M -v0 -c1 -i1",
+            "resourceAssignnents": [
+                {
+                    "intercept": 0.38,
+                    "length": 994,
+                    "processors": [
+                        {
+                            "processingUnits": 1,
+                            "processor": "A53"
+                        }
+                    ],
+                    "slope": 0.34
+                }
+            ],
+            "task": "0_pntrch-4M"
+        },
+        {
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done\" ./bitmnp-4K -v0 -c1 -i100",
+            "resourceAssignnents": [
+                {
+                    "intercept": 0.23,
+                    "length": 273,
+                    "processors": [
+                        {
+                            "processingUnits": 1,
+                            "processor": "A53"
+                        }
+                    ],
+                    "slope": 0.21
+                }
+            ],
+            "task": "1_bitmnp-4K"
+        },
+        {
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU2_work_done\" ./puwmod-4M -v0 -c1 -i100",
+            "resourceAssignnents": [
+                {
+                    "intercept": 1.11,
+                    "length": 446,
+                    "processors": [
+                        {
+                            "processingUnits": 1,
+                            "processor": "A53"
+                        }
+                    ],
+                    "slope": 0.32
+                }
+            ],
+            "task": "2_puwmod-4M"
+        },
+        {
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done\" ./pntrch-4M -v0 -c1 -i1",
+            "resourceAssignnents": [
+                {
+                    "intercept": 1.72,
+                    "length": 667,
+                    "processors": [
+                        {
+                            "processingUnits": 1,
+                            "processor": "A72"
+                        }
+                    ],
+                    "slope": 1.59
+                }
+            ],
+            "task": "3_pntrch-4M"
+        }
+    ],
+    "environment": {
+        "majorFrameLength": 1000,
+        "problemVersion": 1,
+        "processors": [
+            {
+                "name": "A53",
+                "processingUnits": 4,
+                "type": "main_processor"
+            },
+            {
+                "name": "A72",
+                "processingUnits": 2,
+                "type": "main_processor"
+            }
+        ],
+        "scPart": 1.0
+    },
+    "solution": {
+        "feasible": true,
+        "solutionTime": 0,
+        "solverMetadata": null,
+        "solverName": "RandomGenerator",
+        "windows": [
+            {
+                "length": 1000,
+                "tasks": [
+                    {
+                        "length": 994,
+                        "processingUnit": 0,
+                        "processor": "A53",
+                        "start": 0,
+                        "task": "0_pntrch-4M"
+                    },
+                    {
+                        "length": 273,
+                        "processingUnit": 1,
+                        "processor": "A53",
+                        "start": 0,
+                        "task": "1_bitmnp-4K"
+                    },
+                    {
+                        "length": 446,
+                        "processingUnit": 2,
+                        "processor": "A53",
+                        "start": 0,
+                        "task": "2_puwmod-4M"
+                    },
+                    {
+                        "length": 667,
+                        "processingUnit": 1,
+                        "processor": "A72",
+                        "start": 0,
+                        "task": "3_pntrch-4M"
+                    }
+                ]
+            }
+        ]
+    },
+    "tasks": [
+        {
+            "assignmentIndex": 0,
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU0_work_done\" ./pntrch-4M -v0 -c1 -i1",
+            "length": 994,
+            "name": "0_pntrch-4M",
+            "processors": [
+                {
+                    "processingUnits": 1,
+                    "processor": "A53"
+                }
+            ]
+        },
+        {
+            "assignmentIndex": 0,
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done\" ./bitmnp-4K -v0 -c1 -i100",
+            "length": 273,
+            "name": "1_bitmnp-4K",
+            "processors": [
+                {
+                    "processingUnits": 1,
+                    "processor": "A53"
+                }
+            ]
+        },
+        {
+            "assignmentIndex": 0,
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU2_work_done\" ./puwmod-4M -v0 -c1 -i100",
+            "length": 446,
+            "name": "2_puwmod-4M",
+            "processors": [
+                {
+                    "processingUnits": 1,
+                    "processor": "A53"
+                }
+            ]
+        },
+        {
+            "assignmentIndex": 0,
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done\" ./pntrch-4M -v0 -c1 -i1",
+            "length": 667,
+            "name": "3_pntrch-4M",
+            "processors": [
+                {
+                    "processingUnits": 1,
+                    "processor": "A72"
+                }
+            ]
+        }
+    ]
+}

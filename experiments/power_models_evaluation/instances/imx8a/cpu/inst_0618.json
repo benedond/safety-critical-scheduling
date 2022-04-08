@@ -1,7 +1,7 @@
 {
     "assignmentCharacteristics": [
         {
-            "command": "./canrdr-4M -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done\" ./canrdr-4M -v0 -c1 -i100",
             "resourceAssignnents": [
                 {
                     "intercept": 1.47,
@@ -18,7 +18,7 @@
             "task": "0_canrdr-4M"
         },
         {
-            "command": "./rspeed-4K -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU2_work_done\" ./rspeed-4K -v0 -c1 -i100",
             "resourceAssignnents": [
                 {
                     "intercept": 0.36,
@@ -35,7 +35,7 @@
             "task": "1_rspeed-4K"
         },
         {
-            "command": "./aifirf-4K -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU3_work_done\" ./aifirf-4K -v0 -c1 -i100",
             "resourceAssignnents": [
                 {
                     "intercept": 0.23,
@@ -52,7 +52,7 @@
             "task": "2_aifirf-4K"
         },
         {
-            "command": "./tblook-4M -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done\" ./tblook-4M -v0 -c1 -i100",
             "resourceAssignnents": [
                 {
                     "intercept": 2.73,
@@ -130,7 +130,7 @@
     "tasks": [
         {
             "assignmentIndex": 0,
-            "command": "./canrdr-4M -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done\" ./canrdr-4M -v0 -c1 -i100",
             "length": 561,
             "name": "0_canrdr-4M",
             "processors": [
@@ -142,7 +142,7 @@
         },
         {
             "assignmentIndex": 0,
-            "command": "./rspeed-4K -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU2_work_done\" ./rspeed-4K -v0 -c1 -i100",
             "length": 916,
             "name": "1_rspeed-4K",
             "processors": [
@@ -154,7 +154,7 @@
         },
         {
             "assignmentIndex": 0,
-            "command": "./aifirf-4K -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU3_work_done\" ./aifirf-4K -v0 -c1 -i100",
             "length": 122,
             "name": "2_aifirf-4K",
             "processors": [
@@ -166,7 +166,7 @@
         },
         {
             "assignmentIndex": 0,
-            "command": "./tblook-4M -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done\" ./tblook-4M -v0 -c1 -i100",
             "length": 65,
             "name": "3_tblook-4M",
             "processors": [

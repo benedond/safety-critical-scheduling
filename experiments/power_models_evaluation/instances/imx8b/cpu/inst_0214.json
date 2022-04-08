@@ -1,0 +1,216 @@
+{
+    "assignmentCharacteristics": [
+        {
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU0_work_done\" ./iirflt-4M -v0 -c1 -i100",
+            "resourceAssignnents": [
+                {
+                    "intercept": 0.96,
+                    "length": 558,
+                    "processors": [
+                        {
+                            "processingUnits": 1,
+                            "processor": "A53"
+                        }
+                    ],
+                    "slope": 0.29
+                }
+            ],
+            "task": "0_iirflt-4M"
+        },
+        {
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done\" ./tblook-4M -v0 -c1 -i100",
+            "resourceAssignnents": [
+                {
+                    "intercept": 1.01,
+                    "length": 160,
+                    "processors": [
+                        {
+                            "processingUnits": 1,
+                            "processor": "A53"
+                        }
+                    ],
+                    "slope": 0.25
+                }
+            ],
+            "task": "1_tblook-4M"
+        },
+        {
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU2_work_done\" ./iirflt-4K -v0 -c1 -i100",
+            "resourceAssignnents": [
+                {
+                    "intercept": 0.27,
+                    "length": 719,
+                    "processors": [
+                        {
+                            "processingUnits": 1,
+                            "processor": "A53"
+                        }
+                    ],
+                    "slope": 0.22
+                }
+            ],
+            "task": "2_iirflt-4K"
+        },
+        {
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU4_work_done\" ./iirflt-4M -v0 -c1 -i100",
+            "resourceAssignnents": [
+                {
+                    "intercept": 2.33,
+                    "length": 601,
+                    "processors": [
+                        {
+                            "processingUnits": 1,
+                            "processor": "A72"
+                        }
+                    ],
+                    "slope": 1.55
+                }
+            ],
+            "task": "3_iirflt-4M"
+        },
+        {
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done\" ./canrdr-4M -v0 -c1 -i100",
+            "resourceAssignnents": [
+                {
+                    "intercept": 2.32,
+                    "length": 30,
+                    "processors": [
+                        {
+                            "processingUnits": 1,
+                            "processor": "A72"
+                        }
+                    ],
+                    "slope": 1.33
+                }
+            ],
+            "task": "4_canrdr-4M"
+        }
+    ],
+    "environment": {
+        "majorFrameLength": 1000,
+        "problemVersion": 1,
+        "processors": [
+            {
+                "name": "A53",
+                "processingUnits": 4,
+                "type": "main_processor"
+            },
+            {
+                "name": "A72",
+                "processingUnits": 2,
+                "type": "main_processor"
+            }
+        ],
+        "scPart": 1.0
+    },
+    "solution": {
+        "feasible": true,
+        "solutionTime": 0,
+        "solverMetadata": null,
+        "solverName": "RandomGenerator",
+        "windows": [
+            {
+                "length": 1000,
+                "tasks": [
+                    {
+                        "length": 558,
+                        "processingUnit": 0,
+                        "processor": "A53",
+                        "start": 0,
+                        "task": "0_iirflt-4M"
+                    },
+                    {
+                        "length": 160,
+                        "processingUnit": 1,
+                        "processor": "A53",
+                        "start": 0,
+                        "task": "1_tblook-4M"
+                    },
+                    {
+                        "length": 719,
+                        "processingUnit": 2,
+                        "processor": "A53",
+                        "start": 0,
+                        "task": "2_iirflt-4K"
+                    },
+                    {
+                        "length": 601,
+                        "processingUnit": 0,
+                        "processor": "A72",
+                        "start": 0,
+                        "task": "3_iirflt-4M"
+                    },
+                    {
+                        "length": 30,
+                        "processingUnit": 1,
+                        "processor": "A72",
+                        "start": 0,
+                        "task": "4_canrdr-4M"
+                    }
+                ]
+            }
+        ]
+    },
+    "tasks": [
+        {
+            "assignmentIndex": 0,
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU0_work_done\" ./iirflt-4M -v0 -c1 -i100",
+            "length": 558,
+            "name": "0_iirflt-4M",
+            "processors": [
+                {
+                    "processingUnits": 1,
+                    "processor": "A53"
+                }
+            ]
+        },
+        {
+            "assignmentIndex": 0,
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done\" ./tblook-4M -v0 -c1 -i100",
+            "length": 160,
+            "name": "1_tblook-4M",
+            "processors": [
+                {
+                    "processingUnits": 1,
+                    "processor": "A53"
+                }
+            ]
+        },
+        {
+            "assignmentIndex": 0,
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU2_work_done\" ./iirflt-4K -v0 -c1 -i100",
+            "length": 719,
+            "name": "2_iirflt-4K",
+            "processors": [
+                {
+                    "processingUnits": 1,
+                    "processor": "A53"
+                }
+            ]
+        },
+        {
+            "assignmentIndex": 0,
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU4_work_done\" ./iirflt-4M -v0 -c1 -i100",
+            "length": 601,
+            "name": "3_iirflt-4M",
+            "processors": [
+                {
+                    "processingUnits": 1,
+                    "processor": "A72"
+                }
+            ]
+        },
+        {
+            "assignmentIndex": 0,
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done\" ./canrdr-4M -v0 -c1 -i100",
+            "length": 30,
+            "name": "4_canrdr-4M",
+            "processors": [
+                {
+                    "processingUnits": 1,
+                    "processor": "A72"
+                }
+            ]
+        }
+    ]
+}

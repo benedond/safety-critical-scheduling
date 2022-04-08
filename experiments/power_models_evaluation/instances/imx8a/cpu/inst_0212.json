@@ -1,7 +1,7 @@
 {
     "assignmentCharacteristics": [
         {
-            "command": "./pntrch-4K -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done\" ./pntrch-4K -v0 -c1 -i100",
             "resourceAssignnents": [
                 {
                     "intercept": 0.26,
@@ -18,7 +18,7 @@
             "task": "0_pntrch-4K"
         },
         {
-            "command": "./idctrn-4M -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU2_work_done\" ./idctrn-4M -v0 -c1 -i100",
             "resourceAssignnents": [
                 {
                     "intercept": 1.22,
@@ -35,7 +35,7 @@
             "task": "1_idctrn-4M"
         },
         {
-            "command": "./a2time-4K -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU4_work_done\" ./a2time-4K -v0 -c1 -i100",
             "resourceAssignnents": [
                 {
                     "intercept": 1.02,
@@ -106,7 +106,7 @@
     "tasks": [
         {
             "assignmentIndex": 0,
-            "command": "./pntrch-4K -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done\" ./pntrch-4K -v0 -c1 -i100",
             "length": 899,
             "name": "0_pntrch-4K",
             "processors": [
@@ -118,7 +118,7 @@
         },
         {
             "assignmentIndex": 0,
-            "command": "./idctrn-4M -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU2_work_done\" ./idctrn-4M -v0 -c1 -i100",
             "length": 16,
             "name": "1_idctrn-4M",
             "processors": [
@@ -130,7 +130,7 @@
         },
         {
             "assignmentIndex": 0,
-            "command": "./a2time-4K -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU4_work_done\" ./a2time-4K -v0 -c1 -i100",
             "length": 505,
             "name": "2_a2time-4K",
             "processors": [

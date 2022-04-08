@@ -1,7 +1,7 @@
 {
     "assignmentCharacteristics": [
         {
-            "command": "./canrdr-4K -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU0_work_done\" ./canrdr-4K -v0 -c1 -i100",
             "resourceAssignnents": [
                 {
                     "intercept": 0.33,
@@ -18,7 +18,7 @@
             "task": "0_canrdr-4K"
         },
         {
-            "command": "./ttsprk-4K -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done\" ./ttsprk-4K -v0 -c1 -i100",
             "resourceAssignnents": [
                 {
                     "intercept": 0.37,
@@ -35,7 +35,7 @@
             "task": "1_ttsprk-4K"
         },
         {
-            "command": "./rspeed-4M -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU2_work_done\" ./rspeed-4M -v0 -c1 -i100",
             "resourceAssignnents": [
                 {
                     "intercept": 1.68,
@@ -52,7 +52,7 @@
             "task": "2_rspeed-4M"
         },
         {
-            "command": "./ttsprk-4K -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU3_work_done\" ./ttsprk-4K -v0 -c1 -i100",
             "resourceAssignnents": [
                 {
                     "intercept": 0.37,
@@ -69,7 +69,7 @@
             "task": "3_ttsprk-4K"
         },
         {
-            "command": "/root/thermobench/build/benchmarks/mem/membench -t1 -f -w -s 4000000",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU4_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -w -s 4000000",
             "resourceAssignnents": [
                 {
                     "intercept": 3.21,
@@ -86,7 +86,7 @@
             "task": "4_membench-4M-RW-S"
         },
         {
-            "command": "./tblook-4K -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done\" ./tblook-4K -v0 -c1 -i100",
             "resourceAssignnents": [
                 {
                     "intercept": 1.51,
@@ -178,7 +178,7 @@
     "tasks": [
         {
             "assignmentIndex": 0,
-            "command": "./canrdr-4K -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU0_work_done\" ./canrdr-4K -v0 -c1 -i100",
             "length": 201,
             "name": "0_canrdr-4K",
             "processors": [
@@ -190,7 +190,7 @@
         },
         {
             "assignmentIndex": 0,
-            "command": "./ttsprk-4K -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done\" ./ttsprk-4K -v0 -c1 -i100",
             "length": 340,
             "name": "1_ttsprk-4K",
             "processors": [
@@ -202,7 +202,7 @@
         },
         {
             "assignmentIndex": 0,
-            "command": "./rspeed-4M -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU2_work_done\" ./rspeed-4M -v0 -c1 -i100",
             "length": 814,
             "name": "2_rspeed-4M",
             "processors": [
@@ -214,7 +214,7 @@
         },
         {
             "assignmentIndex": 0,
-            "command": "./ttsprk-4K -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU3_work_done\" ./ttsprk-4K -v0 -c1 -i100",
             "length": 883,
             "name": "3_ttsprk-4K",
             "processors": [
@@ -226,7 +226,7 @@
         },
         {
             "assignmentIndex": 0,
-            "command": "/root/thermobench/build/benchmarks/mem/membench -t1 -f -w -s 4000000",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU4_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -w -s 4000000",
             "length": 363,
             "name": "4_membench-4M-RW-S",
             "processors": [
@@ -238,7 +238,7 @@
         },
         {
             "assignmentIndex": 0,
-            "command": "./tblook-4K -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done\" ./tblook-4K -v0 -c1 -i100",
             "length": 363,
             "name": "5_tblook-4K",
             "processors": [

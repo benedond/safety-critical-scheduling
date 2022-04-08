@@ -1,7 +1,7 @@
 {
     "assignmentCharacteristics": [
         {
-            "command": "/root/thermobench/build/benchmarks/mem/membench -t1 -f -r -s 1000000",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU2_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -r -s 1000000",
             "resourceAssignnents": [
                 {
                     "intercept": 0.72,
@@ -18,7 +18,7 @@
             "task": "0_membench-1M-RO-R"
         },
         {
-            "command": "./tblook-4M -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU4_work_done\" ./tblook-4M -v0 -c1 -i100",
             "resourceAssignnents": [
                 {
                     "intercept": 2.73,
@@ -35,7 +35,7 @@
             "task": "1_tblook-4M"
         },
         {
-            "command": "./aifirf-4K -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done\" ./aifirf-4K -v0 -c1 -i100",
             "resourceAssignnents": [
                 {
                     "intercept": 1.4,
@@ -106,7 +106,7 @@
     "tasks": [
         {
             "assignmentIndex": 0,
-            "command": "/root/thermobench/build/benchmarks/mem/membench -t1 -f -r -s 1000000",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU2_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -r -s 1000000",
             "length": 634,
             "name": "0_membench-1M-RO-R",
             "processors": [
@@ -118,7 +118,7 @@
         },
         {
             "assignmentIndex": 0,
-            "command": "./tblook-4M -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU4_work_done\" ./tblook-4M -v0 -c1 -i100",
             "length": 506,
             "name": "1_tblook-4M",
             "processors": [
@@ -130,7 +130,7 @@
         },
         {
             "assignmentIndex": 0,
-            "command": "./aifirf-4K -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done\" ./aifirf-4K -v0 -c1 -i100",
             "length": 899,
             "name": "2_aifirf-4K",
             "processors": [

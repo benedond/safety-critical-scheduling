@@ -1,7 +1,7 @@
 {
     "assignmentCharacteristics": [
         {
-            "command": "./ttsprk-4M -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done\" ./ttsprk-4M -v0 -c1 -i100",
             "resourceAssignnents": [
                 {
                     "intercept": 0.32,
@@ -18,7 +18,7 @@
             "task": "0_ttsprk-4M"
         },
         {
-            "command": "./tblook-4K -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU3_work_done\" ./tblook-4K -v0 -c1 -i100",
             "resourceAssignnents": [
                 {
                     "intercept": 0.27,
@@ -35,7 +35,7 @@
             "task": "1_tblook-4K"
         },
         {
-            "command": "./pntrch-4M -v0 -c1 -i1",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done\" ./pntrch-4M -v0 -c1 -i1",
             "resourceAssignnents": [
                 {
                     "intercept": 2.01,
@@ -106,7 +106,7 @@
     "tasks": [
         {
             "assignmentIndex": 0,
-            "command": "./ttsprk-4M -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done\" ./ttsprk-4M -v0 -c1 -i100",
             "length": 411,
             "name": "0_ttsprk-4M",
             "processors": [
@@ -118,7 +118,7 @@
         },
         {
             "assignmentIndex": 0,
-            "command": "./tblook-4K -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU3_work_done\" ./tblook-4K -v0 -c1 -i100",
             "length": 212,
             "name": "1_tblook-4K",
             "processors": [
@@ -130,7 +130,7 @@
         },
         {
             "assignmentIndex": 0,
-            "command": "./pntrch-4M -v0 -c1 -i1",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done\" ./pntrch-4M -v0 -c1 -i1",
             "length": 103,
             "name": "2_pntrch-4M",
             "processors": [

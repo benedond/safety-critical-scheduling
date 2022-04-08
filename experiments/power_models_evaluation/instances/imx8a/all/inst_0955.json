@@ -1,7 +1,7 @@
 {
     "assignmentCharacteristics": [
         {
-            "command": "./bitmnp-4K -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done\" ./bitmnp-4K -v0 -c1 -i100",
             "resourceAssignnents": [
                 {
                     "intercept": 0.23,
@@ -18,7 +18,7 @@
             "task": "0_bitmnp-4K"
         },
         {
-            "command": "./idctrn-4M -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU2_work_done\" ./idctrn-4M -v0 -c1 -i100",
             "resourceAssignnents": [
                 {
                     "intercept": 1.22,
@@ -35,7 +35,7 @@
             "task": "1_idctrn-4M"
         },
         {
-            "command": "./iirflt-4M -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU3_work_done\" ./iirflt-4M -v0 -c1 -i100",
             "resourceAssignnents": [
                 {
                     "intercept": 1.23,
@@ -52,7 +52,7 @@
             "task": "2_iirflt-4M"
         },
         {
-            "command": "/root/thermobench/build/benchmarks/mem/membench -t1 -f -w -s 1000",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU4_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -w -s 1000",
             "resourceAssignnents": [
                 {
                     "intercept": 0.84,
@@ -69,7 +69,7 @@
             "task": "3_membench-1K-RW-S"
         },
         {
-            "command": "/root/thermobench/build/benchmarks/mem/membench -t1 -f -r -w -s 1000000",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -r -w -s 1000000",
             "resourceAssignnents": [
                 {
                     "intercept": 2.07,
@@ -154,7 +154,7 @@
     "tasks": [
         {
             "assignmentIndex": 0,
-            "command": "./bitmnp-4K -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done\" ./bitmnp-4K -v0 -c1 -i100",
             "length": 372,
             "name": "0_bitmnp-4K",
             "processors": [
@@ -166,7 +166,7 @@
         },
         {
             "assignmentIndex": 0,
-            "command": "./idctrn-4M -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU2_work_done\" ./idctrn-4M -v0 -c1 -i100",
             "length": 432,
             "name": "1_idctrn-4M",
             "processors": [
@@ -178,7 +178,7 @@
         },
         {
             "assignmentIndex": 0,
-            "command": "./iirflt-4M -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU3_work_done\" ./iirflt-4M -v0 -c1 -i100",
             "length": 150,
             "name": "2_iirflt-4M",
             "processors": [
@@ -190,7 +190,7 @@
         },
         {
             "assignmentIndex": 0,
-            "command": "/root/thermobench/build/benchmarks/mem/membench -t1 -f -w -s 1000",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU4_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -w -s 1000",
             "length": 422,
             "name": "3_membench-1K-RW-S",
             "processors": [
@@ -202,7 +202,7 @@
         },
         {
             "assignmentIndex": 0,
-            "command": "/root/thermobench/build/benchmarks/mem/membench -t1 -f -r -w -s 1000000",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -r -w -s 1000000",
             "length": 224,
             "name": "4_membench-1M-RW-R",
             "processors": [

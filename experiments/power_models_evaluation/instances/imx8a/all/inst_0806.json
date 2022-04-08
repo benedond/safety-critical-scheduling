@@ -1,7 +1,7 @@
 {
     "assignmentCharacteristics": [
         {
-            "command": "./puwmod-4M -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU0_work_done\" ./puwmod-4M -v0 -c1 -i100",
             "resourceAssignnents": [
                 {
                     "intercept": 1.4,
@@ -18,7 +18,7 @@
             "task": "0_puwmod-4M"
         },
         {
-            "command": "/root/thermobench/build/benchmarks/mem/membench -t1 -f -r -s 1000",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -r -s 1000",
             "resourceAssignnents": [
                 {
                     "intercept": 0.21,
@@ -35,7 +35,7 @@
             "task": "1_membench-1K-RO-R"
         },
         {
-            "command": "./ttsprk-4K -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU2_work_done\" ./ttsprk-4K -v0 -c1 -i100",
             "resourceAssignnents": [
                 {
                     "intercept": 0.37,
@@ -52,7 +52,7 @@
             "task": "2_ttsprk-4K"
         },
         {
-            "command": "./canrdr-4M -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU3_work_done\" ./canrdr-4M -v0 -c1 -i100",
             "resourceAssignnents": [
                 {
                     "intercept": 1.47,
@@ -69,7 +69,7 @@
             "task": "3_canrdr-4M"
         },
         {
-            "command": "./tblook-4M -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU4_work_done\" ./tblook-4M -v0 -c1 -i100",
             "resourceAssignnents": [
                 {
                     "intercept": 2.73,
@@ -154,7 +154,7 @@
     "tasks": [
         {
             "assignmentIndex": 0,
-            "command": "./puwmod-4M -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU0_work_done\" ./puwmod-4M -v0 -c1 -i100",
             "length": 151,
             "name": "0_puwmod-4M",
             "processors": [
@@ -166,7 +166,7 @@
         },
         {
             "assignmentIndex": 0,
-            "command": "/root/thermobench/build/benchmarks/mem/membench -t1 -f -r -s 1000",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -r -s 1000",
             "length": 9,
             "name": "1_membench-1K-RO-R",
             "processors": [
@@ -178,7 +178,7 @@
         },
         {
             "assignmentIndex": 0,
-            "command": "./ttsprk-4K -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU2_work_done\" ./ttsprk-4K -v0 -c1 -i100",
             "length": 969,
             "name": "2_ttsprk-4K",
             "processors": [
@@ -190,7 +190,7 @@
         },
         {
             "assignmentIndex": 0,
-            "command": "./canrdr-4M -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU3_work_done\" ./canrdr-4M -v0 -c1 -i100",
             "length": 648,
             "name": "3_canrdr-4M",
             "processors": [
@@ -202,7 +202,7 @@
         },
         {
             "assignmentIndex": 0,
-            "command": "./tblook-4M -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU4_work_done\" ./tblook-4M -v0 -c1 -i100",
             "length": 919,
             "name": "4_tblook-4M",
             "processors": [

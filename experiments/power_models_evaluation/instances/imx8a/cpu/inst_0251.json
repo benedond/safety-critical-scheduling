@@ -1,7 +1,7 @@
 {
     "assignmentCharacteristics": [
         {
-            "command": "./matrix-4K -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU0_work_done\" ./matrix-4K -v0 -c1 -i100",
             "resourceAssignnents": [
                 {
                     "intercept": 0.37,
@@ -18,7 +18,7 @@
             "task": "0_matrix-4K"
         },
         {
-            "command": "./pntrch-4M -v0 -c1 -i1",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done\" ./pntrch-4M -v0 -c1 -i1",
             "resourceAssignnents": [
                 {
                     "intercept": 0.54,
@@ -35,7 +35,7 @@
             "task": "1_pntrch-4M"
         },
         {
-            "command": "./puwmod-4M -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU2_work_done\" ./puwmod-4M -v0 -c1 -i100",
             "resourceAssignnents": [
                 {
                     "intercept": 1.4,
@@ -52,7 +52,7 @@
             "task": "2_puwmod-4M"
         },
         {
-            "command": "./puwmod-4K -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done\" ./puwmod-4K -v0 -c1 -i100",
             "resourceAssignnents": [
                 {
                     "intercept": 1.2,
@@ -130,7 +130,7 @@
     "tasks": [
         {
             "assignmentIndex": 0,
-            "command": "./matrix-4K -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU0_work_done\" ./matrix-4K -v0 -c1 -i100",
             "length": 42,
             "name": "0_matrix-4K",
             "processors": [
@@ -142,7 +142,7 @@
         },
         {
             "assignmentIndex": 0,
-            "command": "./pntrch-4M -v0 -c1 -i1",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done\" ./pntrch-4M -v0 -c1 -i1",
             "length": 926,
             "name": "1_pntrch-4M",
             "processors": [
@@ -154,7 +154,7 @@
         },
         {
             "assignmentIndex": 0,
-            "command": "./puwmod-4M -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU2_work_done\" ./puwmod-4M -v0 -c1 -i100",
             "length": 323,
             "name": "2_puwmod-4M",
             "processors": [
@@ -166,7 +166,7 @@
         },
         {
             "assignmentIndex": 0,
-            "command": "./puwmod-4K -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done\" ./puwmod-4K -v0 -c1 -i100",
             "length": 478,
             "name": "3_puwmod-4K",
             "processors": [

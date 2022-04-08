@@ -1,7 +1,7 @@
 {
     "assignmentCharacteristics": [
         {
-            "command": "./ttsprk-4K -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done\" ./ttsprk-4K -v0 -c1 -i100",
             "resourceAssignnents": [
                 {
                     "intercept": 0.37,
@@ -18,7 +18,7 @@
             "task": "0_ttsprk-4K"
         },
         {
-            "command": "./idctrn-4K -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU3_work_done\" ./idctrn-4K -v0 -c1 -i100",
             "resourceAssignnents": [
                 {
                     "intercept": 0.32,
@@ -82,7 +82,7 @@
     "tasks": [
         {
             "assignmentIndex": 0,
-            "command": "./ttsprk-4K -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done\" ./ttsprk-4K -v0 -c1 -i100",
             "length": 638,
             "name": "0_ttsprk-4K",
             "processors": [
@@ -94,7 +94,7 @@
         },
         {
             "assignmentIndex": 0,
-            "command": "./idctrn-4K -v0 -c1 -i100",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU3_work_done\" ./idctrn-4K -v0 -c1 -i100",
             "length": 323,
             "name": "1_idctrn-4K",
             "processors": [
