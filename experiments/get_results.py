@@ -4,7 +4,7 @@ import sys
 import os
 import json
 import pandas as pd
-sys.path.append(os.path.join(os.path.dirname(__file__), '../../tools/src/common'))
+sys.path.append(os.path.join(os.path.dirname(__file__), '../tools/src/common'))
 import instance
 
 lr_coefficients = {
@@ -29,8 +29,8 @@ if __name__ == "__main__":
                 "obj_lr": []}
 
     for f in os.listdir(path_in):
-        if not f.endswith(".out"):
-            continue
+        # if not f.endswith(".out"):
+        #     continue
         
         solver_name_inst = f[f.find("-")+1:-4]
 
