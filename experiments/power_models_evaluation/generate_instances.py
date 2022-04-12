@@ -92,7 +92,7 @@ def generate_instance(args):
                 # Prepare assignment characteristics
                 ass_char.append({"command": cmd,
                                  "task": task_name,
-                                 "resourceAssignnents": [{"length": length,
+                                 "resourceAssignments": [{"length": length,
                                                           "slope": slope,
                                                           "intercept": intercept,
                                                           "processors": [{"processingUnits": 1, "processor": processor}]
