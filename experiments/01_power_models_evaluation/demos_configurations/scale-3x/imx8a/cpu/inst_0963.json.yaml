@@ -1,0 +1,24 @@
+set_cwd: false
+partitions:
+  - name: 2_pntrch-4M
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done" ./pntrch-4M -v0 -c1 -i1
+        budget: 717
+  - name: 1_bitmnp-4K
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU4_work_done" ./bitmnp-4K -v0 -c1 -i100
+        budget: 1501
+  - name: 0_iirflt-4K
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU2_work_done" ./iirflt-4K -v0 -c1 -i100
+        budget: 1368
+
+windows:
+  - length: 3000
+    slices:
+      - cpu: 5
+        sc_partition: 2_pntrch-4M
+      - cpu: 4
+        sc_partition: 1_bitmnp-4K
+      - cpu: 2
+        sc_partition: 0_iirflt-4K

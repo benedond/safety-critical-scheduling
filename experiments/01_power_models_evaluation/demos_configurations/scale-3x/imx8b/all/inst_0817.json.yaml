@@ -1,0 +1,30 @@
+set_cwd: false
+partitions:
+  - name: 3_tinyrenderer-boggie
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done" /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer -f /root/thermobench/benchmarks/tinyrenderer/obj/boggie/*.obj
+        budget: 419
+  - name: 1_bitmnp-4M
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done" ./bitmnp-4M -v0 -c1 -i100
+        budget: 768
+  - name: 2_tblook-4M
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU4_work_done" ./tblook-4M -v0 -c1 -i100
+        budget: 1426
+  - name: 0_aifirf-4M
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU0_work_done" ./aifirf-4M -v0 -c1 -i10
+        budget: 2370
+
+windows:
+  - length: 3000
+    slices:
+      - cpu: 5
+        sc_partition: 3_tinyrenderer-boggie
+      - cpu: 1
+        sc_partition: 1_bitmnp-4M
+      - cpu: 4
+        sc_partition: 2_tblook-4M
+      - cpu: 0
+        sc_partition: 0_aifirf-4M

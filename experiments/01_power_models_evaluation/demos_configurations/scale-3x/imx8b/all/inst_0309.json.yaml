@@ -1,0 +1,30 @@
+set_cwd: false
+partitions:
+  - name: 2_membench-1K-RO-S
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU4_work_done" /root/thermobench/build/benchmarks/mem/membench -t1 -f -s 1000
+        budget: 2329
+  - name: 3_iirflt-4M
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done" ./iirflt-4M -v0 -c1 -i100
+        budget: 2211
+  - name: 1_membench-1M-RW-S
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU3_work_done" /root/thermobench/build/benchmarks/mem/membench -t1 -f -w -s 1000000
+        budget: 1006
+  - name: 0_iirflt-4M
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU2_work_done" ./iirflt-4M -v0 -c1 -i100
+        budget: 1123
+
+windows:
+  - length: 3000
+    slices:
+      - cpu: 4
+        sc_partition: 2_membench-1K-RO-S
+      - cpu: 5
+        sc_partition: 3_iirflt-4M
+      - cpu: 3
+        sc_partition: 1_membench-1M-RW-S
+      - cpu: 2
+        sc_partition: 0_iirflt-4M

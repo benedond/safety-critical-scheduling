@@ -13,10 +13,10 @@ import utils
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--results_file", type=str, help="Path to the results file to be modified.")
-parser.add_argument("--measurements_folder", type=str, help="Path to the folder containing the measurements.")
-parser.add_argument("--new_column_name", type=str, help="Name of the column to be added.")
-parser.add_argument("--measurement_suffix", default=".json.yaml.csv", type=str, help="Suffix to be added to the instance name to find the measurement file.")
+parser.add_argument("-r", "--results_file", type=str, help="Path to the results file to be modified.")
+parser.add_argument("-m", "--measurements_folder", type=str, help="Path to the folder containing the measurements.")
+parser.add_argument("-c", "--new_column_name", type=str, help="Name of the column to be added.")
+parser.add_argument("-s", "--measurement_suffix", default=".json.yaml.csv", type=str, help="Suffix to be added to the instance name to find the measurement file.")
 
 
 if __name__ == "__main__":

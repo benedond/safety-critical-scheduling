@@ -1,0 +1,36 @@
+set_cwd: false
+partitions:
+  - name: 4_tinyrenderer-boggie
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done" /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer -f /root/thermobench/benchmarks/tinyrenderer/obj/boggie/*.obj
+        budget: 2479
+  - name: 3_pntrch-4K
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU4_work_done" ./pntrch-4K -v0 -c1 -i100
+        budget: 1443
+  - name: 2_rspeed-4M
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU3_work_done" ./rspeed-4M -v0 -c1 -i100
+        budget: 1640
+  - name: 1_membench-4M-RW-S
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU2_work_done" /root/thermobench/build/benchmarks/mem/membench -t1 -f -w -s 4000000
+        budget: 2713
+  - name: 0_membench-1M-RO-R
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU0_work_done" /root/thermobench/build/benchmarks/mem/membench -t1 -f -r -s 1000000
+        budget: 2626
+
+windows:
+  - length: 3000
+    slices:
+      - cpu: 5
+        sc_partition: 4_tinyrenderer-boggie
+      - cpu: 4
+        sc_partition: 3_pntrch-4K
+      - cpu: 3
+        sc_partition: 2_rspeed-4M
+      - cpu: 2
+        sc_partition: 1_membench-4M-RW-S
+      - cpu: 0
+        sc_partition: 0_membench-1M-RO-R
