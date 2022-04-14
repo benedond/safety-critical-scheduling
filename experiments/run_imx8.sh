@@ -20,7 +20,7 @@ run () {
             echo "Output file already exists."
         else
             cd /root/thermobench/build/benchmarks/autobench_2.0/single/
-	    thermobench --verbose $FAN --time=$TIM --wait=50 --wait-timeout=60 --sensors_file=/root/thermobench/src/sensors.$PLAT --cpu-usage --column=CPU{0,1,2,3,4,5}_work_done --output=$OUTPATH/$CURBENCH.csv -- demos-sched -p per_process -c $INPATH/$CURBENCH
+	    thermobench --verbose $FAN --time=$TIM --wait=50 --wait-timeout=60 --sensors_file=/root/thermobench/src/sensors.$PLAT --cpu-usage --column=CPU{0,1,2,3,4,5}_work_done --output=$OUTPATH/$CURBENCH.csv -- demos-sched -p high -c $INPATH/$CURBENCH
         fi
     done
 }
