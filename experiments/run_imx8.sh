@@ -9,6 +9,10 @@ run () {
     TIM=$4
     FAN="${5:+--fan-cmd=fan --fan-on=0}" # if $5 has some value, replace it with --fan...
 
+    for i in {0..5}; do
+        echo 1 > /sys/devices/system/cpu/cpu$i/online
+    done
+
     mkdir -p $OUTPATH
 
     for benchmark in $INPATH/*; do
