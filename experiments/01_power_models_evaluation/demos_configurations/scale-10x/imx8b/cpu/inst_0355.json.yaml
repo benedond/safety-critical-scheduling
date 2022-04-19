@@ -1,0 +1,36 @@
+set_cwd: false
+partitions:
+  - name: 4_pntrch-4M
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done" ./pntrch-4M -v0 -c1 -i1
+        budget: 5796
+  - name: 3_tinyrenderer-diablo
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU4_work_done" /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer -f /root/thermobench/benchmarks/tinyrenderer/obj/diablo3_pose/*.obj
+        budget: 4315
+  - name: 2_canrdr-4M
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU3_work_done" ./canrdr-4M -v0 -c1 -i100
+        budget: 1935
+  - name: 0_iirflt-4K
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU0_work_done" ./iirflt-4K -v0 -c1 -i100
+        budget: 3991
+  - name: 1_bitmnp-4K
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done" ./bitmnp-4K -v0 -c1 -i100
+        budget: 2680
+
+windows:
+  - length: 10000
+    slices:
+      - cpu: 5
+        sc_partition: 4_pntrch-4M
+      - cpu: 4
+        sc_partition: 3_tinyrenderer-diablo
+      - cpu: 3
+        sc_partition: 2_canrdr-4M
+      - cpu: 0
+        sc_partition: 0_iirflt-4K
+      - cpu: 1
+        sc_partition: 1_bitmnp-4K

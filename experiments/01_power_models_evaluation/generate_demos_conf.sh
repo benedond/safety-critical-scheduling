@@ -29,3 +29,6 @@ export_config "scale-3x/imx8a/all"
 export_config "scale-3x/imx8a/cpu"
 export_config "scale-3x/imx8b/all"
 export_config "scale-3x/imx8b/cpu"
+
+export_config "scale-10x/imx8b/all"
+export_config "scale-10x/imx8b/cpu"

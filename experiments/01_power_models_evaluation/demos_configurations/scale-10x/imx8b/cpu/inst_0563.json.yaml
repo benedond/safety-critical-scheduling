@@ -1,0 +1,24 @@
+set_cwd: false
+partitions:
+  - name: 2_bitmnp-4M
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done" ./bitmnp-4M -v0 -c1 -i100
+        budget: 7388
+  - name: 0_rspeed-4M
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU0_work_done" ./rspeed-4M -v0 -c1 -i100
+        budget: 731
+  - name: 1_canrdr-4M
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU2_work_done" ./canrdr-4M -v0 -c1 -i100
+        budget: 217
+
+windows:
+  - length: 10000
+    slices:
+      - cpu: 5
+        sc_partition: 2_bitmnp-4M
+      - cpu: 0
+        sc_partition: 0_rspeed-4M
+      - cpu: 2
+        sc_partition: 1_canrdr-4M

@@ -1,0 +1,36 @@
+set_cwd: false
+partitions:
+  - name: 4_membench-1M-RW-S
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done" /root/thermobench/build/benchmarks/mem/membench -t1 -f -w -s 1000000
+        budget: 6529
+  - name: 3_ttsprk-4K
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU4_work_done" ./ttsprk-4K -v0 -c1 -i100
+        budget: 4494
+  - name: 2_membench-1K-RO-S
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU3_work_done" /root/thermobench/build/benchmarks/mem/membench -t1 -f -s 1000
+        budget: 3163
+  - name: 0_aifirf-4M
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU0_work_done" ./aifirf-4M -v0 -c1 -i10
+        budget: 7320
+  - name: 1_membench-1K-RO-R
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU2_work_done" /root/thermobench/build/benchmarks/mem/membench -t1 -f -r -s 1000
+        budget: 4865
+
+windows:
+  - length: 10000
+    slices:
+      - cpu: 5
+        sc_partition: 4_membench-1M-RW-S
+      - cpu: 4
+        sc_partition: 3_ttsprk-4K
+      - cpu: 3
+        sc_partition: 2_membench-1K-RO-S
+      - cpu: 0
+        sc_partition: 0_aifirf-4M
+      - cpu: 2
+        sc_partition: 1_membench-1K-RO-R

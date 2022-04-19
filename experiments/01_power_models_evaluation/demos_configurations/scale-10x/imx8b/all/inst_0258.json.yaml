@@ -1,0 +1,24 @@
+set_cwd: false
+partitions:
+  - name: 2_rspeed-4M
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done" ./rspeed-4M -v0 -c1 -i100
+        budget: 6121
+  - name: 0_puwmod-4M
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU0_work_done" ./puwmod-4M -v0 -c1 -i100
+        budget: 7154
+  - name: 1_ttsprk-4K
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU4_work_done" ./ttsprk-4K -v0 -c1 -i100
+        budget: 6803
+
+windows:
+  - length: 10000
+    slices:
+      - cpu: 5
+        sc_partition: 2_rspeed-4M
+      - cpu: 0
+        sc_partition: 0_puwmod-4M
+      - cpu: 4
+        sc_partition: 1_ttsprk-4K

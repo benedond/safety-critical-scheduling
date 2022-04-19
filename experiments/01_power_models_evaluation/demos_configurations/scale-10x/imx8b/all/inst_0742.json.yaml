@@ -1,0 +1,36 @@
+set_cwd: false
+partitions:
+  - name: 3_a2time-4M
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU3_work_done" ./a2time-4M -v0 -c1 -i100
+        budget: 7940
+  - name: 4_puwmod-4M
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU4_work_done" ./puwmod-4M -v0 -c1 -i100
+        budget: 4564
+  - name: 2_membench-1M-RO-R
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU2_work_done" /root/thermobench/build/benchmarks/mem/membench -t1 -f -r -s 1000000
+        budget: 4130
+  - name: 0_membench-1K-RW-R
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU0_work_done" /root/thermobench/build/benchmarks/mem/membench -t1 -f -r -w -s 1000
+        budget: 8619
+  - name: 1_membench-1K-RW-S
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done" /root/thermobench/build/benchmarks/mem/membench -t1 -f -w -s 1000
+        budget: 3803
+
+windows:
+  - length: 10000
+    slices:
+      - cpu: 3
+        sc_partition: 3_a2time-4M
+      - cpu: 4
+        sc_partition: 4_puwmod-4M
+      - cpu: 2
+        sc_partition: 2_membench-1M-RO-R
+      - cpu: 0
+        sc_partition: 0_membench-1K-RW-R
+      - cpu: 1
+        sc_partition: 1_membench-1K-RW-S

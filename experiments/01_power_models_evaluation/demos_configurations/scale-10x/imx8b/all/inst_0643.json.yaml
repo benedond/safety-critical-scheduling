@@ -1,0 +1,24 @@
+set_cwd: false
+partitions:
+  - name: 2_tinyrenderer-boggie
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done" /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer -f /root/thermobench/benchmarks/tinyrenderer/obj/boggie/*.obj
+        budget: 6118
+  - name: 0_pntrch-4M
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done" ./pntrch-4M -v0 -c1 -i1
+        budget: 9182
+  - name: 1_a2time-4M
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU4_work_done" ./a2time-4M -v0 -c1 -i100
+        budget: 6640
+
+windows:
+  - length: 10000
+    slices:
+      - cpu: 5
+        sc_partition: 2_tinyrenderer-boggie
+      - cpu: 1
+        sc_partition: 0_pntrch-4M
+      - cpu: 4
+        sc_partition: 1_a2time-4M

@@ -1,0 +1,24 @@
+set_cwd: false
+partitions:
+  - name: 0_membench-1K-RO-R
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU0_work_done" /root/thermobench/build/benchmarks/mem/membench -t1 -f -r -s 1000
+        budget: 3267
+  - name: 2_a2time-4K
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU4_work_done" ./a2time-4K -v0 -c1 -i100
+        budget: 8976
+  - name: 1_iirflt-4K
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU3_work_done" ./iirflt-4K -v0 -c1 -i100
+        budget: 432
+
+windows:
+  - length: 10000
+    slices:
+      - cpu: 0
+        sc_partition: 0_membench-1K-RO-R
+      - cpu: 4
+        sc_partition: 2_a2time-4K
+      - cpu: 3
+        sc_partition: 1_iirflt-4K

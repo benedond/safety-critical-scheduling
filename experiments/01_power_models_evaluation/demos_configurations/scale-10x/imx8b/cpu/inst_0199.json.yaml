@@ -1,0 +1,18 @@
+set_cwd: false
+partitions:
+  - name: 1_tinyrenderer-diablo
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done" /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer -f /root/thermobench/benchmarks/tinyrenderer/obj/diablo3_pose/*.obj
+        budget: 6060
+  - name: 0_matrix-4K
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU4_work_done" ./matrix-4K -v0 -c1 -i100
+        budget: 6561
+
+windows:
+  - length: 10000
+    slices:
+      - cpu: 5
+        sc_partition: 1_tinyrenderer-diablo
+      - cpu: 4
+        sc_partition: 0_matrix-4K

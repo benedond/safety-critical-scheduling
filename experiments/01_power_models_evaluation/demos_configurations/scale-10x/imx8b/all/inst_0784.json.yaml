@@ -1,0 +1,18 @@
+set_cwd: false
+partitions:
+  - name: 1_membench-4M-RO-S
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done" /root/thermobench/build/benchmarks/mem/membench -t1 -f -s 4000000
+        budget: 6679
+  - name: 0_idctrn-4M
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU4_work_done" ./idctrn-4M -v0 -c1 -i100
+        budget: 4688
+
+windows:
+  - length: 10000
+    slices:
+      - cpu: 5
+        sc_partition: 1_membench-4M-RO-S
+      - cpu: 4
+        sc_partition: 0_idctrn-4M

@@ -1,0 +1,30 @@
+set_cwd: false
+partitions:
+  - name: 3_puwmod-4K
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done" ./puwmod-4K -v0 -c1 -i100
+        budget: 1650
+  - name: 2_membench-4M-RO-R
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU3_work_done" /root/thermobench/build/benchmarks/mem/membench -t1 -f -r -s 4000000
+        budget: 4660
+  - name: 0_puwmod-4M
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU0_work_done" ./puwmod-4M -v0 -c1 -i100
+        budget: 3660
+  - name: 1_a2time-4K
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU2_work_done" ./a2time-4K -v0 -c1 -i100
+        budget: 7476
+
+windows:
+  - length: 10000
+    slices:
+      - cpu: 5
+        sc_partition: 3_puwmod-4K
+      - cpu: 3
+        sc_partition: 2_membench-4M-RO-R
+      - cpu: 0
+        sc_partition: 0_puwmod-4M
+      - cpu: 2
+        sc_partition: 1_a2time-4K

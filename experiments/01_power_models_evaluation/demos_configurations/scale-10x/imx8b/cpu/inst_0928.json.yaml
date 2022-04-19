@@ -1,0 +1,36 @@
+set_cwd: false
+partitions:
+  - name: 4_rspeed-4K
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done" ./rspeed-4K -v0 -c1 -i100
+        budget: 7004
+  - name: 2_bitmnp-4K
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU2_work_done" ./bitmnp-4K -v0 -c1 -i100
+        budget: 8757
+  - name: 0_aifirf-4K
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU0_work_done" ./aifirf-4K -v0 -c1 -i100
+        budget: 9725
+  - name: 3_rspeed-4K
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU3_work_done" ./rspeed-4K -v0 -c1 -i100
+        budget: 5125
+  - name: 1_iirflt-4M
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done" ./iirflt-4M -v0 -c1 -i100
+        budget: 8943
+
+windows:
+  - length: 10000
+    slices:
+      - cpu: 5
+        sc_partition: 4_rspeed-4K
+      - cpu: 2
+        sc_partition: 2_bitmnp-4K
+      - cpu: 0
+        sc_partition: 0_aifirf-4K
+      - cpu: 3
+        sc_partition: 3_rspeed-4K
+      - cpu: 1
+        sc_partition: 1_iirflt-4M
