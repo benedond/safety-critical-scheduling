@@ -67,7 +67,7 @@ void demos_config_writer::write_window(const window& window)
 	for (auto& t : window.task_assignments)
 	{
 		if (m_environment.processors.at(t.processor).type == processor_type::main_processor)
-			cpu_mappings[t.task].push_back(m_cpu_offset[t.processor] + t.processing_unit);
+			cpu_mappings[t.task].push_back(m_environment.processors.at(t.processor).core_ids[t.processing_unit]);
 	}
 
 	m_output << YAML_INDENT << "- length: " << window.length << YAML_NEWLINE;

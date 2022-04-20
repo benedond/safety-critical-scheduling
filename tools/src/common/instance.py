@@ -15,19 +15,22 @@ class Processor:
     __slots__ = [
         'name',
         'processing_units',
-        'processor_type'
+        'processor_type',
+        'core_ids'
     ]
 
-    def __init__(self, name: str, processing_units: int, processor_type: ProcessorType):
+    def __init__(self, name: str, processing_units: int, processor_type: ProcessorType, core_ids: List[int]):
         self.name = name
         self.processing_units = processing_units
         self.processor_type = processor_type
+        self.core_ids = core_ids
 
     def to_dict(self) -> dict:
         return {
             "name": self.name,
             "processingUnits": self.processing_units,
-            "type": self.processor_type
+            "type": self.processor_type,
+            "coreIds": self.core_ids
         }            
 
 class Environment:
@@ -331,7 +334,7 @@ def parse_environment(s: dict) -> Environment:
                 processor_type = ProcessorType.Coprocessor
             
             # - create new processor
-            proc = Processor(p_name, p["processingUnits"], processor_type)
+            proc = Processor(p_name, p["processingUnits"], processor_type, p["coreIds"])
             processors[proc.name] = proc
             processors_list.append(proc)
 

@@ -44,24 +44,29 @@ environment parse_environment(const nlohmann::json& json)
 
 	if (JSON_HAS_KEY(json, "environment"))
 	{
-		auto& env = json["environment"];
-
+		auto& env = json["environment"];		
 		auto& processors = env["processors"];
 		for (auto& processor : processors)
 		{
 			std::string json_type = processor["type"];
 			std::string name = processor["name"];
 			processor_type type = processor_type::invalid_type;
+			std::vector<int> core_ids_vec;
+			auto& core_ids = processor["coreIds"];
+			for (auto& c_id : core_ids)
+			{
+				core_ids_vec.push_back(c_id);
+			}			
 
 			if (json_type == "main_processor")
 				type = processor_type::main_processor;
 			else if (json_type == "coprocessor")
 				type = processor_type::coprocessor;
 
-			e.processors[name] = { .name = name, .processing_units = processor["processingUnits"], .type = type };
+			e.processors[name] = { .name = name, .processing_units = processor["processingUnits"], .type = type, .core_ids = core_ids_vec };
 			e.processors_list.push_back(&e.processors.at(name));
 		}
-
+		
 		e.major_frame_length = env["majorFrameLength"];
 		e.problem_version = env["problemVersion"];
 

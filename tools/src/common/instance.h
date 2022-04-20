@@ -19,12 +19,13 @@ struct processor
 	std::string name;
 	int processing_units;
 	processor_type type;
+	std::vector<int> core_ids;
 };
 
 struct environment
 {
 	std::unordered_map<std::string, processor> processors;
-	std::vector<processor*> processors_list;
+	std::vector<processor*> processors_list;	
 	int major_frame_length;
 	int problem_version;
 	float sc_part = 0.6f;
