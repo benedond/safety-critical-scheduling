@@ -42,9 +42,9 @@ function plot_relative(input_path, platform, name)
     df[!, "obj_lr"] .+= idle
     
     # sort df by obj_lr
-    sort!(df, [:obj_lr])
+    #sort!(df, [:obj_lr])
     #sort!(df, [:obj_sm])
-    #sort!(df, [:power])
+    sort!(df, [:power])
     
     @gp df[!, "obj_sm"] ./ df[!, "power"] "title 'SM'"
     @gp :- df[!, "obj_lr"] ./ df[!, "power"] "title 'LR'"
