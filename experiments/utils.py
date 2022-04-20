@@ -4,7 +4,11 @@
 
 import pandas as pd
 import json
+import os
 
+def create_folder(out_folder):
+    if not os.path.exists(out_folder):
+        os.makedirs(out_folder)
 
 def read_json(file):
     f = open(file,"r")        
