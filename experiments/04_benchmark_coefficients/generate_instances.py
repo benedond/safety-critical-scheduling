@@ -88,4 +88,18 @@ if __name__ == "__main__":
             inst_all = generate_instance(args, bench_name, bench_cmd, processor, True)
             with open(os.path.join(args.out_folder, "{}_{}_all.json".format(bench_name, p_name)), "w") as f:
                 f.write(json.dumps(inst_all, indent=4, sort_keys=True))  
+    
+    # Generate the sleeps
+    for p_idx, processor in enumerate(env["environment"]["processors"]):
+        p_name = processor["name"]
+        bench_name = "sleep"
+        bench_cmd = "sleep inf"
+                
+        inst = generate_instance(args, bench_name, bench_cmd, processor, False)
+        with open(os.path.join(args.out_folder, "{}_{}_one.json".format(bench_name, p_name)), "w") as f:
+            f.write(json.dumps(inst, indent=4, sort_keys=True)) 
+            
+        inst = generate_instance(args, bench_name, bench_cmd, processor, True)
+        with open(os.path.join(args.out_folder, "{}_{}_all.json".format(bench_name, p_name)), "w") as f:
+            f.write(json.dumps(inst, indent=4, sort_keys=True)) 
             
