@@ -34,4 +34,34 @@ def get_power_from_measurement_file(file):
         
     else:
         return 0.0
+        
+def get_value_per_second(file, col_name):
+    df = read_csv(file)
+    df = df[["time/ms", col_name]]
+    df = df.dropna()
+    
+    if (len(df.index)) >= 2:
+        first = df.iloc[0]
+        last = df.iloc[-1]
+        
+        return (last[col_name] - first[col_name]) / (last["time/ms"] - first["time/ms"]) * 1e3
+        
+    else:
+        return None
+        
+        
+def get_n_cores(env_file_path: str, cluster: str):
+    d = read_json(env_file_path)
+    for p in d["environment"]["processors"]:
+        if p["name"] == cluster:
+            return p["processingUnits"]
+    raise RuntimeException("Cluster {} not contained in environment file {}".format(cluster, env_file_path))
+    
+    
+def get_first_core(env_file_path: str, cluster: str):
+    d = read_json(env_file_path)
+    for p in d["environment"]["processors"]:
+        if p["name"] == cluster:
+            return p["coreIds"][0]
+    raise RuntimeException("Cluster {} not contained in environment file {}".format(cluster, env_file_path))
     
