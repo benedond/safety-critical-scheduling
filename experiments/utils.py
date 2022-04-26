@@ -65,3 +65,7 @@ def get_first_core(env_file_path: str, cluster: str):
             return p["coreIds"][0]
     raise RuntimeException("Cluster {} not contained in environment file {}".format(cluster, env_file_path))
     
+def get_idle_power(env_file_path: str):
+    d = read_json(env_file_path)
+    return d["environment"]["idlePower"]
+
