@@ -39,22 +39,25 @@ class Environment:
         'processors_list',
         'major_frame_length',
         'problem_version',
-        'sc_part'
+        'sc_part',
+        'idle_power'
     ]
 
-    def __init__(self, processors: Mapping[str, Processor], processors_list: List[Processor], major_frame_length: int, problem_version: int, sc_part: float):
+    def __init__(self, processors: Mapping[str, Processor], processors_list: List[Processor], major_frame_length: int, problem_version: int, sc_part: float, idle_power: float):
         self.processors = processors
         self.processors_list = processors_list
         self.major_frame_length = major_frame_length
         self.problem_version = problem_version
         self.sc_part = sc_part
+        self.idle_power = idle_power
 
     def to_dict(self) -> dict:
         return {
             "majorFrameLength": self.major_frame_length,
             "problemVersion": self.problem_version,
             "scPart": self.sc_part,
-            "processors": [p.to_dict() for p in self.processors]
+            "processors": [p.to_dict() for p in self.processors],
+            "idlePower": self.idle_power
         }
 
 class ProcessorAssignment:
@@ -346,9 +349,12 @@ def parse_environment(s: dict) -> Environment:
 
         # Parse SC part
         sc_part = get_val(s["environment"], "scPart", 0.6)
+                
+        # Parse idle power
+        idle_power = s["environment"]["idlePower"]
 
         # Create new environment
-        env = Environment(processors, processors_list, major_frame_length, problem_version, sc_part)
+        env = Environment(processors, processors_list, major_frame_length, problem_version, sc_part, idle_power)
     return env
     
 
