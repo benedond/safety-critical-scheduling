@@ -54,7 +54,8 @@ if __name__ == "__main__":
             all_data["obj_sm"].append(obj_sm)
             all_data["obj_lr_ub"].append(obj_lr_ub)
             all_data["obj_lr"].append(obj_lr)
-            
+
     df = pd.DataFrame(all_data)
+    df = df.sort_values("instance")
     df.to_csv(path_out, index=False)
 
