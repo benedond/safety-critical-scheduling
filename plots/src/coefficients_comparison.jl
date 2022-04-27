@@ -56,7 +56,7 @@ end
 
 
 old_file = "./data/characteristics-imx8b-all.csv"
-new_file = "./experiments/04_benchmark_coefficients/results/characteristics-imx8b-all.csv"
+new_file = "./experiments/01_benchmark_coefficients/results/characteristics-imx8b-all.csv"
 
 plot_coefficients(old_file, new_file)
 plot_runtime(old_file, new_file)
