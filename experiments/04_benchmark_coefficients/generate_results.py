@@ -10,7 +10,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument("--env_file",   "-e", type=str, required=True, help="Path to the environment file.")
 parser.add_argument("--bench_file",   "-b", type=str, required=True, help="Path to the benchmark file.")
 parser.add_argument("--meas_folder",  "-m", type=str, required=True, help="Path to the folder containing measurements.")
-parser.add_argument("--out_folder", "-o", type=str, required=True, help="Path to the folder where to store the results.")
+parser.add_argument("--out_file", "-o", type=str, required=True, help="Path to the folder where to store the results.")
 
 """
 Go through all the files with measurements in the given "path" and produce a dict mapping
@@ -74,7 +74,31 @@ def generate_characteristics(env_file_path: str, bench_file_path:str, measuremen
     df.to_csv(out_path, index=False)        
 
 
+def generate_speed_up(results_file: str):
+    d = utils.read_csv(results_file)
+    name = "imxa" if "imx8a" in results_file else ("imxb" if "imx8b" in results_file else "tx")
+    
+    affinities = d["affinity"].unique()
+    if "A53" in affinities:
+        little = "A53"
+        big = "A72"
+    else:
+        little = "A57"
+        big = "Denver"
+
+    df = pd.DataFrame(columns=("benchmark", name+"Ratio"))
+    for b in d["benchmark"].unique():
+        little_val = d[(d["benchmark"] == b) & (d["affinity"] == little)]["runtime"].iloc[0]
+        big_val = d[(d["benchmark"] == b) & (d["affinity"] == big)]["runtime"].iloc[0]
+        df.loc[len(df)] = [b, little_val / big_val]
+    
+    df = df.sort_values("benchmark")    
+    df.to_csv(results_file + "-ips.csv", index=False)  
+        
+    
+
 if __name__ == "__main__":
     args = parser.parse_args()
-    generate_characteristics(args.env_file, args.bench_file, args.meas_folder, args.out_folder)
+    generate_characteristics(args.env_file, args.bench_file, args.meas_folder, args.out_file)
+    generate_speed_up(args.out_file)
     
