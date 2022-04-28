@@ -1,23 +1,26 @@
 #! /usr/bin/python3
 
+import argparse
 import sys
 import os
 import json
 import pandas as pd
 sys.path.append(os.path.join(os.path.dirname(__file__), '../tools/src/common'))
 import instance
+import utils
 
-lr_coefficients = {
-	"imx8a": {"A53": {"slope": 1.252, "intercept": 0.273},    "A72": {"slope": 0.484, "intercept": 0.529}},
-    "imx8b": {"A53": {"slope": 1.133, "intercept": 0.234},    "A72": {"slope": 0.413, "intercept": 0.526}},
-    "tx2":   {"A72": {"slope": 0.000, "intercept": 0.000}, "Denver": {"slope": 0.000, "intercept": 0.000}}
-}
+parser = argparse.ArgumentParser()
+parser.add_argument("--lr_coeffs_file", "-l", type=str, required=True, help="Path to the file with LR coefficients.")
+parser.add_argument("--path_in",   "-i", type=str, required=True, help="Input folder.")
+parser.add_argument("--path_out",  "-o", type=str, required=True, help="Output file path.")
+parser.add_argument("--platform",  "-p", type=str, required=True, help="Platform name (imx8a, imx8b, tx2).")
 
 if __name__ == "__main__":
-    assert len(sys.argv) >= 3, "path_in and path_out need to be present"
+    args = parser.parse_args()
+    path_in = args.path_in
+    path_out = args.path_out
 
-    path_in = sys.argv[1]
-    path_out = sys.argv[2]
+    lr_coefficients = utils.read_json(args.lr_coeffs_file)
 
     all_data = {"instance": [],
                 "solver": [],
@@ -43,8 +46,8 @@ if __name__ == "__main__":
             n_tasks = len(data["assignmentCharacteristics"])
             sol_len = instance.get_solution_length(instance.parse_solution(data))
             obj_sm = instance.get_solution_objective(data)
-            obj_lr_ub = instance.get_solution_objective_lr_ub(data, lr_coefficients["imx8a"])
-            obj_lr = instance.get_solution_objective_lr(data, lr_coefficients["imx8a"])
+            obj_lr_ub = instance.get_solution_objective_lr_ub(data, lr_coefficients[args.platform])
+            obj_lr = instance.get_solution_objective_lr(data, lr_coefficients[args.platform])
             
             all_data["instance"].append(inst_name)
             all_data["solver"].append(solver_name)
