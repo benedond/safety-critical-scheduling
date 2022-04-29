@@ -1,0 +1,42 @@
+set_cwd: false
+partitions:
+  - name: 5_sleep
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU2_work_done" sleep inf
+        budget: 1000
+  - name: 4_sleep
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done" sleep inf
+        budget: 1000
+  - name: 3_idctrn-4M
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done" ./idctrn-4M -v0 -c1 -i100
+        budget: 1000
+  - name: 2_matrix-4K
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU4_work_done" ./matrix-4K -v0 -c1 -i100
+        budget: 1000
+  - name: 1_canrdr-4K
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU3_work_done" ./canrdr-4K -v0 -c1 -i100
+        budget: 1000
+  - name: 0_membench-4M-RW-S
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU0_work_done" /root/thermobench/build/benchmarks/mem/membench -t1 -f -w -s 4000000
+        budget: 1000
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 2
+        sc_partition: 5_sleep
+      - cpu: 1
+        sc_partition: 4_sleep
+      - cpu: 5
+        sc_partition: 3_idctrn-4M
+      - cpu: 4
+        sc_partition: 2_matrix-4K
+      - cpu: 3
+        sc_partition: 1_canrdr-4K
+      - cpu: 0
+        sc_partition: 0_membench-4M-RW-S

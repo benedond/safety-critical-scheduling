@@ -41,6 +41,7 @@ def get_workload(env, id_to_bench):
 
 def generate_instance(env, benchmarks_char, id_to_bench, bench_to_cmd, w_len):
     instance = env
+    instance["environment"]["majorFrameLength"] = w_len
     workload = get_workload(env, id_to_bench)
     length = w_len
     inst_name = "_".join(map(str,sum(workload.values(), []))) + ".json"
@@ -54,7 +55,8 @@ def generate_instance(env, benchmarks_char, id_to_bench, bench_to_cmd, w_len):
         processor = p["name"]
         p_cores = p["coreIds"]
         
-        for core, bench_id in zip(p_cores, workload[processor]):                
+        for c, bench_id in zip(range(len(p_cores)), workload[processor]):                
+            core = p_cores[c]
             bench_name = id_to_bench[bench_id]
             bench_cmd = bench_to_cmd[bench_name]
             
@@ -87,7 +89,7 @@ def generate_instance(env, benchmarks_char, id_to_bench, bench_to_cmd, w_len):
                             })
             
             win_tasks.append({"length": length,
-                                "processingUnit": core,
+                                "processingUnit": c,
                                 "processor": processor,
                                 "start": 0,
                                 "task": task_name})
