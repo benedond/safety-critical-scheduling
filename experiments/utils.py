@@ -23,14 +23,25 @@ def read_csv(file):
 
 def get_power_from_measurement_file(file):
     df = read_csv(file)
-    df = df[["time/ms", "energy"]]
+    is_tx2 = "tx2" in file
+    if is_tx2:
+        scale = 1
+        power_col = "IN_power/mW"
+    else:
+        scale = 1e3
+        power_col = "energy"
+    
+    df = df[["time/ms", power_col]]
     df = df.dropna()
+    
+    if is_tx2: # the power measurement is not cumulative, the measurements are immediate
+        df[power_col] = df[power_col].cumsum()
     
     if (len(df.index)) > 2:
         second = df.iloc[1]
         last = df.iloc[-1]
         
-        return (last["energy"] - second["energy"]) / (last["time/ms"] - second["time/ms"]) * 1e3
+        return (last[power_col] - second[power_col]) / (last["time/ms"] - second["time/ms"]) * scale
         
     else:
         return 0.0
@@ -68,4 +79,8 @@ def get_first_core(env_file_path: str, cluster: str):
 def get_idle_power(env_file_path: str):
     d = read_json(env_file_path)
     return d["environment"]["idlePower"]
+
+def get_cmd_slope_intercept(benchmark, processor, df):
+    row = df[ (df["benchmark"] == benchmark) & (df["affinity"] == processor) ].iloc[0]
+    return row["command"], row["slope"], row["intercept"]
 
