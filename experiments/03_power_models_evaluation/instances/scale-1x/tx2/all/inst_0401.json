@@ -1,0 +1,191 @@
+{
+    "assignmentCharacteristics": [
+        {
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU3_work_done\" ./aifirf-4M -v0 -c1 -i10",
+            "resourceAssignments": [
+                {
+                    "intercept": 0.3793617776260269,
+                    "length": 57,
+                    "processors": [
+                        {
+                            "processingUnits": 1,
+                            "processor": "A57"
+                        }
+                    ],
+                    "slope": 0.897354554841319
+                }
+            ],
+            "task": "0_aifirf-4M"
+        },
+        {
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU4_work_done\" ./rspeed-4M -v0 -c1 -i100",
+            "resourceAssignments": [
+                {
+                    "intercept": 0.720787006712643,
+                    "length": 816,
+                    "processors": [
+                        {
+                            "processingUnits": 1,
+                            "processor": "A57"
+                        }
+                    ],
+                    "slope": 1.2356681642651024
+                }
+            ],
+            "task": "1_rspeed-4M"
+        },
+        {
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -w -s 1000000",
+            "resourceAssignments": [
+                {
+                    "intercept": 0.1154465130027744,
+                    "length": 406,
+                    "processors": [
+                        {
+                            "processingUnits": 1,
+                            "processor": "A57"
+                        }
+                    ],
+                    "slope": 0.871646340693601
+                }
+            ],
+            "task": "2_membench-1M-RW-S"
+        },
+        {
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done\" ./puwmod-4M -v0 -c1 -i100",
+            "resourceAssignments": [
+                {
+                    "intercept": 0.3745546618998028,
+                    "length": 235,
+                    "processors": [
+                        {
+                            "processingUnits": 1,
+                            "processor": "Denver"
+                        }
+                    ],
+                    "slope": 2.12084198259637
+                }
+            ],
+            "task": "3_puwmod-4M"
+        }
+    ],
+    "environment": {
+        "idlePower": 2.804,
+        "majorFrameLength": 1000,
+        "problemVersion": 1,
+        "processors": [
+            {
+                "coreIds": [
+                    0,
+                    3,
+                    4,
+                    5
+                ],
+                "name": "A57",
+                "processingUnits": 4,
+                "type": "main_processor"
+            },
+            {
+                "coreIds": [
+                    1,
+                    2
+                ],
+                "name": "Denver",
+                "processingUnits": 2,
+                "type": "main_processor"
+            }
+        ],
+        "scPart": 1.0
+    },
+    "solution": {
+        "feasible": true,
+        "solutionTime": 0,
+        "solverMetadata": null,
+        "solverName": "RandomGenerator",
+        "windows": [
+            {
+                "length": 1000,
+                "tasks": [
+                    {
+                        "length": 57,
+                        "processingUnit": 1,
+                        "processor": "A57",
+                        "start": 0,
+                        "task": "0_aifirf-4M"
+                    },
+                    {
+                        "length": 816,
+                        "processingUnit": 2,
+                        "processor": "A57",
+                        "start": 0,
+                        "task": "1_rspeed-4M"
+                    },
+                    {
+                        "length": 406,
+                        "processingUnit": 3,
+                        "processor": "A57",
+                        "start": 0,
+                        "task": "2_membench-1M-RW-S"
+                    },
+                    {
+                        "length": 235,
+                        "processingUnit": 0,
+                        "processor": "Denver",
+                        "start": 0,
+                        "task": "3_puwmod-4M"
+                    }
+                ]
+            }
+        ]
+    },
+    "tasks": [
+        {
+            "assignmentIndex": 0,
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU3_work_done\" ./aifirf-4M -v0 -c1 -i10",
+            "length": 57,
+            "name": "0_aifirf-4M",
+            "processors": [
+                {
+                    "processingUnits": 1,
+                    "processor": "A57"
+                }
+            ]
+        },
+        {
+            "assignmentIndex": 0,
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU4_work_done\" ./rspeed-4M -v0 -c1 -i100",
+            "length": 816,
+            "name": "1_rspeed-4M",
+            "processors": [
+                {
+                    "processingUnits": 1,
+                    "processor": "A57"
+                }
+            ]
+        },
+        {
+            "assignmentIndex": 0,
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -w -s 1000000",
+            "length": 406,
+            "name": "2_membench-1M-RW-S",
+            "processors": [
+                {
+                    "processingUnits": 1,
+                    "processor": "A57"
+                }
+            ]
+        },
+        {
+            "assignmentIndex": 0,
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done\" ./puwmod-4M -v0 -c1 -i100",
+            "length": 235,
+            "name": "3_puwmod-4M",
+            "processors": [
+                {
+                    "processingUnits": 1,
+                    "processor": "Denver"
+                }
+            ]
+        }
+    ]
+}

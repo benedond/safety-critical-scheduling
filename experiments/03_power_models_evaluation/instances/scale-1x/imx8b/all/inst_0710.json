@@ -4,7 +4,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU0_work_done\" ./pntrch-4M -v0 -c1 -i1",
             "resourceAssignments": [
                 {
-                    "intercept": 0.38,
+                    "intercept": 0.314072044297375,
                     "length": 537,
                     "processors": [
                         {
@@ -12,7 +12,7 @@
                             "processor": "A53"
                         }
                     ],
-                    "slope": 0.34
+                    "slope": 0.3437598877732618
                 }
             ],
             "task": "0_pntrch-4M"
@@ -21,7 +21,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU2_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -r -s 1000000",
             "resourceAssignments": [
                 {
-                    "intercept": 0.61,
+                    "intercept": 0.5741854404433324,
                     "length": 840,
                     "processors": [
                         {
@@ -29,7 +29,7 @@
                             "processor": "A53"
                         }
                     ],
-                    "slope": 0.4
+                    "slope": 0.3539638540109318
                 }
             ],
             "task": "1_membench-1M-RO-R"
@@ -38,7 +38,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU3_work_done\" ./ttsprk-4K -v0 -c1 -i100",
             "resourceAssignments": [
                 {
-                    "intercept": 0.34,
+                    "intercept": 0.1930229223856399,
                     "length": 181,
                     "processors": [
                         {
@@ -46,7 +46,7 @@
                             "processor": "A53"
                         }
                     ],
-                    "slope": 0.34
+                    "slope": 0.3434870032582224
                 }
             ],
             "task": "2_ttsprk-4K"
@@ -55,7 +55,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done\" ./tblook-4M -v0 -c1 -i100",
             "resourceAssignments": [
                 {
-                    "intercept": 2.45,
+                    "intercept": 0.7814475802311316,
                     "length": 769,
                     "processors": [
                         {
@@ -63,22 +63,33 @@
                             "processor": "A72"
                         }
                     ],
-                    "slope": 1.74
+                    "slope": 1.616966429225399
                 }
             ],
             "task": "3_tblook-4M"
         }
     ],
     "environment": {
+        "idlePower": 5.45,
         "majorFrameLength": 1000,
         "problemVersion": 1,
         "processors": [
             {
+                "coreIds": [
+                    0,
+                    1,
+                    2,
+                    3
+                ],
                 "name": "A53",
                 "processingUnits": 4,
                 "type": "main_processor"
             },
             {
+                "coreIds": [
+                    4,
+                    5
+                ],
                 "name": "A72",
                 "processingUnits": 2,
                 "type": "main_processor"

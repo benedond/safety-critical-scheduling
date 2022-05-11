@@ -1,0 +1,24 @@
+set_cwd: false
+partitions:
+  - name: 2_tblook-4M
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU2_work_done" ./tblook-4M -v0 -c1 -i100
+        budget: 709
+  - name: 1_puwmod-4K
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done" ./puwmod-4K -v0 -c1 -i100
+        budget: 361
+  - name: 0_matrix-4K
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU0_work_done" ./matrix-4K -v0 -c1 -i100
+        budget: 716
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 2
+        sc_partition: 2_tblook-4M
+      - cpu: 1
+        sc_partition: 1_puwmod-4K
+      - cpu: 0
+        sc_partition: 0_matrix-4K

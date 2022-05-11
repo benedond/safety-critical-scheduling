@@ -4,7 +4,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done\" ./canrdr-4M -v0 -c1 -i100",
             "resourceAssignments": [
                 {
-                    "intercept": 1.47,
+                    "intercept": 0.8900927164287804,
                     "length": 771,
                     "processors": [
                         {
@@ -12,7 +12,7 @@
                             "processor": "A53"
                         }
                     ],
-                    "slope": 0.4
+                    "slope": 0.3755011537810582
                 }
             ],
             "task": "0_canrdr-4M"
@@ -21,7 +21,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU2_work_done\" ./aifirf-4K -v0 -c1 -i100",
             "resourceAssignments": [
                 {
-                    "intercept": 0.23,
+                    "intercept": 0.1940051570004026,
                     "length": 220,
                     "processors": [
                         {
@@ -29,7 +29,7 @@
                             "processor": "A53"
                         }
                     ],
-                    "slope": 0.24
+                    "slope": 0.2383305209708416
                 }
             ],
             "task": "1_aifirf-4K"
@@ -38,7 +38,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU3_work_done\" ./aifirf-4K -v0 -c1 -i100",
             "resourceAssignments": [
                 {
-                    "intercept": 0.23,
+                    "intercept": 0.1940051570004026,
                     "length": 72,
                     "processors": [
                         {
@@ -46,7 +46,7 @@
                             "processor": "A53"
                         }
                     ],
-                    "slope": 0.24
+                    "slope": 0.2383305209708416
                 }
             ],
             "task": "2_aifirf-4K"
@@ -55,7 +55,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU4_work_done\" ./a2time-4M -v0 -c1 -i100",
             "resourceAssignments": [
                 {
-                    "intercept": 2.52,
+                    "intercept": 1.056376591296715,
                     "length": 598,
                     "processors": [
                         {
@@ -63,16 +63,16 @@
                             "processor": "A72"
                         }
                     ],
-                    "slope": 1.18
+                    "slope": 1.079751949123648
                 }
             ],
             "task": "3_a2time-4M"
         },
         {
-            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done\" /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer -f /root/thermobench/benchmarks/tinyrenderer/obj/boggie/*.obj",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done\" /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer /root/thermobench/benchmarks/tinyrenderer/obj/boggie/*.obj",
             "resourceAssignments": [
                 {
-                    "intercept": 2.28,
+                    "intercept": 0.9825416202228148,
                     "length": 665,
                     "processors": [
                         {
@@ -80,22 +80,33 @@
                             "processor": "A72"
                         }
                     ],
-                    "slope": 1.12
+                    "slope": 0.9626852080259498
                 }
             ],
             "task": "4_tinyrenderer-boggie"
         }
     ],
     "environment": {
+        "idlePower": 5.49,
         "majorFrameLength": 1000,
         "problemVersion": 1,
         "processors": [
             {
+                "coreIds": [
+                    0,
+                    1,
+                    2,
+                    3
+                ],
                 "name": "A53",
                 "processingUnits": 4,
                 "type": "main_processor"
             },
             {
+                "coreIds": [
+                    4,
+                    5
+                ],
                 "name": "A72",
                 "processingUnits": 2,
                 "type": "main_processor"
@@ -202,7 +213,7 @@
         },
         {
             "assignmentIndex": 0,
-            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done\" /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer -f /root/thermobench/benchmarks/tinyrenderer/obj/boggie/*.obj",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done\" /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer /root/thermobench/benchmarks/tinyrenderer/obj/boggie/*.obj",
             "length": 665,
             "name": "4_tinyrenderer-boggie",
             "processors": [

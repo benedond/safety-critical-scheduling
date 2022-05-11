@@ -1,0 +1,155 @@
+{
+    "assignmentCharacteristics": [
+        {
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU0_work_done\" ./iirflt-4K -v0 -c1 -i100",
+            "resourceAssignments": [
+                {
+                    "intercept": 0.1818611396787539,
+                    "length": 604,
+                    "processors": [
+                        {
+                            "processingUnits": 1,
+                            "processor": "A57"
+                        }
+                    ],
+                    "slope": 0.7699523230262888
+                }
+            ],
+            "task": "0_iirflt-4K"
+        },
+        {
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU3_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -w -s 1000000",
+            "resourceAssignments": [
+                {
+                    "intercept": 0.1154465130027744,
+                    "length": 912,
+                    "processors": [
+                        {
+                            "processingUnits": 1,
+                            "processor": "A57"
+                        }
+                    ],
+                    "slope": 0.871646340693601
+                }
+            ],
+            "task": "1_membench-1M-RW-S"
+        },
+        {
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU2_work_done\" ./rspeed-4M -v0 -c1 -i100",
+            "resourceAssignments": [
+                {
+                    "intercept": 0.4553683745635379,
+                    "length": 939,
+                    "processors": [
+                        {
+                            "processingUnits": 1,
+                            "processor": "Denver"
+                        }
+                    ],
+                    "slope": 1.9925363991106095
+                }
+            ],
+            "task": "2_rspeed-4M"
+        }
+    ],
+    "environment": {
+        "idlePower": 2.804,
+        "majorFrameLength": 1000,
+        "problemVersion": 1,
+        "processors": [
+            {
+                "coreIds": [
+                    0,
+                    3,
+                    4,
+                    5
+                ],
+                "name": "A57",
+                "processingUnits": 4,
+                "type": "main_processor"
+            },
+            {
+                "coreIds": [
+                    1,
+                    2
+                ],
+                "name": "Denver",
+                "processingUnits": 2,
+                "type": "main_processor"
+            }
+        ],
+        "scPart": 1.0
+    },
+    "solution": {
+        "feasible": true,
+        "solutionTime": 0,
+        "solverMetadata": null,
+        "solverName": "RandomGenerator",
+        "windows": [
+            {
+                "length": 1000,
+                "tasks": [
+                    {
+                        "length": 604,
+                        "processingUnit": 0,
+                        "processor": "A57",
+                        "start": 0,
+                        "task": "0_iirflt-4K"
+                    },
+                    {
+                        "length": 912,
+                        "processingUnit": 1,
+                        "processor": "A57",
+                        "start": 0,
+                        "task": "1_membench-1M-RW-S"
+                    },
+                    {
+                        "length": 939,
+                        "processingUnit": 1,
+                        "processor": "Denver",
+                        "start": 0,
+                        "task": "2_rspeed-4M"
+                    }
+                ]
+            }
+        ]
+    },
+    "tasks": [
+        {
+            "assignmentIndex": 0,
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU0_work_done\" ./iirflt-4K -v0 -c1 -i100",
+            "length": 604,
+            "name": "0_iirflt-4K",
+            "processors": [
+                {
+                    "processingUnits": 1,
+                    "processor": "A57"
+                }
+            ]
+        },
+        {
+            "assignmentIndex": 0,
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU3_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -w -s 1000000",
+            "length": 912,
+            "name": "1_membench-1M-RW-S",
+            "processors": [
+                {
+                    "processingUnits": 1,
+                    "processor": "A57"
+                }
+            ]
+        },
+        {
+            "assignmentIndex": 0,
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU2_work_done\" ./rspeed-4M -v0 -c1 -i100",
+            "length": 939,
+            "name": "2_rspeed-4M",
+            "processors": [
+                {
+                    "processingUnits": 1,
+                    "processor": "Denver"
+                }
+            ]
+        }
+    ]
+}

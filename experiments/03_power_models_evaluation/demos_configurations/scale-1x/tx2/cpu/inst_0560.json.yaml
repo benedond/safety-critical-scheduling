@@ -1,0 +1,24 @@
+set_cwd: false
+partitions:
+  - name: 2_tblook-4K
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU2_work_done" ./tblook-4K -v0 -c1 -i100
+        budget: 852
+  - name: 1_puwmod-4K
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done" ./puwmod-4K -v0 -c1 -i100
+        budget: 255
+  - name: 0_aifirf-4K
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU4_work_done" ./aifirf-4K -v0 -c1 -i100
+        budget: 817
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 2
+        sc_partition: 2_tblook-4K
+      - cpu: 5
+        sc_partition: 1_puwmod-4K
+      - cpu: 4
+        sc_partition: 0_aifirf-4K

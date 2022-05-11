@@ -1,0 +1,155 @@
+{
+    "assignmentCharacteristics": [
+        {
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU4_work_done\" ./aifirf-4M -v0 -c1 -i10",
+            "resourceAssignments": [
+                {
+                    "intercept": 0.3793617776260269,
+                    "length": 963,
+                    "processors": [
+                        {
+                            "processingUnits": 1,
+                            "processor": "A57"
+                        }
+                    ],
+                    "slope": 0.897354554841319
+                }
+            ],
+            "task": "0_aifirf-4M"
+        },
+        {
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done\" /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer /root/thermobench/benchmarks/tinyrenderer/obj/diablo3_pose/*.obj",
+            "resourceAssignments": [
+                {
+                    "intercept": 0.3785860918965604,
+                    "length": 802,
+                    "processors": [
+                        {
+                            "processingUnits": 1,
+                            "processor": "Denver"
+                        }
+                    ],
+                    "slope": 1.0148846377079757
+                }
+            ],
+            "task": "1_tinyrenderer-diablo"
+        },
+        {
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU2_work_done\" ./rspeed-4K -v0 -c1 -i100",
+            "resourceAssignments": [
+                {
+                    "intercept": 0.1199713957404351,
+                    "length": 581,
+                    "processors": [
+                        {
+                            "processingUnits": 1,
+                            "processor": "Denver"
+                        }
+                    ],
+                    "slope": 1.7352238192484446
+                }
+            ],
+            "task": "2_rspeed-4K"
+        }
+    ],
+    "environment": {
+        "idlePower": 2.804,
+        "majorFrameLength": 1000,
+        "problemVersion": 1,
+        "processors": [
+            {
+                "coreIds": [
+                    0,
+                    3,
+                    4,
+                    5
+                ],
+                "name": "A57",
+                "processingUnits": 4,
+                "type": "main_processor"
+            },
+            {
+                "coreIds": [
+                    1,
+                    2
+                ],
+                "name": "Denver",
+                "processingUnits": 2,
+                "type": "main_processor"
+            }
+        ],
+        "scPart": 1.0
+    },
+    "solution": {
+        "feasible": true,
+        "solutionTime": 0,
+        "solverMetadata": null,
+        "solverName": "RandomGenerator",
+        "windows": [
+            {
+                "length": 1000,
+                "tasks": [
+                    {
+                        "length": 963,
+                        "processingUnit": 2,
+                        "processor": "A57",
+                        "start": 0,
+                        "task": "0_aifirf-4M"
+                    },
+                    {
+                        "length": 802,
+                        "processingUnit": 0,
+                        "processor": "Denver",
+                        "start": 0,
+                        "task": "1_tinyrenderer-diablo"
+                    },
+                    {
+                        "length": 581,
+                        "processingUnit": 1,
+                        "processor": "Denver",
+                        "start": 0,
+                        "task": "2_rspeed-4K"
+                    }
+                ]
+            }
+        ]
+    },
+    "tasks": [
+        {
+            "assignmentIndex": 0,
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU4_work_done\" ./aifirf-4M -v0 -c1 -i10",
+            "length": 963,
+            "name": "0_aifirf-4M",
+            "processors": [
+                {
+                    "processingUnits": 1,
+                    "processor": "A57"
+                }
+            ]
+        },
+        {
+            "assignmentIndex": 0,
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done\" /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer /root/thermobench/benchmarks/tinyrenderer/obj/diablo3_pose/*.obj",
+            "length": 802,
+            "name": "1_tinyrenderer-diablo",
+            "processors": [
+                {
+                    "processingUnits": 1,
+                    "processor": "Denver"
+                }
+            ]
+        },
+        {
+            "assignmentIndex": 0,
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU2_work_done\" ./rspeed-4K -v0 -c1 -i100",
+            "length": 581,
+            "name": "2_rspeed-4K",
+            "processors": [
+                {
+                    "processingUnits": 1,
+                    "processor": "Denver"
+                }
+            ]
+        }
+    ]
+}

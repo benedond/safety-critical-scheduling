@@ -4,7 +4,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU0_work_done\" ./bitmnp-4K -v0 -c1 -i100",
             "resourceAssignments": [
                 {
-                    "intercept": 0.23,
+                    "intercept": 0.2053778574288882,
                     "length": 679,
                     "processors": [
                         {
@@ -12,7 +12,7 @@
                             "processor": "A53"
                         }
                     ],
-                    "slope": 0.19
+                    "slope": 0.1966626197979089
                 }
             ],
             "task": "0_bitmnp-4K"
@@ -21,7 +21,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done\" ./canrdr-4K -v0 -c1 -i100",
             "resourceAssignments": [
                 {
-                    "intercept": 0.33,
+                    "intercept": 0.1915548473155226,
                     "length": 472,
                     "processors": [
                         {
@@ -29,7 +29,7 @@
                             "processor": "A53"
                         }
                     ],
-                    "slope": 0.34
+                    "slope": 0.3299832408326685
                 }
             ],
             "task": "1_canrdr-4K"
@@ -38,7 +38,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU2_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -r -s 4000000",
             "resourceAssignments": [
                 {
-                    "intercept": 1.53,
+                    "intercept": 1.1897366956155953,
                     "length": 251,
                     "processors": [
                         {
@@ -46,7 +46,7 @@
                             "processor": "A53"
                         }
                     ],
-                    "slope": 0.23
+                    "slope": 0.1914517590485838
                 }
             ],
             "task": "2_membench-4M-RO-R"
@@ -55,7 +55,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU3_work_done\" ./a2time-4M -v0 -c1 -i100",
             "resourceAssignments": [
                 {
-                    "intercept": 1.39,
+                    "intercept": 0.9119121379116776,
                     "length": 779,
                     "processors": [
                         {
@@ -63,7 +63,7 @@
                             "processor": "A53"
                         }
                     ],
-                    "slope": 0.35
+                    "slope": 0.3152722258653364
                 }
             ],
             "task": "3_a2time-4M"
@@ -72,7 +72,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -r -s 1000000",
             "resourceAssignments": [
                 {
-                    "intercept": 1.89,
+                    "intercept": 1.0068283491984786,
                     "length": 174,
                     "processors": [
                         {
@@ -80,22 +80,33 @@
                             "processor": "A72"
                         }
                     ],
-                    "slope": 0.69
+                    "slope": 0.5165982881210658
                 }
             ],
             "task": "4_membench-1M-RO-R"
         }
     ],
     "environment": {
+        "idlePower": 5.49,
         "majorFrameLength": 1000,
         "problemVersion": 1,
         "processors": [
             {
+                "coreIds": [
+                    0,
+                    1,
+                    2,
+                    3
+                ],
                 "name": "A53",
                 "processingUnits": 4,
                 "type": "main_processor"
             },
             {
+                "coreIds": [
+                    4,
+                    5
+                ],
                 "name": "A72",
                 "processingUnits": 2,
                 "type": "main_processor"

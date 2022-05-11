@@ -6,11 +6,11 @@ partitions:
         budget: 172
   - name: 1_tinyrenderer-diablo
     processes:
-      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU2_work_done" /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer -f /root/thermobench/benchmarks/tinyrenderer/obj/diablo3_pose/*.obj
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU2_work_done" /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer /root/thermobench/benchmarks/tinyrenderer/obj/diablo3_pose/*.obj
         budget: 987
   - name: 0_tinyrenderer-boggie
     processes:
-      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done" /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer -f /root/thermobench/benchmarks/tinyrenderer/obj/boggie/*.obj
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done" /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer /root/thermobench/benchmarks/tinyrenderer/obj/boggie/*.obj
         budget: 850
 
 windows:

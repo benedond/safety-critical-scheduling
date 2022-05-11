@@ -1,0 +1,36 @@
+set_cwd: false
+partitions:
+  - name: 2_a2time-4K
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU4_work_done" ./a2time-4K -v0 -c1 -i100
+        budget: 902
+  - name: 4_puwmod-4K
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU2_work_done" ./puwmod-4K -v0 -c1 -i100
+        budget: 783
+  - name: 1_a2time-4K
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU3_work_done" ./a2time-4K -v0 -c1 -i100
+        budget: 166
+  - name: 3_ttsprk-4M
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done" ./ttsprk-4M -v0 -c1 -i100
+        budget: 825
+  - name: 0_puwmod-4M
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU0_work_done" ./puwmod-4M -v0 -c1 -i100
+        budget: 119
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 4
+        sc_partition: 2_a2time-4K
+      - cpu: 2
+        sc_partition: 4_puwmod-4K
+      - cpu: 3
+        sc_partition: 1_a2time-4K
+      - cpu: 1
+        sc_partition: 3_ttsprk-4M
+      - cpu: 0
+        sc_partition: 0_puwmod-4M

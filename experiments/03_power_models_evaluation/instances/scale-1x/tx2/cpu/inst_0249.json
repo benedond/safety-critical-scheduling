@@ -1,0 +1,191 @@
+{
+    "assignmentCharacteristics": [
+        {
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU0_work_done\" ./ttsprk-4K -v0 -c1 -i100",
+            "resourceAssignments": [
+                {
+                    "intercept": 0.2596792527544362,
+                    "length": 205,
+                    "processors": [
+                        {
+                            "processingUnits": 1,
+                            "processor": "A57"
+                        }
+                    ],
+                    "slope": 0.6689222023999318
+                }
+            ],
+            "task": "0_ttsprk-4K"
+        },
+        {
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU3_work_done\" ./idctrn-4M -v0 -c1 -i100",
+            "resourceAssignments": [
+                {
+                    "intercept": 0.3256903449544364,
+                    "length": 609,
+                    "processors": [
+                        {
+                            "processingUnits": 1,
+                            "processor": "A57"
+                        }
+                    ],
+                    "slope": 0.9390383438018824
+                }
+            ],
+            "task": "1_idctrn-4M"
+        },
+        {
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done\" ./rspeed-4M -v0 -c1 -i100",
+            "resourceAssignments": [
+                {
+                    "intercept": 0.720787006712643,
+                    "length": 666,
+                    "processors": [
+                        {
+                            "processingUnits": 1,
+                            "processor": "A57"
+                        }
+                    ],
+                    "slope": 1.2356681642651024
+                }
+            ],
+            "task": "2_rspeed-4M"
+        },
+        {
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done\" ./canrdr-4K -v0 -c1 -i100",
+            "resourceAssignments": [
+                {
+                    "intercept": 0.328308513039222,
+                    "length": 670,
+                    "processors": [
+                        {
+                            "processingUnits": 1,
+                            "processor": "Denver"
+                        }
+                    ],
+                    "slope": 1.9873482728252547
+                }
+            ],
+            "task": "3_canrdr-4K"
+        }
+    ],
+    "environment": {
+        "idlePower": 2.804,
+        "majorFrameLength": 1000,
+        "problemVersion": 1,
+        "processors": [
+            {
+                "coreIds": [
+                    0,
+                    3,
+                    4,
+                    5
+                ],
+                "name": "A57",
+                "processingUnits": 4,
+                "type": "main_processor"
+            },
+            {
+                "coreIds": [
+                    1,
+                    2
+                ],
+                "name": "Denver",
+                "processingUnits": 2,
+                "type": "main_processor"
+            }
+        ],
+        "scPart": 1.0
+    },
+    "solution": {
+        "feasible": true,
+        "solutionTime": 0,
+        "solverMetadata": null,
+        "solverName": "RandomGenerator",
+        "windows": [
+            {
+                "length": 1000,
+                "tasks": [
+                    {
+                        "length": 205,
+                        "processingUnit": 0,
+                        "processor": "A57",
+                        "start": 0,
+                        "task": "0_ttsprk-4K"
+                    },
+                    {
+                        "length": 609,
+                        "processingUnit": 1,
+                        "processor": "A57",
+                        "start": 0,
+                        "task": "1_idctrn-4M"
+                    },
+                    {
+                        "length": 666,
+                        "processingUnit": 3,
+                        "processor": "A57",
+                        "start": 0,
+                        "task": "2_rspeed-4M"
+                    },
+                    {
+                        "length": 670,
+                        "processingUnit": 0,
+                        "processor": "Denver",
+                        "start": 0,
+                        "task": "3_canrdr-4K"
+                    }
+                ]
+            }
+        ]
+    },
+    "tasks": [
+        {
+            "assignmentIndex": 0,
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU0_work_done\" ./ttsprk-4K -v0 -c1 -i100",
+            "length": 205,
+            "name": "0_ttsprk-4K",
+            "processors": [
+                {
+                    "processingUnits": 1,
+                    "processor": "A57"
+                }
+            ]
+        },
+        {
+            "assignmentIndex": 0,
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU3_work_done\" ./idctrn-4M -v0 -c1 -i100",
+            "length": 609,
+            "name": "1_idctrn-4M",
+            "processors": [
+                {
+                    "processingUnits": 1,
+                    "processor": "A57"
+                }
+            ]
+        },
+        {
+            "assignmentIndex": 0,
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done\" ./rspeed-4M -v0 -c1 -i100",
+            "length": 666,
+            "name": "2_rspeed-4M",
+            "processors": [
+                {
+                    "processingUnits": 1,
+                    "processor": "A57"
+                }
+            ]
+        },
+        {
+            "assignmentIndex": 0,
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done\" ./canrdr-4K -v0 -c1 -i100",
+            "length": 670,
+            "name": "3_canrdr-4K",
+            "processors": [
+                {
+                    "processingUnits": 1,
+                    "processor": "Denver"
+                }
+            ]
+        }
+    ]
+}

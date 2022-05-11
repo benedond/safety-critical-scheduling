@@ -4,7 +4,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU2_work_done\" ./bitmnp-4M -v0 -c1 -i100",
             "resourceAssignments": [
                 {
-                    "intercept": 1.22,
+                    "intercept": 0.7881220943565062,
                     "length": 578,
                     "processors": [
                         {
@@ -12,7 +12,7 @@
                             "processor": "A53"
                         }
                     ],
-                    "slope": 0.29
+                    "slope": 0.266294329175358
                 }
             ],
             "task": "0_bitmnp-4M"
@@ -21,7 +21,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU3_work_done\" ./pntrch-4K -v0 -c1 -i100",
             "resourceAssignments": [
                 {
-                    "intercept": 0.26,
+                    "intercept": 0.1673344981839175,
                     "length": 151,
                     "processors": [
                         {
@@ -29,7 +29,7 @@
                             "processor": "A53"
                         }
                     ],
-                    "slope": 0.23
+                    "slope": 0.2387831493354596
                 }
             ],
             "task": "1_pntrch-4K"
@@ -38,7 +38,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU4_work_done\" ./ttsprk-4K -v0 -c1 -i100",
             "resourceAssignments": [
                 {
-                    "intercept": 1.32,
+                    "intercept": 0.1959049299257094,
                     "length": 691,
                     "processors": [
                         {
@@ -46,22 +46,33 @@
                             "processor": "A72"
                         }
                     ],
-                    "slope": 1.36
+                    "slope": 1.1495060746323045
                 }
             ],
             "task": "2_ttsprk-4K"
         }
     ],
     "environment": {
+        "idlePower": 5.49,
         "majorFrameLength": 1000,
         "problemVersion": 1,
         "processors": [
             {
+                "coreIds": [
+                    0,
+                    1,
+                    2,
+                    3
+                ],
                 "name": "A53",
                 "processingUnits": 4,
                 "type": "main_processor"
             },
             {
+                "coreIds": [
+                    4,
+                    5
+                ],
                 "name": "A72",
                 "processingUnits": 2,
                 "type": "main_processor"

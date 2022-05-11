@@ -4,7 +4,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done\" ./aifirf-4M -v0 -c1 -i10",
             "resourceAssignments": [
                 {
-                    "intercept": 0.83,
+                    "intercept": 0.6573638540169515,
                     "length": 355,
                     "processors": [
                         {
@@ -12,7 +12,7 @@
                             "processor": "A53"
                         }
                     ],
-                    "slope": 0.33
+                    "slope": 0.3209989693391038
                 }
             ],
             "task": "0_aifirf-4M"
@@ -21,7 +21,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU3_work_done\" ./aifirf-4M -v0 -c1 -i10",
             "resourceAssignments": [
                 {
-                    "intercept": 0.83,
+                    "intercept": 0.6573638540169515,
                     "length": 501,
                     "processors": [
                         {
@@ -29,7 +29,7 @@
                             "processor": "A53"
                         }
                     ],
-                    "slope": 0.33
+                    "slope": 0.3209989693391038
                 }
             ],
             "task": "1_aifirf-4M"
@@ -38,7 +38,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done\" ./a2time-4K -v0 -c1 -i100",
             "resourceAssignments": [
                 {
-                    "intercept": 1.07,
+                    "intercept": 0.1908365467570911,
                     "length": 154,
                     "processors": [
                         {
@@ -46,22 +46,33 @@
                             "processor": "A72"
                         }
                     ],
-                    "slope": 1.03
+                    "slope": 0.9844350429996958
                 }
             ],
             "task": "2_a2time-4K"
         }
     ],
     "environment": {
+        "idlePower": 5.45,
         "majorFrameLength": 1000,
         "problemVersion": 1,
         "processors": [
             {
+                "coreIds": [
+                    0,
+                    1,
+                    2,
+                    3
+                ],
                 "name": "A53",
                 "processingUnits": 4,
                 "type": "main_processor"
             },
             {
+                "coreIds": [
+                    4,
+                    5
+                ],
                 "name": "A72",
                 "processingUnits": 2,
                 "type": "main_processor"

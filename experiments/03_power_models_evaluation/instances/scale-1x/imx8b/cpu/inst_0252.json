@@ -4,7 +4,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU0_work_done\" ./tblook-4K -v0 -c1 -i100",
             "resourceAssignments": [
                 {
-                    "intercept": 0.25,
+                    "intercept": 0.2032701812455615,
                     "length": 320,
                     "processors": [
                         {
@@ -12,7 +12,7 @@
                             "processor": "A53"
                         }
                     ],
-                    "slope": 0.23
+                    "slope": 0.2384487972855504
                 }
             ],
             "task": "0_tblook-4K"
@@ -21,7 +21,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done\" ./rspeed-4K -v0 -c1 -i100",
             "resourceAssignments": [
                 {
-                    "intercept": 0.33,
+                    "intercept": 0.1981941350646083,
                     "length": 464,
                     "processors": [
                         {
@@ -29,7 +29,7 @@
                             "processor": "A53"
                         }
                     ],
-                    "slope": 0.33
+                    "slope": 0.3265305224631427
                 }
             ],
             "task": "1_rspeed-4K"
@@ -38,7 +38,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU2_work_done\" ./canrdr-4M -v0 -c1 -i100",
             "resourceAssignments": [
                 {
-                    "intercept": 1.18,
+                    "intercept": 0.9300927164287804,
                     "length": 610,
                     "processors": [
                         {
@@ -46,7 +46,7 @@
                             "processor": "A53"
                         }
                     ],
-                    "slope": 0.36
+                    "slope": 0.3755011537810582
                 }
             ],
             "task": "2_canrdr-4M"
@@ -55,7 +55,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU3_work_done\" ./canrdr-4M -v0 -c1 -i100",
             "resourceAssignments": [
                 {
-                    "intercept": 1.18,
+                    "intercept": 0.9300927164287804,
                     "length": 89,
                     "processors": [
                         {
@@ -63,7 +63,7 @@
                             "processor": "A53"
                         }
                     ],
-                    "slope": 0.36
+                    "slope": 0.3755011537810582
                 }
             ],
             "task": "3_canrdr-4M"
@@ -72,7 +72,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU4_work_done\" ./canrdr-4M -v0 -c1 -i100",
             "resourceAssignments": [
                 {
-                    "intercept": 2.32,
+                    "intercept": 1.0470248708009935,
                     "length": 57,
                     "processors": [
                         {
@@ -80,22 +80,33 @@
                             "processor": "A72"
                         }
                     ],
-                    "slope": 1.33
+                    "slope": 1.264783732754613
                 }
             ],
             "task": "4_canrdr-4M"
         }
     ],
     "environment": {
+        "idlePower": 5.45,
         "majorFrameLength": 1000,
         "problemVersion": 1,
         "processors": [
             {
+                "coreIds": [
+                    0,
+                    1,
+                    2,
+                    3
+                ],
                 "name": "A53",
                 "processingUnits": 4,
                 "type": "main_processor"
             },
             {
+                "coreIds": [
+                    4,
+                    5
+                ],
                 "name": "A72",
                 "processingUnits": 2,
                 "type": "main_processor"

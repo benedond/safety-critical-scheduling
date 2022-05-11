@@ -1,0 +1,30 @@
+set_cwd: false
+partitions:
+  - name: 2_iirflt-4K
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU4_work_done" ./iirflt-4K -v0 -c1 -i100
+        budget: 330
+  - name: 1_matrix-4K
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU3_work_done" ./matrix-4K -v0 -c1 -i100
+        budget: 432
+  - name: 3_idctrn-4K
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done" ./idctrn-4K -v0 -c1 -i100
+        budget: 757
+  - name: 0_matrix-4M
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU0_work_done" ./matrix-4M -v0 -c1 -i100
+        budget: 313
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 4
+        sc_partition: 2_iirflt-4K
+      - cpu: 3
+        sc_partition: 1_matrix-4K
+      - cpu: 1
+        sc_partition: 3_idctrn-4K
+      - cpu: 0
+        sc_partition: 0_matrix-4M

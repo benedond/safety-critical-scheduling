@@ -1,0 +1,30 @@
+set_cwd: false
+partitions:
+  - name: 2_pntrch-4K
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done" ./pntrch-4K -v0 -c1 -i100
+        budget: 15
+  - name: 1_idctrn-4K
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done" ./idctrn-4K -v0 -c1 -i100
+        budget: 853
+  - name: 3_membench-4M-RW-S
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU2_work_done" /root/thermobench/build/benchmarks/mem/membench -t1 -f -w -s 4000000
+        budget: 588
+  - name: 0_membench-1M-RW-R
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU0_work_done" /root/thermobench/build/benchmarks/mem/membench -t1 -f -r -w -s 1000000
+        budget: 604
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 1
+        sc_partition: 2_pntrch-4K
+      - cpu: 5
+        sc_partition: 1_idctrn-4K
+      - cpu: 2
+        sc_partition: 3_membench-4M-RW-S
+      - cpu: 0
+        sc_partition: 0_membench-1M-RW-R

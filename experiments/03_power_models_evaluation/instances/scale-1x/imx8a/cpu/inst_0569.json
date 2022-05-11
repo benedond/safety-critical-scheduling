@@ -4,7 +4,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU0_work_done\" ./ttsprk-4K -v0 -c1 -i100",
             "resourceAssignments": [
                 {
-                    "intercept": 0.37,
+                    "intercept": 0.1530229223856398,
                     "length": 925,
                     "processors": [
                         {
@@ -12,7 +12,7 @@
                             "processor": "A53"
                         }
                     ],
-                    "slope": 0.36
+                    "slope": 0.3434870032582224
                 }
             ],
             "task": "0_ttsprk-4K"
@@ -21,7 +21,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU2_work_done\" ./aifirf-4M -v0 -c1 -i10",
             "resourceAssignments": [
                 {
-                    "intercept": 1.06,
+                    "intercept": 0.6173638540169515,
                     "length": 970,
                     "processors": [
                         {
@@ -29,7 +29,7 @@
                             "processor": "A53"
                         }
                     ],
-                    "slope": 0.36
+                    "slope": 0.3209989693391038
                 }
             ],
             "task": "1_aifirf-4M"
@@ -38,7 +38,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU4_work_done\" ./bitmnp-4M -v0 -c1 -i100",
             "resourceAssignments": [
                 {
-                    "intercept": 1.97,
+                    "intercept": 0.887864101136218,
                     "length": 518,
                     "processors": [
                         {
@@ -46,7 +46,7 @@
                             "processor": "A72"
                         }
                     ],
-                    "slope": 0.9
+                    "slope": 0.7927847647671751
                 }
             ],
             "task": "2_bitmnp-4M"
@@ -55,7 +55,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done\" ./iirflt-4M -v0 -c1 -i100",
             "resourceAssignments": [
                 {
-                    "intercept": 2.64,
+                    "intercept": 0.8132361965874804,
                     "length": 144,
                     "processors": [
                         {
@@ -63,22 +63,33 @@
                             "processor": "A72"
                         }
                     ],
-                    "slope": 1.55
+                    "slope": 1.437909073879684
                 }
             ],
             "task": "3_iirflt-4M"
         }
     ],
     "environment": {
+        "idlePower": 5.49,
         "majorFrameLength": 1000,
         "problemVersion": 1,
         "processors": [
             {
+                "coreIds": [
+                    0,
+                    1,
+                    2,
+                    3
+                ],
                 "name": "A53",
                 "processingUnits": 4,
                 "type": "main_processor"
             },
             {
+                "coreIds": [
+                    4,
+                    5
+                ],
                 "name": "A72",
                 "processingUnits": 2,
                 "type": "main_processor"

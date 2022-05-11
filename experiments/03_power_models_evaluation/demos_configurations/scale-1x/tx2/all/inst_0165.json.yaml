@@ -1,0 +1,24 @@
+set_cwd: false
+partitions:
+  - name: 2_tinyrenderer-boggie
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU2_work_done" /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer /root/thermobench/benchmarks/tinyrenderer/obj/boggie/*.obj
+        budget: 61
+  - name: 1_iirflt-4M
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done" ./iirflt-4M -v0 -c1 -i100
+        budget: 685
+  - name: 0_membench-4M-RO-S
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU4_work_done" /root/thermobench/build/benchmarks/mem/membench -t1 -f -s 4000000
+        budget: 212
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 2
+        sc_partition: 2_tinyrenderer-boggie
+      - cpu: 5
+        sc_partition: 1_iirflt-4M
+      - cpu: 4
+        sc_partition: 0_membench-4M-RO-S

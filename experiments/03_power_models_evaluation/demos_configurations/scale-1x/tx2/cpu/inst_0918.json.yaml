@@ -1,0 +1,30 @@
+set_cwd: false
+partitions:
+  - name: 3_tblook-4K
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU2_work_done" ./tblook-4K -v0 -c1 -i100
+        budget: 973
+  - name: 2_ttsprk-4M
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done" ./ttsprk-4M -v0 -c1 -i100
+        budget: 887
+  - name: 1_tblook-4K
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU3_work_done" ./tblook-4K -v0 -c1 -i100
+        budget: 64
+  - name: 0_tblook-4M
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU0_work_done" ./tblook-4M -v0 -c1 -i100
+        budget: 606
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 2
+        sc_partition: 3_tblook-4K
+      - cpu: 1
+        sc_partition: 2_ttsprk-4M
+      - cpu: 3
+        sc_partition: 1_tblook-4K
+      - cpu: 0
+        sc_partition: 0_tblook-4M

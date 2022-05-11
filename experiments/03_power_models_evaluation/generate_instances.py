@@ -4,6 +4,9 @@ import pandas as pd
 import json
 import random
 import os
+import sys
+sys.path.insert(1, os.path.join(sys.path[0], '..'))
+import utils
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--window_length", default=1000, type=int, help="Length of the window in ms.")
@@ -15,45 +18,20 @@ parser.add_argument("--n_instances", default=1000, type=int, help="Number of ins
 parser.add_argument("--scale", default=1.0, type=float, help="Scale of the MF and other time constants.")
 
 
-cores_offset = {"A53": [0, 1, 2, 3],
-                "A72": [4, 5],
-                "A57": [0, 3, 4, 5],
-                "Denver": [1, 2]}
-
-cores = {"A53": [0, 1, 2, 3],
-          "A72": [0, 1],
-          "A57": [0, 1, 2, 3],
-          "Denver": [0, 1]}
-
-def read_json(file):
-    f = open(file,"r")        
-    data = json.loads(f.read())
-    f.close()
-    return data
-
-
-def read_csv(file):
-    return pd.read_csv(file, comment="#")    
-
-
 def get_workload(env, args, benchmarks):
     processors_workload = {p["name"]: [] for p in env["processors"]}
     
-    for p_name in processors_workload.keys():
-        for c in cores[p_name]:
+    for p in env["processors"]:
+        p_name = p["name"]
+        for c in range(p["processingUnits"]):
             if random.random() > 0.5:  # allocate some workload to this core
                 b_idx = random.randint(0, len(benchmarks)-1)
-                length = int(round(random.random() * args.window_length * args.scale))                
+                length = max(1,int(round(random.random() * args.window_length * args.scale)))
                 processors_workload[p_name].append((benchmarks[b_idx], length))
             else: # core will be empty
                 processors_workload[p_name].append(None)
     
     return processors_workload
-
-
-def get_cmd_slope_intercept(benchmark, processor, df):
-    row = df[ (df["benchmark"] == benchmark) & (df["affinity"] == processor) ].iloc[0]
-    return row["command"], row["slope"], row["intercept"]
 
 
 def workload_is_none(workload):
@@ -65,10 +43,10 @@ def workload_is_none(workload):
 
 
 def generate_instance(args):
-    instance = read_json(args.env_file)
+    instance = utils.read_json(args.env_file)
     instance["environment"]["majorFrameLength"] = int(round(args.window_length * args.scale))
     
-    benchmarks_char = read_csv(args.char_file)    
+    benchmarks_char = utils.read_csv(args.char_file)    
     
     workload = {}
     while workload_is_none(workload):
@@ -79,16 +57,20 @@ def generate_instance(args):
     win_tasks = []
     
     task_idx = 0
-    for p_idx, processor in enumerate(workload.keys()):
-        for core, w in zip(cores[processor], workload[processor]):
+    for p in instance["environment"]["processors"]:
+        processor = p["name"]
+        p_cores = p["coreIds"]
+                
+        for c, w in zip(range(len(p_cores)), workload[processor]):
+            core = p_cores[c]
             if w is None:
                 continue
             else:                
                 benchmark, length = w
                 task_name = "{}_{}".format(task_idx, benchmark)
-                cmd, slope, intercept = get_cmd_slope_intercept(benchmark, processor, benchmarks_char)
+                cmd, slope, intercept = utils.get_cmd_slope_intercept(benchmark, processor, benchmarks_char)
                 
-                cmd = 'TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU{}_work_done" '.format(cores_offset[processor][core]) + cmd
+                cmd = 'TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU{}_work_done" '.format(core) + cmd
                 
                 # Prepare assignment characteristics
                 ass_char.append({"command": cmd,
@@ -109,7 +91,7 @@ def generate_instance(args):
                                })
                 
                 win_tasks.append({"length": length,
-                                  "processingUnit": core,
+                                  "processingUnit": c,
                                   "processor": processor,
                                   "start": 0,
                                   "task": task_name})

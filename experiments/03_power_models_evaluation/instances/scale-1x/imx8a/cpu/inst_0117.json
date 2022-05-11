@@ -4,7 +4,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU0_work_done\" ./aifirf-4M -v0 -c1 -i10",
             "resourceAssignments": [
                 {
-                    "intercept": 1.06,
+                    "intercept": 0.6173638540169515,
                     "length": 208,
                     "processors": [
                         {
@@ -12,7 +12,7 @@
                             "processor": "A53"
                         }
                     ],
-                    "slope": 0.36
+                    "slope": 0.3209989693391038
                 }
             ],
             "task": "0_aifirf-4M"
@@ -21,7 +21,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done\" ./pntrch-4K -v0 -c1 -i100",
             "resourceAssignments": [
                 {
-                    "intercept": 0.26,
+                    "intercept": 0.1673344981839175,
                     "length": 251,
                     "processors": [
                         {
@@ -29,7 +29,7 @@
                             "processor": "A53"
                         }
                     ],
-                    "slope": 0.23
+                    "slope": 0.2387831493354596
                 }
             ],
             "task": "1_pntrch-4K"
@@ -38,7 +38,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU2_work_done\" ./canrdr-4M -v0 -c1 -i100",
             "resourceAssignments": [
                 {
-                    "intercept": 1.47,
+                    "intercept": 0.8900927164287804,
                     "length": 985,
                     "processors": [
                         {
@@ -46,7 +46,7 @@
                             "processor": "A53"
                         }
                     ],
-                    "slope": 0.4
+                    "slope": 0.3755011537810582
                 }
             ],
             "task": "2_canrdr-4M"
@@ -55,15 +55,15 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU3_work_done\" ./puwmod-4K -v0 -c1 -i100",
             "resourceAssignments": [
                 {
-                    "intercept": 0.32,
-                    "length": 0,
+                    "intercept": 0.1764994822680732,
+                    "length": 1,
                     "processors": [
                         {
                             "processingUnits": 1,
                             "processor": "A53"
                         }
                     ],
-                    "slope": 0.28
+                    "slope": 0.2904875493305144
                 }
             ],
             "task": "3_puwmod-4K"
@@ -72,7 +72,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done\" ./ttsprk-4M -v0 -c1 -i100",
             "resourceAssignments": [
                 {
-                    "intercept": 1.58,
+                    "intercept": 0.0145384037012021,
                     "length": 991,
                     "processors": [
                         {
@@ -80,22 +80,33 @@
                             "processor": "A72"
                         }
                     ],
-                    "slope": 1.98
+                    "slope": 1.577697531704464
                 }
             ],
             "task": "4_ttsprk-4M"
         }
     ],
     "environment": {
+        "idlePower": 5.49,
         "majorFrameLength": 1000,
         "problemVersion": 1,
         "processors": [
             {
+                "coreIds": [
+                    0,
+                    1,
+                    2,
+                    3
+                ],
                 "name": "A53",
                 "processingUnits": 4,
                 "type": "main_processor"
             },
             {
+                "coreIds": [
+                    4,
+                    5
+                ],
                 "name": "A72",
                 "processingUnits": 2,
                 "type": "main_processor"
@@ -134,7 +145,7 @@
                         "task": "2_canrdr-4M"
                     },
                     {
-                        "length": 0,
+                        "length": 1,
                         "processingUnit": 3,
                         "processor": "A53",
                         "start": 0,
@@ -191,7 +202,7 @@
         {
             "assignmentIndex": 0,
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU3_work_done\" ./puwmod-4K -v0 -c1 -i100",
-            "length": 0,
+            "length": 1,
             "name": "3_puwmod-4K",
             "processors": [
                 {

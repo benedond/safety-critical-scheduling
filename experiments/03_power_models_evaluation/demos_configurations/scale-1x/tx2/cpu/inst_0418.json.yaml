@@ -1,0 +1,30 @@
+set_cwd: false
+partitions:
+  - name: 3_tblook-4M
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done" ./tblook-4M -v0 -c1 -i100
+        budget: 938
+  - name: 2_canrdr-4K
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done" ./canrdr-4K -v0 -c1 -i100
+        budget: 585
+  - name: 1_aifirf-4M
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU4_work_done" ./aifirf-4M -v0 -c1 -i10
+        budget: 975
+  - name: 0_idctrn-4K
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU3_work_done" ./idctrn-4K -v0 -c1 -i100
+        budget: 543
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 1
+        sc_partition: 3_tblook-4M
+      - cpu: 5
+        sc_partition: 2_canrdr-4K
+      - cpu: 4
+        sc_partition: 1_aifirf-4M
+      - cpu: 3
+        sc_partition: 0_idctrn-4K

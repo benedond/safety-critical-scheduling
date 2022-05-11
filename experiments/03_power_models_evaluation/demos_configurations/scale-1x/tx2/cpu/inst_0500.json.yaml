@@ -1,0 +1,30 @@
+set_cwd: false
+partitions:
+  - name: 3_idctrn-4M
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done" ./idctrn-4M -v0 -c1 -i100
+        budget: 680
+  - name: 2_idctrn-4K
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done" ./idctrn-4K -v0 -c1 -i100
+        budget: 232
+  - name: 1_pntrch-4K
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU4_work_done" ./pntrch-4K -v0 -c1 -i100
+        budget: 66
+  - name: 0_pntrch-4K
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU3_work_done" ./pntrch-4K -v0 -c1 -i100
+        budget: 983
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 1
+        sc_partition: 3_idctrn-4M
+      - cpu: 5
+        sc_partition: 2_idctrn-4K
+      - cpu: 4
+        sc_partition: 1_pntrch-4K
+      - cpu: 3
+        sc_partition: 0_pntrch-4K

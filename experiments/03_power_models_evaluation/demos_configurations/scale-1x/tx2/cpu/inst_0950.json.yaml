@@ -1,0 +1,24 @@
+set_cwd: false
+partitions:
+  - name: 2_bitmnp-4M
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU2_work_done" ./bitmnp-4M -v0 -c1 -i100
+        budget: 363
+  - name: 1_a2time-4K
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done" ./a2time-4K -v0 -c1 -i100
+        budget: 898
+  - name: 0_tinyrenderer-diablo
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU3_work_done" /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer /root/thermobench/benchmarks/tinyrenderer/obj/diablo3_pose/*.obj
+        budget: 160
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 2
+        sc_partition: 2_bitmnp-4M
+      - cpu: 5
+        sc_partition: 1_a2time-4K
+      - cpu: 3
+        sc_partition: 0_tinyrenderer-diablo

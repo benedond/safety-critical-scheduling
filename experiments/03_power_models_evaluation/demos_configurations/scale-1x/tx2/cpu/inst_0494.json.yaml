@@ -1,0 +1,24 @@
+set_cwd: false
+partitions:
+  - name: 2_a2time-4K
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done" ./a2time-4K -v0 -c1 -i100
+        budget: 530
+  - name: 1_tblook-4M
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU3_work_done" ./tblook-4M -v0 -c1 -i100
+        budget: 57
+  - name: 0_tblook-4M
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU0_work_done" ./tblook-4M -v0 -c1 -i100
+        budget: 764
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 5
+        sc_partition: 2_a2time-4K
+      - cpu: 3
+        sc_partition: 1_tblook-4M
+      - cpu: 0
+        sc_partition: 0_tblook-4M

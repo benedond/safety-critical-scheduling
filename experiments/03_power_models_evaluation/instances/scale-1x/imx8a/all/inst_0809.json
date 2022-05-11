@@ -4,7 +4,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU4_work_done\" ./tblook-4K -v0 -c1 -i100",
             "resourceAssignments": [
                 {
-                    "intercept": 1.51,
+                    "intercept": 0.1116929252501606,
                     "length": 901,
                     "processors": [
                         {
@@ -12,7 +12,7 @@
                             "processor": "A72"
                         }
                     ],
-                    "slope": 1.65
+                    "slope": 1.4522183643887034
                 }
             ],
             "task": "0_tblook-4K"
@@ -21,7 +21,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done\" ./iirflt-4K -v0 -c1 -i100",
             "resourceAssignments": [
                 {
-                    "intercept": 1.35,
+                    "intercept": 0.1673526660699398,
                     "length": 739,
                     "processors": [
                         {
@@ -29,22 +29,33 @@
                             "processor": "A72"
                         }
                     ],
-                    "slope": 1.46
+                    "slope": 1.2803810129186657
                 }
             ],
             "task": "1_iirflt-4K"
         }
     ],
     "environment": {
+        "idlePower": 5.49,
         "majorFrameLength": 1000,
         "problemVersion": 1,
         "processors": [
             {
+                "coreIds": [
+                    0,
+                    1,
+                    2,
+                    3
+                ],
                 "name": "A53",
                 "processingUnits": 4,
                 "type": "main_processor"
             },
             {
+                "coreIds": [
+                    4,
+                    5
+                ],
                 "name": "A72",
                 "processingUnits": 2,
                 "type": "main_processor"

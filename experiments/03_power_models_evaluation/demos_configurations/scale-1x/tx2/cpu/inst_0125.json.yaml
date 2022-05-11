@@ -1,0 +1,30 @@
+set_cwd: false
+partitions:
+  - name: 3_matrix-4K
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done" ./matrix-4K -v0 -c1 -i100
+        budget: 672
+  - name: 2_matrix-4M
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done" ./matrix-4M -v0 -c1 -i100
+        budget: 335
+  - name: 1_matrix-4M
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU3_work_done" ./matrix-4M -v0 -c1 -i100
+        budget: 187
+  - name: 0_ttsprk-4M
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU0_work_done" ./ttsprk-4M -v0 -c1 -i100
+        budget: 813
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 1
+        sc_partition: 3_matrix-4K
+      - cpu: 5
+        sc_partition: 2_matrix-4M
+      - cpu: 3
+        sc_partition: 1_matrix-4M
+      - cpu: 0
+        sc_partition: 0_ttsprk-4M

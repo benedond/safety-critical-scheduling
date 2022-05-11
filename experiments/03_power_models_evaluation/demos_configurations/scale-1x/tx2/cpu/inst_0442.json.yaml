@@ -1,0 +1,42 @@
+set_cwd: false
+partitions:
+  - name: 5_tinyrenderer-diablo
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU2_work_done" /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer /root/thermobench/benchmarks/tinyrenderer/obj/diablo3_pose/*.obj
+        budget: 609
+  - name: 4_tblook-4M
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done" ./tblook-4M -v0 -c1 -i100
+        budget: 177
+  - name: 3_idctrn-4M
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done" ./idctrn-4M -v0 -c1 -i100
+        budget: 210
+  - name: 2_canrdr-4M
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU4_work_done" ./canrdr-4M -v0 -c1 -i100
+        budget: 223
+  - name: 1_tinyrenderer-boggie
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU3_work_done" /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer /root/thermobench/benchmarks/tinyrenderer/obj/boggie/*.obj
+        budget: 221
+  - name: 0_tinyrenderer-boggie
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU0_work_done" /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer /root/thermobench/benchmarks/tinyrenderer/obj/boggie/*.obj
+        budget: 506
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 2
+        sc_partition: 5_tinyrenderer-diablo
+      - cpu: 1
+        sc_partition: 4_tblook-4M
+      - cpu: 5
+        sc_partition: 3_idctrn-4M
+      - cpu: 4
+        sc_partition: 2_canrdr-4M
+      - cpu: 3
+        sc_partition: 1_tinyrenderer-boggie
+      - cpu: 0
+        sc_partition: 0_tinyrenderer-boggie

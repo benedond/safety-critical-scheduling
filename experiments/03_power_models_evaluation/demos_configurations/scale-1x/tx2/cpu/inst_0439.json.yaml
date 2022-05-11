@@ -1,0 +1,24 @@
+set_cwd: false
+partitions:
+  - name: 2_a2time-4K
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done" ./a2time-4K -v0 -c1 -i100
+        budget: 214
+  - name: 1_canrdr-4K
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done" ./canrdr-4K -v0 -c1 -i100
+        budget: 917
+  - name: 0_idctrn-4M
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=CPU3_work_done" ./idctrn-4M -v0 -c1 -i100
+        budget: 206
+
+windows:
+  - length: 1000
+    slices:
+      - cpu: 1
+        sc_partition: 2_a2time-4K
+      - cpu: 5
+        sc_partition: 1_canrdr-4K
+      - cpu: 3
+        sc_partition: 0_idctrn-4M
