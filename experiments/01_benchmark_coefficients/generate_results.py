@@ -11,6 +11,7 @@ parser.add_argument("--env_file",   "-e", type=str, required=True, help="Path to
 parser.add_argument("--bench_file",   "-b", type=str, required=True, help="Path to the benchmark file.")
 parser.add_argument("--meas_folder",  "-m", type=str, required=True, help="Path to the folder containing measurements.")
 parser.add_argument("--out_file", "-o", type=str, required=True, help="Path to the folder where to store the results.")
+parser.add_argument("--cpu", "-c", type=int, default=0, help="Set to 0 if all benchamrks are included; >0 if just cpu benchmarks are included.")
 
 """
 Go through all the files with measurements in the given "path" and produce a dict mapping
@@ -49,11 +50,19 @@ def get_bench_cmds(bench, bench_file):
             cmds[b] = df[df["benchmark"] == b].iloc[0]["command"]
     return cmds
 
-def generate_characteristics(env_file_path: str, bench_file_path:str, measurements_path: str, out_path: str):
+def generate_characteristics(env_file_path: str, bench_file_path:str, measurements_path: str, out_path: str, just_cpu: bool):
+    env = utils.read_json(env_file_path)
+    little = env["environment"]["processors"][0]["name"]
+    big = env["environment"]["processors"][1]["name"]
+    
     d = read_data(measurements_path)
     idle_power = utils.get_idle_power(env_file_path)
     cmds = get_bench_cmds([x[0] for x in d.keys()], bench_file_path)
-    df = pd.DataFrame(columns=("benchmark", "affinity", "intercept", "slope", "runtime", "command"))    
+    df = pd.DataFrame(columns=("benchmark", "affinity", "intercept", "slope", "exec_time", "command"))
+    
+    runtime_little = {}
+    runtime_big = {}
+        
     for bench, aff in d.keys():
         n_cores = utils.get_n_cores(args.env_file, aff)
         intercept, slope = get_intercept_and_slope(d[(bench, aff)]["one"], d[(bench,aff)]["all"], n_cores)
@@ -64,13 +73,28 @@ def generate_characteristics(env_file_path: str, bench_file_path:str, measuremen
         
         cmd = cmds[bench]
         
-        # benchmark,affinity,intercept,slope,runtime,command        
-        df.loc[len(df)] = [bench, aff, intercept, slope, 1/ips if ips else None, cmd]              
-    
+        # benchmark,affinity,intercept,slope,runtime, exec_time,command        
+        exec_time = 1/ips if ips else None
+        df.loc[len(df)] = [bench, aff, intercept, slope, exec_time, cmd]              
+        
+        if aff == little and exec_time:
+            runtime_little[bench] = exec_time
+        elif aff == big and exec_time:
+            runtime_big[bench] = exec_time
+
+    # get normalized runtime
+    df["runtime"] = df.apply(lambda row: (runtime_little[row.benchmark] if row.affinity == little else runtime_big[row.benchmark]) / runtime_big[row.benchmark] if (row.benchmark in runtime_little and row.benchmark in runtime_big) else None, axis=1)
+      
     # compensate the idle state (subtract the mean measured idle power consumption)    
     df["intercept"] -= idle_power
     
-    df = df.sort_values("benchmark")    
+    # filter sleep
+    df = df[~df["benchmark"].str.contains("sleep")]
+    
+    if just_cpu:
+        df = df[~df["benchmark"].str.contains("membench")]
+    
+    df = df.sort_values(["benchmark", "affinity"])    
     df.to_csv(out_path, index=False)        
 
 
@@ -98,7 +122,8 @@ def generate_speed_up(results_file: str):
     
 
 if __name__ == "__main__":
+    utils.create_folder("./results")
     args = parser.parse_args()
-    generate_characteristics(args.env_file, args.bench_file, args.meas_folder, args.out_file)
-    generate_speed_up(args.out_file)
+    generate_characteristics(args.env_file, args.bench_file, args.meas_folder, args.out_file, args.cpu > 0)
+    # generate_speed_up(args.out_file)
     
