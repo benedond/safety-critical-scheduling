@@ -4,7 +4,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU0_work_done\" ./idctrn-4M -v0 -c1 -i100",
             "resourceAssignments": [
                 {
-                    "intercept": 0.96,
+                    "intercept": 0.7711385046843713,
                     "length": 1000,
                     "processors": [
                         {
@@ -12,7 +12,7 @@
                             "processor": "A53"
                         }
                     ],
-                    "slope": 0.32
+                    "slope": 0.3142554075379395
                 }
             ],
             "task": "0_idctrn-4M"
@@ -21,7 +21,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done\" ./matrix-4K -v0 -c1 -i100",
             "resourceAssignments": [
                 {
-                    "intercept": 0.34,
+                    "intercept": 0.2015414247750238,
                     "length": 1000,
                     "processors": [
                         {
@@ -29,16 +29,16 @@
                             "processor": "A53"
                         }
                     ],
-                    "slope": 0.31
+                    "slope": 0.3335254213993099
                 }
             ],
             "task": "1_matrix-4K"
         },
         {
-            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU2_work_done\" /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer -f /root/thermobench/benchmarks/tinyrenderer/obj/diablo3_pose/*.obj",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU2_work_done\" /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer /root/thermobench/benchmarks/tinyrenderer/obj/diablo3_pose/*.obj",
             "resourceAssignments": [
                 {
-                    "intercept": 0.87,
+                    "intercept": 0.8601760587883769,
                     "length": 1000,
                     "processors": [
                         {
@@ -46,7 +46,7 @@
                             "processor": "A53"
                         }
                     ],
-                    "slope": 0.24
+                    "slope": 0.2581147359399987
                 }
             ],
             "task": "2_tinyrenderer-diablo"
@@ -213,7 +213,7 @@
         },
         {
             "assignmentIndex": 0,
-            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU2_work_done\" /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer -f /root/thermobench/benchmarks/tinyrenderer/obj/diablo3_pose/*.obj",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU2_work_done\" /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer /root/thermobench/benchmarks/tinyrenderer/obj/diablo3_pose/*.obj",
             "length": 1000,
             "name": "2_tinyrenderer-diablo",
             "processors": [

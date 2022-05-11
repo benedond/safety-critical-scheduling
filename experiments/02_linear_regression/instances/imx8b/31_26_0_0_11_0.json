@@ -4,7 +4,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU0_work_done\" ./rspeed-4K -v0 -c1 -i100",
             "resourceAssignments": [
                 {
-                    "intercept": 0.33,
+                    "intercept": 0.1981941350646083,
                     "length": 1000,
                     "processors": [
                         {
@@ -12,7 +12,7 @@
                             "processor": "A53"
                         }
                     ],
-                    "slope": 0.33
+                    "slope": 0.3265305224631427
                 }
             ],
             "task": "0_rspeed-4K"
@@ -21,7 +21,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -w -s 4000000",
             "resourceAssignments": [
                 {
-                    "intercept": 1.6,
+                    "intercept": 1.373691633717554,
                     "length": 1000,
                     "processors": [
                         {
@@ -29,7 +29,7 @@
                             "processor": "A53"
                         }
                     ],
-                    "slope": 0.34
+                    "slope": 0.3449902757639942
                 }
             ],
             "task": "1_membench-4M-RW-S"
@@ -72,7 +72,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU4_work_done\" ./iirflt-4K -v0 -c1 -i100",
             "resourceAssignments": [
                 {
-                    "intercept": 1.43,
+                    "intercept": 0.2073526660699398,
                     "length": 1000,
                     "processors": [
                         {
@@ -80,7 +80,7 @@
                             "processor": "A72"
                         }
                     ],
-                    "slope": 1.31
+                    "slope": 1.2803810129186657
                 }
             ],
             "task": "4_iirflt-4K"

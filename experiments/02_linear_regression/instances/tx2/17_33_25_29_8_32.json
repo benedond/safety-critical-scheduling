@@ -4,7 +4,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU0_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -r -w -s 1000",
             "resourceAssignments": [
                 {
-                    "intercept": 0.93,
+                    "intercept": 0.1275628115778548,
                     "length": 1000,
                     "processors": [
                         {
@@ -12,7 +12,7 @@
                             "processor": "A57"
                         }
                     ],
-                    "slope": 0.61
+                    "slope": 0.6205543821624716
                 }
             ],
             "task": "0_membench-1K-RW-R"
@@ -21,7 +21,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU3_work_done\" ./tblook-4K -v0 -c1 -i100",
             "resourceAssignments": [
                 {
-                    "intercept": 1.2,
+                    "intercept": 0.2372933123028078,
                     "length": 1000,
                     "processors": [
                         {
@@ -29,7 +29,7 @@
                             "processor": "A57"
                         }
                     ],
-                    "slope": 0.79
+                    "slope": 0.7757500129842537
                 }
             ],
             "task": "1_tblook-4K"
@@ -38,7 +38,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU4_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -r -w -s 4000000",
             "resourceAssignments": [
                 {
-                    "intercept": 0.99,
+                    "intercept": 0.3200574869386066,
                     "length": 1000,
                     "processors": [
                         {
@@ -46,7 +46,7 @@
                             "processor": "A57"
                         }
                     ],
-                    "slope": 0.48
+                    "slope": 0.4884900799828431
                 }
             ],
             "task": "2_membench-4M-RW-R"
@@ -55,7 +55,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done\" ./puwmod-4K -v0 -c1 -i100",
             "resourceAssignments": [
                 {
-                    "intercept": 0.99,
+                    "intercept": 0.1757002391975364,
                     "length": 1000,
                     "processors": [
                         {
@@ -63,7 +63,7 @@
                             "processor": "A57"
                         }
                     ],
-                    "slope": 0.68
+                    "slope": 0.6905398269750257
                 }
             ],
             "task": "3_puwmod-4K"
@@ -72,7 +72,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done\" ./canrdr-4M -v0 -c1 -i100",
             "resourceAssignments": [
                 {
-                    "intercept": 2.84,
+                    "intercept": 0.6538208637366609,
                     "length": 1000,
                     "processors": [
                         {
@@ -80,7 +80,7 @@
                             "processor": "Denver"
                         }
                     ],
-                    "slope": 2.3
+                    "slope": 2.259384477864561
                 }
             ],
             "task": "4_canrdr-4M"
@@ -89,7 +89,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU2_work_done\" ./rspeed-4M -v0 -c1 -i100",
             "resourceAssignments": [
                 {
-                    "intercept": 2.55,
+                    "intercept": 0.4553683745635379,
                     "length": 1000,
                     "processors": [
                         {
@@ -97,7 +97,7 @@
                             "processor": "Denver"
                         }
                     ],
-                    "slope": 1.92
+                    "slope": 1.9925363991106095
                 }
             ],
             "task": "5_rspeed-4M"

@@ -4,7 +4,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU0_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -s 1000000",
             "resourceAssignments": [
                 {
-                    "intercept": 0.86,
+                    "intercept": 0.5728396186226359,
                     "length": 1000,
                     "processors": [
                         {
@@ -12,7 +12,7 @@
                             "processor": "A53"
                         }
                     ],
-                    "slope": 0.57
+                    "slope": 0.5319358817642469
                 }
             ],
             "task": "0_membench-1M-RO-S"
@@ -21,7 +21,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done\" ./rspeed-4M -v0 -c1 -i100",
             "resourceAssignments": [
                 {
-                    "intercept": 1.34,
+                    "intercept": 1.037703453942644,
                     "length": 1000,
                     "processors": [
                         {
@@ -29,7 +29,7 @@
                             "processor": "A53"
                         }
                     ],
-                    "slope": 0.4
+                    "slope": 0.4266070197109079
                 }
             ],
             "task": "1_rspeed-4M"
@@ -38,7 +38,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU2_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -r -s 1000000",
             "resourceAssignments": [
                 {
-                    "intercept": 0.61,
+                    "intercept": 0.5741854404433324,
                     "length": 1000,
                     "processors": [
                         {
@@ -46,7 +46,7 @@
                             "processor": "A53"
                         }
                     ],
-                    "slope": 0.4
+                    "slope": 0.3539638540109318
                 }
             ],
             "task": "2_membench-1M-RO-R"
@@ -55,7 +55,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU3_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -s 4000000",
             "resourceAssignments": [
                 {
-                    "intercept": 1.47,
+                    "intercept": 1.2727281382678983,
                     "length": 1000,
                     "processors": [
                         {
@@ -63,7 +63,7 @@
                             "processor": "A53"
                         }
                     ],
-                    "slope": 0.37
+                    "slope": 0.3629087591866122
                 }
             ],
             "task": "3_membench-4M-RO-S"
@@ -72,7 +72,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU4_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -w -s 1000000",
             "resourceAssignments": [
                 {
-                    "intercept": 2.12,
+                    "intercept": 1.4281025217045942,
                     "length": 1000,
                     "processors": [
                         {
@@ -80,7 +80,7 @@
                             "processor": "A72"
                         }
                     ],
-                    "slope": 0.69
+                    "slope": 0.6578410535418335
                 }
             ],
             "task": "4_membench-1M-RW-S"
@@ -89,7 +89,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done\" ./a2time-4M -v0 -c1 -i100",
             "resourceAssignments": [
                 {
-                    "intercept": 2.26,
+                    "intercept": 1.096376591296715,
                     "length": 1000,
                     "processors": [
                         {
@@ -97,7 +97,7 @@
                             "processor": "A72"
                         }
                     ],
-                    "slope": 1.13
+                    "slope": 1.079751949123648
                 }
             ],
             "task": "5_a2time-4M"

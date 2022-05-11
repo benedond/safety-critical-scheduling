@@ -4,7 +4,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU0_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -s 4000000",
             "resourceAssignments": [
                 {
-                    "intercept": 1.19,
+                    "intercept": 0.5111144059831734,
                     "length": 1000,
                     "processors": [
                         {
@@ -12,7 +12,7 @@
                             "processor": "A57"
                         }
                     ],
-                    "slope": 0.49
+                    "slope": 0.4863050527330153
                 }
             ],
             "task": "0_membench-4M-RO-S"
@@ -21,7 +21,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU3_work_done\" ./canrdr-4K -v0 -c1 -i100",
             "resourceAssignments": [
                 {
-                    "intercept": 1.12,
+                    "intercept": 0.1785781276159461,
                     "length": 1000,
                     "processors": [
                         {
@@ -29,7 +29,7 @@
                             "processor": "A57"
                         }
                     ],
-                    "slope": 0.74
+                    "slope": 0.7498615493412003
                 }
             ],
             "task": "1_canrdr-4K"
@@ -38,7 +38,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU4_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -r -w -s 4000000",
             "resourceAssignments": [
                 {
-                    "intercept": 0.99,
+                    "intercept": 0.3200574869386066,
                     "length": 1000,
                     "processors": [
                         {
@@ -46,7 +46,7 @@
                             "processor": "A57"
                         }
                     ],
-                    "slope": 0.48
+                    "slope": 0.4884900799828431
                 }
             ],
             "task": "2_membench-4M-RW-R"

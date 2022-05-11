@@ -4,7 +4,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU0_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -w -s 1000",
             "resourceAssignments": [
                 {
-                    "intercept": 0.93,
+                    "intercept": 0.1404149708342421,
                     "length": 1000,
                     "processors": [
                         {
@@ -12,7 +12,7 @@
                             "processor": "A57"
                         }
                     ],
-                    "slope": 0.61
+                    "slope": 0.6236942099281021
                 }
             ],
             "task": "0_membench-1K-RW-S"
@@ -21,7 +21,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU3_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -r -s 1000000",
             "resourceAssignments": [
                 {
-                    "intercept": 0.76,
+                    "intercept": 0.1474248577509271,
                     "length": 1000,
                     "processors": [
                         {
@@ -29,7 +29,7 @@
                             "processor": "A57"
                         }
                     ],
-                    "slope": 0.4
+                    "slope": 0.4092993211742065
                 }
             ],
             "task": "1_membench-1M-RO-R"
@@ -38,7 +38,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU4_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -r -w -s 1000",
             "resourceAssignments": [
                 {
-                    "intercept": 0.93,
+                    "intercept": 0.1275628115778548,
                     "length": 1000,
                     "processors": [
                         {
@@ -46,7 +46,7 @@
                             "processor": "A57"
                         }
                     ],
-                    "slope": 0.61
+                    "slope": 0.6205543821624716
                 }
             ],
             "task": "2_membench-1K-RW-R"
@@ -55,7 +55,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -s 1000000",
             "resourceAssignments": [
                 {
-                    "intercept": 0.96,
+                    "intercept": 0.2848395448330887,
                     "length": 1000,
                     "processors": [
                         {
@@ -63,7 +63,7 @@
                             "processor": "A57"
                         }
                     ],
-                    "slope": 0.56
+                    "slope": 0.5448120747263204
                 }
             ],
             "task": "3_membench-1M-RO-S"
@@ -72,7 +72,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done\" ./rspeed-4K -v0 -c1 -i100",
             "resourceAssignments": [
                 {
-                    "intercept": 1.99,
+                    "intercept": 0.1199713957404351,
                     "length": 1000,
                     "processors": [
                         {
@@ -80,7 +80,7 @@
                             "processor": "Denver"
                         }
                     ],
-                    "slope": 1.57
+                    "slope": 1.7352238192484446
                 }
             ],
             "task": "4_rspeed-4K"
@@ -89,7 +89,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU2_work_done\" ./tblook-4K -v0 -c1 -i100",
             "resourceAssignments": [
                 {
-                    "intercept": 1.92,
+                    "intercept": 0.3470712931768962,
                     "length": 1000,
                     "processors": [
                         {
@@ -97,7 +97,7 @@
                             "processor": "Denver"
                         }
                     ],
-                    "slope": 1.51
+                    "slope": 1.5703597722827238
                 }
             ],
             "task": "5_tblook-4K"

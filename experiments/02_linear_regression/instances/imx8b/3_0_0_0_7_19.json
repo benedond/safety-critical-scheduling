@@ -4,7 +4,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU0_work_done\" ./aifirf-4K -v0 -c1 -i100",
             "resourceAssignments": [
                 {
-                    "intercept": 0.25,
+                    "intercept": 0.2340051570004027,
                     "length": 1000,
                     "processors": [
                         {
@@ -12,7 +12,7 @@
                             "processor": "A53"
                         }
                     ],
-                    "slope": 0.25
+                    "slope": 0.2383305209708416
                 }
             ],
             "task": "0_aifirf-4K"
@@ -72,7 +72,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU4_work_done\" ./canrdr-4K -v0 -c1 -i100",
             "resourceAssignments": [
                 {
-                    "intercept": 1.2,
+                    "intercept": 0.1447493941499278,
                     "length": 1000,
                     "processors": [
                         {
@@ -80,7 +80,7 @@
                             "processor": "A72"
                         }
                     ],
-                    "slope": 1.1
+                    "slope": 1.1068858215957862
                 }
             ],
             "task": "4_canrdr-4K"
@@ -89,7 +89,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -r -s 1000000",
             "resourceAssignments": [
                 {
-                    "intercept": 1.57,
+                    "intercept": 1.046828349198479,
                     "length": 1000,
                     "processors": [
                         {
@@ -97,7 +97,7 @@
                             "processor": "A72"
                         }
                     ],
-                    "slope": 0.56
+                    "slope": 0.5165982881210658
                 }
             ],
             "task": "5_membench-1M-RO-R"

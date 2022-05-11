@@ -4,7 +4,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU0_work_done\" ./tblook-4K -v0 -c1 -i100",
             "resourceAssignments": [
                 {
-                    "intercept": 1.2,
+                    "intercept": 0.2372933123028078,
                     "length": 1000,
                     "processors": [
                         {
@@ -12,7 +12,7 @@
                             "processor": "A57"
                         }
                     ],
-                    "slope": 0.79
+                    "slope": 0.7757500129842537
                 }
             ],
             "task": "0_tblook-4K"
@@ -21,7 +21,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU3_work_done\" ./rspeed-4M -v0 -c1 -i100",
             "resourceAssignments": [
                 {
-                    "intercept": 2.1,
+                    "intercept": 0.720787006712643,
                     "length": 1000,
                     "processors": [
                         {
@@ -29,7 +29,7 @@
                             "processor": "A57"
                         }
                     ],
-                    "slope": 1.2
+                    "slope": 1.2356681642651024
                 }
             ],
             "task": "1_rspeed-4M"
@@ -72,7 +72,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -w -s 1000000",
             "resourceAssignments": [
                 {
-                    "intercept": 2.15,
+                    "intercept": -0.7671975283095418,
                     "length": 1000,
                     "processors": [
                         {
@@ -80,7 +80,7 @@
                             "processor": "Denver"
                         }
                     ],
-                    "slope": 2.69
+                    "slope": 2.836476580615649
                 }
             ],
             "task": "4_membench-1M-RW-S"

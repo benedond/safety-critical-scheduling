@@ -4,7 +4,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU0_work_done\" ./matrix-4K -v0 -c1 -i100",
             "resourceAssignments": [
                 {
-                    "intercept": 0.34,
+                    "intercept": 0.2015414247750238,
                     "length": 1000,
                     "processors": [
                         {
@@ -12,7 +12,7 @@
                             "processor": "A53"
                         }
                     ],
-                    "slope": 0.31
+                    "slope": 0.3335254213993099
                 }
             ],
             "task": "0_matrix-4K"
@@ -72,7 +72,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU4_work_done\" ./tblook-4K -v0 -c1 -i100",
             "resourceAssignments": [
                 {
-                    "intercept": 1.57,
+                    "intercept": 0.1516929252501606,
                     "length": 1000,
                     "processors": [
                         {
@@ -80,7 +80,7 @@
                             "processor": "A72"
                         }
                     ],
-                    "slope": 1.51
+                    "slope": 1.4522183643887034
                 }
             ],
             "task": "4_tblook-4K"
@@ -89,7 +89,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -r -w -s 1000000",
             "resourceAssignments": [
                 {
-                    "intercept": 1.73,
+                    "intercept": 1.154812684247687,
                     "length": 1000,
                     "processors": [
                         {
@@ -97,7 +97,7 @@
                             "processor": "A72"
                         }
                     ],
-                    "slope": 0.58
+                    "slope": 0.5535849850119448
                 }
             ],
             "task": "5_membench-1M-RW-R"

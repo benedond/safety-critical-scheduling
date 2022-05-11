@@ -1,10 +1,10 @@
 {
     "assignmentCharacteristics": [
         {
-            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU0_work_done\" /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer -f /root/thermobench/benchmarks/tinyrenderer/obj/boggie/*.obj",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU0_work_done\" /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer /root/thermobench/benchmarks/tinyrenderer/obj/boggie/*.obj",
             "resourceAssignments": [
                 {
-                    "intercept": 0.92,
+                    "intercept": 0.901486860203268,
                     "length": 1000,
                     "processors": [
                         {
@@ -12,7 +12,7 @@
                             "processor": "A53"
                         }
                     ],
-                    "slope": 0.25
+                    "slope": 0.2648500424149172
                 }
             ],
             "task": "0_tinyrenderer-boggie"
@@ -21,7 +21,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -r -w -s 1000000",
             "resourceAssignments": [
                 {
-                    "intercept": 0.63,
+                    "intercept": 0.5739344515756954,
                     "length": 1000,
                     "processors": [
                         {
@@ -29,7 +29,7 @@
                             "processor": "A53"
                         }
                     ],
-                    "slope": 0.47
+                    "slope": 0.3987001775162436
                 }
             ],
             "task": "1_membench-1M-RW-R"
@@ -38,7 +38,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU2_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -r -w -s 1000000",
             "resourceAssignments": [
                 {
-                    "intercept": 0.63,
+                    "intercept": 0.5739344515756954,
                     "length": 1000,
                     "processors": [
                         {
@@ -46,7 +46,7 @@
                             "processor": "A53"
                         }
                     ],
-                    "slope": 0.47
+                    "slope": 0.3987001775162436
                 }
             ],
             "task": "2_membench-1M-RW-R"
@@ -72,7 +72,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU4_work_done\" ./puwmod-4M -v0 -c1 -i100",
             "resourceAssignments": [
                 {
-                    "intercept": 2.32,
+                    "intercept": 0.9485877787580276,
                     "length": 1000,
                     "processors": [
                         {
@@ -80,16 +80,16 @@
                             "processor": "A72"
                         }
                     ],
-                    "slope": 1.46
+                    "slope": 1.3528106385325094
                 }
             ],
             "task": "4_puwmod-4M"
         },
         {
-            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done\" /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer -f /root/thermobench/benchmarks/tinyrenderer/obj/boggie/*.obj",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done\" /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer /root/thermobench/benchmarks/tinyrenderer/obj/boggie/*.obj",
             "resourceAssignments": [
                 {
-                    "intercept": 1.85,
+                    "intercept": 1.0225416202228148,
                     "length": 1000,
                     "processors": [
                         {
@@ -97,7 +97,7 @@
                             "processor": "A72"
                         }
                     ],
-                    "slope": 0.97
+                    "slope": 0.9626852080259498
                 }
             ],
             "task": "5_tinyrenderer-boggie"
@@ -189,7 +189,7 @@
     "tasks": [
         {
             "assignmentIndex": 0,
-            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU0_work_done\" /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer -f /root/thermobench/benchmarks/tinyrenderer/obj/boggie/*.obj",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU0_work_done\" /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer /root/thermobench/benchmarks/tinyrenderer/obj/boggie/*.obj",
             "length": 1000,
             "name": "0_tinyrenderer-boggie",
             "processors": [
@@ -249,7 +249,7 @@
         },
         {
             "assignmentIndex": 0,
-            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done\" /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer -f /root/thermobench/benchmarks/tinyrenderer/obj/boggie/*.obj",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done\" /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer /root/thermobench/benchmarks/tinyrenderer/obj/boggie/*.obj",
             "length": 1000,
             "name": "5_tinyrenderer-boggie",
             "processors": [

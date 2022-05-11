@@ -4,7 +4,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU0_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -r -s 1000000",
             "resourceAssignments": [
                 {
-                    "intercept": 0.72,
+                    "intercept": 0.5341854404433324,
                     "length": 1000,
                     "processors": [
                         {
@@ -12,7 +12,7 @@
                             "processor": "A53"
                         }
                     ],
-                    "slope": 0.5
+                    "slope": 0.3539638540109318
                 }
             ],
             "task": "0_membench-1M-RO-R"
@@ -21,7 +21,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done\" ./puwmod-4K -v0 -c1 -i100",
             "resourceAssignments": [
                 {
-                    "intercept": 0.32,
+                    "intercept": 0.1764994822680732,
                     "length": 1000,
                     "processors": [
                         {
@@ -29,7 +29,7 @@
                             "processor": "A53"
                         }
                     ],
-                    "slope": 0.28
+                    "slope": 0.2904875493305144
                 }
             ],
             "task": "1_puwmod-4K"

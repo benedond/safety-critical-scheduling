@@ -4,7 +4,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU0_work_done\" ./tblook-4K -v0 -c1 -i100",
             "resourceAssignments": [
                 {
-                    "intercept": 0.27,
+                    "intercept": 0.1632701812455614,
                     "length": 1000,
                     "processors": [
                         {
@@ -12,7 +12,7 @@
                             "processor": "A53"
                         }
                     ],
-                    "slope": 0.22
+                    "slope": 0.2384487972855504
                 }
             ],
             "task": "0_tblook-4K"
@@ -21,7 +21,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -r -s 4000000",
             "resourceAssignments": [
                 {
-                    "intercept": 1.53,
+                    "intercept": 1.1897366956155953,
                     "length": 1000,
                     "processors": [
                         {
@@ -29,7 +29,7 @@
                             "processor": "A53"
                         }
                     ],
-                    "slope": 0.23
+                    "slope": 0.1914517590485838
                 }
             ],
             "task": "1_membench-4M-RO-R"
@@ -38,7 +38,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU2_work_done\" ./canrdr-4K -v0 -c1 -i100",
             "resourceAssignments": [
                 {
-                    "intercept": 0.33,
+                    "intercept": 0.1915548473155226,
                     "length": 1000,
                     "processors": [
                         {
@@ -46,7 +46,7 @@
                             "processor": "A53"
                         }
                     ],
-                    "slope": 0.34
+                    "slope": 0.3299832408326685
                 }
             ],
             "task": "2_canrdr-4K"
@@ -72,7 +72,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU4_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -s 1000",
             "resourceAssignments": [
                 {
-                    "intercept": 0.46,
+                    "intercept": 0.1522280862366045,
                     "length": 1000,
                     "processors": [
                         {
@@ -80,7 +80,7 @@
                             "processor": "A72"
                         }
                     ],
-                    "slope": 0.45
+                    "slope": 0.4089263989358809
                 }
             ],
             "task": "4_membench-1K-RO-S"
@@ -89,7 +89,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -r -s 1000000",
             "resourceAssignments": [
                 {
-                    "intercept": 1.89,
+                    "intercept": 1.0068283491984786,
                     "length": 1000,
                     "processors": [
                         {
@@ -97,7 +97,7 @@
                             "processor": "A72"
                         }
                     ],
-                    "slope": 0.69
+                    "slope": 0.5165982881210658
                 }
             ],
             "task": "5_membench-1M-RO-R"

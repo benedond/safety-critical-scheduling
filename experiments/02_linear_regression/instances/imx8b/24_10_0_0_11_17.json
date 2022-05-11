@@ -4,7 +4,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU0_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -s 4000000",
             "resourceAssignments": [
                 {
-                    "intercept": 1.47,
+                    "intercept": 1.2727281382678983,
                     "length": 1000,
                     "processors": [
                         {
@@ -12,7 +12,7 @@
                             "processor": "A53"
                         }
                     ],
-                    "slope": 0.37
+                    "slope": 0.3629087591866122
                 }
             ],
             "task": "0_membench-4M-RO-S"
@@ -21,7 +21,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done\" ./idctrn-4M -v0 -c1 -i100",
             "resourceAssignments": [
                 {
-                    "intercept": 0.96,
+                    "intercept": 0.7711385046843713,
                     "length": 1000,
                     "processors": [
                         {
@@ -29,7 +29,7 @@
                             "processor": "A53"
                         }
                     ],
-                    "slope": 0.32
+                    "slope": 0.3142554075379395
                 }
             ],
             "task": "1_idctrn-4M"
@@ -72,7 +72,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU4_work_done\" ./iirflt-4K -v0 -c1 -i100",
             "resourceAssignments": [
                 {
-                    "intercept": 1.43,
+                    "intercept": 0.2073526660699398,
                     "length": 1000,
                     "processors": [
                         {
@@ -80,7 +80,7 @@
                             "processor": "A72"
                         }
                     ],
-                    "slope": 1.31
+                    "slope": 1.2803810129186657
                 }
             ],
             "task": "4_iirflt-4K"
@@ -89,7 +89,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -r -w -s 1000",
             "resourceAssignments": [
                 {
-                    "intercept": 0.87,
+                    "intercept": 0.1786936098548599,
                     "length": 1000,
                     "processors": [
                         {
@@ -97,7 +97,7 @@
                             "processor": "A72"
                         }
                     ],
-                    "slope": 0.8
+                    "slope": 0.7785204640352088
                 }
             ],
             "task": "5_membench-1K-RW-R"

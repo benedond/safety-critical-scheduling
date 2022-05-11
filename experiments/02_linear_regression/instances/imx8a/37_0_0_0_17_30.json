@@ -4,7 +4,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU0_work_done\" ./ttsprk-4K -v0 -c1 -i100",
             "resourceAssignments": [
                 {
-                    "intercept": 0.37,
+                    "intercept": 0.1530229223856398,
                     "length": 1000,
                     "processors": [
                         {
@@ -12,7 +12,7 @@
                             "processor": "A53"
                         }
                     ],
-                    "slope": 0.36
+                    "slope": 0.3434870032582224
                 }
             ],
             "task": "0_ttsprk-4K"
@@ -72,7 +72,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU4_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -r -w -s 1000",
             "resourceAssignments": [
                 {
-                    "intercept": 0.85,
+                    "intercept": 0.1386936098548599,
                     "length": 1000,
                     "processors": [
                         {
@@ -80,7 +80,7 @@
                             "processor": "A72"
                         }
                     ],
-                    "slope": 0.77
+                    "slope": 0.7785204640352088
                 }
             ],
             "task": "4_membench-1K-RW-R"
@@ -89,7 +89,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done\" ./puwmod-4M -v0 -c1 -i100",
             "resourceAssignments": [
                 {
-                    "intercept": 2.66,
+                    "intercept": 0.9085877787580277,
                     "length": 1000,
                     "processors": [
                         {
@@ -97,7 +97,7 @@
                             "processor": "A72"
                         }
                     ],
-                    "slope": 1.47
+                    "slope": 1.3528106385325094
                 }
             ],
             "task": "5_puwmod-4M"

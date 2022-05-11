@@ -1,10 +1,10 @@
 {
     "assignmentCharacteristics": [
         {
-            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU0_work_done\" /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer -f /root/thermobench/benchmarks/tinyrenderer/obj/diablo3_pose/*.obj",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU0_work_done\" /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer /root/thermobench/benchmarks/tinyrenderer/obj/diablo3_pose/*.obj",
             "resourceAssignments": [
                 {
-                    "intercept": 0.87,
+                    "intercept": 0.8601760587883769,
                     "length": 1000,
                     "processors": [
                         {
@@ -12,7 +12,7 @@
                             "processor": "A53"
                         }
                     ],
-                    "slope": 0.24
+                    "slope": 0.2581147359399987
                 }
             ],
             "task": "0_tinyrenderer-diablo"
@@ -21,7 +21,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done\" ./matrix-4K -v0 -c1 -i100",
             "resourceAssignments": [
                 {
-                    "intercept": 0.34,
+                    "intercept": 0.2015414247750238,
                     "length": 1000,
                     "processors": [
                         {
@@ -29,7 +29,7 @@
                             "processor": "A53"
                         }
                     ],
-                    "slope": 0.31
+                    "slope": 0.3335254213993099
                 }
             ],
             "task": "1_matrix-4K"
@@ -38,7 +38,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU2_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -r -w -s 4000000",
             "resourceAssignments": [
                 {
-                    "intercept": 1.3,
+                    "intercept": 1.242050724450058,
                     "length": 1000,
                     "processors": [
                         {
@@ -46,7 +46,7 @@
                             "processor": "A53"
                         }
                     ],
-                    "slope": 0.25
+                    "slope": 0.22969553581972
                 }
             ],
             "task": "2_membench-4M-RW-R"
@@ -55,7 +55,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU3_work_done\" ./iirflt-4K -v0 -c1 -i100",
             "resourceAssignments": [
                 {
-                    "intercept": 0.27,
+                    "intercept": 0.2214991240550246,
                     "length": 1000,
                     "processors": [
                         {
@@ -63,7 +63,7 @@
                             "processor": "A53"
                         }
                     ],
-                    "slope": 0.22
+                    "slope": 0.2295052855909555
                 }
             ],
             "task": "3_iirflt-4K"
@@ -72,7 +72,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU4_work_done\" ./canrdr-4M -v0 -c1 -i100",
             "resourceAssignments": [
                 {
-                    "intercept": 2.32,
+                    "intercept": 1.0470248708009935,
                     "length": 1000,
                     "processors": [
                         {
@@ -80,7 +80,7 @@
                             "processor": "A72"
                         }
                     ],
-                    "slope": 1.33
+                    "slope": 1.264783732754613
                 }
             ],
             "task": "4_canrdr-4M"
@@ -89,7 +89,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -w -s 1000000",
             "resourceAssignments": [
                 {
-                    "intercept": 2.12,
+                    "intercept": 1.4281025217045942,
                     "length": 1000,
                     "processors": [
                         {
@@ -97,7 +97,7 @@
                             "processor": "A72"
                         }
                     ],
-                    "slope": 0.69
+                    "slope": 0.6578410535418335
                 }
             ],
             "task": "5_membench-1M-RW-S"
@@ -189,7 +189,7 @@
     "tasks": [
         {
             "assignmentIndex": 0,
-            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU0_work_done\" /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer -f /root/thermobench/benchmarks/tinyrenderer/obj/diablo3_pose/*.obj",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU0_work_done\" /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer /root/thermobench/benchmarks/tinyrenderer/obj/diablo3_pose/*.obj",
             "length": 1000,
             "name": "0_tinyrenderer-diablo",
             "processors": [

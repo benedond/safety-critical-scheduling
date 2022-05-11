@@ -72,7 +72,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU4_work_done\" ./rspeed-4K -v0 -c1 -i100",
             "resourceAssignments": [
                 {
-                    "intercept": 1.55,
+                    "intercept": 0.1429253323811581,
                     "length": 1000,
                     "processors": [
                         {
@@ -80,7 +80,7 @@
                             "processor": "A72"
                         }
                     ],
-                    "slope": 1.56
+                    "slope": 1.4654431242527863
                 }
             ],
             "task": "4_rspeed-4K"
@@ -89,7 +89,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -s 4000000",
             "resourceAssignments": [
                 {
-                    "intercept": 2.63,
+                    "intercept": 2.1910576524402297,
                     "length": 1000,
                     "processors": [
                         {
@@ -97,7 +97,7 @@
                             "processor": "A72"
                         }
                     ],
-                    "slope": 0.28
+                    "slope": 0.2956825000977829
                 }
             ],
             "task": "5_membench-4M-RO-S"

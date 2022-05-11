@@ -4,7 +4,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU0_work_done\" ./aifirf-4K -v0 -c1 -i100",
             "resourceAssignments": [
                 {
-                    "intercept": 1.2,
+                    "intercept": 0.2139179275317699,
                     "length": 1000,
                     "processors": [
                         {
@@ -12,7 +12,7 @@
                             "processor": "A57"
                         }
                     ],
-                    "slope": 0.84
+                    "slope": 0.8495383633004295
                 }
             ],
             "task": "0_aifirf-4K"
@@ -21,7 +21,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU3_work_done\" ./matrix-4M -v0 -c1 -i100",
             "resourceAssignments": [
                 {
-                    "intercept": 1.36,
+                    "intercept": 0.2143001388824368,
                     "length": 1000,
                     "processors": [
                         {
@@ -29,7 +29,7 @@
                             "processor": "A57"
                         }
                     ],
-                    "slope": 0.95
+                    "slope": 0.9591009517587188
                 }
             ],
             "task": "1_matrix-4M"
@@ -72,7 +72,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -r -w -s 1000",
             "resourceAssignments": [
                 {
-                    "intercept": 1.76,
+                    "intercept": 0.3417394626096341,
                     "length": 1000,
                     "processors": [
                         {
@@ -80,7 +80,7 @@
                             "processor": "Denver"
                         }
                     ],
-                    "slope": 1.36
+                    "slope": 1.433786718201712
                 }
             ],
             "task": "4_membench-1K-RW-R"

@@ -4,7 +4,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU0_work_done\" ./bitmnp-4K -v0 -c1 -i100",
             "resourceAssignments": [
                 {
-                    "intercept": 0.73,
+                    "intercept": 0.1380742734047095,
                     "length": 1000,
                     "processors": [
                         {
@@ -12,7 +12,7 @@
                             "processor": "A57"
                         }
                     ],
-                    "slope": 0.46
+                    "slope": 0.4615531070528464
                 }
             ],
             "task": "0_bitmnp-4K"
@@ -21,7 +21,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU3_work_done\" ./matrix-4K -v0 -c1 -i100",
             "resourceAssignments": [
                 {
-                    "intercept": 1.25,
+                    "intercept": 0.2143873102116682,
                     "length": 1000,
                     "processors": [
                         {
@@ -29,7 +29,7 @@
                             "processor": "A57"
                         }
                     ],
-                    "slope": 0.92
+                    "slope": 0.9023501789923226
                 }
             ],
             "task": "1_matrix-4K"
@@ -72,7 +72,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done\" ./canrdr-4K -v0 -c1 -i100",
             "resourceAssignments": [
                 {
-                    "intercept": 2.26,
+                    "intercept": 0.328308513039222,
                     "length": 1000,
                     "processors": [
                         {
@@ -80,7 +80,7 @@
                             "processor": "Denver"
                         }
                     ],
-                    "slope": 1.91
+                    "slope": 1.9873482728252547
                 }
             ],
             "task": "4_canrdr-4K"
@@ -89,7 +89,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU2_work_done\" ./iirflt-4M -v0 -c1 -i100",
             "resourceAssignments": [
                 {
-                    "intercept": 2.16,
+                    "intercept": 0.4472381460245969,
                     "length": 1000,
                     "processors": [
                         {
@@ -97,7 +97,7 @@
                             "processor": "Denver"
                         }
                     ],
-                    "slope": 1.78
+                    "slope": 1.7607810988139845
                 }
             ],
             "task": "5_iirflt-4M"
