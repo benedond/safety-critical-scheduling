@@ -81,6 +81,8 @@ def get_idle_power(env_file_path: str):
     return d["environment"]["idlePower"]
 
 def get_cmd_slope_intercept(benchmark, processor, df):
+    if benchmark == "sleep":
+        return "sleep inf", 0.0, 0.0
     row = df[ (df["benchmark"] == benchmark) & (df["affinity"] == processor) ].iloc[0]
     return row["command"], row["slope"], row["intercept"]
 

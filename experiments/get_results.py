@@ -14,11 +14,14 @@ parser.add_argument("--lr_coeffs_file", "-l", type=str, required=True, help="Pat
 parser.add_argument("--path_in",   "-i", type=str, required=True, help="Input folder.")
 parser.add_argument("--path_out",  "-o", type=str, required=True, help="Output file path.")
 parser.add_argument("--platform",  "-p", type=str, required=True, help="Platform name (imx8a, imx8b, tx2).")
+parser.add_argument("--skip",  "-s", type=str, default="", help="Filename to skip.")
 
 if __name__ == "__main__":
     args = parser.parse_args()
     path_in = args.path_in
     path_out = args.path_out
+    
+    utils.create_folder(os.path.dirname(path_out))
 
     lr_coefficients = utils.read_json(args.lr_coeffs_file)
 
@@ -34,7 +37,8 @@ if __name__ == "__main__":
     for f in os.listdir(path_in):        
         # if not f.endswith(".out"):
         #     continue
-        
+        if f == args.skip:
+            continue
         solver_name_inst = f[f.find("-")+1:-4]
 
         with open(os.path.join(path_in,f),"r") as f_in:
