@@ -8,7 +8,7 @@ function read_dataframe(file::String)::DataFrame
     df = DataFrame(CSV.File(file))
 end
 
-idle_power = Dict("imx8a" => 5.5, "imx8b" => 5.4, "tx2" => 2.6)
+idle_power = Dict("imx8a" => 5.49, "imx8b" =>  5.45, "tx2" => 2.804)
 
 function plot(input_path, platform, name)
     idle = idle_power[platform]
