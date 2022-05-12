@@ -34,6 +34,7 @@ private:
 
 	int m_min_length = 40, m_max_length = 160;
 	int m_task_count = 20;
+	int seed_val = 0;
 };
 
 benchmark_data parse_benchmark_data(

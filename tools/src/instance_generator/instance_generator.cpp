@@ -57,12 +57,13 @@ instance_generator::instance_generator(const arg_parser& args,
 	args.set_arg_value_int("--min-length", &this->m_min_length);
 	args.set_arg_value_int("--max-length", &this->m_max_length);
 	args.set_arg_value_int("--task-count", &this->m_task_count);
+	args.set_arg_value_int("--seed", &this->seed_val);
 
 	if (m_supported_problem_versions.find(e.problem_version) == m_supported_problem_versions.end())
 		throw std::invalid_argument("problem version is not supported");
 
 	if (m_min_length > m_max_length)
-		throw std::invalid_argument("min task length is greater than max task length");
+		throw std::invalid_argument("min task length is greater than max task length");	
 }
 
 std::vector<assignment_characteristic> instance_generator::generate() const
@@ -76,7 +77,15 @@ std::vector<assignment_characteristic> instance_generator::generate() const
 	for (auto& be : m_benchmark_data.benchmark_entries)
 		benchmarks.push_back(be.first);
 
-	std::mt19937 random_engine(std::chrono::high_resolution_clock::now().time_since_epoch().count());
+	std::mt19937 random_engine;
+	if (seed_val > 0)
+	{
+		std::srand(seed_val);
+		random_engine = std::mt19937(rand());
+	} else {
+		random_engine = std::mt19937(std::chrono::high_resolution_clock::now().time_since_epoch().count());
+	}
+	
 
 	std::uniform_int_distribution<int> task_length_dist(m_min_length, m_max_length);
 	std::uniform_int_distribution<int> benchmark_dist(0, benchmarks.size()-1);
