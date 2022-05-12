@@ -29,7 +29,7 @@ struct environment
 	int major_frame_length;
 	int problem_version;
 	float sc_part = 0.6f;
-	float idle_powert;
+	float idle_power;
 };
 
 struct task
