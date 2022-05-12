@@ -64,11 +64,13 @@ plot("../../experiments/03_power_models_evaluation/results/scale-1x-imx8a-cpu.cs
 plot("../../experiments/03_power_models_evaluation/results/scale-1x-imx8b-all.csv", "imx8b", "power_imx8b_all")
 plot("../../experiments/03_power_models_evaluation/results/scale-1x-imx8b-cpu.csv", "imx8b", "power_imx8b_cpu")
 
-plot("../../experiments/03_power_models_evaluation/results/scale-3x-imx8b-all.csv", "imx8b", "power_3x_imx8b_all")
-plot("../../experiments/03_power_models_evaluation/results/scale-3x-imx8b-cpu.csv", "imx8b", "power_3X_imx8b_cpu")
+plot("../../experiments/03_power_models_evaluation/results/scale-1x-tx2-all.csv", "tx2", "power_tx2_all")
 
-plot("../../experiments/03_power_models_evaluation/results/scale-1x-imx8b-all-30.csv", "imx8b", "power_imx8b_all_30s")
-plot("../../experiments/03_power_models_evaluation/results/scale-1x-imx8b-cpu-30.csv", "imx8b", "power_imx8b_cpu_30s")
+# plot("../../experiments/03_power_models_evaluation/results/scale-3x-imx8b-all.csv", "imx8b", "power_3x_imx8b_all")
+# plot("../../experiments/03_power_models_evaluation/results/scale-3x-imx8b-cpu.csv", "imx8b", "power_3X_imx8b_cpu")
+
+# plot("../../experiments/03_power_models_evaluation/results/scale-1x-imx8b-all-30.csv", "imx8b", "power_imx8b_all_30s")
+# plot("../../experiments/03_power_models_evaluation/results/scale-1x-imx8b-cpu-30.csv", "imx8b", "power_imx8b_cpu_30s")
 
 
 plot_relative("../../experiments/03_power_models_evaluation/results/scale-1x-imx8a-all.csv", "imx8a", "relative_power_imx8a_all")
@@ -77,10 +79,11 @@ plot_relative("../../experiments/03_power_models_evaluation/results/scale-1x-imx
 plot_relative("../../experiments/03_power_models_evaluation/results/scale-1x-imx8b-all.csv", "imx8b", "relative_power_imx8b_all")
 plot_relative("../../experiments/03_power_models_evaluation/results/scale-1x-imx8b-cpu.csv", "imx8b", "relative_power_imx8b_cpu")
 
+plot_relative("../../experiments/03_power_models_evaluation/results/scale-1x-tx2-all.csv", "tx2", "relative_power_tx2_all")
 
-plot_relative("../../experiments/03_power_models_evaluation/results/scale-3x-imx8b-all.csv", "imx8b", "relative_power_3x_imx8b_all")
-plot_relative("../../experiments/03_power_models_evaluation/results/scale-3x-imx8b-cpu.csv", "imx8b", "relative_power_3x_imx8b_cpu")
+# plot_relative("../../experiments/03_power_models_evaluation/results/scale-3x-imx8b-all.csv", "imx8b", "relative_power_3x_imx8b_all")
+# plot_relative("../../experiments/03_power_models_evaluation/results/scale-3x-imx8b-cpu.csv", "imx8b", "relative_power_3x_imx8b_cpu")
 
 
-plot_relative("../../experiments/03_power_models_evaluation/results/scale-1x-imx8b-all-30.csv", "imx8b", "relative_power_imx8b_all_30s")
-plot_relative("../../experiments/03_power_models_evaluation/results/scale-1x-imx8b-cpu-30.csv", "imx8b", "relative_power_imx8b_cpu_30s")
+# plot_relative("../../experiments/03_power_models_evaluation/results/scale-1x-imx8b-all-30.csv", "imx8b", "relative_power_imx8b_all_30s")
+# plot_relative("../../experiments/03_power_models_evaluation/results/scale-1x-imx8b-cpu-30.csv", "imx8b", "relative_power_imx8b_cpu_30s")
