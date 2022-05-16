@@ -35,6 +35,12 @@ EXP_PATHs=( "HEUR" "ILP-IDLE" "ILP-IDLE" "ILP-SM-I" "ILP-SM-II" "QP-LR-UB")
 cmds=( "" "" "--maximize" "" "" "")
 timelimit=300
 
-solve "imx8a/all"
-solve "imx8a/cpu"
+# solve "imx8a/all"
+# solve "imx8a/cpu"
+
+# solve "imx8b/all"
+# solve "imx8b/cpu"
+
+solve "tx2/all"
+solve "tx2/cpu"
 
