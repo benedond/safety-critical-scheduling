@@ -116,7 +116,7 @@ std::vector<assignment_characteristic> instance_generator::generate() const
 					if (bcmd.find(pc_string) != bcmd.end())
 						task.command = bcmd.at(pc_string);
 				}
-			}
+			}			
 			int length = (int) std::ceil((float) num_iterations * be.proc_time);
 
 			assignment_characteristic::resource_assignment ra { .slope = be.slope,
@@ -126,7 +126,10 @@ std::vector<assignment_characteristic> instance_generator::generate() const
 				ra.processors.push_back({ .processor = p, .processing_units = 1 });
 			task.resource_assignments.push_back(std::move(ra));
 		}
-
+		// Write TB_OPTS
+		std::string TB_OPTS = "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=" + std::to_string(i) + "_work_done\" ";
+		task.command = TB_OPTS + task.command;		
+		
 		tasks.push_back(std::move(task));
 	}
 

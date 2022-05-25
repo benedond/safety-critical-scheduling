@@ -246,7 +246,7 @@ void write_assignment_characteristics(nlohmann::json& json, const std::vector<as
 		auto& json_task = json_assignment_characteristics[i];
 		json_task["task"] = task.task;
 		if (!task.command.empty())
-			json_task["command"] = task.command;
+			json_task["command"] = task.command;		
 
 		auto& json_resource_assignments = json_task["resourceAssignments"];
 		int j=0;
