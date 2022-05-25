@@ -3,6 +3,13 @@
 # Instances for thermal comparison
 N=6
 
+mkdir -p instances/imx8a/all
+mkdir -p instances/imx8a/cpu
+mkdir -p instances/imx8b/all
+mkdir -p instances/imx8b/cpu
+mkdir -p instances/tx2/all
+mkdir -p instances/tx2/cpu
+
 # generate only cpu-bound instances
 for i in $(eval echo "{1..$N}"); do
     ./../../tools/bin/instance_generator.exe --environment ../../data/environment-imx8a.json --benchmark-data ../../data/characteristics-imx8a-cpu.csv --output ./instances/imx8a/cpu/IN_$i.json --seed $i
