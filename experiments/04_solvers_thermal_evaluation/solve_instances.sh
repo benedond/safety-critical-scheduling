@@ -15,7 +15,7 @@ solve () {
 
         for i in "${!solvers[@]}"; do
             echo "By ${solvers[i]}"
-            OUTPUT=./solutions/$EXP_PATH/$CURINST-${solvers[i]}.out
+            OUTPUT=./solutions/$EXP_PATH/$CURINST-${solvers[i]}.json
             if [ -f $OUTPUT ]; then
                 echo "Output file already exists."
             else
