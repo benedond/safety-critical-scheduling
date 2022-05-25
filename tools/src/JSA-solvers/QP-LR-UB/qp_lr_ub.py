@@ -170,8 +170,9 @@ class Solver:
                                                    length=task_length,
                                                    assignment_index=task_ass_idx,
                                                    processors=task_processors))                    
-            
-                s_windows.append(instance.Window(window_length, window_tasks_assignments))
+                
+                if len(window_tasks_assignments) > 0:
+                    s_windows.append(instance.Window(window_length, window_tasks_assignments))
         else:  # infeasible solution            
             s_feasible=False
             self.model.computeIIS()
