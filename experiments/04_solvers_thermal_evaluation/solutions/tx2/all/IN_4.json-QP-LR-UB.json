@@ -591,14 +591,14 @@
     },
     "solution": {
         "feasible": true,
-        "solutionTime": 34,
+        "solutionTime": 105157,
         "solverMetadata": {
-            "objective": "0.0"
+            "objective": "3.1492930636328103"
         },
         "solverName": "QP-LR-UB",
         "windows": [
             {
-                "length": 136,
+                "length": 134,
                 "tasks": [
                     {
                         "length": 134,
@@ -608,45 +608,17 @@
                         "task": "2_pntrch-4K"
                     },
                     {
-                        "length": 115,
-                        "processingUnit": 0,
-                        "processor": "A57",
-                        "start": 0,
-                        "task": "3_tinyrenderer-diablo"
-                    },
-                    {
-                        "length": 127,
+                        "length": 134,
                         "processingUnit": 1,
                         "processor": "Denver",
                         "start": 0,
-                        "task": "8_a2time-4M"
-                    },
-                    {
-                        "length": 38,
-                        "processingUnit": 1,
-                        "processor": "A57",
-                        "start": 0,
-                        "task": "15_membench-4M-RW-R"
-                    },
-                    {
-                        "length": 136,
-                        "processingUnit": 2,
-                        "processor": "A57",
-                        "start": 0,
-                        "task": "18_canrdr-4M"
+                        "task": "19_iirflt-4M"
                     }
                 ]
             },
             {
-                "length": 134,
+                "length": 131,
                 "tasks": [
-                    {
-                        "length": 74,
-                        "processingUnit": 0,
-                        "processor": "A57",
-                        "start": 0,
-                        "task": "6_idctrn-4K"
-                    },
                     {
                         "length": 131,
                         "processingUnit": 0,
@@ -664,40 +636,40 @@
                 ]
             },
             {
-                "length": 134,
+                "length": 129,
                 "tasks": [
                     {
-                        "length": 34,
+                        "length": 115,
                         "processingUnit": 0,
                         "processor": "A57",
                         "start": 0,
-                        "task": "5_membench-4M-RO-R"
+                        "task": "3_tinyrenderer-diablo"
                     },
                     {
-                        "length": 83,
+                        "length": 129,
                         "processingUnit": 0,
                         "processor": "Denver",
+                        "start": 0,
+                        "task": "4_iirflt-4K"
+                    },
+                    {
+                        "length": 119,
+                        "processingUnit": 1,
+                        "processor": "A57",
                         "start": 0,
                         "task": "7_bitmnp-4K"
                     },
                     {
-                        "length": 81,
+                        "length": 127,
                         "processingUnit": 1,
                         "processor": "Denver",
                         "start": 0,
-                        "task": "9_aifirf-4K"
-                    },
-                    {
-                        "length": 88,
-                        "processingUnit": 1,
-                        "processor": "A57",
-                        "start": 0,
-                        "task": "14_pntrch-4K"
+                        "task": "8_a2time-4M"
                     }
                 ]
             },
             {
-                "length": 134,
+                "length": 103,
                 "tasks": [
                     {
                         "length": 87,
@@ -707,11 +679,11 @@
                         "task": "0_membench-4M-RO-R"
                     },
                     {
-                        "length": 129,
+                        "length": 81,
                         "processingUnit": 0,
                         "processor": "Denver",
                         "start": 0,
-                        "task": "4_iirflt-4K"
+                        "task": "9_aifirf-4K"
                     },
                     {
                         "length": 96,
@@ -728,11 +700,11 @@
                         "task": "17_matrix-4M"
                     },
                     {
-                        "length": 134,
+                        "length": 103,
                         "processingUnit": 1,
                         "processor": "Denver",
                         "start": 0,
-                        "task": "19_iirflt-4M"
+                        "task": "18_canrdr-4M"
                     }
                 ]
             },
@@ -747,18 +719,51 @@
                         "task": "1_tblook-4M"
                     },
                     {
-                        "length": 58,
+                        "length": 61,
                         "processingUnit": 0,
                         "processor": "Denver",
+                        "start": 0,
+                        "task": "6_idctrn-4K"
+                    },
+                    {
+                        "length": 70,
+                        "processingUnit": 1,
+                        "processor": "A57",
                         "start": 0,
                         "task": "10_idctrn-4M"
                     },
                     {
-                        "length": 48,
+                        "length": 61,
                         "processingUnit": 1,
-                        "processor": "A57",
+                        "processor": "Denver",
+                        "start": 0,
+                        "task": "14_pntrch-4K"
+                    }
+                ]
+            },
+            {
+                "length": 43,
+                "tasks": [
+                    {
+                        "length": 43,
+                        "processingUnit": 0,
+                        "processor": "Denver",
+                        "start": 0,
+                        "task": "5_membench-4M-RO-R"
+                    },
+                    {
+                        "length": 42,
+                        "processingUnit": 1,
+                        "processor": "Denver",
                         "start": 0,
                         "task": "12_tblook-4K"
+                    },
+                    {
+                        "length": 38,
+                        "processingUnit": 0,
+                        "processor": "A57",
+                        "start": 0,
+                        "task": "15_membench-4M-RW-R"
                     }
                 ]
             }
@@ -778,61 +783,13 @@
             ]
         },
         {
-            "assignmentIndex": 1,
-            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=3_work_done\" /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer /root/thermobench/benchmarks/tinyrenderer/obj/diablo3_pose/*.obj",
-            "length": 115,
-            "name": "3_tinyrenderer-diablo",
-            "processors": [
-                {
-                    "processor": "A57",
-                    "processingUnits": 1
-                }
-            ]
-        },
-        {
             "assignmentIndex": 0,
-            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=8_work_done\" ./a2time-4M -v0 -c1 -i100",
-            "length": 127,
-            "name": "8_a2time-4M",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=19_work_done\" ./iirflt-4M -v0 -c1 -i100",
+            "length": 134,
+            "name": "19_iirflt-4M",
             "processors": [
                 {
                     "processor": "Denver",
-                    "processingUnits": 1
-                }
-            ]
-        },
-        {
-            "assignmentIndex": 1,
-            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=15_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -r -w -s 4000000",
-            "length": 38,
-            "name": "15_membench-4M-RW-R",
-            "processors": [
-                {
-                    "processor": "A57",
-                    "processingUnits": 1
-                }
-            ]
-        },
-        {
-            "assignmentIndex": 1,
-            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=18_work_done\" ./canrdr-4M -v0 -c1 -i100",
-            "length": 136,
-            "name": "18_canrdr-4M",
-            "processors": [
-                {
-                    "processor": "A57",
-                    "processingUnits": 1
-                }
-            ]
-        },
-        {
-            "assignmentIndex": 1,
-            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=6_work_done\" ./idctrn-4K -v0 -c1 -i100",
-            "length": 74,
-            "name": "6_idctrn-4K",
-            "processors": [
-                {
-                    "processor": "A57",
                     "processingUnits": 1
                 }
             ]
@@ -863,9 +820,9 @@
         },
         {
             "assignmentIndex": 1,
-            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=5_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -r -s 4000000",
-            "length": 34,
-            "name": "5_membench-4M-RO-R",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=3_work_done\" /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer /root/thermobench/benchmarks/tinyrenderer/obj/diablo3_pose/*.obj",
+            "length": 115,
+            "name": "3_tinyrenderer-diablo",
             "processors": [
                 {
                     "processor": "A57",
@@ -875,21 +832,9 @@
         },
         {
             "assignmentIndex": 0,
-            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=7_work_done\" ./bitmnp-4K -v0 -c1 -i100",
-            "length": 83,
-            "name": "7_bitmnp-4K",
-            "processors": [
-                {
-                    "processor": "Denver",
-                    "processingUnits": 1
-                }
-            ]
-        },
-        {
-            "assignmentIndex": 0,
-            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=9_work_done\" ./aifirf-4K -v0 -c1 -i100",
-            "length": 81,
-            "name": "9_aifirf-4K",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=4_work_done\" ./iirflt-4K -v0 -c1 -i100",
+            "length": 129,
+            "name": "4_iirflt-4K",
             "processors": [
                 {
                     "processor": "Denver",
@@ -899,12 +844,24 @@
         },
         {
             "assignmentIndex": 1,
-            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=14_work_done\" ./pntrch-4K -v0 -c1 -i100",
-            "length": 88,
-            "name": "14_pntrch-4K",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=7_work_done\" ./bitmnp-4K -v0 -c1 -i100",
+            "length": 119,
+            "name": "7_bitmnp-4K",
             "processors": [
                 {
                     "processor": "A57",
+                    "processingUnits": 1
+                }
+            ]
+        },
+        {
+            "assignmentIndex": 0,
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=8_work_done\" ./a2time-4M -v0 -c1 -i100",
+            "length": 127,
+            "name": "8_a2time-4M",
+            "processors": [
+                {
+                    "processor": "Denver",
                     "processingUnits": 1
                 }
             ]
@@ -923,9 +880,9 @@
         },
         {
             "assignmentIndex": 0,
-            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=4_work_done\" ./iirflt-4K -v0 -c1 -i100",
-            "length": 129,
-            "name": "4_iirflt-4K",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=9_work_done\" ./aifirf-4K -v0 -c1 -i100",
+            "length": 81,
+            "name": "9_aifirf-4K",
             "processors": [
                 {
                     "processor": "Denver",
@@ -959,9 +916,9 @@
         },
         {
             "assignmentIndex": 0,
-            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=19_work_done\" ./iirflt-4M -v0 -c1 -i100",
-            "length": 134,
-            "name": "19_iirflt-4M",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=18_work_done\" ./canrdr-4M -v0 -c1 -i100",
+            "length": 103,
+            "name": "18_canrdr-4M",
             "processors": [
                 {
                     "processor": "Denver",
@@ -983,9 +940,9 @@
         },
         {
             "assignmentIndex": 0,
-            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=10_work_done\" ./idctrn-4M -v0 -c1 -i100",
-            "length": 58,
-            "name": "10_idctrn-4M",
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=6_work_done\" ./idctrn-4K -v0 -c1 -i100",
+            "length": 61,
+            "name": "6_idctrn-4K",
             "processors": [
                 {
                     "processor": "Denver",
@@ -995,9 +952,57 @@
         },
         {
             "assignmentIndex": 1,
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=10_work_done\" ./idctrn-4M -v0 -c1 -i100",
+            "length": 70,
+            "name": "10_idctrn-4M",
+            "processors": [
+                {
+                    "processor": "A57",
+                    "processingUnits": 1
+                }
+            ]
+        },
+        {
+            "assignmentIndex": 0,
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=14_work_done\" ./pntrch-4K -v0 -c1 -i100",
+            "length": 61,
+            "name": "14_pntrch-4K",
+            "processors": [
+                {
+                    "processor": "Denver",
+                    "processingUnits": 1
+                }
+            ]
+        },
+        {
+            "assignmentIndex": 0,
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=5_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -r -s 4000000",
+            "length": 43,
+            "name": "5_membench-4M-RO-R",
+            "processors": [
+                {
+                    "processor": "Denver",
+                    "processingUnits": 1
+                }
+            ]
+        },
+        {
+            "assignmentIndex": 0,
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=12_work_done\" ./tblook-4K -v0 -c1 -i100",
-            "length": 48,
+            "length": 42,
             "name": "12_tblook-4K",
+            "processors": [
+                {
+                    "processor": "Denver",
+                    "processingUnits": 1
+                }
+            ]
+        },
+        {
+            "assignmentIndex": 1,
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=15_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -r -w -s 4000000",
+            "length": 38,
+            "name": "15_membench-4M-RW-R",
             "processors": [
                 {
                     "processor": "A57",

@@ -10,23 +10,73 @@ Changed value of parameter TimeLimit to 300.0
 Gurobi Optimizer version 9.1.2 build v9.1.2rc0 (linux64)
 Thread count: 2 physical cores, 4 logical processors, using up to 1 threads
 Optimize a model with 407 rows, 369 columns and 1465 nonzeros
-Model fingerprint: 0x5b01f151
+Model fingerprint: 0x5bd5ea03
+Model has 360 quadratic objective terms
 Variable types: 9 continuous, 360 integer (360 binary)
 Coefficient statistics:
   Matrix range     [1e+00, 2e+02]
   Objective range  [0e+00, 0e+00]
+  QObjective range [2e-03, 5e-03]
   Bounds range     [1e+00, 1e+00]
   RHS range        [1e+00, 6e+02]
-Presolve removed 162 rows and 144 columns
+Presolve removed 162 rows and 143 columns
 Presolve time: 0.02s
-Presolved: 245 rows, 225 columns, 867 nonzeros
-Variable types: 9 continuous, 216 integer (216 binary)
-Found heuristic solution: objective 0.0000000
+Presolved: 462 rows, 443 columns, 1520 nonzeros
+Variable types: 0 continuous, 443 integer (217 binary)
 
-Explored 0 nodes (0 simplex iterations) in 0.02 seconds
+Root relaxation: objective 0.000000e+00, 101 iterations, 0.00 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0    0.00000    0   48          -    0.00000      -     -    0s
+H    0     0                       4.7134395    0.00000   100%     -    0s
+H    0     0                       3.9859634    0.00000   100%     -    0s
+H    0     0                       3.9736595    0.00000   100%     -    0s
+     0     0    0.00000    0   55    3.97366    0.00000   100%     -    0s
+H    0     0                       3.9613556    0.00000   100%     -    0s
+H    0     0                       3.9367479    0.00000   100%     -    0s
+     0     0    0.00000    0   45    3.93675    0.00000   100%     -    0s
+     0     0    0.00000    0   44    3.93675    0.00000   100%     -    0s
+     0     2    0.15437    0   43    3.93675    0.15437  96.1%     -    0s
+H  135   118                       3.9366996    0.15563  96.0%  13.7    0s
+H  216   185                       3.6831907    0.16408  95.5%  11.7    0s
+H  270   228                       3.6121211    0.16408  95.5%  10.6    0s
+H  324   278                       3.5649802    0.31000  91.3%  13.1    0s
+H  378   321                       3.4887822    0.31000  91.1%  13.4    0s
+H  982   637                       3.4757237    0.94928  72.7%  20.1    0s
+H 1009   629                       3.4400829    0.94928  72.4%  20.0    0s
+H 1174   691                       3.4153814    0.94928  72.2%  18.7    0s
+H 1355   747                       3.4058772    0.94928  72.1%  17.6    0s
+H 1823   973                       3.3159309    0.94928  71.4%  15.9    1s
+H 1955  1073                       3.2821381    0.94928  71.1%  15.5    1s
+H 1981  1090                       3.2818854    0.94928  71.1%  15.4    1s
+H 2119  1167                       3.2647518    0.94928  70.9%  15.0    1s
+H 2649  1490                       3.2250719    0.94928  70.6%  14.1    1s
+ 10250  5731    2.97829   39   97    3.22507    2.94501  8.68%  11.4    5s
+ 18499  6245    3.09305   42   64    3.22507    3.06893  4.84%  11.9   10s
+ 29379  5740    3.15391   58   50    3.22507    3.10477  3.73%  11.9   15s
+ 41005  7024     cutoff   53         3.22507    3.13131  2.91%  11.7   20s
+ 52984  6790     cutoff   44         3.22507    3.15216  2.26%  11.4   25s
+ 65471  5124    3.18812   44   73    3.22507    3.17228  1.64%  11.2   30s
+ 78932   841     cutoff   49         3.22507    3.21006  0.47%  10.9   35s
+
+Cutting planes:
+  Gomory: 24
+  Implied bound: 197
+  Projected implied bound: 17
+  Clique: 5
+  MIR: 42
+  StrongCG: 3
+  Flow cover: 74
+  GUB cover: 4
+  Zero half: 2
+  Relax-and-lift: 12
+
+Explored 80039 nodes (867211 simplex iterations) in 35.40 seconds
 Thread count was 1 (of 4 available processors)
 
-Solution count 1: 0 
+Solution count 10: 3.22507 3.26475 3.28189 ... 3.48878
 
 Optimal solution found (tolerance 1.00e-04)
-Best objective 0.000000000000e+00, best bound 0.000000000000e+00, gap 0.0000%
+Best objective 3.225071867340e+00, best bound 3.224759360087e+00, gap 0.0097%
