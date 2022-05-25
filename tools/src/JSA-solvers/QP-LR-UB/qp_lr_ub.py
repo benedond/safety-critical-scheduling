@@ -9,30 +9,15 @@ import numpy as np
 import logging
 
 
-def get_coeff(which: str, res: str):
-    if res == "A53":
-        if which == "slope":
-            return 1.252
-        elif which == "intercept":
-            return 0.273
-        else:
-            return 0 
-    elif res == "A72":
-        if which == "slope":
-            return 0.484
-        elif which == "intercept":
-            return 0.529
-        else:
-            return 0
-    else:
-        return 0
+def get_coeff(which: str, res: str, lr_coeffs):
+    return lr_coeffs[res][which]
 
 class Solver:
-    def __init__(self, arg_parser: ap.ArgParser, env: instance.Environment, acs: List[instance.AssignmentCharacteristic], timelimit=float("inf")):
-        self.arg_parser = arg_parser
+    def __init__(self, env: instance.Environment, acs: List[instance.AssignmentCharacteristic], lr_coeffs: dict, timelimit=float("inf")):
         self.env = env
         self.acs = acs
         self.timelimit = timelimit
+        self.lr_coeffs = lr_coeffs
         self.model = None
         self.x = None
         self.l = None
@@ -95,7 +80,7 @@ class Solver:
 
         # specity the objective
         obj = grb.quicksum(
-            l_j[j] * grb.quicksum(x_ijk[i,j,k] * (self.acs[i].resource_assignmnets[k].slope * get_coeff("slope", self.acs[i].resource_assignmnets[k].processors[0].processor) + self.acs[i].resource_assignmnets[k].intercept * get_coeff("intercept", self.acs[i].resource_assignmnets[k].processors[0].processor))
+            l_j[j] * grb.quicksum(x_ijk[i,j,k] * (self.acs[i].resource_assignmnets[k].slope * get_coeff("slope", self.acs[i].resource_assignmnets[k].processors[0].processor, self.lr_coeffs) + self.acs[i].resource_assignmnets[k].intercept * get_coeff("intercept", self.acs[i].resource_assignmnets[k].processors[0].processor, self.lr_coeffs))
                         for i in range(n_tasks) for k in range(len(self.acs[i].resource_assignmnets)))
             for j in range(n_win_ub))
 

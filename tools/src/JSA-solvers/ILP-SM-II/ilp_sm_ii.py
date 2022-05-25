@@ -1,14 +1,14 @@
 #! /usr/bin/python3
-from common import arg_parser as ap
 from common import instance
 from typing import List, Tuple
 import gurobipy as grb
 import sys
 import time
 
+
 class Solver:
-    def __init__(self, arg_parser: ap.ArgParser, env: instance.Environment, acs: List[instance.AssignmentCharacteristic], timelimit:float=float("inf"), cutoff=None):
-        self.arg_parser = arg_parser
+    def __init__(self, args, env: instance.Environment, acs: List[instance.AssignmentCharacteristic], timelimit:float=float("inf"), cutoff=None):
+        self.args = args
         self.env = env
         self.acs = acs                
         self.timelimit = timelimit
@@ -153,9 +153,9 @@ class Solver:
                                                            
         else:  # infeasible solution            
             s_feasible=False
-            if self.arg_parser.is_arg_present("--iis-output"):
+            if self.args.iis:
                 model.computeIIS()
-                model.write(self.arg_parser.get_arg_value("--iis-output") + ".ilp")        
+                model.write("iis.ilp")
         solution = instance.Solution(s_feasible, s_solver_name, s_solution_time, s_metadata, s_windows)
         
         return (solution, tasks)        

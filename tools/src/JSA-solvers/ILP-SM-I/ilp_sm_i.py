@@ -1,5 +1,5 @@
 #! /usr/bin/python3
-from common import arg_parser as ap
+
 from common import instance
 from typing import List, Tuple
 import gurobipy as grb
@@ -8,8 +8,8 @@ import time
 
 
 class Solver:
-    def __init__(self, arg_parser: ap.ArgParser, env: instance.Environment, acs: List[instance.AssignmentCharacteristic], timelimit:float=float("inf")):
-        self.arg_parser = arg_parser
+    def __init__(self, args, env: instance.Environment, acs: List[instance.AssignmentCharacteristic], timelimit:float=float("inf")):
+        self.args = args
         self.env = env
         self.acs = acs        
         self.timelimit = timelimit
@@ -93,7 +93,7 @@ class Solver:
         model.setObjectiveN(energy_consumption_sum * 1/env.major_frame_length,
                             index=0, priority=1, weight=1.0, name="min avg power consumption")
 
-        if (self.arg_parser.is_arg_present("--optimize-schedule")):
+        if (self.args.optimize):
             print("warning: --optimize-schedule active with predictor method", file=sys.stderr)
             model.setObjectiveN(l_j.sum("*"),
                                 index=1, priority=0, weight=1.0, name="min total schedule length")
@@ -171,9 +171,9 @@ class Solver:
                 s_windows.append(instance.Window(window_length, window_tasks_assignments))
         else:  # infeasible solution            
             s_feasible=False
-            if self.arg_parser.is_arg_present("--iis-output"):
+            if self.args.iis:
                 model.computeIIS()
-                model.write(self.arg_parser.get_arg_value("--iis-output") + ".ilp")        
+                model.write("iis.ilp")         # TODO: name the file
         solution = instance.Solution(s_feasible, s_solver_name, s_solution_time, s_metadata, s_windows)
         
         return (solution, tasks)

@@ -1,5 +1,4 @@
 #! /usr/bin/python3
-from common import arg_parser as ap
 from common import instance
 from typing import List, Tuple
 import gurobipy as grb
@@ -9,8 +8,7 @@ import numpy as np
 
 
 class Solver:
-    def __init__(self, arg_parser: ap.ArgParser, env: instance.Environment, acs: List[instance.AssignmentCharacteristic], minimize=True, timelimit=float("inf")):
-        self.arg_parser = arg_parser
+    def __init__(self, env: instance.Environment, acs: List[instance.AssignmentCharacteristic], minimize=True, timelimit=float("inf")):
         self.env = env
         self.acs = acs
 
