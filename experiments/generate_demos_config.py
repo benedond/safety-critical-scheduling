@@ -12,13 +12,15 @@ the experiment folder, and the --inst_path represents the some path (experiment 
 """
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--inst_path", "-i", required=True, type=str, help="Path in './instances/... to the folder containing the instances.")
+parser.add_argument("--inst_folder", "-f", required=True, default="instances", type=str, help="Folder where instances are stored.")
+parser.add_argument("--inst_path", "-i", required=True, type=str, help="Path in './[instances_folder]/... to the folder containing the instances.")
+
 
 
 if __name__ == "__main__":
     args = parser.parse_args()    
     
-    inst_path = os.path.join("./instances", args.inst_path)
+    inst_path = os.path.join(args.inst_folder, args.inst_path)
     conf_path = os.path.join("./demos_configurations", args.inst_path)
     sched_path = os.path.join("./schedules", args.inst_path)
     
@@ -27,11 +29,13 @@ if __name__ == "__main__":
     print("Creating", sched_path)
     utils.create_folder(sched_path)
     
-    if len(os.listdir(inst_path)) == len(os.listdir(conf_path)):
-        print("Number of files in {} and {} is the same. Terminating...".format(inst_path, conf_path))
+    out_files = list(filter(lambda x: x.endswith(".json"), os.listdir(inst_path)))
+    
+    if len(os.listdir(conf_path)) == len(out_files):
+        print("Number of files in {} and {} is the same. Terminating...".format(conf_path, inst_path))
         exit(0)
     
-    for f in os.listdir(inst_path):
+    for f in out_files:
         if os.path.isfile(os.path.join(conf_path, f + ".yaml")):
             print("Output file {} aleady exists.".format(f + ".yaml"))
         else:
