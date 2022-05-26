@@ -12,7 +12,7 @@ the experiment folder, and the --inst_path represents the some path (experiment 
 """
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--inst_folder", "-f", required=True, default="instances", type=str, help="Folder where instances are stored.")
+parser.add_argument("--inst_folder", "-f", default="instances", type=str, help="Folder where instances are stored.")
 parser.add_argument("--inst_path", "-i", required=True, type=str, help="Path in './[instances_folder]/... to the folder containing the instances.")
 
 
