@@ -4,7 +4,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done\" ./a2time-4M -v0 -c1 -i100",
             "resourceAssignments": [
                 {
-                    "intercept": 0.9119121379116776,
+                    "intercept": 1.3782962421469795,
                     "length": 460,
                     "processors": [
                         {
@@ -12,7 +12,7 @@
                             "processor": "A53"
                         }
                     ],
-                    "slope": 0.3152722258653364
+                    "slope": 0.3524115692386657
                 }
             ],
             "task": "0_a2time-4M"
@@ -21,7 +21,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU3_work_done\" ./puwmod-4M -v0 -c1 -i100",
             "resourceAssignments": [
                 {
-                    "intercept": 0.8664629729281499,
+                    "intercept": 1.3576739744676312,
                     "length": 53,
                     "processors": [
                         {
@@ -29,7 +29,7 @@
                             "processor": "A53"
                         }
                     ],
-                    "slope": 0.3260835424599421
+                    "slope": 0.3646338012683732
                 }
             ],
             "task": "1_puwmod-4M"
@@ -38,7 +38,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -s 1000000",
             "resourceAssignments": [
                 {
-                    "intercept": 0.9213932013879536,
+                    "intercept": 1.2202345759831648,
                     "length": 339,
                     "processors": [
                         {
@@ -46,7 +46,7 @@
                             "processor": "A72"
                         }
                     ],
-                    "slope": 0.8970942789843752
+                    "slope": 1.244531363451368
                 }
             ],
             "task": "2_membench-1M-RO-S"

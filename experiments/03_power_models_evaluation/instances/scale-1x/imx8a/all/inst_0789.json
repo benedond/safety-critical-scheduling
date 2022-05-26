@@ -4,7 +4,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done\" /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer /root/thermobench/benchmarks/tinyrenderer/obj/diablo3_pose/*.obj",
             "resourceAssignments": [
                 {
-                    "intercept": 0.8201760587883768,
+                    "intercept": 1.3260525809749248,
                     "length": 500,
                     "processors": [
                         {
@@ -12,7 +12,7 @@
                             "processor": "A53"
                         }
                     ],
-                    "slope": 0.2581147359399987
+                    "slope": 0.276058562153253
                 }
             ],
             "task": "0_tinyrenderer-diablo"
@@ -21,7 +21,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU2_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -s 1000",
             "resourceAssignments": [
                 {
-                    "intercept": 0.1849168894607027,
+                    "intercept": 0.2357333411872515,
                     "length": 991,
                     "processors": [
                         {
@@ -29,7 +29,7 @@
                             "processor": "A53"
                         }
                     ],
-                    "slope": 0.1521274221990604
+                    "slope": 0.1644425390553952
                 }
             ],
             "task": "1_membench-1K-RO-S"
@@ -38,7 +38,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU3_work_done\" ./puwmod-4K -v0 -c1 -i100",
             "resourceAssignments": [
                 {
-                    "intercept": 0.1764994822680732,
+                    "intercept": 0.2543404557478919,
                     "length": 459,
                     "processors": [
                         {
@@ -46,7 +46,7 @@
                             "processor": "A53"
                         }
                     ],
-                    "slope": 0.2904875493305144
+                    "slope": 0.3186729670708705
                 }
             ],
             "task": "2_puwmod-4K"
@@ -55,7 +55,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done\" ./a2time-4M -v0 -c1 -i100",
             "resourceAssignments": [
                 {
-                    "intercept": 1.056376591296715,
+                    "intercept": 1.627796292441822,
                     "length": 206,
                     "processors": [
                         {
@@ -63,7 +63,7 @@
                             "processor": "A72"
                         }
                     ],
-                    "slope": 1.079751949123648
+                    "slope": 1.142446544783514
                 }
             ],
             "task": "3_a2time-4M"

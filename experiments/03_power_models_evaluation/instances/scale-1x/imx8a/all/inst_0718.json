@@ -4,7 +4,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done\" ./aifirf-4K -v0 -c1 -i100",
             "resourceAssignments": [
                 {
-                    "intercept": 0.1940051570004026,
+                    "intercept": 0.1996395430486366,
                     "length": 75,
                     "processors": [
                         {
@@ -12,7 +12,7 @@
                             "processor": "A53"
                         }
                     ],
-                    "slope": 0.2383305209708416
+                    "slope": 0.2632852733690904
                 }
             ],
             "task": "0_aifirf-4K"
@@ -21,7 +21,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU2_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -s 1000000",
             "resourceAssignments": [
                 {
-                    "intercept": 0.5328396186226358,
+                    "intercept": 0.548891603708654,
                     "length": 910,
                     "processors": [
                         {
@@ -29,7 +29,7 @@
                             "processor": "A53"
                         }
                     ],
-                    "slope": 0.5319358817642469
+                    "slope": 0.7694183493303006
                 }
             ],
             "task": "1_membench-1M-RO-S"
@@ -38,7 +38,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU3_work_done\" ./tblook-4K -v0 -c1 -i100",
             "resourceAssignments": [
                 {
-                    "intercept": 0.1632701812455614,
+                    "intercept": 0.2091083493165904,
                     "length": 699,
                     "processors": [
                         {
@@ -46,7 +46,7 @@
                             "processor": "A53"
                         }
                     ],
-                    "slope": 0.2384487972855504
+                    "slope": 0.2480810187585183
                 }
             ],
             "task": "2_tblook-4K"
@@ -55,7 +55,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done\" ./iirflt-4M -v0 -c1 -i100",
             "resourceAssignments": [
                 {
-                    "intercept": 0.8132361965874804,
+                    "intercept": 1.4311409769043966,
                     "length": 47,
                     "processors": [
                         {
@@ -63,7 +63,7 @@
                             "processor": "A72"
                         }
                     ],
-                    "slope": 1.437909073879684
+                    "slope": 1.4667992273387576
                 }
             ],
             "task": "3_iirflt-4M"

@@ -4,7 +4,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU0_work_done\" ./iirflt-4K -v0 -c1 -i100",
             "resourceAssignments": [
                 {
-                    "intercept": 0.1814991240550245,
+                    "intercept": 0.2061375774456646,
                     "length": 604,
                     "processors": [
                         {
@@ -12,7 +12,7 @@
                             "processor": "A53"
                         }
                     ],
-                    "slope": 0.2295052855909555
+                    "slope": 0.2467029096159461
                 }
             ],
             "task": "0_iirflt-4K"
@@ -21,7 +21,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -w -s 1000000",
             "resourceAssignments": [
                 {
-                    "intercept": 0.5619881339398916,
+                    "intercept": 0.3966595852622356,
                     "length": 912,
                     "processors": [
                         {
@@ -29,7 +29,7 @@
                             "processor": "A53"
                         }
                     ],
-                    "slope": 0.5292008467237537
+                    "slope": 0.8994551790858697
                 }
             ],
             "task": "1_membench-1M-RW-S"
@@ -38,7 +38,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done\" ./rspeed-4M -v0 -c1 -i100",
             "resourceAssignments": [
                 {
-                    "intercept": 1.0968483351631644,
+                    "intercept": 1.7580574625694894,
                     "length": 939,
                     "processors": [
                         {
@@ -46,7 +46,7 @@
                             "processor": "A72"
                         }
                     ],
-                    "slope": 2.0753341421914677
+                    "slope": 2.207915565695288
                 }
             ],
             "task": "2_rspeed-4M"

@@ -4,7 +4,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU3_work_done\" /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer /root/thermobench/benchmarks/tinyrenderer/obj/boggie/*.obj",
             "resourceAssignments": [
                 {
-                    "intercept": 0.8614868602032679,
+                    "intercept": 1.3675635362510563,
                     "length": 502,
                     "processors": [
                         {
@@ -12,7 +12,7 @@
                             "processor": "A53"
                         }
                     ],
-                    "slope": 0.2648500424149172
+                    "slope": 0.2923976448944616
                 }
             ],
             "task": "0_tinyrenderer-boggie"
@@ -21,7 +21,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU4_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -w -s 4000000",
             "resourceAssignments": [
                 {
-                    "intercept": 2.307726106844253,
+                    "intercept": 3.1745930327581267,
                     "length": 355,
                     "processors": [
                         {
@@ -29,7 +29,7 @@
                             "processor": "A72"
                         }
                     ],
-                    "slope": 0.2909001557809798
+                    "slope": 0.3468575095340505
                 }
             ],
             "task": "1_membench-4M-RW-S"
@@ -38,7 +38,7 @@
             "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU5_work_done\" ./aifirf-4K -v0 -c1 -i100",
             "resourceAssignments": [
                 {
-                    "intercept": 0.1346077060316659,
+                    "intercept": 0.1396438598989302,
                     "length": 153,
                     "processors": [
                         {
@@ -46,7 +46,7 @@
                             "processor": "A72"
                         }
                     ],
-                    "slope": 1.386087803783588
+                    "slope": 1.467876146533304
                 }
             ],
             "task": "2_aifirf-4K"
