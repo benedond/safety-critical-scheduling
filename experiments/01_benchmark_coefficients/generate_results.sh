@@ -1,11 +1,11 @@
 #!/bin/bash
 
 # Benchmark characteristis
-python generate_results.py  -e ../../data/environment-imx8a.json -o "./results/characteristics-imx8a-all.csv" -m "./measurements/imx8b" -b "../../data/benchmarks.csv"
+python generate_results.py  -e ../../data/environment-imx8a.json -o "./results/characteristics-imx8a-all.csv" -m "./measurements/imx8a" -b "../../data/benchmarks.csv"
 python generate_results.py  -e ../../data/environment-imx8b.json -o "./results/characteristics-imx8b-all.csv" -m "./measurements/imx8b" -b "../../data/benchmarks.csv"
 python generate_results.py  -e ../../data/environment-tx2.json -o "./results/characteristics-tx2-all.csv" -m "./measurements/tx2" -b "../../data/benchmarks.csv"
 
-python generate_results.py  -e ../../data/environment-imx8a.json -o "./results/characteristics-imx8a-cpu.csv" -m "./measurements/imx8b" -b "../../data/benchmarks.csv" -c 1
+python generate_results.py  -e ../../data/environment-imx8a.json -o "./results/characteristics-imx8a-cpu.csv" -m "./measurements/imx8a" -b "../../data/benchmarks.csv" -c 1
 python generate_results.py  -e ../../data/environment-imx8b.json -o "./results/characteristics-imx8b-cpu.csv" -m "./measurements/imx8b" -b "../../data/benchmarks.csv" -c 1
 python generate_results.py  -e ../../data/environment-tx2.json -o "./results/characteristics-tx2-cpu.csv" -m "./measurements/tx2" -b "../../data/benchmarks.csv" -c 1
 
