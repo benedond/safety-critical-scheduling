@@ -1,0 +1,39 @@
+﻿\newcommand{\Border}[3]{
+    \draw[thick] ($(#1.north west)+(-0.3,0.3)$)  rectangle ($(#2.south east)+(0.3,-0.3)$);
+	\node at ($(#1.north) + (0,0.3) $) [anchor=south] {\footnotesize  \textbf{#3}};
+}
+
+\begin{tikzpicture}
+
+\tikzset{RNode/.style={rectangle, draw, font=\footnotesize, minimum size=1cm, text centered, inner sep=2pt, text width=2cm}}
+\tikzset{Arrow/.style={-latex, thick}}
+\tikzset{Desc/.style={font=\scriptsize, pos=0.5}}
+
+\node[RNode] (NTaskSet) at (0,0) {Task set};
+\node[RNode] (NHW) [below of=NTaskSet, yshift=-0.4cm] {Hardware platform};
+\Border{NTaskSet}{NHW}{Benchmarking};
+
+\node[RNode] (NAlg) [right of=NTaskSet, xshift=6cm] {Algorithm};
+\node[RNode] (NModel) [below of=NAlg, yshift=-0.4cm] {Thermal model};
+\Border{NAlg}{NModel}{Optimization};
+\draw[Arrow] ($(NAlg.south) - (0.2,0)$) -- ($(NModel.north) - (0.2,0)$);
+\draw[Arrow] ($(NModel.north) + (0.2,0)$) -- ($(NAlg.south) + (0.2,0)$);
+
+\draw[Arrow] (NTaskSet.east) -- ($(NAlg.west)-(0.3,0)$) node[Desc, anchor=south] {Task Characteristics};
+\draw[Arrow] (NHW.east) -- ($(NModel.west)-(0.3,0)$) node[Desc, anchor=north] {Platform Characteristics};
+
+\node[RNode,text width=3cm] (NEval) [right of=NAlg, xshift=4.5cm] {Evaluation on the physical platform};
+\node[RNode,text width=3cm, minimum size=0.5cm] (NData) [below of=NEval, yshift=0.00cm] {Data Collection};
+\node[RNode,text width=3cm, minimum size=0.5cm] (NStats) [below of=NData, yshift=0.25cm] {Statistical evaluation};
+\Border{NEval}{NStats}{Evaluation};
+\draw[Arrow] ($(NAlg.east) + (0.3,-0.65)$) -- ($(NEval.west) - (0.3,0.65) $) node[Desc,anchor=south] {Schedule};
+
+\node[RNode] (NInst) [right of=NTaskSet, xshift=2.3cm, yshift=-0.7cm] {Problem instance};
+\draw[Arrow] (NInst.east) -- ($(NAlg.west) - (0.3, 0.7)$);
+
+\draw[thick,dashed] (1.7,-3) -- (1.7,2);
+\draw[Arrow] (1.7,-2.5) -- (0,-2.5) node[Desc, anchor=north, pos=0.7] {Done only once};
+\draw[Arrow] (1.7,-2.5) -- (4,-2.5) node[Desc, anchor=north, pos=0.7] {Done for each instance};
+
+
+\end{tikzpicture}
