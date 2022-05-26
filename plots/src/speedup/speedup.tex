@@ -1,0 +1,48 @@
+﻿\definecolor{Clr1}{HTML}{1f77b4}
+\definecolor{Clr2}{HTML}{ff7f0e}
+\definecolor{Clr3}{HTML}{2ca02c}
+\definecolor{Clr4}{HTML}{d62728}
+\definecolor{Clr5}{HTML}{9467bd}
+\definecolor{Clr6}{HTML}{8c564b}
+\definecolor{Clr7}{HTML}{e377c2}
+\definecolor{Clr8}{HTML}{7f7f7f}
+\definecolor{Clr9}{HTML}{bcbd22}
+\definecolor{Clr10}{HTML}{17becf}
+
+\newcommand{\Data}{speedup.csv}
+
+\begin{tikzpicture}
+ \tikzset{every mark/.append style={scale=2}}
+
+    \begin{axis}[width=\textwidth,
+        height=6cm,
+        ymin=0,
+        grid=major,
+        xmin=-0.1,
+        xmax=37.1,
+        xtick=data,
+        table/col sep=comma,
+        xticklabels from table={\Data}{benchmark},
+        xticklabel style={rotate=90,font=\scriptsize},
+        legend style={
+            at={([yshift=5pt]0.5,1)},
+            anchor=south,
+            font=\scriptsize,
+        },
+        legend columns=3,
+        xlabel=\footnotesize Benchmark,
+        ylabel=\footnotesize Relative speedup,
+	  ytick={0,1,2,3,4},
+]
+
+    \addplot[Clr1,thick,mark=x] table [x expr=\coordindex,y={runtime_imx8a}, col sep=comma] {\Data}; \addlegendentry{I.MX8 MEK}
+
+    \addplot[Clr2,thick,mark=square] table [x expr=\coordindex,y={runtime_imx8b}, col sep=comma] {\Data}; \addlegendentry{I.MX8 Ixora}
+
+    \addplot[Clr3,thick,mark=triangle] table [x expr=\coordindex,y={runtime_tx2}, col sep=comma] {\Data}; \addlegendentry{TX2}
+    
+
+    \end{axis}
+
+
+\end{tikzpicture}

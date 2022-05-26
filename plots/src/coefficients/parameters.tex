@@ -1,0 +1,97 @@
+﻿\newcommand{\DataLittle}{parameters_little.csv}
+\newcommand{\DataBig}{parameters_big.csv}
+
+\newcommand{\TaskCoefSlope}[2]{a_{#1,#2}}
+\newcommand{\TaskCoefOffset}[2]{o_{#1,#2}}
+\newcommand{\TaskIdx}{i}
+\newcommand{\ResIdx}{k}
+
+\pgfplotstableread[col sep=comma]{\DataLittle}{\loadedtable}
+        \pgfplotstablegetcolsof{\loadedtable}
+        \pgfmathtruncatemacro{\NoOfCols}{\pgfplotsretval-1}
+
+
+\begin{tikzpicture}
+ \begin{groupplot}[
+    group style={
+        columns=1,
+        rows=6,
+        x descriptions at=edge bottom,
+        y descriptions at=edge left,
+        horizontal sep=10pt,
+        vertical sep=2pt,
+    },
+  width=\textwidth,
+  height=3cm,
+  legend style={
+            at={([yshift=5pt]0.5,1)},
+            anchor=south,
+            font=\scriptsize,
+        },
+  legend columns= 2,
+  grid=major,
+  xmin=-1,  xmax=38,
+  ymin=0,  ymax=3.75,
+  table/col sep=comma,
+  xtick=data,  
+  xticklabel style={rotate=90,font=\scriptsize},
+  xticklabels from table={\DataLittle}{benchmark},  
+  xtick style={draw=none},
+  ybar=0pt,
+  /pgf/bar width=2.5pt,
+  ticklabel style = {font=\scriptsize}
+]
+
+\tikzset{Desc/.style={anchor=north west, fill=white, rectangle, inner sep=2pt, fill opacity=0.5, text opacity=1, font=\scriptsize}}
+
+\nextgroupplot[legend entries={$\TaskCoefOffset{\TaskIdx}{\ResIdx}$,$\TaskCoefSlope{\TaskIdx}{\ResIdx}$}]
+% IMXA
+  % LITTLE CLUSTER
+     \addplot[Clr2,fill=Clr2] table [x expr=\coordindex,y={slopeimxa}, col sep=comma] {\DataLittle};  
+     \addplot[Clr1,fill=Clr1] table [x expr=\coordindex,y={interceptimxa}, col sep=comma] {\DataLittle};  
+
+	\node[Desc] at (axis cs: 0,3.5) {I.MX8~MEK little cluster};
+
+\nextgroupplot[]
+    % BIG CLUSTER
+     \addplot[Clr2,fill=Clr2] table [x expr=\coordindex,y expr=\thisrow{slopeimxa}, col sep=comma] {\DataBig};  
+    \addplot[Clr1,fill=Clr1] table [x expr=\coordindex,y expr=\thisrow{interceptimxa}, col sep=comma] {\DataBig};  
+
+	\node[Desc] at (axis cs: 0,3.5) {I.MX8~MEK big cluster};
+
+% IMXB
+\nextgroupplot[]
+  % LITTLE CLUSTER
+     \addplot[Clr2,fill=Clr2] table [x expr=\coordindex,y={slopeimxb}, col sep=comma] {\DataLittle};  
+     \addplot[Clr1,fill=Clr1] table [x expr=\coordindex,y={interceptimxb}, col sep=comma] {\DataLittle};  
+
+	\node[Desc] at (axis cs: 0,3.5) {I.MX8~Ixora little cluster};
+
+
+\nextgroupplot[  ylabel={Coefficient value [\si{\watt}]}, every axis y label/.append style={at=(ticklabel cs:1.1)} ]
+    % BIG CLUSTER
+     \addplot[Clr2,fill=Clr2] table [x expr=\coordindex,y expr=\thisrow{slopeimxb}, col sep=comma] {\DataBig};  
+    \addplot[Clr1,fill=Clr1] table [x expr=\coordindex,y expr=\thisrow{interceptimxb}, col sep=comma] {\DataBig};  
+
+	\node[Desc] at (axis cs: 0,3.5) {I.MX8~Ixora big cluster};
+
+
+% TX2
+\nextgroupplot[]
+  % LITTLE CLUSTER
+     \addplot[Clr2,fill=Clr2] table [x expr=\coordindex,y={slopetx}, col sep=comma] {\DataLittle};  
+     \addplot[Clr1,fill=Clr1] table [x expr=\coordindex,y={intercepttx}, col sep=comma] {\DataLittle};  
+
+	\node[Desc] at (axis cs: 0,3.5) {TX2 little cluster};
+
+
+       \nextgroupplot[]
+\nextgroupplot[]
+    % BIG CLUSTER
+     \addplot[Clr2,fill=Clr2] table [x expr=\coordindex,y expr=\thisrow{slopetx}, col sep=comma] {\DataBig};  
+    \addplot[Clr1,fill=Clr1] table [x expr=\coordindex,y expr=\thisrow{intercepttx}, col sep=comma] {\DataBig};  
+	\node[Desc] at (axis cs: 0,3.5) {TX2 big cluster};
+
+
+\end{groupplot}
+\end{tikzpicture}}
