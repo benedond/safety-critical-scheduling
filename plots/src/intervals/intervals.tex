@@ -1,0 +1,50 @@
+﻿%Task{Core}{Start}{End}{Desc}{Clr}
+\newcommand{\TaskGantt}[5]{
+	\draw[fill=#5] ($(#2,-#1) - (0,0.2)$) rectangle node[font=\scriptsize,pos=0.5] {#4} ($(#3, -#1) - (0,0.8)$);
+}
+
+\begin{tikzpicture}[yscale=0.6,xscale=1.2]
+
+
+% Draw the tasks
+\TaskGantt{0}{0}{4}{Task 1}{Clr1!40!white};
+\TaskGantt{1}{0}{5.5}{Task 2}{Clr2!40};
+\TaskGantt{3}{0}{1.5}{Task 3}{Clr3!40};
+\TaskGantt{4}{0}{7}{Task 4}{Clr5!40};
+
+% Draw lines between intervals
+\foreach \i in {0, 1.5, 4, 5.5, 7}{
+	\draw[dashed] (\i, 0) -- (\i, -7);
+}
+
+% Draw interval descriptions
+\draw[latex-latex, thick] (0,-6.5) -- node[anchor=north,font=\tiny] {Interval 1} (1.5,-6.5);
+\draw[latex-latex, thick] (1.5,-6.5) -- node[anchor=north,font=\tiny] {Interval 2} (4,-6.5);
+\draw[latex-latex, thick] (4,-6.5) -- node[anchor=north,font=\tiny] {Interval 3} (5.5,-6.5);
+\draw[latex-latex, thick] (5.5,-6.5) -- node[anchor=north,font=\tiny] {Interval 4} (7,-6.5);
+
+% Draw dotted lines in between cores
+\foreach \i in {1,2,3,5}{
+	\draw[thick, densely dotted] (0,-\i) -- (7,-\i);
+}
+
+% Draw thick lines in between clusters
+\draw[thick] (0,-4) -- (7,-4);
+
+% Draw border around the while window
+\draw[thick] (0,0) rectangle (7,-6);
+\node[anchor=south] at (3.5, 0) {\footnotesize Window $W$};
+
+% Draw cores descriptions
+\foreach \i in {1,...,6}{
+	\node[anchor=west, font=\footnotesize, xshift=5pt] at  ($(7, -\i) + (0,0.5)$) {Core \i};
+}
+
+% Draw cluster descriptions
+\begin{scope}[xshift=-5pt]
+	\draw[latex-latex, thick] (0,-4) -- node[sloped, anchor=south, pos=0.5] {\scriptsize little cluster} (0,0);
+	\draw[latex-latex, thick] (0,-6) -- node[sloped, anchor=south, pos=0.5] {\scriptsize big cluster} (0,-4);
+\end{scope}
+
+
+\end{tikzpicture}

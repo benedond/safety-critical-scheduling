@@ -1,0 +1,74 @@
+\newcommand{\DataLittle}{parameters_little_nneg.csv}
+\newcommand{\DataBig}{parameters_big_nneg.csv}
+
+\newcommand{\TaskCoefSlope}[2]{a_{#1,#2}}
+\newcommand{\TaskCoefOffset}[2]{o_{#1,#2}}
+\newcommand{\TaskIdx}{i}
+\newcommand{\ResIdx}{k}
+
+
+\begin{tikzpicture}
+ \begin{groupplot}[
+    group style={
+        columns=1,
+        rows=3,
+        x descriptions at=edge bottom,
+        y descriptions at=edge left,
+        horizontal sep=10pt,
+        vertical sep=5pt,
+    },
+  ybar stacked,
+  stack negative=separate,
+  width=\textwidth,
+  height=6cm,
+  legend style={
+            at={([yshift=5pt]0.5,1)},
+            anchor=south,
+            font=\scriptsize,
+        },
+  legend columns= 2,
+  ylabel={\footnotesize Coefficient value [\si{\watt}]},
+  xtick=data,  
+  xmin=-3.5,
+  xmax=37.5,
+  ymin=-4.2,
+  ymax=4.2,
+  table/col sep=comma,
+  xticklabel style={rotate=90,font=\scriptsize},
+  xticklabels from table={\DataLittle}{benchmark},
+  height=6cm,
+  grid=major,
+  ytick={-4,-2,0,2,4},
+  yticklabels={4,2,0,2,4},
+ticklabel style = {font=\scriptsize}
+]
+
+\pgfplotsinvokeforeach{imxa,imxb,tx}{
+    \ifthenelse{\equal{#1}{imxa}}
+    {\nextgroupplot[legend entries={$\TaskCoefOffset{\TaskIdx}{\ResIdx}$,$\TaskCoefSlope{\TaskIdx}{\ResIdx}$}]}
+    {\nextgroupplot[]}
+
+    \ifthenelse{\equal{#1}{imxa}}{\node[anchor=north west,fill=white, fill opacity=0.7, text opacity=1] at (axis cs: 0,3.8) {\footnotesize I.MX8~MEK};}{}
+    \ifthenelse{\equal{#1}{imxb}}{\node[anchor=north west,fill=white, fill opacity=0.7, text opacity=1] at (axis cs: 0,3.8) {\footnotesize I.MX8~Ixora};}{}
+    \ifthenelse{\equal{#1}{tx}}{\node[anchor=north west,fill=white, fill opacity=0.7, text opacity=1] at (axis cs: 0,3.8) {\footnotesize TX2};}{}
+
+    
+    % LITTLE CLUSTER
+     \addplot[Clr1,fill=Clr1, bar width=5pt] table [x expr=\coordindex,y={intercept#1}, col sep=comma] {\DataLittle};  
+    
+     \addplot[Clr2,fill=Clr2, bar width=5pt] table [x expr=\coordindex,y={slope#1}, col sep=comma] {\DataLittle};  
+    
+    % BIG CLUSTER
+    \addplot[Clr1,fill=Clr1, bar width=5pt, opacity=0.7] table [x expr=\coordindex,y expr=-\thisrow{intercept#1}, col sep=comma] {\DataBig};  
+    
+     \addplot[Clr2,fill=Clr2, bar width=5pt, opacity=0.7] table [x expr=\coordindex,y expr=-\thisrow{slope#1}, col sep=comma] {\DataBig};  
+    
+    \draw[thick] (axis cs: -4,0) -- (axis cs: 40, 0);
+    \draw[-latex, thick] (axis cs: -1.5,0) -- node[sloped,anchor=south,fill=white,fill opacity=0.7, text opacity=1] {\scriptsize little cluster} (axis cs: -1.5, 4.2);
+    \draw[latex-, thick] (axis cs: -1.5,-4.2) -- node[sloped,anchor=south,fill=white,fill opacity=0.7, text opacity=1] {\scriptsize big cluster} (axis cs: -1.5, 0);
+}
+
+
+
+\end{groupplot}
+\end{tikzpicture}
