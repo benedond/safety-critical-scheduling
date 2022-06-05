@@ -1,0 +1,2 @@
+/root/JSA/run_tx2.sh /root/JSA/methods_comparison/demos_configurations/tx2/all/ /root/JSA/methods_comparison/measurements/tx2/all/ tx2 1800
+/root/JSA/run_tx2.sh /root/JSA/methods_comparison/demos_configurations/tx2/cpu/ /root/JSA/methods_comparison/measurements/tx2/cpu/ tx2 1800
