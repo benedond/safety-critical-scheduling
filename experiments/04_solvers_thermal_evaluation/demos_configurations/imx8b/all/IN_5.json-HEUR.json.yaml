@@ -1,0 +1,132 @@
+set_cwd: false
+partitions:
+  - name: 7_membench-1M-RO-R
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=7_work_done" /root/thermobench/build/benchmarks/mem/membench -t1 -f -r -s 1000000
+        budget: 49
+  - name: 17_iirflt-4K
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=17_work_done" ./iirflt-4K -v0 -c1 -i100
+        budget: 132
+  - name: 14_membench-1K-RO-S
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=14_work_done" /root/thermobench/build/benchmarks/mem/membench -t1 -f -s 1000
+        budget: 110
+  - name: 16_iirflt-4K
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=16_work_done" ./iirflt-4K -v0 -c1 -i100
+        budget: 448
+  - name: 10_membench-4M-RW-R
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=10_work_done" /root/thermobench/build/benchmarks/mem/membench -t1 -f -r -w -s 4000000
+        budget: 94
+  - name: 4_ttsprk-4K
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=4_work_done" ./ttsprk-4K -v0 -c1 -i100
+        budget: 61
+  - name: 15_membench-4M-RW-S
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=15_work_done" /root/thermobench/build/benchmarks/mem/membench -t1 -f -w -s 4000000
+        budget: 99
+  - name: 13_membench-1K-RO-S
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=13_work_done" /root/thermobench/build/benchmarks/mem/membench -t1 -f -s 1000
+        budget: 154
+  - name: 12_matrix-4M
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=12_work_done" ./matrix-4M -v0 -c1 -i100
+        budget: 346
+  - name: 1_idctrn-4K
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=1_work_done" ./idctrn-4K -v0 -c1 -i100
+        budget: 338
+  - name: 19_bitmnp-4K
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=19_work_done" ./bitmnp-4K -v0 -c1 -i100
+        budget: 130
+  - name: 0_tinyrenderer-boggie
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=0_work_done" /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer /root/thermobench/benchmarks/tinyrenderer/obj/boggie/*.obj
+        budget: 298
+  - name: 3_puwmod-4K
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=3_work_done" ./puwmod-4K -v0 -c1 -i100
+        budget: 267
+  - name: 5_aifirf-4K
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=5_work_done" ./aifirf-4K -v0 -c1 -i100
+        budget: 232
+  - name: 2_tblook-4M
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=2_work_done" ./tblook-4M -v0 -c1 -i100
+        budget: 143
+  - name: 8_membench-1K-RW-R
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=8_work_done" /root/thermobench/build/benchmarks/mem/membench -t1 -f -r -w -s 1000
+        budget: 121
+  - name: 6_rspeed-4M
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=6_work_done" ./rspeed-4M -v0 -c1 -i100
+        budget: 335
+  - name: 18_idctrn-4K
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=18_work_done" ./idctrn-4K -v0 -c1 -i100
+        budget: 194
+  - name: 9_a2time-4M
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=9_work_done" ./a2time-4M -v0 -c1 -i100
+        budget: 137
+  - name: 11_membench-1M-RO-S
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=11_work_done" /root/thermobench/build/benchmarks/mem/membench -t1 -f -s 1000000
+        budget: 63
+
+windows:
+  - length: 448
+    slices:
+      - cpu: 3
+        sc_partition: 16_iirflt-4K
+      - cpu: 5
+        sc_partition: 15_membench-4M-RW-S
+      - cpu: 4
+        sc_partition: 13_membench-1K-RO-S
+      - cpu: 2
+        sc_partition: 12_matrix-4M
+      - cpu: 0
+        sc_partition: 1_idctrn-4K
+      - cpu: 1
+        sc_partition: 6_rspeed-4M
+  - length: 298
+    slices:
+      - cpu: 4
+        sc_partition: 8_membench-1K-RW-R
+      - cpu: 5
+        sc_partition: 19_bitmnp-4K
+      - cpu: 2
+        sc_partition: 5_aifirf-4K
+      - cpu: 3
+        sc_partition: 18_idctrn-4K
+      - cpu: 0
+        sc_partition: 0_tinyrenderer-boggie
+      - cpu: 1
+        sc_partition: 3_puwmod-4K
+  - length: 143
+    slices:
+      - cpu: 5
+        sc_partition: 17_iirflt-4K
+      - cpu: 2
+        sc_partition: 11_membench-1M-RO-S
+      - cpu: 0
+        sc_partition: 2_tblook-4M
+      - cpu: 3
+        sc_partition: 14_membench-1K-RO-S
+      - cpu: 4
+        sc_partition: 10_membench-4M-RW-R
+      - cpu: 1
+        sc_partition: 9_a2time-4M
+  - length: 61
+    slices:
+      - cpu: 0
+        sc_partition: 7_membench-1M-RO-R
+      - cpu: 4
+        sc_partition: 4_ttsprk-4K
