@@ -28,7 +28,7 @@ function plot(input_path, platform, name)
     @gp :- df[!, "obj_lr_ub"] "title 'LR-UB'"
     @gp :- df[!, "power"] "title 'Measured'"
     @gp :- xlabel="#instance [-]" ylabel="Power [W]" "set grid" title="Power models estimations and measurements ($(name))"
-    @gp :- yrange = (5, 13)
+    @gp :- yrange = (0, 13)
     save(term="pngcairo size 1280,960 noenhanced", output="../bin/power_evaluation/$(name).png")    
     
     @gp :-
