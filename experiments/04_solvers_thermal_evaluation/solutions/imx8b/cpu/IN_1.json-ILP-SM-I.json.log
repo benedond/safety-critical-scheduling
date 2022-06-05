@@ -1,0 +1,115 @@
+Set parameter Username
+Set parameter Threads to value 1
+Academic license - for non-commercial use only - expires 2022-07-11
+Set parameter TimeLimit to value 300
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (linux64)
+Thread count: 2 physical cores, 4 logical processors, using up to 1 threads
+Optimize a model with 1700 rows, 840 columns and 6478 nonzeros
+Model fingerprint: 0x744c7d71
+Variable types: 20 continuous, 820 integer (800 binary)
+Coefficient statistics:
+  Matrix range     [5e-02, 1e+03]
+  Objective range  [1e-03, 2e-01]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 1e+03]
+
+---------------------------------------------------------------------------
+Multi-objectives: starting optimization with 1 objectives ... 
+---------------------------------------------------------------------------
+---------------------------------------------------------------------------
+
+Multi-objectives: optimize objective 1 (min avg power cons) ...
+---------------------------------------------------------------------------
+
+Optimize a model with 1700 rows, 840 columns and 6478 nonzeros
+Model fingerprint: 0x0fff097d
+Variable types: 20 continuous, 820 integer (800 binary)
+Coefficient statistics:
+  Matrix range     [5e-02, 1e+03]
+  Objective range  [1e-03, 2e-01]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 1e+03]
+Presolve removed 1164 rows and 533 columns
+Presolve time: 0.06s
+Presolved: 536 rows, 307 columns, 3339 nonzeros
+Variable types: 16 continuous, 291 integer (275 binary)
+
+Root relaxation: objective 1.377436e+00, 215 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0    1.37744    0   73          -    1.37744      -     -    0s
+H    0     0                       2.5090154    1.37744  45.1%     -    0s
+H    0     0                       2.4821529    1.37744  44.5%     -    0s
+     0     0    1.55035    0   58    2.48215    1.55035  37.5%     -    0s
+H    0     0                       2.4688365    1.55035  37.2%     -    0s
+     0     0    1.55846    0   63    2.46884    1.55846  36.9%     -    0s
+     0     0    1.67807    0   69    2.46884    1.67807  32.0%     -    0s
+     0     0    1.69755    0   72    2.46884    1.69755  31.2%     -    0s
+     0     0    1.75569    0   74    2.46884    1.75569  28.9%     -    0s
+H    0     0                       2.4148343    1.75569  27.3%     -    0s
+     0     0    1.76353    0   76    2.41483    1.76353  27.0%     -    0s
+     0     0    1.78554    0   78    2.41483    1.78554  26.1%     -    0s
+     0     0    1.78886    0   82    2.41483    1.78886  25.9%     -    0s
+     0     0    1.79044    0   81    2.41483    1.79044  25.9%     -    0s
+     0     0    1.79104    0   80    2.41483    1.79104  25.8%     -    0s
+     0     0    1.79139    0   84    2.41483    1.79139  25.8%     -    0s
+     0     0    1.79192    0   84    2.41483    1.79192  25.8%     -    0s
+     0     0    1.79193    0   85    2.41483    1.79193  25.8%     -    0s
+     0     0    1.80027    0   78    2.41483    1.80027  25.4%     -    0s
+H    0     0                       2.3282275    1.80027  22.7%     -    0s
+H    0     0                       2.3171084    1.80027  22.3%     -    0s
+     0     0    1.80258    0   91    2.31711    1.80258  22.2%     -    0s
+     0     0    1.80639    0   86    2.31711    1.80639  22.0%     -    0s
+     0     0    1.80678    0   88    2.31711    1.80678  22.0%     -    0s
+     0     0    1.80681    0   86    2.31711    1.80681  22.0%     -    0s
+     0     0    1.80979    0   80    2.31711    1.80979  21.9%     -    0s
+H    0     0                       2.3141243    1.80979  21.8%     -    0s
+     0     0    1.81193    0   82    2.31412    1.81193  21.7%     -    0s
+     0     0    1.81230    0   82    2.31412    1.81230  21.7%     -    0s
+     0     0    1.81239    0   84    2.31412    1.81239  21.7%     -    0s
+     0     0    1.81642    0   81    2.31412    1.81642  21.5%     -    0s
+     0     0    1.81774    0   89    2.31412    1.81774  21.5%     -    0s
+     0     0    1.81795    0   88    2.31412    1.81795  21.4%     -    0s
+     0     0    1.81804    0   88    2.31412    1.81804  21.4%     -    0s
+     0     0    1.81927    0   86    2.31412    1.81927  21.4%     -    0s
+     0     0    1.81939    0   87    2.31412    1.81939  21.4%     -    0s
+     0     0    1.81950    0   86    2.31412    1.81950  21.4%     -    0s
+     0     0    1.81955    0   85    2.31412    1.81955  21.4%     -    0s
+     0     0    1.81964    0   85    2.31412    1.81964  21.4%     -    0s
+     0     0    1.81964    0   83    2.31412    1.81964  21.4%     -    0s
+H    0     0                       2.2466678    1.81975  19.0%     -    0s
+     0     2    1.81990    0   83    2.24667    1.81990  19.0%     -    0s
+H   77    37                       2.2120658    1.86775  15.6%  27.3    0s
+H  158    50                       2.1996105    1.89037  14.1%  21.6    0s
+* 2247   421              34       2.1995119    2.02903  7.75%  23.6    3s
+H 2418   437                       2.1885954    2.03796  6.88%  23.6    3s
+H 2675   455                       2.1854358    2.05281  6.07%  23.9    4s
+  3551   445    2.15496   30   39    2.18544    2.09622  4.08%  23.7    5s
+
+Cutting planes:
+  Learned: 7
+  Cover: 51
+  Implied bound: 56
+  Projected implied bound: 19
+  Clique: 3
+  MIR: 50
+  Flow cover: 62
+  GUB cover: 16
+  Inf proof: 1
+  Zero half: 1
+  RLT: 1
+  Relax-and-lift: 85
+
+Explored 5569 nodes (121920 simplex iterations) in 6.95 seconds (4.85 work units)
+Thread count was 1 (of 4 available processors)
+
+Solution count 10: 2.18544 2.1886 2.19951 ... 2.41483
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 2.185435772873e+00, best bound 2.185435772873e+00, gap 0.0000%
+
+---------------------------------------------------------------------------
+Multi-objectives: solved in 6.95 seconds (4.85 work units), solution count 10
+

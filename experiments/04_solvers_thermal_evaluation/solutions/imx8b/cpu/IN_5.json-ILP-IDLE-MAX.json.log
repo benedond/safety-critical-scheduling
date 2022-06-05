@@ -1,0 +1,73 @@
+Set parameter Username
+Set parameter Threads to value 1
+Academic license - for non-commercial use only - expires 2022-07-11
+Set parameter TimeLimit to value 300
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (linux64)
+Thread count: 2 physical cores, 4 logical processors, using up to 1 threads
+Optimize a model with 880 rows, 820 columns and 3258 nonzeros
+Model fingerprint: 0xad0dced2
+Variable types: 20 continuous, 800 integer (800 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 5e+02]
+  Objective range  [4e+01, 5e+02]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 1e+03]
+Presolve removed 602 rows and 519 columns
+Presolve time: 0.19s
+Presolved: 278 rows, 301 columns, 1580 nonzeros
+Variable types: 17 continuous, 284 integer (284 binary)
+
+Root relaxation: objective 4.146000e+03, 182 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 4146.00000    0   35          - 4146.00000      -     -    0s
+H    0     0                    3916.0000000 4146.00000  5.87%     -    0s
+     0     0 4146.00000    0   42 3916.00000 4146.00000  5.87%     -    0s
+     0     0 4146.00000    0   38 3916.00000 4146.00000  5.87%     -    0s
+     0     0 4146.00000    0   26 3916.00000 4146.00000  5.87%     -    0s
+     0     0 4146.00000    0   30 3916.00000 4146.00000  5.87%     -    0s
+     0     0 4146.00000    0   18 3916.00000 4146.00000  5.87%     -    0s
+H    0     0                    3940.0000000 4146.00000  5.23%     -    0s
+     0     0 4146.00000    0   20 3940.00000 4146.00000  5.23%     -    0s
+     0     0 4146.00000    0   21 3940.00000 4146.00000  5.23%     -    0s
+     0     0 4146.00000    0   18 3940.00000 4146.00000  5.23%     -    0s
+     0     0 4146.00000    0   20 3940.00000 4146.00000  5.23%     -    0s
+     0     0 4146.00000    0   35 3940.00000 4146.00000  5.23%     -    0s
+     0     0 4146.00000    0   21 3940.00000 4146.00000  5.23%     -    0s
+     0     0 4146.00000    0   28 3940.00000 4146.00000  5.23%     -    0s
+     0     0 4146.00000    0   20 3940.00000 4146.00000  5.23%     -    0s
+     0     0 4146.00000    0   15 3940.00000 4146.00000  5.23%     -    0s
+H    0     0                    4027.0000000 4146.00000  2.96%     -    0s
+     0     0 4146.00000    0   28 4027.00000 4146.00000  2.96%     -    0s
+     0     0 4146.00000    0   39 4027.00000 4146.00000  2.96%     -    0s
+     0     0 4146.00000    0   40 4027.00000 4146.00000  2.96%     -    0s
+     0     0 4146.00000    0   24 4027.00000 4146.00000  2.96%     -    0s
+     0     0 4146.00000    0   29 4027.00000 4146.00000  2.96%     -    0s
+     0     0 4146.00000    0   23 4027.00000 4146.00000  2.96%     -    0s
+     0     0 4146.00000    0   23 4027.00000 4146.00000  2.96%     -    0s
+     0     0 4146.00000    0   20 4027.00000 4146.00000  2.96%     -    0s
+     0     0 4146.00000    0   28 4027.00000 4146.00000  2.96%     -    0s
+     0     0 4146.00000    0   21 4027.00000 4146.00000  2.96%     -    0s
+     0     0 4146.00000    0   34 4027.00000 4146.00000  2.96%     -    0s
+     0     0 4146.00000    0   18 4027.00000 4146.00000  2.96%     -    0s
+     0     0 4146.00000    0   13 4027.00000 4146.00000  2.96%     -    0s
+     0     2 4146.00000    0   11 4027.00000 4146.00000  2.96%     -    0s
+H  299   157                    4045.0000000 4146.00000  2.50%  14.6    0s
+H  341   142                    4048.0000000 4146.00000  2.42%  15.4    0s
+H  354   153                    4059.0000000 4146.00000  2.14%  15.4    0s
+  4907   459 4146.00000   26   26 4059.00000 4146.00000  2.14%  16.5    5s
+
+Cutting planes:
+  MIR: 1
+  Flow cover: 5
+  Relax-and-lift: 2
+
+Explored 11924 nodes (162319 simplex iterations) in 8.61 seconds (5.40 work units)
+Thread count was 1 (of 4 available processors)
+
+Solution count 6: 4059 4048 4045 ... 3916
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 4.059000000000e+03, best bound 4.059000000000e+03, gap 0.0000%
