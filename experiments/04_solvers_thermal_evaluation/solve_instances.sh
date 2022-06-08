@@ -46,3 +46,13 @@ cmds=( "" "" "--maximize" "" "" "--path_lr ../../data/LR-coefficients.json -p tx
 solve "tx2/all"
 solve "tx2/cpu"
 
+# Rename the solved instances
+for i in "${solvers[@]}"; do
+    rename 's/.json-'"$i"'/-'"$i"'/' solutions/imx8a/all/*
+    rename 's/.json-'"$i"'/-'"$i"'/' solutions/imx8a/cpu/*
+    rename 's/.json-'"$i"'/-'"$i"'/' solutions/imx8b/all/*
+    rename 's/.json-'"$i"'/-'"$i"'/' solutions/imx8b/cpu/*
+    rename 's/.json-'"$i"'/-'"$i"'/' solutions/tx2/all/*
+    rename 's/.json-'"$i"'/-'"$i"'/' solutions/tx2/cpu/*
+done
+
