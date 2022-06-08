@@ -8,6 +8,7 @@ import pandas as pd
 sys.path.append(os.path.join(os.path.dirname(__file__), '../tools/src/common'))
 import instance
 import utils
+from tqdm import tqdm
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--lr_coeffs_file", "-l", type=str, required=True, help="Path to the file with LR coefficients.")
@@ -15,6 +16,7 @@ parser.add_argument("--path_in",   "-i", type=str, required=True, help="Input fo
 parser.add_argument("--path_out",  "-o", type=str, required=True, help="Output file path.")
 parser.add_argument("--platform",  "-p", type=str, required=True, help="Platform name (imx8a, imx8b, tx2).")
 parser.add_argument("--skip",  "-s", type=str, default="", help="Filename to skip.")
+parser.add_argument("--include_only", type=str, default="", help="Suffix of files to include (all others will be skipped).")
 
 if __name__ == "__main__":
     args = parser.parse_args()
@@ -33,13 +35,18 @@ if __name__ == "__main__":
                 "obj_sm": [],
                 "obj_lr_ub": [],
                 "obj_lr": []}
-
-    for f in os.listdir(path_in):        
+    pbar = tqdm(os.listdir(path_in))
+    for f in pbar:
+        
         # if not f.endswith(".out"):
         #     continue
         if f == args.skip:
             continue
+        if args.include_only and (not f.endswith(args.include_only)):
+            continue
         solver_name_inst = f[f.find("-")+1:-4]
+        
+        pbar.set_description("Processing %s" % f)
 
         with open(os.path.join(path_in,f),"r") as f_in:
             data = json.load(f_in)
