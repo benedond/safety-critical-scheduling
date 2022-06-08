@@ -46,6 +46,18 @@ def get_power_from_measurement_file(file):
     else:
         return 0.0
         
+def get_temp_from_measurement_file(file, col):
+    df = read_csv(file)
+    is_tx2 = "tx2" in file
+    if is_tx2:
+        scale = 1e-3
+    else:        
+        scale = 1e-3
+        
+    tmp = df[col].dropna().tail(50).mean() * scale
+    return tmp
+        
+            
 def get_value_per_second(file, col_name):
     df = read_csv(file)
     df = df[["time/ms", col_name]]
