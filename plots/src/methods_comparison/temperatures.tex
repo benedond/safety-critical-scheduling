@@ -1,0 +1,99 @@
+﻿\newcommand{\DataIMXaAll}{temp_imx8a-all_absolute.csv}
+\newcommand{\DataIMXaCPU}{temp_imx8a-cpu_absolute.csv}
+\newcommand{\DataIMXbAll}{temp_imx8b-all_absolute.csv}
+\newcommand{\DataIMXbCPU}{temp_imx8b-cpu_absolute.csv}
+\newcommand{\DataTXAll}{temp_tx2-all_absolute.csv}
+\newcommand{\DataTXCPU}{temp_tx2-cpu_absolute.csv}
+
+\pgfplotstableread[col sep=comma]{\DataIMXaAll}{\loadedtable}
+        \pgfplotstablegetcolsof{\loadedtable}
+        \pgfmathtruncatemacro{\NoOfCols}{\pgfplotsretval-1}
+
+
+\begin{tikzpicture}
+ \begin{groupplot}[
+    group style={
+        columns=3,
+        rows=2,
+        x descriptions at=edge bottom,
+        y descriptions at=edge left,
+        horizontal sep=10pt,
+        vertical sep=20pt,
+    },
+  width=6cm,
+  height=4cm,
+  legend style={
+            at={([yshift=5pt]0.5,1)},
+            anchor=south,
+            font=\scriptsize,
+        },
+  legend columns= 2,
+  grid=major,
+%  xmin=-1,  xmax=38,
+ ymin=45,  ymax=65,
+  table/col sep=comma,
+  xtick=data,  
+  xticklabel style={rotate=90,font=\scriptsize},
+  xticklabels from table={\DataIMXaAll}{method},  
+  xtick style={draw=none},
+  ybar=0pt,
+  /pgf/bar width=5pt,
+  ticklabel style = {font=\scriptsize},
+ylabel={\scriptsize Temperature [\si{\celsius}]},
+]
+
+\tikzset{Desc/.style={anchor=north west, fill=white, rectangle, inner sep=2pt, fill opacity=0.5, text opacity=1, font=\scriptsize}}
+
+\nextgroupplot[title=mix, title style={yshift=-5pt, xshift=-1.7cm}]
+% ALL - imx8a
+   \addplot[Clr2,fill=Clr2] table [x expr=\coordindex,y={T-little}, col sep=comma] {\DataIMXaAll};  
+     \addplot[Clr1,fill=Clr1] table [x expr=\coordindex,y={T-big}, col sep=comma] {\DataIMXaAll};  
+
+	\node[Desc] at (axis cs: -0.4, 65) {I.MX8~MEK};
+
+\nextgroupplot[legend entries={little,big}]
+% ALL - imx8b
+   \addplot[Clr2,fill=Clr2] table [x expr=\coordindex,y={T-little}, col sep=comma] {\DataIMXbAll};  
+     \addplot[Clr1,fill=Clr1] table [x expr=\coordindex,y={T-big}, col sep=comma] {\DataIMXbAll};  
+
+	\node[Desc] at (axis cs: -0.5,65) {I.MX8~Ixora};
+
+\nextgroupplot[]
+% ALL - tx2
+   \addplot[Clr2,fill=Clr2] table [x expr=\coordindex,y={T-little}, col sep=comma] {\DataTXAll};  
+     \addplot[Clr1,fill=Clr1] table [x expr=\coordindex,y={T-big}, col sep=comma] {\DataTXAll};  
+
+	\node[Desc] at (axis cs: -0.5,65) {TX2};
+
+% CPU
+\nextgroupplot[title=CPU, title style={yshift=-5pt, xshift=-1.7cm}]
+%  imx8a
+   \addplot[Clr2,fill=Clr2] table [x expr=\coordindex,y={T-little}, col sep=comma] {\DataIMXaCPU};  
+     \addplot[Clr1,fill=Clr1] table [x expr=\coordindex,y={T-big}, col sep=comma] {\DataIMXaCPU};  
+
+	\node[Desc] at (axis cs: -0.4, 65) {I.MX8~MEK};
+
+\nextgroupplot[xlabel={\scriptsize Method}]
+%  imx8b
+   \addplot[Clr2,fill=Clr2] table [x expr=\coordindex,y={T-little}, col sep=comma] {\DataIMXbCPU};  
+     \addplot[Clr1,fill=Clr1] table [x expr=\coordindex,y={T-big}, col sep=comma] {\DataIMXbCPU};  
+
+	\node[Desc] at (axis cs: -0.5,65) {I.MX8~Ixora};
+
+\nextgroupplot[]
+%  tx2
+   \addplot[Clr2,fill=Clr2] table [x expr=\coordindex,y={T-little}, col sep=comma] {\DataTXCPU};  
+     \addplot[Clr1,fill=Clr1] table [x expr=\coordindex,y={T-big}, col sep=comma] {\DataTXCPU};  
+
+	\node[Desc] at (axis cs: -0.5,65) {TX2};
+
+\end{groupplot}
+
+
+
+\end{tikzpicture}coordindex,y expr=\thisrow{intercepttx}, col sep=comma] {\DataBig};  
+	\node[Desc] at (axis cs: 0,3.5) {TX2 big cluster};
+
+
+\end{groupplot}
+\end{tikzpicture}}
