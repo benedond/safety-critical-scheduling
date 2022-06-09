@@ -58,13 +58,27 @@ if __name__ == "__main__":
         df.to_csv("./temp_{}_{}.csv".format(e, "relative" if args.relative else "absolute"), index=False)    
     
     # Save CSV for power tables
-    for e in experiments:
-        df_data = get_df("../../../experiments/04_solvers_thermal_evaluation/results/{}.csv".format(e), args.relative)
-        df = pd.DataFrame(columns=["method"] + [f"inst-{i}" for i in range(len(df_data["inst_id"].unique()))])
+    #for e in experiments:
+    #    df_data = get_df("../../../experiments/04_solvers_thermal_evaluation/results/{}.csv".format(e), args.relative)
+    #    df = pd.DataFrame(columns=["method"] + [f"inst{i}" for i in range(len(df_data["inst_id"].unique()))])
+        
+    #    for m in solvers:
+    #        df_m = df_data[df_data["solver"] == m]
+    #        df.loc[len(df)] = [m] + list(df_m["power"])
+            
+    #    df.to_csv("./power_{}_{}.csv".format(e, "relative" if args.relative else "absolute"), index=False)
+    
+    # joined CSV
+    for e in ["imx8a", "imx8b", "tx2"]:
+        df_all = get_df("../../../experiments/04_solvers_thermal_evaluation/results/{}-all.csv".format(e), args.relative)
+        df_cpu = get_df("../../../experiments/04_solvers_thermal_evaluation/results/{}-cpu.csv".format(e), args.relative)
+        
+        df = pd.DataFrame(columns=["method"] + [f"inst{i}-all" for i in range(len(df_all["inst_id"].unique()))] + [f"inst{i}-cpu" for i in range(len(df_cpu["inst_id"].unique()))])
         
         for m in solvers:
-            df_m = df_data[df_data["solver"] == m]
-            df.loc[len(df)] = [m] + list(df_m["power"])
+            df_all_m = df_all[df_all["solver"] == m]
+            df_cpu_m = df_cpu[df_cpu["solver"] == m]
+            df.loc[len(df)] = [m] + list(df_all_m["power"]) + list(df_cpu_m["power"])
             
         df.to_csv("./power_{}_{}.csv".format(e, "relative" if args.relative else "absolute"), index=False)
    
