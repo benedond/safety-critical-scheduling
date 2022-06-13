@@ -29,20 +29,40 @@ solve () {
 }
 # ==============================================================================================
 
-# Scalability and imx8 instances.
-solvers=( "HEUR" "ILP-IDLE-MIN" "ILP-IDLE-MAX" "ILP-SM-I" "ILP-SM-II" "QP-LR-UB")
-EXP_PATHs=( "HEUR" "ILP-IDLE" "ILP-IDLE" "ILP-SM-I" "ILP-SM-II" "QP-LR-UB")
+# Temp : just LR solver
+
+solvers=( "BB-LR" )
+EXP_PATHs=( "BB" )
 timelimit=300
 
-cmds=( "" "" "--maximize" "" "" "--path_lr ../../data/LR-coefficients.json -p imx8a")
+cmds=( "-c ../../data/LR-coefficients.json -p imx8a -m lr" )
 solve "imx8a/all"
 solve "imx8a/cpu"
 
-cmds=( "" "" "--maximize" "" "" "--path_lr ../../data/LR-coefficients.json -p imx8b")
+cmds=( "-c ../../data/LR-coefficients.json -p imx8b -m lr" )
 solve "imx8b/all"
 solve "imx8b/cpu"
 
-cmds=( "" "" "--maximize" "" "" "--path_lr ../../data/LR-coefficients.json -p tx2")
+cmds=( "-c ../../data/LR-coefficients.json -p tx2 -m lr" )
+solve "tx2/all"
+solve "tx2/cpu"
+
+exit 0
+
+# Scalability and imx8 instances.
+solvers=( "HEUR" "ILP-IDLE-MIN" "ILP-IDLE-MAX" "ILP-SM-I" "ILP-SM-II" "QP-LR-UB" "BB-LR" )
+EXP_PATHs=( "HEUR" "ILP-IDLE" "ILP-IDLE" "ILP-SM-I" "ILP-SM-II" "QP-LR-UB" "BB" )
+timelimit=300
+
+cmds=( "" "" "--maximize" "" "" "--path_lr ../../data/LR-coefficients.json -p imx8a" "-c ../../data/LR-coefficients.json -p imx8a -m lr" )
+solve "imx8a/all"
+solve "imx8a/cpu"
+
+cmds=( "" "" "--maximize" "" "" "--path_lr ../../data/LR-coefficients.json -p imx8b" "-c ../../data/LR-coefficients.json -p imx8b -m lr" )
+solve "imx8b/all"
+solve "imx8b/cpu"
+
+cmds=( "" "" "--maximize" "" "" "--path_lr ../../data/LR-coefficients.json -p tx2" "-c ../../data/LR-coefficients.json -p tx2 -m lr" )
 solve "tx2/all"
 solve "tx2/cpu"
 
