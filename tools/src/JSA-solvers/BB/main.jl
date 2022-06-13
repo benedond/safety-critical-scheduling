@@ -266,12 +266,48 @@ function run_meta_task()
     best_obj = Inf64
     remaining_time = time_limit_sec
     
+    fitness = (x) -> fitness_meta_task(x)[1]
+    c1 = (x) -> sum(assign_tasks(x)[3]) - major_frame_length
+    c2 = (x) -> Float64(assign_tasks(x)[4])
+    pop_size = 4*convert(Int,round(sqrt(n_tasks))) # population size
+
+
     while true
+        # @info " - looking for an initial solution"
+        # init_iter = 0
+        # x_init = [rand() for _ in 1:n_tasks]
+        # while remaining_time > 0
+        #     t_sec = @elapsed begin
+        #         if (c1(x_init) <= 0.0) && (c2(x_init) <= 0.5)
+        #             @info "   found a feasible solution after $(init_iter) iterations"
+        #             break
+        #         end 
+                
+        #         x_init = [rand() for _ in 1:n_tasks]
+        #         x_init[x_init .>= 0.5] .= 0.5 + 0.9 * rand() * (0.5/n_win_ub)
+        #         x_init[x_init .< 0.5] .= 0 + 0.9 * rand() * (0.5/n_win_ub)
+        #         init_iter += 1
+        #     end
+        #     remaining_time -= t_sec
+        # end
+
+        # # Create the initial population
+        # X = [ rand(n_tasks) for i in 1:(pop_size-1) ]; # random solutions (uniform distribution)
+        # push!(X,x_init)
+        # population = [ Metaheuristics.create_child(x, fitness(x)) for x in X ]
+        # prev_status = State(Metaheuristics.get_best(population), population)
+
         t_sec = @elapsed begin
+            # DE 3.30
+            # PSO 3.,52
+            # WOA 3.27
+
             @info "Iterating; remaining time $(remaining_time), sol $(best_obj)"
             #solver = WOA(N=1*n_tasks, options=Options(debug=true, time_limit=remaining_time))    
-            solver = CGSA(N=15*n_tasks, options=Options(debug=true, time_limit=remaining_time))    
-            
+            #solver = CGSA(N=15*n_tasks, options=Options(debug=true, time_limit=remaining_time))    
+            solver = CGSA(N=pop_size, options=Options(debug=true, time_limit=remaining_time))    
+            #solver.status = prev_status
+
             result = Metaheuristics.optimize(fitness_meta_task, bounds, solver)
         end
 

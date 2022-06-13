@@ -17,4 +17,5 @@ if __name__ == "__main__":
     input_filename = args.input
 
     logging.info("Running julia.")
-    os.system(f"julia -t 1 main.jl -i {args.input} -o {args.output} -t {args.timelimit} -c {args.path_lr} -p {args.platform} -m {args.model}")
+    julia_path = os.path.join(os.path.dirname(__file__), "main.jl")
+    os.system(f"julia -t 1 {julia_path} -i {args.input} -o {args.output} -t {args.timelimit} -c {args.path_lr} -p {args.platform} -m {args.model}")

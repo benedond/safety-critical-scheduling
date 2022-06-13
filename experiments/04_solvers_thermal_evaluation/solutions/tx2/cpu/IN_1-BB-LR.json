@@ -1,0 +1,969 @@
+{
+  "tasks": [
+    {
+      "length": 142,
+      "name": "0_tblook-4K",
+      "processors": {
+        "processor": "Denver",
+        "processingUnits": 1
+      },
+      "assignmentIndex": 1,
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=0_work_done\" ./tblook-4K -v0 -c1 -i100"
+    },
+    {
+      "length": 46,
+      "name": "1_idctrn-4M",
+      "processors": {
+        "processor": "Denver",
+        "processingUnits": 1
+      },
+      "assignmentIndex": 1,
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=1_work_done\" ./idctrn-4M -v0 -c1 -i100"
+    },
+    {
+      "length": 212,
+      "name": "2_a2time-4M",
+      "processors": {
+        "processor": "A57",
+        "processingUnits": 1
+      },
+      "assignmentIndex": 2,
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=2_work_done\" ./a2time-4M -v0 -c1 -i100"
+    },
+    {
+      "length": 127,
+      "name": "3_tinyrenderer-boggie",
+      "processors": {
+        "processor": "A57",
+        "processingUnits": 1
+      },
+      "assignmentIndex": 2,
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=3_work_done\" /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer /root/thermobench/benchmarks/tinyrenderer/obj/boggie/*.obj"
+    },
+    {
+      "length": 204,
+      "name": "4_iirflt-4K",
+      "processors": {
+        "processor": "A57",
+        "processingUnits": 1
+      },
+      "assignmentIndex": 2,
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=4_work_done\" ./iirflt-4K -v0 -c1 -i100"
+    },
+    {
+      "length": 200,
+      "name": "5_bitmnp-4K",
+      "processors": {
+        "processor": "A57",
+        "processingUnits": 1
+      },
+      "assignmentIndex": 2,
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=5_work_done\" ./bitmnp-4K -v0 -c1 -i100"
+    },
+    {
+      "length": 77,
+      "name": "6_ttsprk-4M",
+      "processors": {
+        "processor": "Denver",
+        "processingUnits": 1
+      },
+      "assignmentIndex": 1,
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=6_work_done\" ./ttsprk-4M -v0 -c1 -i100"
+    },
+    {
+      "length": 164,
+      "name": "7_puwmod-4K",
+      "processors": {
+        "processor": "A57",
+        "processingUnits": 1
+      },
+      "assignmentIndex": 2,
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=7_work_done\" ./puwmod-4K -v0 -c1 -i100"
+    },
+    {
+      "length": 106,
+      "name": "8_tblook-4K",
+      "processors": {
+        "processor": "A57",
+        "processingUnits": 1
+      },
+      "assignmentIndex": 2,
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=8_work_done\" ./tblook-4K -v0 -c1 -i100"
+    },
+    {
+      "length": 193,
+      "name": "9_puwmod-4K",
+      "processors": {
+        "processor": "A57",
+        "processingUnits": 1
+      },
+      "assignmentIndex": 2,
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=9_work_done\" ./puwmod-4K -v0 -c1 -i100"
+    },
+    {
+      "length": 109,
+      "name": "10_tblook-4K",
+      "processors": {
+        "processor": "Denver",
+        "processingUnits": 1
+      },
+      "assignmentIndex": 1,
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=10_work_done\" ./tblook-4K -v0 -c1 -i100"
+    },
+    {
+      "length": 55,
+      "name": "11_canrdr-4M",
+      "processors": {
+        "processor": "Denver",
+        "processingUnits": 1
+      },
+      "assignmentIndex": 1,
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=11_work_done\" ./canrdr-4M -v0 -c1 -i100"
+    },
+    {
+      "length": 64,
+      "name": "12_matrix-4K",
+      "processors": {
+        "processor": "Denver",
+        "processingUnits": 1
+      },
+      "assignmentIndex": 1,
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=12_work_done\" ./matrix-4K -v0 -c1 -i100"
+    },
+    {
+      "length": 149,
+      "name": "13_tinyrenderer-diablo",
+      "processors": {
+        "processor": "A57",
+        "processingUnits": 1
+      },
+      "assignmentIndex": 2,
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=13_work_done\" /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer /root/thermobench/benchmarks/tinyrenderer/obj/diablo3_pose/*.obj"
+    },
+    {
+      "length": 44,
+      "name": "14_tblook-4M",
+      "processors": {
+        "processor": "Denver",
+        "processingUnits": 1
+      },
+      "assignmentIndex": 1,
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=14_work_done\" ./tblook-4M -v0 -c1 -i100"
+    },
+    {
+      "length": 59,
+      "name": "15_matrix-4K",
+      "processors": {
+        "processor": "Denver",
+        "processingUnits": 1
+      },
+      "assignmentIndex": 1,
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=15_work_done\" ./matrix-4K -v0 -c1 -i100"
+    },
+    {
+      "length": 120,
+      "name": "16_a2time-4K",
+      "processors": {
+        "processor": "Denver",
+        "processingUnits": 1
+      },
+      "assignmentIndex": 1,
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=16_work_done\" ./a2time-4K -v0 -c1 -i100"
+    },
+    {
+      "length": 136,
+      "name": "17_canrdr-4M",
+      "processors": {
+        "processor": "A57",
+        "processingUnits": 1
+      },
+      "assignmentIndex": 2,
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=17_work_done\" ./canrdr-4M -v0 -c1 -i100"
+    },
+    {
+      "length": 151,
+      "name": "18_tinyrenderer-boggie",
+      "processors": {
+        "processor": "Denver",
+        "processingUnits": 1
+      },
+      "assignmentIndex": 1,
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=18_work_done\" /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer /root/thermobench/benchmarks/tinyrenderer/obj/boggie/*.obj"
+    },
+    {
+      "length": 78,
+      "name": "19_tblook-4K",
+      "processors": {
+        "processor": "Denver",
+        "processingUnits": 1
+      },
+      "assignmentIndex": 1,
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=19_work_done\" ./tblook-4K -v0 -c1 -i100"
+    }
+  ],
+  "solution": {
+    "solutionTime": 300.0,
+    "solverMetadata": {
+      "objective": "3.527392642953895"
+    },
+    "solverName": "BB-lr",
+    "windows": [
+      {
+        "length": 162,
+        "tasks": [
+          {
+            "length": 162,
+            "task": "0_tblook-4K",
+            "processingUnit": 0,
+            "start": 0,
+            "processor": "A57"
+          },
+          {
+            "length": 56,
+            "task": "1_idctrn-4M",
+            "processingUnit": 1,
+            "start": 0,
+            "processor": "A57"
+          },
+          {
+            "length": 107,
+            "task": "6_ttsprk-4M",
+            "processingUnit": 2,
+            "start": 0,
+            "processor": "A57"
+          },
+          {
+            "length": 124,
+            "task": "10_tblook-4K",
+            "processingUnit": 3,
+            "start": 0,
+            "processor": "A57"
+          },
+          {
+            "length": 141,
+            "task": "4_iirflt-4K",
+            "processingUnit": 0,
+            "start": 0,
+            "processor": "Denver"
+          },
+          {
+            "length": 140,
+            "task": "5_bitmnp-4K",
+            "processingUnit": 1,
+            "start": 0,
+            "processor": "Denver"
+          }
+        ]
+      },
+      {
+        "length": 95,
+        "tasks": [
+          {
+            "length": 73,
+            "task": "11_canrdr-4M",
+            "processingUnit": 0,
+            "start": 0,
+            "processor": "A57"
+          },
+          {
+            "length": 50,
+            "task": "12_matrix-4K",
+            "processingUnit": 1,
+            "start": 0,
+            "processor": "A57"
+          },
+          {
+            "length": 52,
+            "task": "14_tblook-4M",
+            "processingUnit": 2,
+            "start": 0,
+            "processor": "A57"
+          },
+          {
+            "length": 46,
+            "task": "15_matrix-4K",
+            "processingUnit": 3,
+            "start": 0,
+            "processor": "A57"
+          },
+          {
+            "length": 95,
+            "task": "7_puwmod-4K",
+            "processingUnit": 0,
+            "start": 0,
+            "processor": "Denver"
+          },
+          {
+            "length": 93,
+            "task": "8_tblook-4K",
+            "processingUnit": 1,
+            "start": 0,
+            "processor": "Denver"
+          }
+        ]
+      },
+      {
+        "length": 170,
+        "tasks": [
+          {
+            "length": 170,
+            "task": "16_a2time-4K",
+            "processingUnit": 0,
+            "start": 0,
+            "processor": "A57"
+          },
+          {
+            "length": 167,
+            "task": "18_tinyrenderer-boggie",
+            "processingUnit": 1,
+            "start": 0,
+            "processor": "A57"
+          },
+          {
+            "length": 89,
+            "task": "19_tblook-4K",
+            "processingUnit": 2,
+            "start": 0,
+            "processor": "A57"
+          },
+          {
+            "length": 112,
+            "task": "9_puwmod-4K",
+            "processingUnit": 0,
+            "start": 0,
+            "processor": "Denver"
+          },
+          {
+            "length": 129,
+            "task": "13_tinyrenderer-diablo",
+            "processingUnit": 1,
+            "start": 0,
+            "processor": "Denver"
+          }
+        ]
+      },
+      {
+        "length": 103,
+        "tasks": [
+          {
+            "length": 103,
+            "task": "17_canrdr-4M",
+            "processingUnit": 0,
+            "start": 0,
+            "processor": "Denver"
+          }
+        ]
+      },
+      {
+        "length": 115,
+        "tasks": [
+          {
+            "length": 101,
+            "task": "2_a2time-4M",
+            "processingUnit": 0,
+            "start": 0,
+            "processor": "Denver"
+          },
+          {
+            "length": 115,
+            "task": "3_tinyrenderer-boggie",
+            "processingUnit": 1,
+            "start": 0,
+            "processor": "Denver"
+          }
+        ]
+      }
+    ],
+    "feasible": true
+  },
+  "environment": {
+    "processors": [
+      {
+        "coreIds": [
+          0,
+          3,
+          4,
+          5
+        ],
+        "name": "A57",
+        "processingUnits": 4,
+        "type": "main_processor"
+      },
+      {
+        "coreIds": [
+          1,
+          2
+        ],
+        "name": "Denver",
+        "processingUnits": 2,
+        "type": "main_processor"
+      }
+    ],
+    "idlePower": 2.804,
+    "problemVersion": 1,
+    "majorFrameLength": 650,
+    "scPart": 1.0
+  },
+  "assignmentCharacteristics": [
+    {
+      "resourceAssignments": [
+        {
+          "length": 142,
+          "intercept": 0.3470712900161743,
+          "processors": [
+            {
+              "processor": "Denver",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 1.5703598260879517
+        },
+        {
+          "length": 162,
+          "intercept": 0.2372933179140091,
+          "processors": [
+            {
+              "processor": "A57",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 0.7757500410079956
+        }
+      ],
+      "task": "0_tblook-4K",
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=0_work_done\" ./tblook-4K -v0 -c1 -i100"
+    },
+    {
+      "resourceAssignments": [
+        {
+          "length": 46,
+          "intercept": 0.4355277419090271,
+          "processors": [
+            {
+              "processor": "Denver",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 2.355722427368164
+        },
+        {
+          "length": 56,
+          "intercept": 0.325690358877182,
+          "processors": [
+            {
+              "processor": "A57",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 0.9390383362770081
+        }
+      ],
+      "task": "1_idctrn-4M",
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=1_work_done\" ./idctrn-4M -v0 -c1 -i100"
+    },
+    {
+      "resourceAssignments": [
+        {
+          "length": 101,
+          "intercept": 0.45916926860809326,
+          "processors": [
+            {
+              "processor": "Denver",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 2.1923182010650635
+        },
+        {
+          "length": 212,
+          "intercept": 0.36785000562667847,
+          "processors": [
+            {
+              "processor": "A57",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 0.6975114941596985
+        }
+      ],
+      "task": "2_a2time-4M",
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=2_work_done\" ./a2time-4M -v0 -c1 -i100"
+    },
+    {
+      "resourceAssignments": [
+        {
+          "length": 115,
+          "intercept": 0.47007882595062256,
+          "processors": [
+            {
+              "processor": "Denver",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 1.0252491235733032
+        },
+        {
+          "length": 127,
+          "intercept": 0.30602583289146423,
+          "processors": [
+            {
+              "processor": "A57",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 0.5838550329208374
+        }
+      ],
+      "task": "3_tinyrenderer-boggie",
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=3_work_done\" /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer /root/thermobench/benchmarks/tinyrenderer/obj/boggie/*.obj"
+    },
+    {
+      "resourceAssignments": [
+        {
+          "length": 141,
+          "intercept": 0.3327092230319977,
+          "processors": [
+            {
+              "processor": "Denver",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 1.5817019939422607
+        },
+        {
+          "length": 204,
+          "intercept": 0.18186113238334656,
+          "processors": [
+            {
+              "processor": "A57",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 0.7699522972106934
+        }
+      ],
+      "task": "4_iirflt-4K",
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=4_work_done\" ./iirflt-4K -v0 -c1 -i100"
+    },
+    {
+      "resourceAssignments": [
+        {
+          "length": 140,
+          "intercept": 0.30244749784469604,
+          "processors": [
+            {
+              "processor": "Denver",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 1.523178219795227
+        },
+        {
+          "length": 200,
+          "intercept": 0.13807427883148193,
+          "processors": [
+            {
+              "processor": "A57",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 0.46155309677124023
+        }
+      ],
+      "task": "5_bitmnp-4K",
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=5_work_done\" ./bitmnp-4K -v0 -c1 -i100"
+    },
+    {
+      "resourceAssignments": [
+        {
+          "length": 77,
+          "intercept": 0.25760790705680847,
+          "processors": [
+            {
+              "processor": "Denver",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 1.5757802724838257
+        },
+        {
+          "length": 107,
+          "intercept": 0.1965142786502838,
+          "processors": [
+            {
+              "processor": "A57",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 0.7143514156341553
+        }
+      ],
+      "task": "6_ttsprk-4M",
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=6_work_done\" ./ttsprk-4M -v0 -c1 -i100"
+    },
+    {
+      "resourceAssignments": [
+        {
+          "length": 95,
+          "intercept": 0.3054978847503662,
+          "processors": [
+            {
+              "processor": "Denver",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 1.9212547540664673
+        },
+        {
+          "length": 164,
+          "intercept": 0.17570023238658905,
+          "processors": [
+            {
+              "processor": "A57",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 0.6905398368835449
+        }
+      ],
+      "task": "7_puwmod-4K",
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=7_work_done\" ./puwmod-4K -v0 -c1 -i100"
+    },
+    {
+      "resourceAssignments": [
+        {
+          "length": 93,
+          "intercept": 0.3470712900161743,
+          "processors": [
+            {
+              "processor": "Denver",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 1.5703598260879517
+        },
+        {
+          "length": 106,
+          "intercept": 0.2372933179140091,
+          "processors": [
+            {
+              "processor": "A57",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 0.7757500410079956
+        }
+      ],
+      "task": "8_tblook-4K",
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=8_work_done\" ./tblook-4K -v0 -c1 -i100"
+    },
+    {
+      "resourceAssignments": [
+        {
+          "length": 112,
+          "intercept": 0.3054978847503662,
+          "processors": [
+            {
+              "processor": "Denver",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 1.9212547540664673
+        },
+        {
+          "length": 193,
+          "intercept": 0.17570023238658905,
+          "processors": [
+            {
+              "processor": "A57",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 0.6905398368835449
+        }
+      ],
+      "task": "9_puwmod-4K",
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=9_work_done\" ./puwmod-4K -v0 -c1 -i100"
+    },
+    {
+      "resourceAssignments": [
+        {
+          "length": 109,
+          "intercept": 0.3470712900161743,
+          "processors": [
+            {
+              "processor": "Denver",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 1.5703598260879517
+        },
+        {
+          "length": 124,
+          "intercept": 0.2372933179140091,
+          "processors": [
+            {
+              "processor": "A57",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 0.7757500410079956
+        }
+      ],
+      "task": "10_tblook-4K",
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=10_work_done\" ./tblook-4K -v0 -c1 -i100"
+    },
+    {
+      "resourceAssignments": [
+        {
+          "length": 55,
+          "intercept": 0.6538208723068237,
+          "processors": [
+            {
+              "processor": "Denver",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 2.2593843936920166
+        },
+        {
+          "length": 73,
+          "intercept": 0.41545671224594116,
+          "processors": [
+            {
+              "processor": "A57",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 1.0119125843048096
+        }
+      ],
+      "task": "11_canrdr-4M",
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=11_work_done\" ./canrdr-4M -v0 -c1 -i100"
+    },
+    {
+      "resourceAssignments": [
+        {
+          "length": 64,
+          "intercept": 0.26619699597358704,
+          "processors": [
+            {
+              "processor": "Denver",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 1.8811428546905518
+        },
+        {
+          "length": 50,
+          "intercept": 0.21438731253147125,
+          "processors": [
+            {
+              "processor": "A57",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 0.9023501873016357
+        }
+      ],
+      "task": "12_matrix-4K",
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=12_work_done\" ./matrix-4K -v0 -c1 -i100"
+    },
+    {
+      "resourceAssignments": [
+        {
+          "length": 129,
+          "intercept": 0.378586083650589,
+          "processors": [
+            {
+              "processor": "Denver",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 1.0148845911026
+        },
+        {
+          "length": 149,
+          "intercept": 0.2589811384677887,
+          "processors": [
+            {
+              "processor": "A57",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 0.5785925984382629
+        }
+      ],
+      "task": "13_tinyrenderer-diablo",
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=13_work_done\" /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer /root/thermobench/benchmarks/tinyrenderer/obj/diablo3_pose/*.obj"
+    },
+    {
+      "resourceAssignments": [
+        {
+          "length": 44,
+          "intercept": 0.38739684224128723,
+          "processors": [
+            {
+              "processor": "Denver",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 1.6787763833999634
+        },
+        {
+          "length": 52,
+          "intercept": 0.2525101602077484,
+          "processors": [
+            {
+              "processor": "A57",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 0.901309072971344
+        }
+      ],
+      "task": "14_tblook-4M",
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=14_work_done\" ./tblook-4M -v0 -c1 -i100"
+    },
+    {
+      "resourceAssignments": [
+        {
+          "length": 59,
+          "intercept": 0.26619699597358704,
+          "processors": [
+            {
+              "processor": "Denver",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 1.8811428546905518
+        },
+        {
+          "length": 46,
+          "intercept": 0.21438731253147125,
+          "processors": [
+            {
+              "processor": "A57",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 0.9023501873016357
+        }
+      ],
+      "task": "15_matrix-4K",
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=15_work_done\" ./matrix-4K -v0 -c1 -i100"
+    },
+    {
+      "resourceAssignments": [
+        {
+          "length": 120,
+          "intercept": 0.32301414012908936,
+          "processors": [
+            {
+              "processor": "Denver",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 1.5972448587417603
+        },
+        {
+          "length": 170,
+          "intercept": 0.10590464621782303,
+          "processors": [
+            {
+              "processor": "A57",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 0.5758305788040161
+        }
+      ],
+      "task": "16_a2time-4K",
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=16_work_done\" ./a2time-4K -v0 -c1 -i100"
+    },
+    {
+      "resourceAssignments": [
+        {
+          "length": 103,
+          "intercept": 0.6538208723068237,
+          "processors": [
+            {
+              "processor": "Denver",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 2.2593843936920166
+        },
+        {
+          "length": 136,
+          "intercept": 0.41545671224594116,
+          "processors": [
+            {
+              "processor": "A57",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 1.0119125843048096
+        }
+      ],
+      "task": "17_canrdr-4M",
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=17_work_done\" ./canrdr-4M -v0 -c1 -i100"
+    },
+    {
+      "resourceAssignments": [
+        {
+          "length": 151,
+          "intercept": 0.47007882595062256,
+          "processors": [
+            {
+              "processor": "Denver",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 1.0252491235733032
+        },
+        {
+          "length": 167,
+          "intercept": 0.30602583289146423,
+          "processors": [
+            {
+              "processor": "A57",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 0.5838550329208374
+        }
+      ],
+      "task": "18_tinyrenderer-boggie",
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=18_work_done\" /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer /root/thermobench/benchmarks/tinyrenderer/obj/boggie/*.obj"
+    },
+    {
+      "resourceAssignments": [
+        {
+          "length": 78,
+          "intercept": 0.3470712900161743,
+          "processors": [
+            {
+              "processor": "Denver",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 1.5703598260879517
+        },
+        {
+          "length": 89,
+          "intercept": 0.2372933179140091,
+          "processors": [
+            {
+              "processor": "A57",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 0.7757500410079956
+        }
+      ],
+      "task": "19_tblook-4K",
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=19_work_done\" ./tblook-4K -v0 -c1 -i100"
+    }
+  ]
+}
