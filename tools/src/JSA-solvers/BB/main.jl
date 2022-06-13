@@ -185,8 +185,78 @@ function fitness_meta_task(x)
         obj = compute_obj_sum_max(cluster, tasks_in_window, window_lengths)
     end
 
-    constr = [major_frame_length - sum(window_lengths) + 1e6 * (to_schedule)]
-    return obj, constr, [0.0]
+    constr = [Float64(sum(window_lengths) - major_frame_length)]
+    return obj, constr, [Float64(to_schedule)]
+end
+
+
+# Extract the solution and write it to a file
+function write_solution(best_result, obj, inst_path, out_path)
+    dct = JSON.parsefile(inst_path)
+    cluster, tasks_in_window, window_lengths, to_schedule = assign_tasks(best_result)
+
+    @info "Solution found"
+    @info cluster
+    @info tasks_in_window
+    @info window_lengths
+    @info to_schedule
+
+    @info major_frame_length sum(window_lengths)
+
+    # write windows
+    all_windows = []
+    for i in 1:length(window_lengths)
+        if window_lengths[i] > 0
+            t_in_w = []
+            cur_unit = Dict(c => 0 for c in clusters)
+            for t in tasks_in_window[i]
+                t_cluster = clusters[cluster[t]]
+                push!(t_in_w, Dict(
+                    "length" => tasks_char[t_cluster][t]["length"],
+                    "processingUnit" => cur_unit[t_cluster],
+                    "processor" => t_cluster,
+                    "start" => 0,
+                    "task" => dct["assignmentCharacteristics"][t]["task"]
+                ))
+                cur_unit[t_cluster] += 1
+            end
+            push!(all_windows, Dict(
+                "length" => window_lengths[i],
+                "tasks" => t_in_w
+            ))
+        end
+    end
+    
+
+    # write tasks
+    tasks = []
+    for t in 1:n_tasks
+        ac = dct["assignmentCharacteristics"][t]
+        push!(tasks, Dict(
+            "assignmentIndex" => cluster[t],
+            "command" => ac["command"],
+            "length" => ac["resourceAssignments"][cluster[t]]["length"],
+            "name" => ac["task"],
+            "processors" => Dict(
+                "processor" => ac["resourceAssignments"][cluster[t]]["processors"][1]["processor"],
+                "processingUnits" => 1,  # TODO: make more general
+            )
+        ))
+    end
+
+    # write solution and metadata
+    dct["solution"] = Dict(
+        "feasible" => (to_schedule > 0) && (sum(window_lengths - major_frame_length <= 0)) ? false : true,
+        "solutionTime" => time_limit_sec,  # TODO: measure true running time
+        "solverMetadata" => Dict("objective" => to_schedule > 0 ? "0" : string(obj)),
+        "solverName" => "BB-" * args["model"], 
+        "windows" => all_windows
+    )
+    dct["tasks"] = tasks
+
+    open(out_path,"w") do f
+        JSON.print(f, dct, 2)
+    end
 end
 
 
@@ -198,14 +268,16 @@ function run_meta_task()
     
     while true
         t_sec = @elapsed begin
-            @info "Iterating WOA; remaining time $(remaining_time), sol $(best_obj)"
-            solver = WOA(N=1*n_tasks, options=Options(debug=false, time_limit=remaining_time))    
+            @info "Iterating; remaining time $(remaining_time), sol $(best_obj)"
+            #solver = WOA(N=1*n_tasks, options=Options(debug=true, time_limit=remaining_time))    
+            solver = CGSA(N=15*n_tasks, options=Options(debug=true, time_limit=remaining_time))    
+            
             result = Metaheuristics.optimize(fitness_meta_task, bounds, solver)
         end
 
         if minimum(result) <= best_obj
             best_obj = minimum(result)
-            best_result = result
+            best_result = minimizer(result)
         end
 
         remaining_time -= t_sec
@@ -214,9 +286,87 @@ function run_meta_task()
             break
         end
     end
-    @info "The found solution has objective $(minimum(best_result))"
+    @info "The found solution has objective $(best_obj)"
     
-    # TODO: Write the solution to file.
+    write_solution(best_result, best_obj, in_path, out_path)
+end
+
+
+function run_nlopt_task()
+    n_variables = n_tasks
+    best_result = missing
+    best_obj = Inf64
+    remaining_time = time_limit_sec
+    
+    fitness = (x, grad) -> fitness_meta_task(x)[1]
+    c1 = (x, grad) -> sum(assign_tasks(x)[3]) - major_frame_length
+    c2 = (x, grad) -> Float64(assign_tasks(x)[4])
+    
+    while true
+        @info "Iterating; remaining time $(remaining_time), sol $(best_obj)"
+
+        @info " - looking for an initial solution"
+        init_iter = 0
+        x_init = [rand() for _ in 1:n_variables]
+        while remaining_time > 0
+            t_sec = @elapsed begin
+                if (c1(x_init, []) <= 0.0) && (c2(x_init, []) <= 0.5)
+                    @info "   found a feasible solution after $(init_iter) iterations"
+                    
+                    
+                    break
+                end 
+                
+                x_init = [rand() for _ in 1:n_variables]
+                x_init[x_init .>= 0.5] .= 0.5 + 0.9 * rand() * (0.5/n_win_ub)
+                x_init[x_init .< 0.5] .= 0 + 0.9 * rand() * (0.5/n_win_ub)
+                init_iter += 1
+            end
+            remaining_time -= t_sec
+        end
+
+        t_sec = @elapsed begin
+            opt = Opt(:GN_ISRES, n_variables)
+            # Set local optimizer
+            #local_opt = Opt(:LN_COBYLA, n_variables)
+            #local_opt.maxtime = min(remaining_time, time_limit_sec / 5)  # allow for 5 restarts
+            #opt.local_optimizer = local_opt
+            # Set global parameters
+            opt.lower_bounds = [0.0 for _ in 1:n_variables]
+            opt.upper_bounds = [1.0 for _ in 1:n_variables]            
+            opt.maxtime = min(remaining_time, time_limit_sec / 5)  # allow for 5 restarts
+            opt.min_objective = fitness
+            #opt.ftol_abs = 0.01
+
+            # Constraints
+            # - major frame length fitted
+            inequality_constraint!(opt, c1)
+
+            # - everything scheduled
+            inequality_constraint!(opt, c2)
+
+            # Optimize
+            (minf,minx,ret) = NLopt.optimize(opt, x_init)
+        end
+
+        if (c1(minx, []) <= 0.0) && (c2(minx, []) <= 0.5) && (minf <= best_obj)
+            best_obj = minf
+            best_result = minx
+        end
+
+        remaining_time -= t_sec
+    
+        if remaining_time <= 0
+            break
+        end
+    end
+    if best_obj < Inf64
+        @info "The found solution has objective $(best_obj)"
+    else
+        @info "No solution was found"
+    end
+    
+    write_solution(best_result, best_obj, in_path, out_path)
 end
 
 # First parse the arguments
@@ -224,6 +374,7 @@ args = parse_commandline()
 @info "Parsed command line with args" args
 
 in_path = args["input"]
+out_path = args["output"]
 lr_path = args["path_lr"]
 args_platform = args["platform"]
 time_limit_sec = args["timelimit"]
@@ -273,3 +424,5 @@ n_win_ub = min(findfirst(cumsum(tasks_lengths) .> major_frame_length), n_tasks)
 
 # Run the optimization
 run_meta_task()
+# NLopt model does not seem to work properly with constraints
+#run_nlopt_task()
