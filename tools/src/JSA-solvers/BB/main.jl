@@ -3,6 +3,8 @@ using JuMP
 using NLopt
 using JSON
 using Metaheuristics
+using Evolutionary
+using Random
 
 function parse_commandline()
     s = ArgParseSettings()
@@ -31,9 +33,13 @@ function parse_commandline()
             help = "Power model to be used for fitness evaluation [sm, lr]; sm for sum-max, lr for linear regression."
             required = true
             range_tester = (x->x ∈ ["sm", "lr"])
+        "--seed", "-s"
+            help = "Random seed."            
+            default = 9874984737484            
     end
     return parse_args(s)
 end
+
 
 
 # Given path to the instance file, load 
@@ -405,9 +411,147 @@ function run_nlopt_task()
     write_solution(best_result, best_obj, in_path, out_path)
 end
 
+
+function generate_random_feasible(t_lim)
+    x_init = [rand() for _ in 1:n_tasks]
+    constr = (x) -> [sum(assign_tasks(x)[3]), Float64(assign_tasks(x)[4])]
+
+    while t_lim > 0
+        t_sec = @elapsed begin
+            c_val = constr(x_init)
+            if (c_val[1] <= major_frame_length) && (c_val[2] <= 0.5)                
+                break
+            end 
+            
+            x_init = [rand() for _ in 1:n_tasks]
+            x_init[x_init .>= 0.5] .= 0.5 + 0.9 * rand() * (0.5/n_win_ub)
+            x_init[x_init .< 0.5] .= 0 + 0.9 * rand() * (0.5/n_win_ub)            
+        end
+        t_lim -= t_sec
+    end
+
+    return x_init
+end
+
+
+function run_evolutionary()
+    n_variables = n_tasks
+    best_result = missing
+    best_obj = Inf64
+    remaining_time = time_limit_sec
+    
+    fitness = (x) -> fitness_meta_task(x)[1]        
+
+    # Box constraints on variables
+    lb = [0.0 for _ in 1:n_variables]
+    ub = [1.0 for _ in 1:n_variables]
+    # Additional constraints    
+    constr = (x) -> [sum(assign_tasks(x)[3]), Float64(assign_tasks(x)[4])]
+    lc = [0.0, 0.0]
+    uc = [Float64(major_frame_length), 0.5]
+    con = WorstFitnessConstraints(lb, ub, lc, uc, constr)
+
+    # Define params of GA
+    # ga = GA(populationSize = 50*n_variables,
+    #     #selection=tournament(3), 
+    #     selection=uniformranking(Int(round(0.3*50*n_variables))), 
+    #     mutation=BGA([2*0.5/n_win_ub for _ in 1:n_variables], n_variables),
+    #     #mutation=uniform(0.7*0.5/n_win_ub),        
+    #     crossover=TPX,
+    #     epsilon=0.01
+    # )        
+
+    # ga = GA(populationSize = 50*n_variables,
+    #     selection=tournament(7),         
+    #     mutation=BGA([2*0.5/n_win_ub for _ in 1:n_variables], n_variables),        
+    #     crossover=TPX        
+    # )   
+
+    pop_size = 50*n_variables
+
+    # # Good for IN_2
+    ga = GA(populationSize = pop_size,
+    selection=uniformranking(Int(round(0.9*pop_size))), 
+    mutation=BGA([3*0.5/n_win_ub for _ in 1:n_variables], n_variables),    
+    crossover=TPX,
+    epsilon=0.002,
+    mutationRate=0.2,
+    crossoverRate=0.8
+    )   
+
+   
+    # -----------------------------------------------------
+    #@info "initial solution is" fitness(x_init)
+   
+    # Generate intial sol
+    while true
+        t_sec = @elapsed begin
+            x_init = generate_random_feasible(remaining_time)
+            x_obj = fitness(x_init)
+            if x_obj < best_obj                
+                best_result = x_init
+                best_obj = fitness(x_init)
+            end
+        end    
+        remaining_time -= t_sec
+
+        if remaining_time < 9.5/10*time_limit_sec
+            break
+        end
+    end
+
+    
+    n_loops = 0
+    f_improved = false
+    while true         
+        if (n_loops > 0) && !f_improved
+            t_sec = @elapsed begin
+                x_init = generate_random_feasible(remaining_time)                
+            end
+            remaining_time -= t_sec
+        else
+            x_init = best_result
+        end
+        
+        t_sec = @elapsed begin
+            res = Evolutionary.optimize(fitness, con, x_init, ga, Evolutionary.Options(abstol=0.0005, time_limit=remaining_time, successive_f_tol=10))
+            minf = Evolutionary.minimum(res)
+            minx = Evolutionary.minimizer(res)
+        end
+        
+        c_val = constr(minx)
+        if (c_val[1] <= major_frame_length) && (c_val[2] <= 0.5) && (minf < best_obj)
+            best_obj = minf
+            best_result = minx
+            f_improved = true        
+        else
+            f_improved = false
+        end
+
+        remaining_time -= t_sec
+
+        @info " - time $(round(remaining_time,digits=2)), init $(round(fitness(x_init),digits=3)) current $(round(fitness(minx),digits=3)) best $(round(best_obj,digits=3))"
+    
+        if remaining_time <= 0
+            break
+        end
+
+        n_loops += 1
+    end
+    if best_obj < Inf64
+        @info "The found solution has objective $(best_obj)"
+    else
+        @info "No solution was found"
+    end
+    
+    write_solution(best_result, best_obj, in_path, out_path)
+end
+
 # First parse the arguments
 args = parse_commandline()
 @info "Parsed command line with args" args
+
+Random.seed!(args["seed"])
 
 in_path = args["input"]
 out_path = args["output"]
@@ -459,6 +603,8 @@ n_win_ub = min(findfirst(cumsum(tasks_lengths) .> major_frame_length), n_tasks)
 # @info fitness_meta_task(x)
 
 # Run the optimization
-run_meta_task()
+#run_meta_task()
 # NLopt model does not seem to work properly with constraints
 #run_nlopt_task()
+# Evolutionary alg.
+run_evolutionary()
