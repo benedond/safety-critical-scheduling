@@ -53,11 +53,16 @@ function load_instance(path)
     mf_len = data["environment"]["majorFrameLength"]
     
     coeffs = Dict(p["name"] => Dict()  for p in data["environment"]["processors"])
+
+    ac_idx = [Dict() for _ in 1:n_tasks]
     
-    for (idx, ac) in enumerate(data["assignmentCharacteristics"])  # tasks
-        # Write the coeffisients for each assignment of this task
-        for ra in ac["resourceAssignments"]  # Assume that each assignment is only to a single processor (i.e., cluster)
+    for (idx, ac) in enumerate(data["assignmentCharacteristics"])  # tasks        
+        for (idx_ra, ra) in enumerate(ac["resourceAssignments"])  # Assume that each assignment is only to a single processor (i.e., cluster)
+            # Write the coeffisients for each assignment of this task    
             coeffs[ra["processors"][1]["processor"]][idx] = Dict("slope" => ra["slope"], "intercept" => ra["intercept"], "length" => ra["length"])
+            
+            # Save indexes of the individual assignment chars, based on cluster (cluster -> idx in RA)
+            ac_idx[idx][ra["processors"][1]["processor"]] = idx_ra
         end
 
         # The solver assumes that each task can be assigned to each of the available processors
@@ -69,7 +74,7 @@ function load_instance(path)
         end
     end
 
-    return n_tasks, mf_len, coeffs
+    return n_tasks, mf_len, coeffs, ac_idx
 end
 
 # Load environment from the instance file
@@ -238,13 +243,14 @@ function write_solution(best_result, obj, inst_path, out_path)
     tasks = []
     for t in 1:n_tasks
         ac = dct["assignmentCharacteristics"][t]
+        cur_ac_index = ac_idx[t][clusters[cluster[t]]]
         push!(tasks, Dict(
-            "assignmentIndex" => cluster[t],
+            "assignmentIndex" => cur_ac_index - 1,  # used format indexes from 0 (like Python or C++)
             "command" => ac["command"],
-            "length" => ac["resourceAssignments"][cluster[t]]["length"],
+            "length" => ac["resourceAssignments"][cur_ac_index]["length"],
             "name" => ac["task"],
             "processors" => [Dict(
-                "processor" => ac["resourceAssignments"][cluster[t]]["processors"][1]["processor"],
+                "processor" => ac["resourceAssignments"][cur_ac_index]["processors"][1]["processor"],
                 "processingUnits" => 1,  # TODO: make more general
             )]
         ))
@@ -564,7 +570,7 @@ time_limit_sec = args["timelimit"]
 #args_platform = "imx8a"
 
 # Load the instance
-n_tasks, major_frame_length, tasks_char = load_instance(in_path)
+n_tasks, major_frame_length, tasks_char, ac_idx = load_instance(in_path)
 clusters, cores, env = load_environment(in_path)
 n_clusters = length(clusters)
 lr_coeffs = load_lr_coeffs(lr_path, args_platform)
