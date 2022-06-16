@@ -2,7 +2,7 @@
 
 # Just for the renaming of old solutions to desired format (when generating solutions from the scratch, the renaming should be already part of the procedure)
 
-solvers=( "HEUR" "ILP-IDLE-MIN" "ILP-IDLE-MAX" "ILP-SM-I" "ILP-SM-II" "QP-LR-UB")
+solvers=( "HEUR" "ILP-IDLE-MIN" "ILP-IDLE-MAX" "ILP-SM-I" "ILP-SM-II" "QP-LR-UB" "BB-LR" "BB-SM" )
 folders=( "solutions" "demos_configurations" "measurements" )
 
 # Rename the solved instances
