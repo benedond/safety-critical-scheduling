@@ -243,10 +243,10 @@ function write_solution(best_result, obj, inst_path, out_path)
             "command" => ac["command"],
             "length" => ac["resourceAssignments"][cluster[t]]["length"],
             "name" => ac["task"],
-            "processors" => Dict(
+            "processors" => [Dict(
                 "processor" => ac["resourceAssignments"][cluster[t]]["processors"][1]["processor"],
                 "processingUnits" => 1,  # TODO: make more general
-            )
+            )]
         ))
     end
 
