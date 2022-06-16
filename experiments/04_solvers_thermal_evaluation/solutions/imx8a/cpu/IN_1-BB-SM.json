@@ -1,0 +1,1004 @@
+{
+  "tasks": [
+    {
+      "length": 142,
+      "name": "0_tblook-4K",
+      "processors": [
+        {
+          "processor": "A72",
+          "processingUnits": 1
+        }
+      ],
+      "assignmentIndex": 0,
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=0_work_done\" ./tblook-4K -v0 -c1 -i100"
+    },
+    {
+      "length": 138,
+      "name": "1_idctrn-4M",
+      "processors": [
+        {
+          "processor": "A53",
+          "processingUnits": 1
+        }
+      ],
+      "assignmentIndex": 1,
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=1_work_done\" ./idctrn-4M -v0 -c1 -i100"
+    },
+    {
+      "length": 172,
+      "name": "2_a2time-4M",
+      "processors": [
+        {
+          "processor": "A53",
+          "processingUnits": 1
+        }
+      ],
+      "assignmentIndex": 1,
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=2_work_done\" ./a2time-4M -v0 -c1 -i100"
+    },
+    {
+      "length": 224,
+      "name": "3_tinyrenderer-boggie",
+      "processors": [
+        {
+          "processor": "A53",
+          "processingUnits": 1
+        }
+      ],
+      "assignmentIndex": 1,
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=3_work_done\" /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer /root/thermobench/benchmarks/tinyrenderer/obj/boggie/*.obj"
+    },
+    {
+      "length": 141,
+      "name": "4_iirflt-4K",
+      "processors": [
+        {
+          "processor": "A72",
+          "processingUnits": 1
+        }
+      ],
+      "assignmentIndex": 0,
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=4_work_done\" ./iirflt-4K -v0 -c1 -i100"
+    },
+    {
+      "length": 140,
+      "name": "5_bitmnp-4K",
+      "processors": [
+        {
+          "processor": "A72",
+          "processingUnits": 1
+        }
+      ],
+      "assignmentIndex": 0,
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=5_work_done\" ./bitmnp-4K -v0 -c1 -i100"
+    },
+    {
+      "length": 164,
+      "name": "6_ttsprk-4M",
+      "processors": [
+        {
+          "processor": "A53",
+          "processingUnits": 1
+        }
+      ],
+      "assignmentIndex": 1,
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=6_work_done\" ./ttsprk-4M -v0 -c1 -i100"
+    },
+    {
+      "length": 183,
+      "name": "7_puwmod-4K",
+      "processors": [
+        {
+          "processor": "A53",
+          "processingUnits": 1
+        }
+      ],
+      "assignmentIndex": 1,
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=7_work_done\" ./puwmod-4K -v0 -c1 -i100"
+    },
+    {
+      "length": 289,
+      "name": "8_tblook-4K",
+      "processors": [
+        {
+          "processor": "A53",
+          "processingUnits": 1
+        }
+      ],
+      "assignmentIndex": 1,
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=8_work_done\" ./tblook-4K -v0 -c1 -i100"
+    },
+    {
+      "length": 216,
+      "name": "9_puwmod-4K",
+      "processors": [
+        {
+          "processor": "A53",
+          "processingUnits": 1
+        }
+      ],
+      "assignmentIndex": 1,
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=9_work_done\" ./puwmod-4K -v0 -c1 -i100"
+    },
+    {
+      "length": 109,
+      "name": "10_tblook-4K",
+      "processors": [
+        {
+          "processor": "A72",
+          "processingUnits": 1
+        }
+      ],
+      "assignmentIndex": 0,
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=10_work_done\" ./tblook-4K -v0 -c1 -i100"
+    },
+    {
+      "length": 106,
+      "name": "11_canrdr-4M",
+      "processors": [
+        {
+          "processor": "A53",
+          "processingUnits": 1
+        }
+      ],
+      "assignmentIndex": 1,
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=11_work_done\" ./canrdr-4M -v0 -c1 -i100"
+    },
+    {
+      "length": 168,
+      "name": "12_matrix-4K",
+      "processors": [
+        {
+          "processor": "A53",
+          "processingUnits": 1
+        }
+      ],
+      "assignmentIndex": 1,
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=12_work_done\" ./matrix-4K -v0 -c1 -i100"
+    },
+    {
+      "length": 259,
+      "name": "13_tinyrenderer-diablo",
+      "processors": [
+        {
+          "processor": "A53",
+          "processingUnits": 1
+        }
+      ],
+      "assignmentIndex": 1,
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=13_work_done\" /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer /root/thermobench/benchmarks/tinyrenderer/obj/diablo3_pose/*.obj"
+    },
+    {
+      "length": 143,
+      "name": "14_tblook-4M",
+      "processors": [
+        {
+          "processor": "A53",
+          "processingUnits": 1
+        }
+      ],
+      "assignmentIndex": 1,
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=14_work_done\" ./tblook-4M -v0 -c1 -i100"
+    },
+    {
+      "length": 155,
+      "name": "15_matrix-4K",
+      "processors": [
+        {
+          "processor": "A53",
+          "processingUnits": 1
+        }
+      ],
+      "assignmentIndex": 1,
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=15_work_done\" ./matrix-4K -v0 -c1 -i100"
+    },
+    {
+      "length": 207,
+      "name": "16_a2time-4K",
+      "processors": [
+        {
+          "processor": "A53",
+          "processingUnits": 1
+        }
+      ],
+      "assignmentIndex": 1,
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=16_work_done\" ./a2time-4K -v0 -c1 -i100"
+    },
+    {
+      "length": 103,
+      "name": "17_canrdr-4M",
+      "processors": [
+        {
+          "processor": "A72",
+          "processingUnits": 1
+        }
+      ],
+      "assignmentIndex": 0,
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=17_work_done\" ./canrdr-4M -v0 -c1 -i100"
+    },
+    {
+      "length": 151,
+      "name": "18_tinyrenderer-boggie",
+      "processors": [
+        {
+          "processor": "A72",
+          "processingUnits": 1
+        }
+      ],
+      "assignmentIndex": 0,
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=18_work_done\" /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer /root/thermobench/benchmarks/tinyrenderer/obj/boggie/*.obj"
+    },
+    {
+      "length": 242,
+      "name": "19_tblook-4K",
+      "processors": [
+        {
+          "processor": "A53",
+          "processingUnits": 1
+        }
+      ],
+      "assignmentIndex": 1,
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=19_work_done\" ./tblook-4K -v0 -c1 -i100"
+    }
+  ],
+  "solution": {
+    "solutionTime": 300.0,
+    "solverMetadata": {
+      "objective": "2.732849734704545"
+    },
+    "solverName": "BB-sm",
+    "windows": [
+      {
+        "length": 155,
+        "tasks": [
+          {
+            "length": 143,
+            "task": "14_tblook-4M",
+            "processingUnit": 0,
+            "start": 0,
+            "processor": "A53"
+          },
+          {
+            "length": 151,
+            "task": "18_tinyrenderer-boggie",
+            "processingUnit": 0,
+            "start": 0,
+            "processor": "A72"
+          },
+          {
+            "length": 103,
+            "task": "17_canrdr-4M",
+            "processingUnit": 1,
+            "start": 0,
+            "processor": "A72"
+          },
+          {
+            "length": 155,
+            "task": "15_matrix-4K",
+            "processingUnit": 1,
+            "start": 0,
+            "processor": "A53"
+          },
+          {
+            "length": 106,
+            "task": "11_canrdr-4M",
+            "processingUnit": 2,
+            "start": 0,
+            "processor": "A53"
+          },
+          {
+            "length": 138,
+            "task": "1_idctrn-4M",
+            "processingUnit": 3,
+            "start": 0,
+            "processor": "A53"
+          }
+        ]
+      },
+      {
+        "length": 289,
+        "tasks": [
+          {
+            "length": 142,
+            "task": "0_tblook-4K",
+            "processingUnit": 0,
+            "start": 0,
+            "processor": "A72"
+          },
+          {
+            "length": 164,
+            "task": "6_ttsprk-4M",
+            "processingUnit": 0,
+            "start": 0,
+            "processor": "A53"
+          },
+          {
+            "length": 183,
+            "task": "7_puwmod-4K",
+            "processingUnit": 1,
+            "start": 0,
+            "processor": "A53"
+          },
+          {
+            "length": 289,
+            "task": "8_tblook-4K",
+            "processingUnit": 2,
+            "start": 0,
+            "processor": "A53"
+          },
+          {
+            "length": 216,
+            "task": "9_puwmod-4K",
+            "processingUnit": 3,
+            "start": 0,
+            "processor": "A53"
+          },
+          {
+            "length": 109,
+            "task": "10_tblook-4K",
+            "processingUnit": 1,
+            "start": 0,
+            "processor": "A72"
+          }
+        ]
+      },
+      {
+        "length": 259,
+        "tasks": [
+          {
+            "length": 172,
+            "task": "2_a2time-4M",
+            "processingUnit": 0,
+            "start": 0,
+            "processor": "A53"
+          },
+          {
+            "length": 141,
+            "task": "4_iirflt-4K",
+            "processingUnit": 0,
+            "start": 0,
+            "processor": "A72"
+          },
+          {
+            "length": 140,
+            "task": "5_bitmnp-4K",
+            "processingUnit": 1,
+            "start": 0,
+            "processor": "A72"
+          },
+          {
+            "length": 259,
+            "task": "13_tinyrenderer-diablo",
+            "processingUnit": 1,
+            "start": 0,
+            "processor": "A53"
+          },
+          {
+            "length": 242,
+            "task": "19_tblook-4K",
+            "processingUnit": 2,
+            "start": 0,
+            "processor": "A53"
+          },
+          {
+            "length": 224,
+            "task": "3_tinyrenderer-boggie",
+            "processingUnit": 3,
+            "start": 0,
+            "processor": "A53"
+          }
+        ]
+      },
+      {
+        "length": 207,
+        "tasks": [
+          {
+            "length": 207,
+            "task": "16_a2time-4K",
+            "processingUnit": 0,
+            "start": 0,
+            "processor": "A53"
+          },
+          {
+            "length": 168,
+            "task": "12_matrix-4K",
+            "processingUnit": 1,
+            "start": 0,
+            "processor": "A53"
+          }
+        ]
+      }
+    ],
+    "feasible": true
+  },
+  "environment": {
+    "processors": [
+      {
+        "coreIds": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "name": "A53",
+        "processingUnits": 4,
+        "type": "main_processor"
+      },
+      {
+        "coreIds": [
+          4,
+          5
+        ],
+        "name": "A72",
+        "processingUnits": 2,
+        "type": "main_processor"
+      }
+    ],
+    "idlePower": 5.49,
+    "problemVersion": 1,
+    "majorFrameLength": 940,
+    "scPart": 1.0
+  },
+  "assignmentCharacteristics": [
+    {
+      "resourceAssignments": [
+        {
+          "length": 142,
+          "intercept": 0.2878774404525757,
+          "processors": [
+            {
+              "processor": "A72",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 1.4983469247817993
+        },
+        {
+          "length": 441,
+          "intercept": 0.2091083526611328,
+          "processors": [
+            {
+              "processor": "A53",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 0.2480810135602951
+        }
+      ],
+      "task": "0_tblook-4K",
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=0_work_done\" ./tblook-4K -v0 -c1 -i100"
+    },
+    {
+      "resourceAssignments": [
+        {
+          "length": 46,
+          "intercept": 1.2741247415542603,
+          "processors": [
+            {
+              "processor": "A72",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 1.6805007457733154
+        },
+        {
+          "length": 138,
+          "intercept": 1.1517181396484375,
+          "processors": [
+            {
+              "processor": "A53",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 0.3536776602268219
+        }
+      ],
+      "task": "1_idctrn-4M",
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=1_work_done\" ./idctrn-4M -v0 -c1 -i100"
+    },
+    {
+      "resourceAssignments": [
+        {
+          "length": 101,
+          "intercept": 1.6277962923049927,
+          "processors": [
+            {
+              "processor": "A72",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 1.142446517944336
+        },
+        {
+          "length": 172,
+          "intercept": 1.3782962560653687,
+          "processors": [
+            {
+              "processor": "A53",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 0.35241156816482544
+        }
+      ],
+      "task": "2_a2time-4M",
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=2_work_done\" ./a2time-4M -v0 -c1 -i100"
+    },
+    {
+      "resourceAssignments": [
+        {
+          "length": 115,
+          "intercept": 1.4682059288024902,
+          "processors": [
+            {
+              "processor": "A72",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 1.085396409034729
+        },
+        {
+          "length": 224,
+          "intercept": 1.3675634860992432,
+          "processors": [
+            {
+              "processor": "A53",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 0.2923976480960846
+        }
+      ],
+      "task": "3_tinyrenderer-boggie",
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=3_work_done\" /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer /root/thermobench/benchmarks/tinyrenderer/obj/boggie/*.obj"
+    },
+    {
+      "resourceAssignments": [
+        {
+          "length": 141,
+          "intercept": 0.29871866106987,
+          "processors": [
+            {
+              "processor": "A72",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 1.3097386360168457
+        },
+        {
+          "length": 404,
+          "intercept": 0.20613758265972137,
+          "processors": [
+            {
+              "processor": "A53",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 0.2467029094696045
+        }
+      ],
+      "task": "4_iirflt-4K",
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=4_work_done\" ./iirflt-4K -v0 -c1 -i100"
+    },
+    {
+      "resourceAssignments": [
+        {
+          "length": 140,
+          "intercept": 0.2228277176618576,
+          "processors": [
+            {
+              "processor": "A72",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 0.7441056370735168
+        },
+        {
+          "length": 292,
+          "intercept": 0.21105487644672394,
+          "processors": [
+            {
+              "processor": "A53",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 0.22021609544754028
+        }
+      ],
+      "task": "5_bitmnp-4K",
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=5_work_done\" ./bitmnp-4K -v0 -c1 -i100"
+    },
+    {
+      "resourceAssignments": [
+        {
+          "length": 77,
+          "intercept": -0.3373093903064728,
+          "processors": [
+            {
+              "processor": "A72",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 2.059513807296753
+        },
+        {
+          "length": 164,
+          "intercept": -0.15774327516555786,
+          "processors": [
+            {
+              "processor": "A53",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 0.7086412310600281
+        }
+      ],
+      "task": "6_ttsprk-4M",
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=6_work_done\" ./ttsprk-4M -v0 -c1 -i100"
+    },
+    {
+      "resourceAssignments": [
+        {
+          "length": 95,
+          "intercept": 0.2378079891204834,
+          "processors": [
+            {
+              "processor": "A72",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 1.1902371644973755
+        },
+        {
+          "length": 183,
+          "intercept": 0.2543404698371887,
+          "processors": [
+            {
+              "processor": "A53",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 0.31867295503616333
+        }
+      ],
+      "task": "7_puwmod-4K",
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=7_work_done\" ./puwmod-4K -v0 -c1 -i100"
+    },
+    {
+      "resourceAssignments": [
+        {
+          "length": 93,
+          "intercept": 0.2878774404525757,
+          "processors": [
+            {
+              "processor": "A72",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 1.4983469247817993
+        },
+        {
+          "length": 289,
+          "intercept": 0.2091083526611328,
+          "processors": [
+            {
+              "processor": "A53",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 0.2480810135602951
+        }
+      ],
+      "task": "8_tblook-4K",
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=8_work_done\" ./tblook-4K -v0 -c1 -i100"
+    },
+    {
+      "resourceAssignments": [
+        {
+          "length": 112,
+          "intercept": 0.2378079891204834,
+          "processors": [
+            {
+              "processor": "A72",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 1.1902371644973755
+        },
+        {
+          "length": 216,
+          "intercept": 0.2543404698371887,
+          "processors": [
+            {
+              "processor": "A53",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 0.31867295503616333
+        }
+      ],
+      "task": "9_puwmod-4K",
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=9_work_done\" ./puwmod-4K -v0 -c1 -i100"
+    },
+    {
+      "resourceAssignments": [
+        {
+          "length": 109,
+          "intercept": 0.2878774404525757,
+          "processors": [
+            {
+              "processor": "A72",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 1.4983469247817993
+        },
+        {
+          "length": 338,
+          "intercept": 0.2091083526611328,
+          "processors": [
+            {
+              "processor": "A53",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 0.2480810135602951
+        }
+      ],
+      "task": "10_tblook-4K",
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=10_work_done\" ./tblook-4K -v0 -c1 -i100"
+    },
+    {
+      "resourceAssignments": [
+        {
+          "length": 55,
+          "intercept": 1.5866328477859497,
+          "processors": [
+            {
+              "processor": "A72",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 1.3203872442245483
+        },
+        {
+          "length": 106,
+          "intercept": 1.3604037761688232,
+          "processors": [
+            {
+              "processor": "A53",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 0.41491806507110596
+        }
+      ],
+      "task": "11_canrdr-4M",
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=11_work_done\" ./canrdr-4M -v0 -c1 -i100"
+    },
+    {
+      "resourceAssignments": [
+        {
+          "length": 64,
+          "intercept": 0.901816725730896,
+          "processors": [
+            {
+              "processor": "A72",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 1.3037322759628296
+        },
+        {
+          "length": 168,
+          "intercept": 0.2171453982591629,
+          "processors": [
+            {
+              "processor": "A53",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 0.3460477888584137
+        }
+      ],
+      "task": "12_matrix-4K",
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=12_work_done\" ./matrix-4K -v0 -c1 -i100"
+    },
+    {
+      "resourceAssignments": [
+        {
+          "length": 129,
+          "intercept": 1.338173270225525,
+          "processors": [
+            {
+              "processor": "A72",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 1.135343313217163
+        },
+        {
+          "length": 259,
+          "intercept": 1.3260525465011597,
+          "processors": [
+            {
+              "processor": "A53",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 0.276058554649353
+        }
+      ],
+      "task": "13_tinyrenderer-diablo",
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=13_work_done\" /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer /root/thermobench/benchmarks/tinyrenderer/obj/diablo3_pose/*.obj"
+    },
+    {
+      "resourceAssignments": [
+        {
+          "length": 44,
+          "intercept": 1.3523695468902588,
+          "processors": [
+            {
+              "processor": "A72",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 1.6788700819015503
+        },
+        {
+          "length": 143,
+          "intercept": 1.330340027809143,
+          "processors": [
+            {
+              "processor": "A53",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 0.2637937664985657
+        }
+      ],
+      "task": "14_tblook-4M",
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=14_work_done\" ./tblook-4M -v0 -c1 -i100"
+    },
+    {
+      "resourceAssignments": [
+        {
+          "length": 59,
+          "intercept": 0.901816725730896,
+          "processors": [
+            {
+              "processor": "A72",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 1.3037322759628296
+        },
+        {
+          "length": 155,
+          "intercept": 0.2171453982591629,
+          "processors": [
+            {
+              "processor": "A53",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 0.3460477888584137
+        }
+      ],
+      "task": "15_matrix-4K",
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=15_work_done\" ./matrix-4K -v0 -c1 -i100"
+    },
+    {
+      "resourceAssignments": [
+        {
+          "length": 120,
+          "intercept": 0.15908029675483704,
+          "processors": [
+            {
+              "processor": "A72",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 1.0505038499832153
+        },
+        {
+          "length": 207,
+          "intercept": 0.24763469398021698,
+          "processors": [
+            {
+              "processor": "A53",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 0.24972325563430786
+        }
+      ],
+      "task": "16_a2time-4K",
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=16_work_done\" ./a2time-4K -v0 -c1 -i100"
+    },
+    {
+      "resourceAssignments": [
+        {
+          "length": 103,
+          "intercept": 1.5866328477859497,
+          "processors": [
+            {
+              "processor": "A72",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 1.3203872442245483
+        },
+        {
+          "length": 198,
+          "intercept": 1.3604037761688232,
+          "processors": [
+            {
+              "processor": "A53",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 0.41491806507110596
+        }
+      ],
+      "task": "17_canrdr-4M",
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=17_work_done\" ./canrdr-4M -v0 -c1 -i100"
+    },
+    {
+      "resourceAssignments": [
+        {
+          "length": 151,
+          "intercept": 1.4682059288024902,
+          "processors": [
+            {
+              "processor": "A72",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 1.085396409034729
+        },
+        {
+          "length": 294,
+          "intercept": 1.3675634860992432,
+          "processors": [
+            {
+              "processor": "A53",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 0.2923976480960846
+        }
+      ],
+      "task": "18_tinyrenderer-boggie",
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=18_work_done\" /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer /root/thermobench/benchmarks/tinyrenderer/obj/boggie/*.obj"
+    },
+    {
+      "resourceAssignments": [
+        {
+          "length": 78,
+          "intercept": 0.2878774404525757,
+          "processors": [
+            {
+              "processor": "A72",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 1.4983469247817993
+        },
+        {
+          "length": 242,
+          "intercept": 0.2091083526611328,
+          "processors": [
+            {
+              "processor": "A53",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 0.2480810135602951
+        }
+      ],
+      "task": "19_tblook-4K",
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=19_work_done\" ./tblook-4K -v0 -c1 -i100"
+    }
+  ]
+}

@@ -1,0 +1,1009 @@
+{
+  "tasks": [
+    {
+      "length": 113,
+      "name": "0_membench-1M-RO-S",
+      "processors": [
+        {
+          "processor": "A53",
+          "processingUnits": 1
+        }
+      ],
+      "assignmentIndex": 1,
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=0_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -s 1000000"
+    },
+    {
+      "length": 97,
+      "name": "1_bitmnp-4K",
+      "processors": [
+        {
+          "processor": "A53",
+          "processingUnits": 1
+        }
+      ],
+      "assignmentIndex": 1,
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=1_work_done\" ./bitmnp-4K -v0 -c1 -i100"
+    },
+    {
+      "length": 175,
+      "name": "2_a2time-4M",
+      "processors": [
+        {
+          "processor": "A53",
+          "processingUnits": 1
+        }
+      ],
+      "assignmentIndex": 1,
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=2_work_done\" ./a2time-4M -v0 -c1 -i100"
+    },
+    {
+      "length": 265,
+      "name": "3_iirflt-4M",
+      "processors": [
+        {
+          "processor": "A53",
+          "processingUnits": 1
+        }
+      ],
+      "assignmentIndex": 1,
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=3_work_done\" ./iirflt-4M -v0 -c1 -i100"
+    },
+    {
+      "length": 141,
+      "name": "4_pntrch-4M",
+      "processors": [
+        {
+          "processor": "A72",
+          "processingUnits": 1
+        }
+      ],
+      "assignmentIndex": 0,
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=4_work_done\" ./pntrch-4M -v0 -c1 -i1"
+    },
+    {
+      "length": 251,
+      "name": "5_membench-1K-RW-R",
+      "processors": [
+        {
+          "processor": "A53",
+          "processingUnits": 1
+        }
+      ],
+      "assignmentIndex": 1,
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=5_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -r -w -s 1000"
+    },
+    {
+      "length": 152,
+      "name": "6_tinyrenderer-boggie",
+      "processors": [
+        {
+          "processor": "A53",
+          "processingUnits": 1
+        }
+      ],
+      "assignmentIndex": 1,
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=6_work_done\" /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer /root/thermobench/benchmarks/tinyrenderer/obj/boggie/*.obj"
+    },
+    {
+      "length": 95,
+      "name": "7_matrix-4K",
+      "processors": [
+        {
+          "processor": "A72",
+          "processingUnits": 1
+        }
+      ],
+      "assignmentIndex": 0,
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=7_work_done\" ./matrix-4K -v0 -c1 -i100"
+    },
+    {
+      "length": 119,
+      "name": "8_membench-4M-RO-R",
+      "processors": [
+        {
+          "processor": "A53",
+          "processingUnits": 1
+        }
+      ],
+      "assignmentIndex": 1,
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=8_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -r -s 4000000"
+    },
+    {
+      "length": 112,
+      "name": "9_membench-4M-RO-S",
+      "processors": [
+        {
+          "processor": "A72",
+          "processingUnits": 1
+        }
+      ],
+      "assignmentIndex": 0,
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=9_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -s 4000000"
+    },
+    {
+      "length": 139,
+      "name": "10_membench-4M-RO-R",
+      "processors": [
+        {
+          "processor": "A53",
+          "processingUnits": 1
+        }
+      ],
+      "assignmentIndex": 1,
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=10_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -r -s 4000000"
+    },
+    {
+      "length": 55,
+      "name": "11_pntrch-4K",
+      "processors": [
+        {
+          "processor": "A72",
+          "processingUnits": 1
+        }
+      ],
+      "assignmentIndex": 0,
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=11_work_done\" ./pntrch-4K -v0 -c1 -i100"
+    },
+    {
+      "length": 52,
+      "name": "12_membench-1M-RW-S",
+      "processors": [
+        {
+          "processor": "A53",
+          "processingUnits": 1
+        }
+      ],
+      "assignmentIndex": 1,
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=12_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -w -s 1000000"
+    },
+    {
+      "length": 129,
+      "name": "13_rspeed-4M",
+      "processors": [
+        {
+          "processor": "A72",
+          "processingUnits": 1
+        }
+      ],
+      "assignmentIndex": 0,
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=13_work_done\" ./rspeed-4M -v0 -c1 -i100"
+    },
+    {
+      "length": 128,
+      "name": "14_iirflt-4K",
+      "processors": [
+        {
+          "processor": "A53",
+          "processingUnits": 1
+        }
+      ],
+      "assignmentIndex": 1,
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=14_work_done\" ./iirflt-4K -v0 -c1 -i100"
+    },
+    {
+      "length": 47,
+      "name": "15_membench-1M-RO-S",
+      "processors": [
+        {
+          "processor": "A53",
+          "processingUnits": 1
+        }
+      ],
+      "assignmentIndex": 1,
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=15_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -s 1000000"
+    },
+    {
+      "length": 230,
+      "name": "16_canrdr-4K",
+      "processors": [
+        {
+          "processor": "A53",
+          "processingUnits": 1
+        }
+      ],
+      "assignmentIndex": 1,
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=16_work_done\" ./canrdr-4K -v0 -c1 -i100"
+    },
+    {
+      "length": 304,
+      "name": "17_pntrch-4K",
+      "processors": [
+        {
+          "processor": "A53",
+          "processingUnits": 1
+        }
+      ],
+      "assignmentIndex": 1,
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=17_work_done\" ./pntrch-4K -v0 -c1 -i100"
+    },
+    {
+      "length": 300,
+      "name": "18_puwmod-4M",
+      "processors": [
+        {
+          "processor": "A53",
+          "processingUnits": 1
+        }
+      ],
+      "assignmentIndex": 1,
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=18_work_done\" ./puwmod-4M -v0 -c1 -i100"
+    },
+    {
+      "length": 140,
+      "name": "19_membench-1K-RW-R",
+      "processors": [
+        {
+          "processor": "A53",
+          "processingUnits": 1
+        }
+      ],
+      "assignmentIndex": 1,
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=19_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -r -w -s 1000"
+    }
+  ],
+  "solution": {
+    "solutionTime": 300.0,
+    "solverMetadata": {
+      "objective": "2.4458896056206503"
+    },
+    "solverName": "BB-lr",
+    "windows": [
+      {
+        "length": 304,
+        "tasks": [
+          {
+            "length": 304,
+            "task": "17_pntrch-4K",
+            "processingUnit": 0,
+            "start": 0,
+            "processor": "A53"
+          },
+          {
+            "length": 251,
+            "task": "5_membench-1K-RW-R",
+            "processingUnit": 1,
+            "start": 0,
+            "processor": "A53"
+          },
+          {
+            "length": 112,
+            "task": "9_membench-4M-RO-S",
+            "processingUnit": 0,
+            "start": 0,
+            "processor": "A72"
+          },
+          {
+            "length": 300,
+            "task": "18_puwmod-4M",
+            "processingUnit": 2,
+            "start": 0,
+            "processor": "A53"
+          },
+          {
+            "length": 265,
+            "task": "3_iirflt-4M",
+            "processingUnit": 3,
+            "start": 0,
+            "processor": "A53"
+          },
+          {
+            "length": 95,
+            "task": "7_matrix-4K",
+            "processingUnit": 1,
+            "start": 0,
+            "processor": "A72"
+          }
+        ]
+      },
+      {
+        "length": 141,
+        "tasks": [
+          {
+            "length": 113,
+            "task": "0_membench-1M-RO-S",
+            "processingUnit": 0,
+            "start": 0,
+            "processor": "A53"
+          },
+          {
+            "length": 141,
+            "task": "4_pntrch-4M",
+            "processingUnit": 0,
+            "start": 0,
+            "processor": "A72"
+          },
+          {
+            "length": 119,
+            "task": "8_membench-4M-RO-R",
+            "processingUnit": 1,
+            "start": 0,
+            "processor": "A53"
+          },
+          {
+            "length": 139,
+            "task": "10_membench-4M-RO-R",
+            "processingUnit": 2,
+            "start": 0,
+            "processor": "A53"
+          },
+          {
+            "length": 129,
+            "task": "13_rspeed-4M",
+            "processingUnit": 1,
+            "start": 0,
+            "processor": "A72"
+          },
+          {
+            "length": 128,
+            "task": "14_iirflt-4K",
+            "processingUnit": 3,
+            "start": 0,
+            "processor": "A53"
+          }
+        ]
+      },
+      {
+        "length": 230,
+        "tasks": [
+          {
+            "length": 175,
+            "task": "2_a2time-4M",
+            "processingUnit": 0,
+            "start": 0,
+            "processor": "A53"
+          },
+          {
+            "length": 152,
+            "task": "6_tinyrenderer-boggie",
+            "processingUnit": 1,
+            "start": 0,
+            "processor": "A53"
+          },
+          {
+            "length": 230,
+            "task": "16_canrdr-4K",
+            "processingUnit": 2,
+            "start": 0,
+            "processor": "A53"
+          },
+          {
+            "length": 140,
+            "task": "19_membench-1K-RW-R",
+            "processingUnit": 3,
+            "start": 0,
+            "processor": "A53"
+          },
+          {
+            "length": 55,
+            "task": "11_pntrch-4K",
+            "processingUnit": 0,
+            "start": 0,
+            "processor": "A72"
+          }
+        ]
+      },
+      {
+        "length": 47,
+        "tasks": [
+          {
+            "length": 47,
+            "task": "15_membench-1M-RO-S",
+            "processingUnit": 0,
+            "start": 0,
+            "processor": "A53"
+          }
+        ]
+      },
+      {
+        "length": 97,
+        "tasks": [
+          {
+            "length": 97,
+            "task": "1_bitmnp-4K",
+            "processingUnit": 0,
+            "start": 0,
+            "processor": "A53"
+          },
+          {
+            "length": 52,
+            "task": "12_membench-1M-RW-S",
+            "processingUnit": 1,
+            "start": 0,
+            "processor": "A53"
+          }
+        ]
+      }
+    ],
+    "feasible": true
+  },
+  "environment": {
+    "processors": [
+      {
+        "coreIds": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "name": "A53",
+        "processingUnits": 4,
+        "type": "main_processor"
+      },
+      {
+        "coreIds": [
+          4,
+          5
+        ],
+        "name": "A72",
+        "processingUnits": 2,
+        "type": "main_processor"
+      }
+    ],
+    "idlePower": 5.45,
+    "problemVersion": 1,
+    "majorFrameLength": 870,
+    "scPart": 1.0
+  },
+  "assignmentCharacteristics": [
+    {
+      "resourceAssignments": [
+        {
+          "length": 142,
+          "intercept": 0.9613931775093079,
+          "processors": [
+            {
+              "processor": "A72",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 0.8970942497253418
+        },
+        {
+          "length": 113,
+          "intercept": 0.572839617729187,
+          "processors": [
+            {
+              "processor": "A53",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 0.5319358706474304
+        }
+      ],
+      "task": "0_membench-1M-RO-S",
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=0_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -s 1000000"
+    },
+    {
+      "resourceAssignments": [
+        {
+          "length": 46,
+          "intercept": 0.21472233533859253,
+          "processors": [
+            {
+              "processor": "A72",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 0.7207295298576355
+        },
+        {
+          "length": 97,
+          "intercept": 0.24537785351276398,
+          "processors": [
+            {
+              "processor": "A53",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 0.19666261970996857
+        }
+      ],
+      "task": "1_bitmnp-4K",
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=1_work_done\" ./bitmnp-4K -v0 -c1 -i100"
+    },
+    {
+      "resourceAssignments": [
+        {
+          "length": 101,
+          "intercept": 1.0963765382766724,
+          "processors": [
+            {
+              "processor": "A72",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 1.079751968383789
+        },
+        {
+          "length": 175,
+          "intercept": 0.9519121646881104,
+          "processors": [
+            {
+              "processor": "A53",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 0.3152722120285034
+        }
+      ],
+      "task": "2_a2time-4M",
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=2_work_done\" ./a2time-4M -v0 -c1 -i100"
+    },
+    {
+      "resourceAssignments": [
+        {
+          "length": 115,
+          "intercept": 0.853236198425293,
+          "processors": [
+            {
+              "processor": "A72",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 1.4379091262817383
+        },
+        {
+          "length": 265,
+          "intercept": 0.7997804284095764,
+          "processors": [
+            {
+              "processor": "A53",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 0.2899535596370697
+        }
+      ],
+      "task": "3_iirflt-4M",
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=3_work_done\" ./iirflt-4M -v0 -c1 -i100"
+    },
+    {
+      "resourceAssignments": [
+        {
+          "length": 141,
+          "intercept": 0.40436968207359314,
+          "processors": [
+            {
+              "processor": "A72",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 1.4711300134658813
+        },
+        {
+          "length": 417,
+          "intercept": 0.31407204270362854,
+          "processors": [
+            {
+              "processor": "A53",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 0.3437598943710327
+        }
+      ],
+      "task": "4_pntrch-4M",
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=4_work_done\" ./pntrch-4M -v0 -c1 -i1"
+    },
+    {
+      "resourceAssignments": [
+        {
+          "length": 140,
+          "intercept": 0.17869360744953156,
+          "processors": [
+            {
+              "processor": "A72",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 0.7785204648971558
+        },
+        {
+          "length": 251,
+          "intercept": 0.21034812927246094,
+          "processors": [
+            {
+              "processor": "A53",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 0.18359877169132233
+        }
+      ],
+      "task": "5_membench-1K-RW-R",
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=5_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -r -w -s 1000"
+    },
+    {
+      "resourceAssignments": [
+        {
+          "length": 77,
+          "intercept": 1.0225416421890259,
+          "processors": [
+            {
+              "processor": "A72",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 0.962685227394104
+        },
+        {
+          "length": 152,
+          "intercept": 0.901486873626709,
+          "processors": [
+            {
+              "processor": "A53",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 0.26485005021095276
+        }
+      ],
+      "task": "6_tinyrenderer-boggie",
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=6_work_done\" /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer /root/thermobench/benchmarks/tinyrenderer/obj/boggie/*.obj"
+    },
+    {
+      "resourceAssignments": [
+        {
+          "length": 95,
+          "intercept": 0.4107467830181122,
+          "processors": [
+            {
+              "processor": "A72",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 1.5940042734146118
+        },
+        {
+          "length": 267,
+          "intercept": 0.20154142379760742,
+          "processors": [
+            {
+              "processor": "A53",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 0.3335254192352295
+        }
+      ],
+      "task": "7_matrix-4K",
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=7_work_done\" ./matrix-4K -v0 -c1 -i100"
+    },
+    {
+      "resourceAssignments": [
+        {
+          "length": 93,
+          "intercept": 1.3298289775848389,
+          "processors": [
+            {
+              "processor": "A72",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 0.36866244673728943
+        },
+        {
+          "length": 119,
+          "intercept": 1.2297366857528687,
+          "processors": [
+            {
+              "processor": "A53",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 0.191451758146286
+        }
+      ],
+      "task": "8_membench-4M-RO-R",
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=8_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -r -s 4000000"
+    },
+    {
+      "resourceAssignments": [
+        {
+          "length": 112,
+          "intercept": 2.1910576820373535,
+          "processors": [
+            {
+              "processor": "A72",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 0.29568248987197876
+        },
+        {
+          "length": 359,
+          "intercept": 1.2727280855178833,
+          "processors": [
+            {
+              "processor": "A53",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 0.3629087507724762
+        }
+      ],
+      "task": "9_membench-4M-RO-S",
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=9_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -s 4000000"
+    },
+    {
+      "resourceAssignments": [
+        {
+          "length": 109,
+          "intercept": 1.3298289775848389,
+          "processors": [
+            {
+              "processor": "A72",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 0.36866244673728943
+        },
+        {
+          "length": 139,
+          "intercept": 1.2297366857528687,
+          "processors": [
+            {
+              "processor": "A53",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 0.191451758146286
+        }
+      ],
+      "task": "10_membench-4M-RO-R",
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=10_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -r -s 4000000"
+    },
+    {
+      "resourceAssignments": [
+        {
+          "length": 55,
+          "intercept": 0.10423119366168976,
+          "processors": [
+            {
+              "processor": "A72",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 1.3315865993499756
+        },
+        {
+          "length": 162,
+          "intercept": 0.207334503531456,
+          "processors": [
+            {
+              "processor": "A53",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 0.23878315091133118
+        }
+      ],
+      "task": "11_pntrch-4K",
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=11_work_done\" ./pntrch-4K -v0 -c1 -i100"
+    },
+    {
+      "resourceAssignments": [
+        {
+          "length": 64,
+          "intercept": 1.4281024932861328,
+          "processors": [
+            {
+              "processor": "A72",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 0.6578410267829895
+        },
+        {
+          "length": 52,
+          "intercept": 0.6019881367683411,
+          "processors": [
+            {
+              "processor": "A53",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 0.5292008519172668
+        }
+      ],
+      "task": "12_membench-1M-RW-S",
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=12_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -w -s 1000000"
+    },
+    {
+      "resourceAssignments": [
+        {
+          "length": 129,
+          "intercept": 1.1368483304977417,
+          "processors": [
+            {
+              "processor": "A72",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 2.075334072113037
+        },
+        {
+          "length": 396,
+          "intercept": 1.0377033948898315,
+          "processors": [
+            {
+              "processor": "A53",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 0.42660701274871826
+        }
+      ],
+      "task": "13_rspeed-4M",
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=13_work_done\" ./rspeed-4M -v0 -c1 -i100"
+    },
+    {
+      "resourceAssignments": [
+        {
+          "length": 44,
+          "intercept": 0.2073526680469513,
+          "processors": [
+            {
+              "processor": "A72",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 1.2803809642791748
+        },
+        {
+          "length": 128,
+          "intercept": 0.22149913012981415,
+          "processors": [
+            {
+              "processor": "A53",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 0.2295052856206894
+        }
+      ],
+      "task": "14_iirflt-4K",
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=14_work_done\" ./iirflt-4K -v0 -c1 -i100"
+    },
+    {
+      "resourceAssignments": [
+        {
+          "length": 59,
+          "intercept": 0.9613931775093079,
+          "processors": [
+            {
+              "processor": "A72",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 0.8970942497253418
+        },
+        {
+          "length": 47,
+          "intercept": 0.572839617729187,
+          "processors": [
+            {
+              "processor": "A53",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 0.5319358706474304
+        }
+      ],
+      "task": "15_membench-1M-RO-S",
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=15_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -s 1000000"
+    },
+    {
+      "resourceAssignments": [
+        {
+          "length": 120,
+          "intercept": 0.14474938809871674,
+          "processors": [
+            {
+              "processor": "A72",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 1.1068857908248901
+        },
+        {
+          "length": 230,
+          "intercept": 0.23155485093593597,
+          "processors": [
+            {
+              "processor": "A53",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 0.3299832344055176
+        }
+      ],
+      "task": "16_canrdr-4K",
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=16_work_done\" ./canrdr-4K -v0 -c1 -i100"
+    },
+    {
+      "resourceAssignments": [
+        {
+          "length": 103,
+          "intercept": 0.10423119366168976,
+          "processors": [
+            {
+              "processor": "A72",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 1.3315865993499756
+        },
+        {
+          "length": 304,
+          "intercept": 0.207334503531456,
+          "processors": [
+            {
+              "processor": "A53",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 0.23878315091133118
+        }
+      ],
+      "task": "17_pntrch-4K",
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=17_work_done\" ./pntrch-4K -v0 -c1 -i100"
+    },
+    {
+      "resourceAssignments": [
+        {
+          "length": 151,
+          "intercept": 0.9485877752304077,
+          "processors": [
+            {
+              "processor": "A72",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 1.3528106212615967
+        },
+        {
+          "length": 300,
+          "intercept": 0.9064629673957825,
+          "processors": [
+            {
+              "processor": "A53",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 0.32608354091644287
+        }
+      ],
+      "task": "18_puwmod-4M",
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=18_work_done\" ./puwmod-4M -v0 -c1 -i100"
+    },
+    {
+      "resourceAssignments": [
+        {
+          "length": 78,
+          "intercept": 0.17869360744953156,
+          "processors": [
+            {
+              "processor": "A72",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 0.7785204648971558
+        },
+        {
+          "length": 140,
+          "intercept": 0.21034812927246094,
+          "processors": [
+            {
+              "processor": "A53",
+              "processingUnits": 1
+            }
+          ],
+          "slope": 0.18359877169132233
+        }
+      ],
+      "task": "19_membench-1K-RW-R",
+      "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=19_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -r -w -s 1000"
+    }
+  ]
+}
