@@ -47,22 +47,40 @@ cmds=( "-c ../../data/LR-coefficients.json -p tx2 -m lr" )
 solve "tx2/all"
 solve "tx2/cpu"
 
-exit 0
-
-# Scalability and imx8 instances.
-solvers=( "HEUR" "ILP-IDLE-MIN" "ILP-IDLE-MAX" "ILP-SM-I" "ILP-SM-II" "QP-LR-UB" "BB-LR" )
-EXP_PATHs=( "HEUR" "ILP-IDLE" "ILP-IDLE" "ILP-SM-I" "ILP-SM-II" "QP-LR-UB" "BB" )
+# - sum-max model
+solvers=( "BB-SM" )
+EXP_PATHs=( "BB" )
 timelimit=300
 
-cmds=( "" "" "--maximize" "" "" "--path_lr ../../data/LR-coefficients.json -p imx8a" "-c ../../data/LR-coefficients.json -p imx8a -m lr" )
+cmds=( "-c ../../data/LR-coefficients.json -p imx8a -m sm" )
 solve "imx8a/all"
 solve "imx8a/cpu"
 
-cmds=( "" "" "--maximize" "" "" "--path_lr ../../data/LR-coefficients.json -p imx8b" "-c ../../data/LR-coefficients.json -p imx8b -m lr" )
+cmds=( "-c ../../data/LR-coefficients.json -p imx8b -m sm" )
 solve "imx8b/all"
 solve "imx8b/cpu"
 
-cmds=( "" "" "--maximize" "" "" "--path_lr ../../data/LR-coefficients.json -p tx2" "-c ../../data/LR-coefficients.json -p tx2 -m lr" )
+cmds=( "-c ../../data/LR-coefficients.json -p tx2 -m sm" )
+solve "tx2/all"
+solve "tx2/cpu"
+
+
+exit 0
+
+# Scalability and imx8 instances.
+solvers=( "HEUR" "ILP-IDLE-MIN" "ILP-IDLE-MAX" "ILP-SM-I" "ILP-SM-II" "QP-LR-UB" "BB-LR" "BB-SM" )
+EXP_PATHs=( "HEUR" "ILP-IDLE" "ILP-IDLE" "ILP-SM-I" "ILP-SM-II" "QP-LR-UB" "BB" "BB" )
+timelimit=300
+
+cmds=( "" "" "--maximize" "" "" "--path_lr ../../data/LR-coefficients.json -p imx8a" "-c ../../data/LR-coefficients.json -p imx8a -m lr" "-c ../../data/LR-coefficients.json -p imx8a -m sm" )
+solve "imx8a/all"
+solve "imx8a/cpu"
+
+cmds=( "" "" "--maximize" "" "" "--path_lr ../../data/LR-coefficients.json -p imx8b" "-c ../../data/LR-coefficients.json -p imx8b -m lr" "-c ../../data/LR-coefficients.json -p imx8b -m sm" )
+solve "imx8b/all"
+solve "imx8b/cpu"
+
+cmds=( "" "" "--maximize" "" "" "--path_lr ../../data/LR-coefficients.json -p tx2" "-c ../../data/LR-coefficients.json -p tx2 -m lr" "-c ../../data/LR-coefficients.json -p tx2 -m sm" )
 solve "tx2/all"
 solve "tx2/cpu"
 
