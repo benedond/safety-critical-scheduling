@@ -3,51 +3,51 @@ partitions:
   - name: 19_canrdr-4K
     processes:
       - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=19_work_done" ./canrdr-4K -v0 -c1 -i100
-        budget: 66
+        budget: 125
   - name: 18_tinyrenderer-boggie
     processes:
       - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=18_work_done" /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer /root/thermobench/benchmarks/tinyrenderer/obj/boggie/*.obj
-        budget: 143
+        budget: 279
   - name: 15_membench-4M-RO-R
     processes:
       - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=15_work_done" /root/thermobench/build/benchmarks/mem/membench -t1 -f -r -s 4000000
-        budget: 115
+        budget: 148
   - name: 14_matrix-4M
     processes:
       - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=14_work_done" ./matrix-4M -v0 -c1 -i100
-        budget: 80
+        budget: 227
   - name: 13_aifirf-4M
     processes:
       - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=13_work_done" ./aifirf-4M -v0 -c1 -i10
-        budget: 403
+        budget: 143
   - name: 0_aifirf-4M
     processes:
       - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=0_work_done" ./aifirf-4M -v0 -c1 -i10
-        budget: 96
+        budget: 270
   - name: 1_aifirf-4M
     processes:
       - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=1_work_done" ./aifirf-4M -v0 -c1 -i10
-        budget: 335
+        budget: 119
   - name: 2_canrdr-4K
     processes:
       - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=2_work_done" ./canrdr-4K -v0 -c1 -i100
-        budget: 102
+        budget: 193
   - name: 11_membench-1M-RO-S
     processes:
       - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=11_work_done" /root/thermobench/build/benchmarks/mem/membench -t1 -f -s 1000000
-        budget: 44
+        budget: 35
   - name: 17_pntrch-4M
     processes:
       - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=17_work_done" ./pntrch-4M -v0 -c1 -i1
-        budget: 414
+        budget: 141
   - name: 8_matrix-4M
     processes:
       - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=8_work_done" ./matrix-4M -v0 -c1 -i100
-        budget: 345
+        budget: 122
   - name: 3_matrix-4M
     processes:
       - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=3_work_done" ./matrix-4M -v0 -c1 -i100
-        budget: 97
+        budget: 275
   - name: 4_bitmnp-4M
     processes:
       - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=4_work_done" ./bitmnp-4M -v0 -c1 -i100
@@ -55,23 +55,23 @@ partitions:
   - name: 16_canrdr-4M
     processes:
       - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=16_work_done" ./canrdr-4M -v0 -c1 -i100
-        budget: 93
+        budget: 179
   - name: 5_membench-4M-RW-R
     processes:
       - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=5_work_done" /root/thermobench/build/benchmarks/mem/membench -t1 -f -r -w -s 4000000
-        budget: 154
+        budget: 202
   - name: 7_membench-1M-RO-S
     processes:
       - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=7_work_done" /root/thermobench/build/benchmarks/mem/membench -t1 -f -s 1000000
-        budget: 100
+        budget: 79
   - name: 6_tinyrenderer-diablo
     processes:
       - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=6_work_done" /root/thermobench/build/benchmarks/tinyrenderer/tinyrenderer /root/thermobench/benchmarks/tinyrenderer/obj/diablo3_pose/*.obj
-        budget: 91
+        budget: 183
   - name: 9_ttsprk-4K
     processes:
       - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=9_work_done" ./ttsprk-4K -v0 -c1 -i100
-        budget: 107
+        budget: 219
   - name: 10_membench-1K-RO-S
     processes:
       - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=10_work_done" /root/thermobench/build/benchmarks/mem/membench -t1 -f -s 1000
@@ -82,40 +82,42 @@ partitions:
         budget: 63
 
 windows:
+  - length: 219
+    slices:
+      - cpu: 3
+        sc_partition: 2_canrdr-4K
+      - cpu: 2
+        sc_partition: 19_canrdr-4K
+      - cpu: 5
+        sc_partition: 1_aifirf-4M
+      - cpu: 4
+        sc_partition: 17_pntrch-4M
+      - cpu: 1
+        sc_partition: 5_membench-4M-RW-R
+      - cpu: 0
+        sc_partition: 9_ttsprk-4K
   - length: 183
     slices:
       - cpu: 5
         sc_partition: 8_matrix-4M
-      - cpu: 4
-        sc_partition: 1_aifirf-4M
       - cpu: 3
-        sc_partition: 16_canrdr-4M
-      - cpu: 2
-        sc_partition: 19_canrdr-4K
-      - cpu: 1
-        sc_partition: 12_membench-1K-RO-S
-      - cpu: 0
         sc_partition: 6_tinyrenderer-diablo
-  - length: 270
-    slices:
-      - cpu: 5
-        sc_partition: 17_pntrch-4M
+      - cpu: 2
+        sc_partition: 16_canrdr-4M
+      - cpu: 1
+        sc_partition: 15_membench-4M-RO-R
       - cpu: 4
         sc_partition: 13_aifirf-4M
-      - cpu: 3
-        sc_partition: 5_membench-4M-RW-R
-      - cpu: 2
-        sc_partition: 4_bitmnp-4M
-      - cpu: 1
-        sc_partition: 2_canrdr-4K
       - cpu: 0
-        sc_partition: 0_aifirf-4M
-  - length: 148
-    slices:
-      - cpu: 3
-        sc_partition: 15_membench-4M-RO-R
-      - cpu: 2
         sc_partition: 7_membench-1M-RO-S
+  - length: 111
+    slices:
+      - cpu: 4
+        sc_partition: 4_bitmnp-4M
+  - length: 63
+    slices:
+      - cpu: 2
+        sc_partition: 12_membench-1K-RO-S
       - cpu: 1
         sc_partition: 11_membench-1M-RO-S
       - cpu: 0
@@ -123,13 +125,13 @@ windows:
   - length: 279
     slices:
       - cpu: 3
-        sc_partition: 14_matrix-4M
+        sc_partition: 3_matrix-4M
       - cpu: 2
-        sc_partition: 9_ttsprk-4K
+        sc_partition: 14_matrix-4M
       - cpu: 1
         sc_partition: 18_tinyrenderer-boggie
       - cpu: 0
-        sc_partition: 3_matrix-4M
-  - length: 20
+        sc_partition: 0_aifirf-4M
+  - length: 45
     slices:
       - cpu: 0

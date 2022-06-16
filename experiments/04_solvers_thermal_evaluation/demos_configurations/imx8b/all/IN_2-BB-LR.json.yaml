@@ -3,43 +3,43 @@ partitions:
   - name: 19_membench-1K-RO-S
     processes:
       - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=19_work_done" /root/thermobench/build/benchmarks/mem/membench -t1 -f -s 1000
-        budget: 91
+        budget: 92
   - name: 18_tblook-4K
     processes:
       - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=18_work_done" ./tblook-4K -v0 -c1 -i100
-        budget: 99
+        budget: 313
   - name: 17_membench-1K-RO-R
     processes:
       - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=17_work_done" /root/thermobench/build/benchmarks/mem/membench -t1 -f -r -s 1000
-        budget: 99
+        budget: 100
   - name: 15_iirflt-4M
     processes:
       - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=15_work_done" ./iirflt-4M -v0 -c1 -i100
-        budget: 137
+        budget: 316
   - name: 1_membench-1K-RO-S
     processes:
       - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=1_work_done" /root/thermobench/build/benchmarks/mem/membench -t1 -f -s 1000
-        budget: 116
+        budget: 117
   - name: 16_rspeed-4K
     processes:
       - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=16_work_done" ./rspeed-4K -v0 -c1 -i100
-        budget: 104
+        budget: 269
   - name: 5_membench-1M-RO-R
     processes:
       - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=5_work_done" /root/thermobench/build/benchmarks/mem/membench -t1 -f -r -s 1000000
-        budget: 102
+        budget: 91
   - name: 2_membench-1K-RO-R
     processes:
       - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=2_work_done" /root/thermobench/build/benchmarks/mem/membench -t1 -f -r -s 1000
-        budget: 58
+        budget: 59
   - name: 6_canrdr-4M
     processes:
       - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=6_work_done" ./canrdr-4M -v0 -c1 -i100
-        budget: 136
+        budget: 263
   - name: 3_membench-1K-RW-R
     processes:
       - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=3_work_done" /root/thermobench/build/benchmarks/mem/membench -t1 -f -r -w -s 1000
-        budget: 83
+        budget: 149
   - name: 7_rspeed-4K
     processes:
       - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=7_work_done" ./rspeed-4K -v0 -c1 -i100
@@ -47,11 +47,11 @@ partitions:
   - name: 13_membench-1K-RO-S
     processes:
       - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=13_work_done" /root/thermobench/build/benchmarks/mem/membench -t1 -f -s 1000
-        budget: 62
+        budget: 63
   - name: 8_canrdr-4K
     processes:
       - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=8_work_done" ./canrdr-4K -v0 -c1 -i100
-        budget: 45
+        budget: 87
   - name: 9_a2time-4K
     processes:
       - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=9_work_done" ./a2time-4K -v0 -c1 -i100
@@ -63,15 +63,15 @@ partitions:
   - name: 10_canrdr-4M
     processes:
       - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=10_work_done" ./canrdr-4M -v0 -c1 -i100
-        budget: 106
+        budget: 205
   - name: 11_iirflt-4K
     processes:
       - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=11_work_done" ./iirflt-4K -v0 -c1 -i100
-        budget: 343
+        budget: 118
   - name: 14_membench-1K-RO-S
     processes:
       - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=14_work_done" /root/thermobench/build/benchmarks/mem/membench -t1 -f -s 1000
-        budget: 80
+        budget: 81
   - name: 0_tblook-4K
     processes:
       - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=0_work_done" ./tblook-4K -v0 -c1 -i100
@@ -79,57 +79,57 @@ partitions:
   - name: 12_pntrch-4K
     processes:
       - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=12_work_done" ./pntrch-4K -v0 -c1 -i100
-        budget: 430
+        budget: 146
 
 windows:
-  - length: 269
-    slices:
-      - cpu: 3
-        sc_partition: 10_canrdr-4M
-      - cpu: 5
-        sc_partition: 11_iirflt-4K
-      - cpu: 1
-        sc_partition: 6_canrdr-4M
-      - cpu: 4
-        sc_partition: 0_tblook-4K
-      - cpu: 2
-        sc_partition: 16_rspeed-4K
-      - cpu: 0
-        sc_partition: 14_membench-1K-RO-S
-  - length: 149
-    slices:
-      - cpu: 5
-        sc_partition: 12_pntrch-4K
-      - cpu: 2
-        sc_partition: 3_membench-1K-RW-R
-      - cpu: 4
-        sc_partition: 9_a2time-4K
-      - cpu: 1
-        sc_partition: 2_membench-1K-RO-R
-      - cpu: 3
-        sc_partition: 5_membench-1M-RO-R
-      - cpu: 0
-        sc_partition: 1_membench-1K-RO-S
-  - length: 100
+  - length: 125
     slices:
       - cpu: 3
         sc_partition: 19_membench-1K-RO-S
       - cpu: 2
-        sc_partition: 17_membench-1K-RO-R
+        sc_partition: 1_membench-1K-RO-S
+      - cpu: 4
+        sc_partition: 7_rspeed-4K
       - cpu: 1
-        sc_partition: 13_membench-1K-RO-S
-      - cpu: 0
         sc_partition: 8_canrdr-4K
-  - length: 324
+      - cpu: 5
+        sc_partition: 11_iirflt-4K
+      - cpu: 0
+        sc_partition: 17_membench-1K-RO-R
+  - length: 316
     slices:
       - cpu: 3
-        sc_partition: 7_rspeed-4K
-      - cpu: 2
         sc_partition: 15_iirflt-4M
-      - cpu: 1
-        sc_partition: 18_tblook-4K
-      - cpu: 0
+      - cpu: 5
         sc_partition: 4_tinyrenderer-diablo
-  - length: 18
+      - cpu: 2
+        sc_partition: 18_tblook-4K
+      - cpu: 1
+        sc_partition: 6_canrdr-4M
+      - cpu: 4
+        sc_partition: 12_pntrch-4K
+      - cpu: 0
+        sc_partition: 3_membench-1K-RW-R
+  - length: 149
+    slices:
+      - cpu: 2
+        sc_partition: 14_membench-1K-RO-S
+      - cpu: 3
+        sc_partition: 2_membench-1K-RO-R
+      - cpu: 1
+        sc_partition: 9_a2time-4K
+      - cpu: 0
+        sc_partition: 5_membench-1M-RO-R
+  - length: 269
+    slices:
+      - cpu: 3
+        sc_partition: 13_membench-1K-RO-S
+      - cpu: 2
+        sc_partition: 16_rspeed-4K
+      - cpu: 1
+        sc_partition: 0_tblook-4K
+      - cpu: 0
+        sc_partition: 10_canrdr-4M
+  - length: 1
     slices:
       - cpu: 0
