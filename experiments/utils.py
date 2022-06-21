@@ -56,7 +56,13 @@ def get_temp_from_measurement_file(file, col):
         
     tmp = df[col].dropna().tail(50).mean() * scale
     return tmp
-        
+    
+def get_ambient_from_measurement_file(file):
+    df = read_csv(file)
+    if "ambient" in df:
+        return df["ambient"].dropna().mean()
+    else:
+        return 25.0
             
 def get_value_per_second(file, col_name):
     df = read_csv(file)

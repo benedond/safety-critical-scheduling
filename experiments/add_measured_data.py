@@ -11,7 +11,7 @@ import os
 import pandas as pd
 import utils
 
-data_types = ["power", "temperature"]
+data_types = ["power", "temperature", "ambient"]
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-r", "--results_file", type=str, help="Path to the results file to be modified.")
@@ -40,6 +40,8 @@ if __name__ == "__main__":
             df[args.new_column_name + "_offset"] = df[args.new_column_name] - P_idle
     elif args.data_type == "temperature":
         df[args.new_column_name] = df.apply(lambda row: utils.get_temp_from_measurement_file(os.path.join(args.measurements_folder, row.instance + args.measurement_suffix), args.data_column), axis=1)
+    elif args.data_type == "ambient":
+        df["ambient"] = df.apply(lambda row: utils.get_ambient_from_measurement_file(os.path.join(args.measurements_folder, row.instance + args.measurement_suffix)), axis=1)
         
     # write back
     df.to_csv(args.results_file, index=False)
