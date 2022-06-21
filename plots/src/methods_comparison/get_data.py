@@ -14,8 +14,12 @@ def get_df(res_file, relative: bool=False):
     
     if relative:
         df["power"] -= P_idle
-        df["temp-little"] -= T_idle["imx8a" if "imx8a" in res_file else ("imx8b" if "imx8b" in res_file else "tx2")]
-        df["temp-big"] -= T_idle["imx8a" if "imx8a" in res_file else ("imx8b" if "imx8b" in res_file else "tx2")]
+        # relative w.r.t T_idle
+        #df["temp-little"] -= T_idle["imx8a" if "imx8a" in res_file else ("imx8b" if "imx8b" in res_file else "tx2")]
+        #df["temp-big"] -= T_idle["imx8a" if "imx8a" in res_file else ("imx8b" if "imx8b" in res_file else "tx2")]
+        # relative w.r.t. T_amb
+        df["temp-little"] -= df["ambient"]
+        df["temp-big"] -= df["ambient"]
     else:
         df["obj_sm"] += P_idle
         df["obj_lr"] += P_idle 
@@ -23,19 +27,24 @@ def get_df(res_file, relative: bool=False):
     
     df["inst_id"] = df.apply(lambda row: row.instance.split("-")[0], axis=1)
     df = df.round({'temp-little': 1, 'temp-big': 1, 'power': 2})
-
+    df["solver"] = df["solver"].str.upper()
+    
+    
     return df[["inst_id", "solver", "obj_sm", "obj_lr", "obj_lr_ub", "power", "temp-little","temp-big"]]
 
-def temp_csv(dct, experiment, output):
-    df 
-    
+
 if __name__ == "__main__":  
     args = parser.parse_args()    
   
     experiments = ["imx8a-all", "imx8a-cpu", "imx8b-all", "imx8b-cpu", "tx2-all", "tx2-cpu"]
+    # Get some reasonable order of solvers
     df = get_df("../../../experiments/04_solvers_thermal_evaluation/results/{}.csv".format(experiments[1]))
     df = df.sort_values(by=["power"])
     solvers = df["solver"].unique()
+    solvers = [s for s in solvers if s != "ILP-SM-II"]
+    
+    #solvers = ["ILP-SM-I", "HEUR", "BB-SM", "ILP-IDLE-MIN", "QP-LR-UB", "BB-LR", "ILP-IDLE-MAX"]
+    
     dct_res = {m: {e: None for e in experiments} for m in solvers}
     dfs = dict()
 
