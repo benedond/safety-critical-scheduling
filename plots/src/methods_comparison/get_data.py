@@ -25,6 +25,9 @@ def get_df(res_file, relative: bool=False):
         df["obj_lr"] += P_idle 
         df["obj_lr_ub"] += P_idle
     
+    df["solver"] = df.apply(lambda row: row.solver if row.solver != "ILP-SM-I" else "ILP-SM", axis=1)
+    
+    
     df["inst_id"] = df.apply(lambda row: row.instance.split("-")[0], axis=1)
     df = df.round({'temp-little': 1, 'temp-big': 1, 'power': 2})
     df["solver"] = df["solver"].str.upper()
