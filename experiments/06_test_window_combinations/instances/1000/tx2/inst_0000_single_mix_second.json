@@ -1,0 +1,119 @@
+{
+    "assignmentCharacteristics": [
+        {
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU0_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -r -w -s 1000",
+            "resourceAssignments": [
+                {
+                    "intercept": 0.1275628115778548,
+                    "length": 1000,
+                    "processors": [
+                        {
+                            "processingUnits": 1,
+                            "processor": "A57"
+                        }
+                    ],
+                    "slope": 0.6205543821624716
+                }
+            ],
+            "task": "0_membench-1K-RW-R"
+        },
+        {
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -r -s 1000000",
+            "resourceAssignments": [
+                {
+                    "intercept": 0.7467884464502954,
+                    "length": 2000,
+                    "processors": [
+                        {
+                            "processingUnits": 1,
+                            "processor": "Denver"
+                        }
+                    ],
+                    "slope": 0.4864156708440585
+                }
+            ],
+            "task": "1_membench-1M-RO-R"
+        }
+    ],
+    "environment": {
+        "idlePower": 2.804,
+        "majorFrameLength": 2000,
+        "problemVersion": 1,
+        "processors": [
+            {
+                "coreIds": [
+                    0,
+                    3,
+                    4,
+                    5
+                ],
+                "name": "A57",
+                "processingUnits": 4,
+                "type": "main_processor"
+            },
+            {
+                "coreIds": [
+                    1,
+                    2
+                ],
+                "name": "Denver",
+                "processingUnits": 2,
+                "type": "main_processor"
+            }
+        ],
+        "scPart": 1.0
+    },
+    "solution": {
+        "feasible": true,
+        "solutionTime": 0,
+        "solverMetadata": null,
+        "solverName": "RandomGenerator",
+        "windows": [
+            {
+                "length": 2000,
+                "tasks": [
+                    {
+                        "length": 1000,
+                        "processingUnit": 0,
+                        "processor": "A57",
+                        "start": 0,
+                        "task": "0_membench-1K-RW-R"
+                    },
+                    {
+                        "length": 2000,
+                        "processingUnit": 0,
+                        "processor": "Denver",
+                        "start": 0,
+                        "task": "1_membench-1M-RO-R"
+                    }
+                ]
+            }
+        ]
+    },
+    "tasks": [
+        {
+            "assignmentIndex": 0,
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU0_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -r -w -s 1000",
+            "length": 1000,
+            "name": "0_membench-1K-RW-R",
+            "processors": [
+                {
+                    "processingUnits": 1,
+                    "processor": "A57"
+                }
+            ]
+        },
+        {
+            "assignmentIndex": 0,
+            "command": "TB_OPTS=\"--count=0 --work_done_every_sec=0.5 --work_done_str=CPU1_work_done\" /root/thermobench/build/benchmarks/mem/membench -t1 -f -r -s 1000000",
+            "length": 2000,
+            "name": "1_membench-1M-RO-R",
+            "processors": [
+                {
+                    "processingUnits": 1,
+                    "processor": "Denver"
+                }
+            ]
+        }
+    ]
+}
