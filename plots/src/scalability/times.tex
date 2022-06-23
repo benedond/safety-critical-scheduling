@@ -1,0 +1,59 @@
+﻿\newcommand{\Data}{times.csv}
+
+\begin{tikzpicture}
+
+    \begin{axis}[width=\textwidth,
+        height=5cm,
+        ymin=0,
+        grid=major,    
+        xtick=data,
+        xticklabels from table={\Data}{n},
+        table/col sep=comma,
+		legend pos=south east,
+        legend style={
+%            at={([yshift=5pt]0.5,1)},
+ %           anchor=south,
+            font=\scriptsize,
+        },		
+        legend columns=2,
+        xlabel=\footnotesize Number of tasks $n$,
+        ylabel=\footnotesize {Time [\si{\second}]},
+		ticklabel style = {font=\scriptsize},
+		ymode=log,
+		ytick={1e-3,1e-2,1e-1,1e0,10,100,1000},
+		legend cell align={left},
+]
+
+
+%	\foreach \m/\qer in {{HEUR}/1,	
+%											{ILP-IDLE-MAX}/2,
+%											{ILP-IDLE-MIN}/3,
+%											{ILP-SM}/4,
+%											{QP-LR-UB}/5} {
+%		    \addplot[color=Clr\qer,thick,mark=x] table [x expr=\coordindex,y={\m_t-avg}, col sep=comma] {\Data}; 
+%		}
+
+ % Plot data
+   \addplot[color=Clr1,thick,mark=x] table [x expr=\coordindex,y={HEUR_t-avg}, col sep=comma] {\Data}; \addlegendentry{HEUR};
+  \addplot[color=Clr2,thick,mark=x] table [x expr=\coordindex,y={ILP-IDLE-MAX_t-avg}, col sep=comma] {\Data}; \addlegendentry{ILP-IDLE-MAX}
+
+	\addplot[color=Clr3,thick,mark=x] table [x expr=\coordindex,y={ILP-IDLE-MIN_t-avg}, col sep=comma] {\Data}; \addlegendentry{ILP-IDLE-MIN}
+
+   \addplot[color=Clr4,thick,mark=x] table [x expr=\coordindex,y={ILP-SM_t-avg}, col sep=comma] {\Data};   \addlegendentry{ILP-SM}
+
+   \addplot[color=Clr5,thick,mark=x] table [x expr=\coordindex,y={QP-LR-UB_t-avg}, col sep=comma] {\Data}; 
+\addlegendentry{QP-LR-UB}
+
+	\addplot [Clr6, thick, mark=x ]  coordinates {(0,300) (1,300) (2,300) (3,300) (4,300) (5,300) (6,300) (7,300) (8,300) (9,300) (10,300) (11,300)};
+\addlegendentry{BB-[SM/LR]}
+
+% Plot min max
+%   \addplot[color=Clr1,thick,mark=triangle, only marks] table [x expr=\coordindex,y={HEUR_t-min}, col sep=comma] {\Data}; 
+
+
+
+
+    \end{axis}
+
+
+\end{tikzpicture}
