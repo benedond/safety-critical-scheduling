@@ -33,8 +33,9 @@ def get_power_from_measurement_file(file):
     
     df = df[["time/ms", power_col]]
     df = df.dropna()
+    df = df[df["time/ms"] > 5000] # filter first five seconds as warm-up
     
-    if is_tx2: # the power measurement is not cumulative, the measurements are immediate
+    if is_tx2: # the power measurement is not cumulative, the measurements are immediate        
         df[power_col] = df[power_col].cumsum()
     
     if (len(df.index)) > 2:
