@@ -36,16 +36,17 @@ def get_power_from_measurement_file(file):
     df = df[df["time/ms"] > 5000] # filter first five seconds as warm-up
     
     if is_tx2: # the power measurement is not cumulative, the measurements are immediate        
-        df[power_col] = df[power_col].cumsum()
-    
-    if (len(df.index)) > 2:
-        second = df.iloc[1]
-        last = df.iloc[-1]
-        
-        return (last[power_col] - second[power_col]) / (last["time/ms"] - second["time/ms"]) * scale
-        
-    else:
-        return 0.0
+        avg = df[power_col].mean()        
+        return float(avg * 1e-3)
+    else:            
+        if (len(df.index)) > 2:
+            second = df.iloc[1]
+            last = df.iloc[-1]
+            
+            return (last[power_col] - second[power_col]) / (last["time/ms"] - second["time/ms"]) * scale
+            
+        else:
+            return 0.0
         
 def get_temp_from_measurement_file(file, col):
     df = read_csv(file)
