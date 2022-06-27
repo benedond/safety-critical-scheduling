@@ -1,0 +1,132 @@
+set_cwd: false
+partitions:
+  - name: 14_bitmnp-4M
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=14_work_done" ./bitmnp-4M -v0 -c1 -i100
+        budget: 114
+  - name: 9_aifirf-4K
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=9_work_done" ./aifirf-4K -v0 -c1 -i100
+        budget: 125
+  - name: 2_aifirf-4M
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=2_work_done" ./aifirf-4M -v0 -c1 -i10
+        budget: 85
+  - name: 18_aifirf-4M
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=18_work_done" ./aifirf-4M -v0 -c1 -i10
+        budget: 145
+  - name: 4_bitmnp-4K
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=4_work_done" ./bitmnp-4K -v0 -c1 -i100
+        budget: 221
+  - name: 10_puwmod-4K
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=10_work_done" ./puwmod-4K -v0 -c1 -i100
+        budget: 183
+  - name: 15_tblook-4M
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=15_work_done" ./tblook-4M -v0 -c1 -i100
+        budget: 162
+  - name: 7_pntrch-4K
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=7_work_done" ./pntrch-4K -v0 -c1 -i100
+        budget: 179
+  - name: 3_tblook-4K
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=3_work_done" ./tblook-4K -v0 -c1 -i100
+        budget: 83
+  - name: 5_matrix-4M
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=5_work_done" ./matrix-4M -v0 -c1 -i100
+        budget: 102
+  - name: 0_aifirf-4M
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=0_work_done" ./aifirf-4M -v0 -c1 -i10
+        budget: 116
+  - name: 17_aifirf-4M
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=17_work_done" ./aifirf-4M -v0 -c1 -i10
+        budget: 145
+  - name: 16_pntrch-4K
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=16_work_done" ./pntrch-4K -v0 -c1 -i100
+        budget: 149
+  - name: 19_bitmnp-4M
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=19_work_done" ./bitmnp-4M -v0 -c1 -i100
+        budget: 130
+  - name: 1_bitmnp-4M
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=1_work_done" ./bitmnp-4M -v0 -c1 -i100
+        budget: 166
+  - name: 12_idctrn-4M
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=12_work_done" ./idctrn-4M -v0 -c1 -i100
+        budget: 176
+  - name: 8_a2time-4K
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=8_work_done" ./a2time-4K -v0 -c1 -i100
+        budget: 45
+  - name: 6_puwmod-4M
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=6_work_done" ./puwmod-4M -v0 -c1 -i100
+        budget: 241
+  - name: 11_tblook-4M
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=11_work_done" ./tblook-4M -v0 -c1 -i100
+        budget: 118
+  - name: 13_bitmnp-4M
+    processes:
+      - cmd: TB_OPTS="--count=0 --work_done_every_sec=0.5 --work_done_str=13_work_done" ./bitmnp-4M -v0 -c1 -i100
+        budget: 89
+
+windows:
+  - length: 241
+    slices:
+      - cpu: 4
+        sc_partition: 7_pntrch-4K
+      - cpu: 5
+        sc_partition: 10_puwmod-4K
+      - cpu: 3
+        sc_partition: 6_puwmod-4M
+      - cpu: 0
+        sc_partition: 4_bitmnp-4K
+  - length: 179
+    slices:
+      - cpu: 4
+        sc_partition: 15_tblook-4M
+      - cpu: 3
+        sc_partition: 12_idctrn-4M
+      - cpu: 5
+        sc_partition: 16_pntrch-4K
+      - cpu: 2
+        sc_partition: 5_matrix-4M
+      - cpu: 1
+        sc_partition: 3_tblook-4K
+      - cpu: 0
+        sc_partition: 1_bitmnp-4M
+  - length: 145
+    slices:
+      - cpu: 5
+        sc_partition: 19_bitmnp-4M
+      - cpu: 4
+        sc_partition: 18_aifirf-4M
+      - cpu: 0
+        sc_partition: 13_bitmnp-4M
+      - cpu: 3
+        sc_partition: 17_aifirf-4M
+      - cpu: 2
+        sc_partition: 11_tblook-4M
+      - cpu: 1
+        sc_partition: 8_a2time-4K
+  - length: 125
+    slices:
+      - cpu: 5
+        sc_partition: 14_bitmnp-4M
+      - cpu: 4
+        sc_partition: 9_aifirf-4K
+      - cpu: 3
+        sc_partition: 2_aifirf-4M
+      - cpu: 0
+        sc_partition: 0_aifirf-4M
