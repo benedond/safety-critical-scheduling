@@ -49,6 +49,11 @@
   /pgf/bar width=5pt,
   ticklabel style = {font=\scriptsize},
 ylabel={\scriptsize $T_{\text{measured}} - T_{\text{amb}}$ [\si{\celsius}]},
+ extra y tick style={yticklabels={},
+	grid=major,
+    major grid style={black!10!white}},
+  % position of minor y-grid lines
+  extra y ticks={22.5, 27.5, 32.5,37.5},
 ]
 
 \tikzset{Desc/.style={anchor=north west, fill=white, rectangle, inner sep=2pt, fill opacity=0.5, text opacity=1, font=\scriptsize}}
