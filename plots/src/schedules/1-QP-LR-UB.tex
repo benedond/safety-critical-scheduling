@@ -1,0 +1,89 @@
+\begin{tikzpicture}
+\begin{scope}[yscale=0.300000]
+\draw[thick] (0,0) rectangle (3.822222,6);
+\foreach \y in {1,2,...,5} {\draw[dotted] (0,\y) -- (3.822222,\y);}
+\draw [decorate,decoration={brace,amplitude=3pt},xshift=-4pt,yshift=0pt] (0,4.1) -- (0,5.9) node [black,midway,xshift=-0.5cm]  {\scriptsize A72};
+\draw [decorate,decoration={brace,amplitude=3pt},xshift=-4pt,yshift=0pt] (0,0.1) -- (0,3.9) node [black,midway,xshift=-0.5cm]  {\scriptsize A53};
+
+\draw[fill=TaskClrFill11] (0.000000,0.150000) rectangle (1.173333,0.850000);
+\draw[fill=TaskClrFill16] (0.000000,1.150000) rectangle (1.106667,1.850000);
+\draw[fill=TaskClrFill26] (0.000000,2.150000) rectangle (1.271111,2.850000);
+\draw[fill=TaskClrFill29] (0.000000,3.150000) rectangle (1.320000,3.850000);
+\draw[fill=TaskClrFill27] (1.320000,4.150000) rectangle (1.946667,4.850000);
+\draw[fill=TaskClrFill34] (1.320000,0.150000) rectangle (1.986667,0.850000);
+\draw[fill=TaskClrFill22] (1.320000,1.150000) rectangle (1.942222,1.850000);
+\draw[fill=TaskClrFill26] (1.320000,2.150000) rectangle (2.000000,2.850000);
+\draw[fill=TaskClrFill16] (1.320000,3.150000) rectangle (1.937778,3.850000);
+\draw[fill=TaskClrFill22] (2.000000,0.150000) rectangle (2.533333,0.850000);
+\draw[fill=TaskClrFill31] (2.000000,4.150000) rectangle (2.573333,4.850000);
+\draw[fill=TaskClrFill10] (2.000000,1.150000) rectangle (2.560000,1.850000);
+\draw[fill=TaskClrFill6] (2.000000,5.150000) rectangle (2.533333,5.850000);
+\draw[fill=TaskClrFill19] (2.573333,0.150000) rectangle (3.071111,0.850000);
+\draw[fill=TaskClrFill23] (2.573333,4.150000) rectangle (3.071111,4.850000);
+\draw[fill=TaskClrFill4] (3.071111,0.150000) rectangle (3.497778,0.850000);
+\draw[fill=TaskClrFill1] (3.071111,4.150000) rectangle (3.520000,4.850000);
+\draw[fill=TaskClrFill12] (3.071111,5.150000) rectangle (3.493333,5.850000);
+\draw[fill=TaskClrFill21] (3.520000,0.150000) rectangle (3.742222,0.850000);
+\draw[fill=TaskClrFill19] (3.520000,1.150000) rectangle (3.728889,1.850000);
+
+\draw[dashed, red] (1.32,0) rectangle (1.32,6);
+\node[anchor=north,font=\tiny][red] at (1.320000,0) { \rotatebox{90}{ 297 } };
+\draw[dashed, red] (2.0,0) rectangle (2.0,6);
+\node[anchor=north,font=\tiny][red] at (2.000000,0) { \rotatebox{90}{ 450 } };
+\draw[dashed, red] (2.5733333333333333,0) rectangle (2.5733333333333333,6);
+\node[anchor=north,font=\tiny][red] at (2.573333,0) { \rotatebox{90}{ 579 } };
+\draw[dashed, red] (3.071111111111111,0) rectangle (3.071111111111111,6);
+\node[anchor=north,font=\tiny][red] at (3.071111,0) { \rotatebox{90}{ 691 } };
+\draw[dashed, red] (3.52,0) rectangle (3.52,6);
+\node[anchor=north,font=\tiny][red] at (3.520000,0) { \rotatebox{90}{ 792 } };
+\draw[dashed, red] (3.7422222222222223,0) rectangle (3.7422222222222223,6);
+\node[anchor=north,font=\tiny][red] at (3.742222,0) { \rotatebox{90}{ 842 } };
+\end{scope}
+\begin{scope}[yshift=-0.75cm]
+\begin{axis}[%
+width=3.822222cm,
+height=1cm,
+xmin=0,
+xmax=10,
+ymin=0,
+ymax=10,
+legend columns=5,
+scale only axis,
+hide axis,
+legend style={legend cell align=left, at={(0.5,0.0)},anchor=north, font=\footnotesize},
+]
+\addlegendimage{ TaskClrFill1,mark=square*, only marks}
+\addlegendentry{ a2time-4M };
+\addlegendimage{ TaskClrFill4,mark=square*, only marks}
+\addlegendentry{ bitmnp-4K };
+\addlegendimage{ TaskClrFill6,mark=square*, only marks}
+\addlegendentry{ canrdr-4K };
+\addlegendimage{ TaskClrFill10,mark=square*, only marks}
+\addlegendentry{ iirflt-4K };
+\addlegendimage{ TaskClrFill11,mark=square*, only marks}
+\addlegendentry{ iirflt-4M };
+\addlegendimage{ TaskClrFill12,mark=square*, only marks}
+\addlegendentry{ matrix-4K };
+\addlegendimage{ TaskClrFill16,mark=square*, only marks}
+\addlegendentry{ membench-1K-RW-R };
+\addlegendimage{ TaskClrFill19,mark=square*, only marks}
+\addlegendentry{ membench-1M-RO-S };
+\addlegendimage{ TaskClrFill21,mark=square*, only marks}
+\addlegendentry{ membench-1M-RW-S };
+\addlegendimage{ TaskClrFill22,mark=square*, only marks}
+\addlegendentry{ membench-4M-RO-R };
+\addlegendimage{ TaskClrFill23,mark=square*, only marks}
+\addlegendentry{ membench-4M-RO-S };
+\addlegendimage{ TaskClrFill26,mark=square*, only marks}
+\addlegendentry{ pntrch-4K };
+\addlegendimage{ TaskClrFill27,mark=square*, only marks}
+\addlegendentry{ pntrch-4M };
+\addlegendimage{ TaskClrFill29,mark=square*, only marks}
+\addlegendentry{ puwmod-4M };
+\addlegendimage{ TaskClrFill31,mark=square*, only marks}
+\addlegendentry{ rspeed-4M };
+\addlegendimage{ TaskClrFill34,mark=square*, only marks}
+\addlegendentry{ tinyrenderer-boggie };
+\end{axis}
+\end{scope}
+\end{tikzpicture}
