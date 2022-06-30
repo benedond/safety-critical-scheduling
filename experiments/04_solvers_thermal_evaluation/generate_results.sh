@@ -14,7 +14,9 @@ methods=( "HEUR" "ILP-IDLE-MAX" "ILP-IDLE-MIN" "ILP-SM-I" "QP-LR-UB" "BB-SM" "BB
 experiments=( "all" "cpu" )
 
 for i in "${methods[@]}"; do
+    echo $i
     for exp in "${experiments[@]}"; do
+        echo "- $exp" 
         python3 ../add_measured_data.py -r ./results/imx8a-$exp.csv -m ./measurements/imx8a/$exp/ -c power -e ../../data/environment-imx8a.json --measurement_suffix .json.yaml.csv
         python3 ../add_measured_data.py -r ./results/imx8a-$exp.csv -m ./measurements/imx8a/$exp/ -c temp-little -e ../../data/environment-imx8a.json --measurement_suffix .json.yaml.csv -d temperature --data_column "CPU_0_temp/m°C"
         python3 ../add_measured_data.py -r ./results/imx8a-$exp.csv -m ./measurements/imx8a/$exp/ -c temp-big -e ../../data/environment-imx8a.json --measurement_suffix .json.yaml.csv -d temperature --data_column "CPU_1_temp/m°C"
