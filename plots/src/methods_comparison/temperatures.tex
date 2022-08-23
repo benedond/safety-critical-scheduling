@@ -4,22 +4,20 @@
 %\newcommand{\DataIMXbCPU}{temp_imx8b-cpu_absolute.csv}
 %\newcommand{\DataTXAll}{temp_tx2-all_absolute.csv}
 %\newcommand{\DataTXCPU}{temp_tx2-cpu_absolute.csv}
+\begin{tikzpicture}
 
+\path (-1,-6.7) rectangle (14.75,3.2);
 \newcommand{\DataIMXaAll}{temp_imx8a-all_relative.csv}
 \newcommand{\DataIMXaCPU}{temp_imx8a-cpu_relative.csv}
 \newcommand{\DataIMXbAll}{temp_imx8b-all_relative.csv}
 \newcommand{\DataIMXbCPU}{temp_imx8b-cpu_relative.csv}
 \newcommand{\DataTXAll}{temp_tx2-all_relative.csv}
 \newcommand{\DataTXCPU}{temp_tx2-cpu_relative.csv}
-
 \newcommand{\maxY}{40}
-
 \pgfplotstableread[col sep=comma]{\DataIMXaAll}{\loadedtable}
         \pgfplotstablegetcolsof{\loadedtable}
         \pgfmathtruncatemacro{\NoOfCols}{\pgfplotsretval-1}
 
-
-\begin{tikzpicture}
  \begin{groupplot}[
     group style={
         columns=3,
@@ -58,7 +56,7 @@ ylabel={\scriptsize $T_{\text{measured}} - T_{\text{amb}}$ [\si{\celsius}]},
 
 \tikzset{Desc/.style={anchor=north west, fill=white, rectangle, inner sep=2pt, fill opacity=0.5, text opacity=1, font=\scriptsize}}
 
-\nextgroupplot[title=mix, title style={yshift=-5pt, xshift=-1.7cm}]
+\nextgroupplot[title=Mixed, title style={yshift=-5pt, xshift=-1.7cm}]
 % ALL - imx8a
    \addplot[Clr2,fill=Clr2] table [x expr=\coordindex,y={T-little}, col sep=comma] {\DataIMXaAll};  
      \addplot[Clr1,fill=Clr1] table [x expr=\coordindex,y={T-big}, col sep=comma] {\DataIMXaAll};  
@@ -80,7 +78,7 @@ ylabel={\scriptsize $T_{\text{measured}} - T_{\text{amb}}$ [\si{\celsius}]},
 	\node[Desc] at (axis cs: -0.5,\maxY) {TX2};
 
 % CPU
-\nextgroupplot[title=CPU, title style={yshift=-5pt, xshift=-1.7cm}]
+\nextgroupplot[title=CPU-bound, title style={yshift=-5pt, xshift=-1.25cm}]
 %  imx8a
    \addplot[Clr2,fill=Clr2] table [x expr=\coordindex,y={T-little}, col sep=comma] {\DataIMXaCPU};  
      \addplot[Clr1,fill=Clr1] table [x expr=\coordindex,y={T-big}, col sep=comma] {\DataIMXaCPU};  
