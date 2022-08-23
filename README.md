@@ -1,6 +1,7 @@
-# Contents
+# Safety-critical scheduling
 
-- [Contents](#contents)
+- [Safety-critical scheduling](#safety-critical-scheduling)
+  - [JSA data](#jsa-data)
   - [Available tools](#available-tools)
       - [instance\_generator](#instance_generator)
       - [ilp\_global\_solver](#ilp_global_solver)
@@ -10,6 +11,29 @@
       - [demos\_config\_export](#demos_config_export)
   - [Compiling](#compiling)
   - [Data format](#data-format)
+
+This repository contains source-codes and data collected during experiments with thermal-aware safety-critical scheduling.
+
+## JSA data
+
+The preliminary study and experiments with Linux scheduler [DEmOS](https://github.com/CTU-IIG/demos-sched) was published and presented at RTCSA 2021 conference
+
+- O. Benedikt et al., "Thermal-Aware Scheduling for MPSoC in the Avionics Domain: Tooling and Initial Results," 2021 IEEE 27th International Conference on Embedded and Real-Time Computing Systems and Applications (RTCSA), 2021, pp. 159-168, doi: [10.1109/RTCSA52859.2021.00026](https://ieeexplore.ieee.org/document/9545290/).
+
+The extended version with new optimizers and experiments was submitted to Journal of Systems Architecture and is currently under review. The optimizers source codes can be found in `tools/src/JSA-solvers` folder; specifically, the optimizers presented in the JSA study include
+
+| **Optimizer** | **Source code**                  |
+|---------------|----------------------------------|
+| ILP-SM        | `tools/src/JSA-solvers/ILP-SM-I` |
+| QP-LR-UB      | `tools/src/JSA-solvers/QP-LR-UB` |
+| BB-LR         | `tools/src/JSA-solvers/BB`       |
+| BB-SM         | `tools/src/JSA-solvers/BB`       |
+| HEUR          | `tools/src/JSA-solvers/HEUR`     |
+| ILP-IDLE-MIN  | `tools/src/JSA-solvers/ILP-IDLE` |
+| ILP-IDLE-MAX  | `tools/src/JSA-solvers/ILP-IDLE` |
+
+All the experimental data can be found in `experiments` folder, including benchmarking of the kernels, data used for linear regression coefficients identification, power models evaluation, thermal evaluation of thested optimization methods, and evaluation of methods scalability. The platform and kernel characteristics are further extracted in `data` folder.
+
 
 ## Available tools
 
@@ -220,18 +244,22 @@ multiple times have been truncated for brevity.
              {                           // processor 0 (demos_config_export will use CPU indices 0-3 for this processor)
                 "name":"A53",            // processor name
                 "processingUnits":4,     // number of available processing units (integer)
-                "type":"main_processor"  // type: main_processor or coprocessor
+                "type":"main_processor",  // type: main_processor or coprocessor
+                "coreIds": [0,1,2,3]  // ids of the cores needed for DEmOS config export
              },
              {                           // processor 1 (demos_config_export will use CPU indices 4-5 for this processor)
                 "name":"A72",
                 "processingUnits":2,
-                "type":"main_processor"
+                "type":"main_processor",
+                "coreIds: [4,5]
              },
              {                           // processor 2 (demos_config_export will ignore this processor because it is a coprocessor)
                 "name":"GPU",
                 "processingUnits":2,
                 "type":"coprocessor"
-             }
+             },
+             "idlePower": 5.49 // platform's idle power
+             
           ]
         },
 
@@ -333,7 +361,7 @@ multiple times have been truncated for brevity.
 
        "solution":{                              // solution data: final schedule
           "feasible":true,                       // is the solution feasible? if not, array of windows will be empty
-          "solutionTime":1,                      // how long it took the solver to generate this solution (in ms)
+          "solutionTime":1,                      // how long it took the solver to generate this solution
           "solverMetadata":null,                 // additional solver metadata, specific to every solver (it would be an object containing key-value pairs if it was not null in this case)
           "solverName":"ILP Solver",             // name of the solver that generated this solution
           "windows":[                            // solution consists of these windows:
