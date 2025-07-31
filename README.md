@@ -33,7 +33,7 @@ in [Journal of Parallel and Distributed Computing](https://doi.org/10.1016/j.jpd
 | ILP-IDLE-MIN  | [`tools/src/JPDC-solvers/ILP-IDLE`](tools/src/JPDC-solvers/ILP-IDLE) |
 | ILP-IDLE-MAX  | [`tools/src/JPDC-solvers/ILP-IDLE`](tools/src/JPDC-solvers/ILP-IDLE) |
 
-All the experimental data can be found in `experiments` folder, including benchmarking of the kernels, data used for linear regression coefficients identification, power models evaluation, thermal evaluation of thested optimization methods, and evaluation of methods scalability. The platform and kernel characteristics are further extracted in `data` folder.
+All the experimental data can be found in `experiments` folder, including benchmarking of the kernels, data used for linear regression coefficients identification, power models evaluation, thermal evaluation of tested optimization methods, and evaluation of methods scalability. The platform and kernel characteristics are further extracted in `data` folder.
 
 
 ## Available tools
@@ -233,7 +233,7 @@ The content of the JSONs that the tools use is best explained by an
 example. The JSON requirements and output referenced in the [Available
 tools](#available-tools) section of this readme refer to the names of
 the top-level object in the JSON. The following example contains all
-posible field the provided tools recognize, but some fields that repeat
+possible field the provided tools recognize, but some fields that repeat
 multiple times have been truncated for brevity.
 
     {
