@@ -20,7 +20,8 @@ The preliminary study and experiments with Linux scheduler [DEmOS](https://githu
 
 - O. Benedikt et al., "Thermal-Aware Scheduling for MPSoC in the Avionics Domain: Tooling and Initial Results," 2021 IEEE 27th International Conference on Embedded and Real-Time Computing Systems and Applications (RTCSA), 2021, pp. 159-168, doi: [10.1109/RTCSA52859.2021.00026](https://ieeexplore.ieee.org/document/9545290/).
 
-The extended version with new optimizers and experiments was submitted to Journal of Systems Architecture and is currently under review. The optimizers source codes can be found in `tools/src/JPDC-solvers` folder; specifically, the optimizers presented in the JPDC study include
+The extended version with new optimizers and experiments was published
+in [Journal of Parallel and Distributed Computing](https://doi.org/10.1016/j.jpdc.2025.105107). The optimizers source codes can be found in `tools/src/JPDC-solvers` folder; specifically, the optimizers presented in the JPDC study include
 
 | **Optimizer** | **Source code**                                                    |
 |---------------|--------------------------------------------------------------------|
