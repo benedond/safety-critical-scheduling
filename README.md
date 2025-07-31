@@ -1,7 +1,7 @@
 # Safety-critical scheduling
 
 - [Safety-critical scheduling](#safety-critical-scheduling)
-  - [JSA data](#jsa-data)
+  - [JPDC data](#jpdc-data)
   - [Available tools](#available-tools)
       - [instance\_generator](#instance_generator)
       - [ilp\_global\_solver](#ilp_global_solver)
@@ -14,23 +14,23 @@
 
 This repository contains source-codes and data collected during experiments with thermal-aware safety-critical scheduling.
 
-## JSA data
+## JPDC data
 
 The preliminary study and experiments with Linux scheduler [DEmOS](https://github.com/CTU-IIG/demos-sched) was published and presented at RTCSA 2021 conference
 
 - O. Benedikt et al., "Thermal-Aware Scheduling for MPSoC in the Avionics Domain: Tooling and Initial Results," 2021 IEEE 27th International Conference on Embedded and Real-Time Computing Systems and Applications (RTCSA), 2021, pp. 159-168, doi: [10.1109/RTCSA52859.2021.00026](https://ieeexplore.ieee.org/document/9545290/).
 
-The extended version with new optimizers and experiments was submitted to Journal of Systems Architecture and is currently under review. The optimizers source codes can be found in `tools/src/JSA-solvers` folder; specifically, the optimizers presented in the JSA study include
+The extended version with new optimizers and experiments was submitted to Journal of Systems Architecture and is currently under review. The optimizers source codes can be found in `tools/src/JPDC-solvers` folder; specifically, the optimizers presented in the JPDC study include
 
 | **Optimizer** | **Source code**                                                    |
 |---------------|--------------------------------------------------------------------|
-| ILP-SM        | [`tools/src/JSA-solvers/ILP-SM-I`](tools/src/JSA-solvers/ILP-SM-I) |
-| QP-LR-UB      | [`tools/src/JSA-solvers/QP-LR-UB`](tools/src/JSA-solvers/QP-LR-UB) |
-| BB-LR         | [`tools/src/JSA-solvers/BB`](tools/src/JSA-solvers/BB)             |
-| BB-SM         | [`tools/src/JSA-solvers/BB`](tools/src/JSA-solvers/BB)             |
-| HEUR          | [`tools/src/JSA-solvers/HEUR`](tools/src/JSA-solvers/HEUR)         |
-| ILP-IDLE-MIN  | [`tools/src/JSA-solvers/ILP-IDLE`](tools/src/JSA-solvers/ILP-IDLE) |
-| ILP-IDLE-MAX  | [`tools/src/JSA-solvers/ILP-IDLE`](tools/src/JSA-solvers/ILP-IDLE) |
+| ILP-SM        | [`tools/src/JPDC-solvers/ILP-SM-I`](tools/src/JPDC-solvers/ILP-SM-I) |
+| QP-LR-UB      | [`tools/src/JPDC-solvers/QP-LR-UB`](tools/src/JPDC-solvers/QP-LR-UB) |
+| BB-LR         | [`tools/src/JPDC-solvers/BB`](tools/src/JPDC-solvers/BB)             |
+| BB-SM         | [`tools/src/JPDC-solvers/BB`](tools/src/JPDC-solvers/BB)             |
+| HEUR          | [`tools/src/JPDC-solvers/HEUR`](tools/src/JPDC-solvers/HEUR)         |
+| ILP-IDLE-MIN  | [`tools/src/JPDC-solvers/ILP-IDLE`](tools/src/JPDC-solvers/ILP-IDLE) |
+| ILP-IDLE-MAX  | [`tools/src/JPDC-solvers/ILP-IDLE`](tools/src/JPDC-solvers/ILP-IDLE) |
 
 All the experimental data can be found in `experiments` folder, including benchmarking of the kernels, data used for linear regression coefficients identification, power models evaluation, thermal evaluation of thested optimization methods, and evaluation of methods scalability. The platform and kernel characteristics are further extracted in `data` folder.
 
