@@ -415,3 +415,9 @@ multiple times have been truncated for brevity.
           ]
        }
     }
+
+#### Funding information
+
+This work was supported by the European Union under the project
+Robotics and advanced industrial production (reg. no.
+CZ.02.01.01/00/22_008/0004590)
